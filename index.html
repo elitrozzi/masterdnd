@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MasterDND</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+/* ── VARIABLES ── */
+:root {
+  --brand-400:#6f93eb; --brand-500:#496be3; --brand-600:#3851d8;
+  --gold:#c8a84b; --gold-l:#f0d380; --gold-d:#8a6820;
+  --teal:#2e9cca; --purple:#7b6fa8;
+  --dark:#06080f; --surface:#0f1520; --card:#131c2e; --border:#1e2d47;
+  --text:#dce6f5; --text-m:#6a7fa0; --text-d:#2d3f5a;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;overflow-x:hidden;}
+body{font-family:'Roboto',sans-serif;font-size:16px;line-height:1.4;letter-spacing:.2px;background:var(--dark);color:var(--text);cursor:none;}
+a{text-decoration:none;color:inherit;}
+button{cursor:none;border:none;font-family:'Roboto',sans-serif;}
+
+/* ── CUSTOM CURSOR ── */
+#cdot{position:fixed;width:7px;height:7px;border-radius:50%;background:var(--gold);pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .1s,opacity .2s;}
+#cring{position:fixed;width:36px;height:36px;border-radius:50%;border:1px solid rgba(200,168,75,.35);pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .2s,height .2s,border-color .2s;}
+body:has(.page.active#page-characters) #cdot,
+body:has(.page.active#page-maps) #cdot,
+body:has(.page.active#page-sounds) #cdot{background:var(--brand-400);}
+body:has(.page.active#page-characters) #cring,
+body:has(.page.active#page-maps) #cring,
+body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
+
+/* ── PAGES ── */
+.page{display:none;}
+.page.active{display:block;}
+
+/* ══════════════════════════════════ LANDING */
+#page-home{position:relative;width:100vw;height:100vh;overflow:hidden;}
+#bg3d{position:fixed;inset:0;width:100%;height:100%;z-index:0;opacity:0;animation:fadeIn 2.5s ease .3s forwards;}
+@keyframes fadeIn{to{opacity:1;}}
+
+/* Grain overlay */
+#page-home::after{content:'';position:fixed;inset:0;z-index:1;opacity:.025;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px 200px;}
+
+/* Landing UI overlay */
+.land-ui{position:fixed;inset:0;z-index:10;pointer-events:none;}
+.land-ui *{pointer-events:auto;}
+
+/* Landing nav */
+.land-nav{position:absolute;top:0;left:0;right:0;height:68px;display:flex;align-items:center;padding:0 48px;gap:32px;}
+.land-logo{display:flex;align-items:baseline;gap:0;text-decoration:none;cursor:none;}
+.llogo-m{font-family:'Cinzel',serif;font-size:13px;font-weight:400;letter-spacing:.4em;color:rgba(220,230,245,.6);text-transform:uppercase;}
+.llogo-d{font-family:'Cinzel',serif;font-size:20px;font-weight:700;color:var(--gold);letter-spacing:.1em;margin-left:6px;}
+.land-nav-links{display:flex;gap:2px;margin-left:12px;}
+.land-nav-links a{padding:6px 14px;font-size:13px;color:var(--text-m);border-radius:8px;transition:.15s;letter-spacing:.5px;}
+.land-nav-links a:hover{color:var(--text);background:rgba(255,255,255,.05);}
+.land-nav-spacer{flex:1;}
+.land-nav-right{display:flex;align-items:center;gap:12px;}
+.lbtn-ghost{background:transparent;border:1px solid var(--border);color:var(--text-m);padding:8px 18px;border-radius:8px;font-size:13px;font-weight:600;transition:.15s;letter-spacing:.3px;}
+.lbtn-ghost:hover{border-color:var(--gold);color:var(--gold);}
+.lbtn-gold{background:linear-gradient(135deg,var(--gold) 0%,#e8a820 100%);color:#1a0a00;padding:8px 20px;border-radius:8px;font-size:13px;font-weight:600;transition:.15s;}
+.lbtn-gold:hover{filter:brightness(1.1);}
+.lang-toggle{display:flex;background:rgba(255,255,255,.05);border-radius:8px;overflow:hidden;border:1px solid var(--border);}
+.lang-btn{padding:6px 11px;font-size:12px;font-weight:600;color:var(--text-m);transition:.15s;cursor:none;background:transparent;}
+.lang-btn.active{background:var(--brand-500);color:#fff;}
+
+/* Hero text — ASYMMETRIC, bottom-left */
+.land-hero{position:absolute;bottom:14vh;left:7vw;max-width:700px;}
+.land-eyebrow{font-size:11px;font-weight:600;letter-spacing:.28em;color:var(--gold);text-transform:uppercase;margin-bottom:18px;opacity:0;animation:slideUp .6s ease .7s forwards;}
+.land-title{line-height:1;margin-bottom:24px;}
+.lt-master{display:block;font-family:'Cinzel',serif;font-size:clamp(32px,6vw,76px);font-weight:400;letter-spacing:.38em;color:rgba(220,230,245,.85);opacity:0;animation:slideUp .8s ease .95s forwards;}
+.lt-dnd{display:block;font-family:'Cinzel',serif;font-size:clamp(76px,16vw,190px);font-weight:700;color:transparent;-webkit-text-stroke:2px var(--gold);letter-spacing:.04em;line-height:.9;margin-left:-4px;opacity:0;animation:slideUp .8s ease 1.15s forwards;}
+.lt-dnd:hover{color:rgba(200,168,75,.08);transition:color .3s;}
+.land-sub{font-size:clamp(14px,1.5vw,17px);color:var(--text-m);line-height:1.7;max-width:420px;margin-bottom:36px;opacity:0;animation:slideUp .6s ease 1.5s forwards;}
+.land-btns{display:flex;gap:12px;opacity:0;animation:slideUp .6s ease 1.8s forwards;}
+.lbtn-lg{padding:14px 32px;border-radius:10px;font-size:15px;font-weight:600;}
+
+/* Bottom hints */
+.land-hints{position:absolute;bottom:32px;left:0;right:0;display:flex;align-items:flex-end;justify-content:space-between;padding:0 48px;}
+.dice-label{font-size:11px;letter-spacing:.2em;color:var(--text-d);text-transform:uppercase;opacity:0;animation:fadeIn2 1s ease 2.5s forwards;}
+@keyframes fadeIn2{to{opacity:1;}}
+.scroll-down{display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fadeIn2 1s ease 2.5s forwards;}
+.scroll-down span{font-size:9px;letter-spacing:.3em;color:var(--text-d);}
+.sd-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--gold-d),transparent);animation:scrollPulse 2s ease infinite;}
+@keyframes scrollPulse{0%,100%{opacity:.3;transform:scaleY(.5);transform-origin:top;}50%{opacity:1;transform:scaleY(1);}}
+
+@keyframes slideUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+
+/* ══════════════════════════════════ APP NAV (inner pages) */
+.app-nav{display:none;position:fixed;top:0;left:0;right:0;z-index:200;height:60px;align-items:center;padding:0 32px;gap:20px;background:rgba(6,8,15,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+.app-nav.visible{display:flex;}
+.anav-logo{font-family:'Cinzel',serif;font-size:14px;cursor:none;display:flex;align-items:baseline;gap:0;}
+.anav-logo .llogo-m{font-size:11px;letter-spacing:.35em;color:var(--text-m);}
+.anav-logo .llogo-d{font-size:17px;color:var(--gold);}
+.anav-links{display:flex;gap:2px;margin-left:8px;}
+.anav-link{padding:5px 13px;border-radius:8px;font-size:13px;color:var(--text-m);cursor:none;transition:.15s;}
+.anav-link:hover,.anav-link.active{background:rgba(255,255,255,.06);color:var(--text);}
+.anav-spacer{flex:1;}
+.anav-btn{padding:7px 16px;border-radius:8px;font-size:13px;font-weight:600;}
+
+/* ══════════════════════════════════ INNER PAGES */
+.inner-page{min-height:100vh;padding-top:60px;}
+
+/* ── CHARACTER CREATOR ── */
+.creator-wrap{max-width:860px;margin:0 auto;padding:40px 24px;}
+.creator-header{text-align:center;margin-bottom:36px;}
+.creator-header h2{font-family:'Cinzel',serif;font-size:28px;color:var(--gold);margin-bottom:8px;}
+.creator-header p{color:var(--text-m);font-size:14px;}
+.progress-bar{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:36px;}
+.prog-step{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.prog-dot{width:34px;height:34px;border-radius:50%;border:2px solid var(--border);background:var(--card);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--text-m);transition:.3s;}
+.prog-dot.active{border-color:var(--brand-500);background:var(--brand-500);color:#fff;}
+.prog-dot.done{border-color:var(--gold);background:var(--gold);color:#1a0a00;}
+.prog-label{font-size:10px;color:var(--text-m);white-space:nowrap;}
+.prog-line{width:60px;height:2px;background:var(--border);margin-bottom:20px;transition:.3s;}
+.prog-line.done{background:var(--gold);}
+.creator-step{display:none;}
+.creator-step.active{display:block;}
+.step-title{font-family:'Cinzel',serif;font-size:22px;color:var(--gold);margin-bottom:8px;text-align:center;}
+.step-desc{font-size:14px;color:var(--text-m);text-align:center;margin-bottom:28px;}
+.option-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:28px;}
+.option-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 12px;text-align:center;cursor:none;transition:.2s;}
+.option-card:hover{border-color:var(--brand-400);background:rgba(73,107,227,.06);}
+.option-card.selected{border-color:var(--gold);background:rgba(200,168,75,.08);}
+.oc-icon{font-size:26px;margin-bottom:8px;}
+.oc-name{font-size:13px;font-weight:600;}
+.oc-sub{font-size:11px;color:var(--text-m);margin-top:3px;}
+.step-nav{display:flex;justify-content:space-between;margin-top:24px;}
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;}
+.mode-card{background:var(--card);border:2px solid var(--border);border-radius:16px;padding:28px 24px;text-align:center;cursor:none;transition:.2s;}
+.mode-card:hover{border-color:var(--brand-400);}
+.mode-card.selected{border-color:var(--gold);background:rgba(200,168,75,.06);}
+.mode-icon{font-size:36px;margin-bottom:12px;}
+.mode-name{font-size:17px;font-weight:600;margin-bottom:6px;}
+.mode-desc{font-size:13px;color:var(--text-m);line-height:1.5;}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:420px;margin:0 auto 8px;}
+.stat-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;}
+.stat-name{font-size:11px;font-weight:600;color:var(--text-m);letter-spacing:.15em;}
+.stat-value{font-size:32px;font-weight:600;color:var(--text);margin:4px 0;}
+.stat-mod{font-size:14px;color:var(--gold);}
+@keyframes diceAnim{0%,100%{transform:scale(1);}50%{transform:scale(1.12);color:var(--gold);}}
+.dice-anim{animation:diceAnim .35s ease;}
+.char-sheet{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;max-width:580px;margin:0 auto;}
+.cs-header{display:flex;align-items:center;gap:16px;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border);}
+.cs-avatar{font-size:42px;width:64px;height:64px;background:var(--surface);border-radius:14px;display:flex;align-items:center;justify-content:center;}
+.cs-name{font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--gold);}
+.cs-meta{font-size:13px;color:var(--text-m);margin-top:4px;}
+.cs-body{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:20px;}
+.cs-stat{background:var(--surface);border-radius:10px;padding:10px 6px;text-align:center;}
+.cs-stat-name{font-size:10px;color:var(--text-m);letter-spacing:.1em;font-weight:600;}
+.cs-stat-val{font-size:22px;font-weight:600;color:var(--text);}
+.cs-stat-mod{font-size:12px;color:var(--gold);}
+.cs-footer{display:flex;flex-wrap:wrap;gap:8px;padding-top:16px;border-top:1px solid var(--border);}
+.tag{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;}
+.tag-brand{background:rgba(73,107,227,.15);color:var(--brand-400);}
+.tag-gold{background:rgba(200,168,75,.15);color:var(--gold);}
+.btn-nav{padding:8px 18px;border-radius:8px;font-size:13px;font-weight:600;cursor:none;transition:.15s;}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text-m);}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold);}
+.btn-primary{background:var(--brand-500);color:#fff;}
+.btn-primary:hover{background:var(--brand-600);}
+.btn-gold{background:linear-gradient(135deg,var(--gold),#e8a820);color:#1a0a00;font-weight:600;}
+.btn-primary[disabled]{opacity:.4;cursor:not-allowed;}
+
+/* ── MAP BUILDER ── */
+.map-layout{display:grid;grid-template-columns:200px 1fr 180px;height:calc(100vh - 60px);}
+.map-sidebar-left,.map-sidebar-right{background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;padding:12px;}
+.map-sidebar-right{border-right:none;border-left:1px solid var(--border);}
+.sidebar-section{margin-bottom:18px;}
+.sidebar-title{font-size:10px;font-weight:600;letter-spacing:.15em;color:var(--text-m);text-transform:uppercase;margin-bottom:8px;}
+.tool-btn{width:100%;text-align:left;background:transparent;border:1px solid transparent;border-radius:8px;padding:7px 10px;font-size:12px;color:var(--text-m);margin-bottom:4px;transition:.15s;}
+.tool-btn:hover,.tool-btn.active{background:rgba(73,107,227,.1);border-color:var(--brand-500);color:var(--text);}
+.tile-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;}
+.tile{height:32px;display:flex;align-items:center;justify-content:center;font-size:16px;border-radius:6px;cursor:none;border:1px solid transparent;transition:.1s;}
+.tile:hover,.tile.active{background:rgba(200,168,75,.12);border-color:var(--gold);}
+.map-canvas-wrap{overflow:auto;background:#020408;display:flex;align-items:center;justify-content:center;padding:24px;}
+#mapWrap canvas{display:block;box-shadow:0 0 60px rgba(0,0,0,.9),0 0 120px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.04);}
+.tile{height:28px;display:flex;align-items:center;gap:6px;padding:0 6px;font-size:11px;border-radius:6px;cursor:none;border:1px solid transparent;transition:.1s;color:var(--text-m);}
+.tile:hover,.tile.active{background:rgba(200,168,75,.12);border-color:var(--gold);color:var(--text);}
+.tile-swatch{width:14px;height:14px;border-radius:2px;flex-shrink:0;border:1px solid rgba(255,255,255,.12);}
+.tile-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px;}
+
+/* ── SOUNDS ── */
+.sound-layout{max-width:1080px;margin:0 auto;padding:32px 24px;}
+.sound-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;}
+.sound-header h2{font-family:'Cinzel',serif;font-size:24px;color:var(--gold);margin-bottom:4px;}
+.sound-header p{font-size:14px;color:var(--text-m);}
+.now-playing{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 20px;display:flex;align-items:center;gap:16px;margin-bottom:24px;}
+.np-icon{font-size:28px;}
+.np-info{flex:1;}
+.np-name{font-size:15px;font-weight:600;}
+.np-meta{font-size:12px;color:var(--text-m);}
+.np-controls{display:flex;gap:8px;}
+.np-btn{background:rgba(255,255,255,.06);border:none;border-radius:50%;width:34px;height:34px;font-size:14px;color:var(--text);cursor:none;}
+.np-play{background:var(--brand-500);color:#fff;}
+.np-volume{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-m);}
+.np-volume input{accent-color:var(--gold);}
+.cat-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:24px;}
+.cat-tab{padding:7px 16px;border-radius:20px;background:var(--surface);border:1px solid var(--border);font-size:12px;color:var(--text-m);cursor:none;transition:.15s;}
+.cat-tab:hover,.cat-tab.active{background:rgba(200,168,75,.1);border-color:var(--gold);color:var(--gold);}
+.sounds-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:32px;}
+.sound-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;cursor:none;transition:.2s;}
+.sound-card:hover{border-color:var(--brand-400);transform:translateY(-2px);}
+.sound-card.playing{border-color:var(--gold);}
+.sc-top{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.sc-emoji{font-size:24px;}
+.sc-name{font-size:14px;font-weight:600;}
+.sc-type{font-size:11px;color:var(--text-m);}
+.sc-waveform{height:28px;background:rgba(255,255,255,.04);border-radius:6px;overflow:hidden;position:relative;margin-bottom:12px;}
+.sc-wave-fill{position:absolute;left:0;top:0;height:100%;width:45%;background:linear-gradient(90deg,var(--brand-600),var(--brand-400));opacity:.5;}
+.sound-card.playing .sc-wave-fill{animation:wavePulse 1.5s ease-in-out infinite;}
+@keyframes wavePulse{0%,100%{width:30%;}50%{width:65%;}}
+.sc-bottom{display:flex;justify-content:space-between;align-items:center;}
+.sc-duration{font-size:11px;color:var(--text-m);}
+.sc-play-btn{background:var(--brand-500);border:none;border-radius:50%;width:28px;height:28px;color:#fff;font-size:12px;cursor:none;display:flex;align-items:center;justify-content:center;}
+
+/* ── SFX Cards ── */
+.sfx-tab{border-color:rgba(123,111,168,.4)!important;color:var(--purple)!important;}
+.sfx-tab:hover,.sfx-tab.active{background:rgba(123,111,168,.15)!important;border-color:var(--purple)!important;color:#b0a8d8!important;}
+.sfx-card{background:var(--card);border:1px solid rgba(123,111,168,.3);border-radius:14px;padding:18px 14px 14px;cursor:none;transition:.2s;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;text-align:center;}
+.sfx-card:hover{border-color:var(--purple);transform:translateY(-2px);background:rgba(19,28,46,.9);}
+.sfx-card.firing{animation:sfxPulse .5s ease;}
+@keyframes sfxPulse{0%{box-shadow:0 0 0 0 rgba(200,168,75,.8);border-color:var(--gold);}50%{box-shadow:0 0 0 16px rgba(200,168,75,0);border-color:var(--gold);}100%{box-shadow:0 0 0 0 rgba(200,168,75,0);border-color:rgba(123,111,168,.3);}}
+.sfx-badge{position:absolute;top:9px;right:9px;font-size:9px;font-weight:700;letter-spacing:.12em;color:var(--purple);background:rgba(123,111,168,.15);padding:2px 6px;border-radius:10px;border:1px solid rgba(123,111,168,.3);}
+.sfx-icon{font-size:30px;margin-bottom:8px;display:block;line-height:1;}
+.sfx-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px;}
+.sfx-dur{font-size:10px;color:var(--text-m);margin-bottom:12px;letter-spacing:.05em;}
+.sfx-trigger{width:100%;padding:7px 0;border-radius:8px;background:rgba(123,111,168,.15);border:1px solid rgba(123,111,168,.4);color:var(--text-m);font-size:12px;font-weight:600;cursor:none;transition:.15s;letter-spacing:.2px;pointer-events:none;}
+.sfx-card:hover .sfx-trigger{background:rgba(123,111,168,.3);border-color:var(--purple);color:var(--text);}
+.sfx-card.firing .sfx-trigger{background:rgba(200,168,75,.2);border-color:var(--gold);color:var(--gold);}
+.playlist-section{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;}
+.playlist-title{font-size:14px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.playlist-items{display:flex;flex-direction:column;gap:2px;}
+.pl-item{display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px;cursor:none;transition:.15s;}
+.pl-item:hover,.pl-item.active{background:rgba(255,255,255,.04);}
+.pl-num{font-size:11px;color:var(--text-m);width:16px;text-align:center;}
+.pl-icon{font-size:18px;}
+.pl-info{flex:1;}
+.pl-name{font-size:13px;font-weight:600;}
+.pl-sub{font-size:11px;color:var(--text-m);}
+.pl-dur{font-size:11px;color:var(--text-m);}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(6,8,15,.8);backdrop-filter:blur(8px);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.2s;}
+.modal-overlay.open{opacity:1;pointer-events:auto;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:32px;width:100%;max-width:400px;position:relative;}
+.modal-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.06);border:none;border-radius:50%;width:32px;height:32px;color:var(--text-m);font-size:14px;cursor:none;}
+.modal h2{font-family:'Cinzel',serif;font-size:22px;color:var(--gold);margin-bottom:4px;}
+.modal-sub{font-size:13px;color:var(--text-m);margin-bottom:20px;}
+.modal-tabs{display:flex;gap:4px;background:rgba(255,255,255,.04);border-radius:10px;padding:4px;margin-bottom:20px;}
+.modal-tab{flex:1;text-align:center;padding:8px;border-radius:8px;font-size:13px;font-weight:600;color:var(--text-m);cursor:none;transition:.15s;}
+.modal-tab.active{background:var(--brand-500);color:#fff;}
+.btn-google{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:10px;padding:11px;font-size:14px;color:var(--text);display:flex;align-items:center;justify-content:center;gap:8px;cursor:none;transition:.15s;margin-bottom:16px;}
+.btn-google:hover{background:rgba(255,255,255,.08);}
+.divider-or{text-align:center;font-size:12px;color:var(--text-m);margin-bottom:16px;position:relative;}
+.divider-or::before,.divider-or::after{content:'';position:absolute;top:50%;width:38%;height:1px;background:var(--border);}
+.divider-or::before{left:0;} .divider-or::after{right:0;}
+.form-group{margin-bottom:14px;}
+.form-label{display:block;font-size:12px;font-weight:600;color:var(--text-m);margin-bottom:6px;letter-spacing:.05em;}
+.form-input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:14px;color:var(--text);font-family:'Roboto',sans-serif;outline:none;transition:.15s;}
+.form-input:focus{border-color:var(--brand-500);}
+.btn-full{width:100%;padding:12px;border-radius:10px;font-size:14px;font-weight:600;cursor:none;}
+</style>
+</head>
+<body>
+
+<!-- ── CUSTOM CURSOR ── -->
+<div id="cdot"></div>
+<div id="cring"></div>
+
+<!-- ══════════════════════════ APP NAV (inner pages) -->
+<nav class="app-nav" id="appNav">
+  <div class="anav-logo" onclick="goTo('home')">
+    <span class="llogo-m">MASTER</span><span class="llogo-d">DND</span>
+  </div>
+  <div class="anav-links">
+    <a class="anav-link" id="nl-characters" onclick="goTo('characters')" data-es="Personajes" data-en="Characters">Personajes</a>
+    <a class="anav-link" id="nl-maps" onclick="goTo('maps')" data-es="Mapas" data-en="Maps">Mapas</a>
+    <a class="anav-link" id="nl-sounds" onclick="goTo('sounds')" data-es="Sonidos" data-en="Sounds">Sonidos</a>
+  </div>
+  <div class="anav-spacer"></div>
+  <div class="lang-toggle">
+    <button class="lang-btn active" onclick="setLang('es')">ES</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+  </div>
+  <button class="btn-nav btn-ghost" onclick="openModal('login')" data-es="Entrar" data-en="Log in">Entrar</button>
+  <button class="btn-nav btn-gold" onclick="openModal('register')" data-es="Comenzar" data-en="Get started">Comenzar</button>
+</nav>
+
+<!-- ══════════════════════════ PAGE: LANDING -->
+<div id="page-home" class="page active">
+  <canvas id="bg3d"></canvas>
+  <div class="land-ui">
+    <nav class="land-nav">
+      <div class="land-logo">
+        <span class="llogo-m">MASTER</span><span class="llogo-d">DND</span>
+      </div>
+      <div class="land-nav-links">
+        <a onclick="goTo('characters')" data-es="Personajes" data-en="Characters">Personajes</a>
+        <a onclick="goTo('maps')" data-es="Mapas" data-en="Maps">Mapas</a>
+        <a onclick="goTo('sounds')" data-es="Sonidos" data-en="Sounds">Sonidos</a>
+      </div>
+      <div class="land-nav-spacer"></div>
+      <div class="land-nav-right">
+        <div class="lang-toggle">
+          <button class="lang-btn active" onclick="setLang('es')">ES</button>
+          <button class="lang-btn" onclick="setLang('en')">EN</button>
+        </div>
+        <button class="lbtn-ghost" onclick="openModal('login')" data-es="Entrar" data-en="Log in">Entrar</button>
+        <button class="lbtn-gold" onclick="openModal('register')" data-es="Comenzar" data-en="Get started">Comenzar</button>
+      </div>
+    </nav>
+
+    <div class="land-hero">
+      <div class="land-eyebrow" data-es="TU PLATAFORMA DE D&D" data-en="YOUR D&D PLATFORM">TU PLATAFORMA DE D&D</div>
+      <div class="land-title">
+        <span class="lt-master">MASTER</span>
+        <span class="lt-dnd">DND</span>
+      </div>
+      <p class="land-sub" data-es="Crea personajes épicos. Diseña tus mapas.<br>Ambienta tu partida." data-en="Build epic characters. Design your maps.<br>Set the mood for your session.">Crea personajes épicos. Diseña tus mapas.<br>Ambienta tu partida.</p>
+      <div class="land-btns">
+        <button class="lbtn-gold lbtn-lg" onclick="goTo('characters')" data-es="Crear personaje" data-en="Create character">Crear personaje</button>
+        <button class="lbtn-ghost lbtn-lg" onclick="goTo('maps')" data-es="Diseñar mapa" data-en="Design a map">Diseñar mapa</button>
+      </div>
+    </div>
+
+    <div class="land-hints">
+      <div class="dice-label" data-es="Mové el mouse" data-en="Move your mouse">Mové el mouse</div>
+      <div class="scroll-down">
+        <span>SCROLL</span>
+        <div class="sd-line"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════ PAGE: CHARACTERS -->
+<div id="page-characters" class="page">
+  <div class="inner-page">
+    <div class="creator-wrap">
+      <div class="creator-header">
+        <h2 data-es="Creador de Personajes" data-en="Character Creator">Creador de Personajes</h2>
+        <p data-es="Construí tu aventurero desde cero o de manera aleatoria." data-en="Build your adventurer from scratch or randomly.">Construí tu aventurero desde cero o de manera aleatoria.</p>
+      </div>
+      <div class="progress-bar">
+        <div class="prog-step"><div class="prog-dot active" id="pd1">1</div><div class="prog-label" data-es="Modo" data-en="Mode">Modo</div></div>
+        <div class="prog-line" id="pl1"></div>
+        <div class="prog-step"><div class="prog-dot" id="pd2">2</div><div class="prog-label" data-es="Raza" data-en="Race">Raza</div></div>
+        <div class="prog-line" id="pl2"></div>
+        <div class="prog-step"><div class="prog-dot" id="pd3">3</div><div class="prog-label" data-es="Clase" data-en="Class">Clase</div></div>
+        <div class="prog-line" id="pl3"></div>
+        <div class="prog-step"><div class="prog-dot" id="pd4">4</div><div class="prog-label" data-es="Stats" data-en="Stats">Stats</div></div>
+        <div class="prog-line" id="pl4"></div>
+        <div class="prog-step"><div class="prog-dot" id="pd5">5</div><div class="prog-label" data-es="Ficha" data-en="Sheet">Ficha</div></div>
+      </div>
+      <!-- Step 1 -->
+      <div class="creator-step active" id="step1">
+        <div class="step-title" data-es="¿Cómo querés crear tu personaje?" data-en="How do you want to create your character?">¿Cómo querés crear tu personaje?</div>
+        <div class="step-desc" data-es="Podés elegir todo vos o dejar que el azar decida." data-en="Choose everything yourself or let fate decide.">Podés elegir todo vos o dejar que el azar decida.</div>
+        <div class="mode-grid">
+          <div class="mode-card" id="modeManual" onclick="selectMode('manual')"><div class="mode-icon">🎯</div><div class="mode-name" data-es="Manual" data-en="Manual">Manual</div><div class="mode-desc" data-es="Elegís cada detalle de tu personaje." data-en="You choose every detail of your character.">Elegís cada detalle de tu personaje.</div></div>
+          <div class="mode-card" id="modeRandom" onclick="selectMode('random')"><div class="mode-icon">🎲</div><div class="mode-name" data-es="Aleatorio" data-en="Random">Aleatorio</div><div class="mode-desc" data-es="Los dados deciden tu destino." data-en="The dice decide your fate.">Los dados deciden tu destino.</div></div>
+        </div>
+        <div class="step-nav"><div></div><button class="btn-nav btn-primary" onclick="nextStep()" data-es="Continuar →" data-en="Continue →">Continuar →</button></div>
+      </div>
+      <!-- Step 2 -->
+      <div class="creator-step" id="step2">
+        <div class="step-title" data-es="Elegí tu raza" data-en="Choose your race">Elegí tu raza</div>
+        <div class="step-desc" data-es="Cada raza tiene habilidades y bonuses únicos." data-en="Each race has unique abilities and bonuses.">Cada raza tiene habilidades y bonuses únicos.</div>
+        <div class="option-grid">
+          <div class="option-card" onclick="selectOption(this,'race','human')"><div class="oc-icon">👤</div><div class="oc-name" data-es="Humano" data-en="Human">Humano</div><div class="oc-sub">+1 todos</div></div>
+          <div class="option-card" onclick="selectOption(this,'race','elf')"><div class="oc-icon">🧝</div><div class="oc-name" data-es="Elfo" data-en="Elf">Elfo</div><div class="oc-sub">+2 DEX</div></div>
+          <div class="option-card" onclick="selectOption(this,'race','dwarf')"><div class="oc-icon">⛏️</div><div class="oc-name" data-es="Enano" data-en="Dwarf">Enano</div><div class="oc-sub">+2 CON</div></div>
+          <div class="option-card" onclick="selectOption(this,'race','halfling')"><div class="oc-icon">🌿</div><div class="oc-name" data-es="Mediano" data-en="Halfling">Mediano</div><div class="oc-sub">+2 DEX</div></div>
+          <div class="option-card" onclick="selectOption(this,'race','dragonborn')"><div class="oc-icon">🐲</div><div class="oc-name">Dragonborn</div><div class="oc-sub">+2 STR</div></div>
+          <div class="option-card" onclick="selectOption(this,'race','tiefling')"><div class="oc-icon">😈</div><div class="oc-name">Tiefling</div><div class="oc-sub">+2 CHA</div></div>
+          <div class="option-card" onclick="selectOption(this,'race','halforc')"><div class="oc-icon">💪</div><div class="oc-name" data-es="Semiorco" data-en="Half-Orc">Semiorco</div><div class="oc-sub">+2 STR</div></div>
+          <div class="option-card" onclick="selectOption(this,'race','gnome')"><div class="oc-icon">🔮</div><div class="oc-name" data-es="Gnomo" data-en="Gnome">Gnomo</div><div class="oc-sub">+2 INT</div></div>
+          <div class="option-card" onclick="selectOption(this,'race','aasimar')"><div class="oc-icon">✨</div><div class="oc-name">Aasimar</div><div class="oc-sub">+2 CHA</div></div>
+          <div class="option-card" onclick="selectOption(this,'race','tabaxi')"><div class="oc-icon">🐱</div><div class="oc-name">Tabaxi</div><div class="oc-sub">+2 DEX</div></div>
+          <div class="option-card" onclick="selectOption(this,'race','firbolg')"><div class="oc-icon">🌲</div><div class="oc-name">Firbolg</div><div class="oc-sub">+2 WIS</div></div>
+          <div class="option-card" onclick="selectOption(this,'race','kenku')"><div class="oc-icon">🦅</div><div class="oc-name">Kenku</div><div class="oc-sub">+2 DEX</div></div>
+        </div>
+        <div class="step-nav"><button class="btn-nav btn-ghost" onclick="prevStep()" data-es="← Atrás" data-en="← Back">← Atrás</button><button class="btn-nav btn-primary" onclick="nextStep()" data-es="Continuar →" data-en="Continue →">Continuar →</button></div>
+      </div>
+      <!-- Step 3 -->
+      <div class="creator-step" id="step3">
+        <div class="step-title" data-es="Elegí tu clase" data-en="Choose your class">Elegí tu clase</div>
+        <div class="step-desc" data-es="La clase define tu rol en el grupo." data-en="Your class defines your role in the group.">La clase define tu rol en el grupo.</div>
+        <div class="option-grid">
+          <div class="option-card" onclick="selectOption(this,'class','fighter')"><div class="oc-icon">⚔️</div><div class="oc-name" data-es="Guerrero" data-en="Fighter">Guerrero</div><div class="oc-sub" data-es="Combate" data-en="Combat">Combate</div></div>
+          <div class="option-card" onclick="selectOption(this,'class','wizard')"><div class="oc-icon">🧙</div><div class="oc-name" data-es="Mago" data-en="Wizard">Mago</div><div class="oc-sub" data-es="Magia arcana" data-en="Arcane magic">Magia arcana</div></div>
+          <div class="option-card" onclick="selectOption(this,'class','rogue')"><div class="oc-icon">🗡️</div><div class="oc-name" data-es="Pícaro" data-en="Rogue">Pícaro</div><div class="oc-sub" data-es="Sigilo" data-en="Stealth">Sigilo</div></div>
+          <div class="option-card" onclick="selectOption(this,'class','cleric')"><div class="oc-icon">✝️</div><div class="oc-name" data-es="Clérigo" data-en="Cleric">Clérigo</div><div class="oc-sub" data-es="Curación" data-en="Healing">Curación</div></div>
+          <div class="option-card" onclick="selectOption(this,'class','ranger')"><div class="oc-icon">🏹</div><div class="oc-name" data-es="Explorador" data-en="Ranger">Explorador</div><div class="oc-sub" data-es="Naturaleza" data-en="Nature">Naturaleza</div></div>
+          <div class="option-card" onclick="selectOption(this,'class','paladin')"><div class="oc-icon">🛡️</div><div class="oc-name" data-es="Paladín" data-en="Paladin">Paladín</div><div class="oc-sub" data-es="Fe y combate" data-en="Faith">Fe y combate</div></div>
+          <div class="option-card" onclick="selectOption(this,'class','barbarian')"><div class="oc-icon">💢</div><div class="oc-name" data-es="Bárbaro" data-en="Barbarian">Bárbaro</div><div class="oc-sub" data-es="Furia" data-en="Rage">Furia</div></div>
+          <div class="option-card" onclick="selectOption(this,'class','bard')"><div class="oc-icon">🎶</div><div class="oc-name" data-es="Bardo" data-en="Bard">Bardo</div><div class="oc-sub" data-es="Música" data-en="Music">Música</div></div>
+          <div class="option-card" onclick="selectOption(this,'class','druid')"><div class="oc-icon">🌿</div><div class="oc-name" data-es="Druida" data-en="Druid">Druida</div><div class="oc-sub" data-es="Naturaleza" data-en="Nature">Naturaleza</div></div>
+          <div class="option-card" onclick="selectOption(this,'class','monk')"><div class="oc-icon">🥋</div><div class="oc-name" data-es="Monje" data-en="Monk">Monje</div><div class="oc-sub" data-es="Artes marciales" data-en="Martial arts">Artes marciales</div></div>
+          <div class="option-card" onclick="selectOption(this,'class','sorcerer')"><div class="oc-icon">🔥</div><div class="oc-name" data-es="Hechicero" data-en="Sorcerer">Hechicero</div><div class="oc-sub" data-es="Innato" data-en="Innate">Innato</div></div>
+          <div class="option-card" onclick="selectOption(this,'class','warlock')"><div class="oc-icon">👁️</div><div class="oc-name" data-es="Brujo" data-en="Warlock">Brujo</div><div class="oc-sub" data-es="Pacto oscuro" data-en="Dark pact">Pacto oscuro</div></div>
+        </div>
+        <div class="step-nav"><button class="btn-nav btn-ghost" onclick="prevStep()" data-es="← Atrás" data-en="← Back">← Atrás</button><button class="btn-nav btn-primary" onclick="nextStep()" data-es="Continuar →" data-en="Continue →">Continuar →</button></div>
+      </div>
+      <!-- Step 4 -->
+      <div class="creator-step" id="step4">
+        <div class="step-title" data-es="Tirar estadísticas" data-en="Roll your stats">Tirar estadísticas</div>
+        <div class="step-desc" data-es="4d6, descartás el menor. Presioná el botón para tirar." data-en="4d6, drop the lowest. Press to roll.">4d6, descartás el menor. Presioná el botón para tirar.</div>
+        <div class="stats-grid" id="statsGrid">
+          <div class="stat-box"><div class="stat-name">STR</div><div class="stat-value" id="sv-str">—</div><div class="stat-mod" id="sm-str"></div></div>
+          <div class="stat-box"><div class="stat-name">DEX</div><div class="stat-value" id="sv-dex">—</div><div class="stat-mod" id="sm-dex"></div></div>
+          <div class="stat-box"><div class="stat-name">CON</div><div class="stat-value" id="sv-con">—</div><div class="stat-mod" id="sm-con"></div></div>
+          <div class="stat-box"><div class="stat-name">INT</div><div class="stat-value" id="sv-int">—</div><div class="stat-mod" id="sm-int"></div></div>
+          <div class="stat-box"><div class="stat-name">WIS</div><div class="stat-value" id="sv-wis">—</div><div class="stat-mod" id="sm-wis"></div></div>
+          <div class="stat-box"><div class="stat-name">CHA</div><div class="stat-value" id="sv-cha">—</div><div class="stat-mod" id="sm-cha"></div></div>
+        </div>
+        <div style="text-align:center;margin-top:24px;"><button class="btn-nav btn-gold" style="padding:12px 32px;font-size:15px;" onclick="rollStats()" id="rollBtn" data-es="🎲 Tirar dados" data-en="🎲 Roll dice">🎲 Tirar dados</button></div>
+        <div class="step-nav"><button class="btn-nav btn-ghost" onclick="prevStep()" data-es="← Atrás" data-en="← Back">← Atrás</button><button class="btn-nav btn-primary" id="btnStep4Next" onclick="nextStep()" disabled data-es="Ver ficha →" data-en="View sheet →">Ver ficha →</button></div>
+      </div>
+      <!-- Step 5 -->
+      <div class="creator-step" id="step5">
+        <div class="step-title" data-es="¡Tu personaje está listo!" data-en="Your character is ready!">¡Tu personaje está listo!</div>
+        <div class="step-desc" data-es="Guardalo, compartilo o exportalo a PDF." data-en="Save it, share it, or export to PDF.">Guardalo, compartilo o exportalo a PDF.</div>
+        <div class="char-sheet" id="charSheet">
+          <div class="cs-header">
+            <div class="cs-avatar" id="csAvatar">⚔️</div>
+            <div><div class="cs-name" id="csName">Aelindra</div><div class="cs-meta" id="csMeta">Tiefling · Explorador · Nivel 1</div><div style="margin-top:8px;display:flex;gap:8px;"><span class="tag tag-brand">CA: 14</span><span class="tag tag-gold">HP: 11</span><span class="tag tag-brand">Prof: +2</span></div></div>
+          </div>
+          <div class="cs-body" id="csBody">
+            <div class="cs-stat"><div class="cs-stat-name">STR</div><div class="cs-stat-val" id="cstr">—</div><div class="cs-stat-mod" id="cmstr"></div></div>
+            <div class="cs-stat"><div class="cs-stat-name">DEX</div><div class="cs-stat-val" id="cdex">—</div><div class="cs-stat-mod" id="cmdex"></div></div>
+            <div class="cs-stat"><div class="cs-stat-name">CON</div><div class="cs-stat-val" id="ccon">—</div><div class="cs-stat-mod" id="cmcon"></div></div>
+            <div class="cs-stat"><div class="cs-stat-name">INT</div><div class="cs-stat-val" id="cint">—</div><div class="cs-stat-mod" id="cmint"></div></div>
+            <div class="cs-stat"><div class="cs-stat-name">WIS</div><div class="cs-stat-val" id="cwis">—</div><div class="cs-stat-mod" id="cmwis"></div></div>
+            <div class="cs-stat"><div class="cs-stat-name">CHA</div><div class="cs-stat-val" id="ccha">—</div><div class="cs-stat-mod" id="cmcha"></div></div>
+          </div>
+          <div class="cs-footer"><button class="btn-nav btn-primary" data-es="💾 Guardar" data-en="💾 Save">💾 Guardar</button><button class="btn-nav btn-ghost" data-es="📄 Exportar PDF" data-en="📄 Export PDF">📄 Exportar PDF</button><button class="btn-nav btn-ghost" data-es="🔗 Compartir" data-en="🔗 Share">🔗 Compartir</button></div>
+        </div>
+        <div class="step-nav" style="margin-top:24px;"><button class="btn-nav btn-ghost" onclick="resetCreator()" data-es="↺ Nuevo personaje" data-en="↺ New character">↺ Nuevo personaje</button><button class="btn-nav btn-gold" onclick="goTo('home')" data-es="Volver al inicio →" data-en="Back to home →">Volver al inicio →</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════ PAGE: MAPS -->
+<div id="page-maps" class="page">
+  <div class="inner-page">
+    <div class="map-layout">
+      <div class="map-sidebar-left">
+        <div class="sidebar-section"><div class="sidebar-title" data-es="Herramientas" data-en="Tools">Herramientas</div><button class="tool-btn active" id="tool-draw" onclick="selectTool('draw')">✏️ <span data-es="Dibujar" data-en="Draw">Dibujar</span></button><button class="tool-btn" id="tool-erase" onclick="selectTool('erase')">⬜ <span data-es="Borrar" data-en="Erase">Borrar</span></button><button class="tool-btn" id="tool-fog" onclick="selectTool('fog')">🌫️ Fog of War</button><button class="tool-btn" id="tool-token" onclick="selectTool('token')">🧙 Token</button></div>
+        <div class="sidebar-section"><div class="sidebar-title" data-es="Terreno" data-en="Terrain">Terreno</div><div class="tile-grid">
+          <div class="tile active" onclick="selectTile(this,'floor')"><span class="tile-swatch" style="background:#3a3a50"></span><span data-es="Piso" data-en="Floor">Piso</span></div>
+          <div class="tile" onclick="selectTile(this,'wall')"><span class="tile-swatch" style="background:#0e0e16"></span><span data-es="Muro" data-en="Wall">Muro</span></div>
+          <div class="tile" onclick="selectTile(this,'water')"><span class="tile-swatch" style="background:#0e3a5a"></span><span data-es="Agua" data-en="Water">Agua</span></div>
+          <div class="tile" onclick="selectTile(this,'grass')"><span class="tile-swatch" style="background:#1a3f1a"></span><span data-es="Hierba" data-en="Grass">Hierba</span></div>
+          <div class="tile" onclick="selectTile(this,'rock')"><span class="tile-swatch" style="background:#252535"></span><span data-es="Roca" data-en="Rock">Roca</span></div>
+          <div class="tile" onclick="selectTile(this,'blood')"><span class="tile-swatch" style="background:#6e0808"></span><span data-es="Sangre" data-en="Blood">Sangre</span></div>
+        </div></div>
+        <div class="sidebar-section"><div class="sidebar-title" data-es="Objetos" data-en="Objects">Objetos</div><div class="tile-grid">
+          <div class="tile" onclick="selectTile(this,'door')"><span class="tile-swatch" style="background:#7a4820"></span><span data-es="Puerta" data-en="Door">Puerta</span></div>
+          <div class="tile" onclick="selectTile(this,'pit')"><span class="tile-swatch" style="background:#03030e"></span><span data-es="Pozo" data-en="Pit">Pozo</span></div>
+          <div class="tile" onclick="selectTile(this,'fire')"><span class="tile-swatch" style="background:#c86010"></span><span data-es="Fuego" data-en="Fire">Fuego</span></div>
+          <div class="tile" onclick="selectTile(this,'chest')"><span class="tile-swatch" style="background:#7a5018"></span><span data-es="Cofre" data-en="Chest">Cofre</span></div>
+          <div class="tile" onclick="selectTile(this,'bed')"><span class="tile-swatch" style="background:#7a2050"></span><span data-es="Cama" data-en="Bed">Cama</span></div>
+          <div class="tile" onclick="selectTile(this,'stairs')"><span class="tile-swatch" style="background:#424252"></span><span data-es="Escaleras" data-en="Stairs">Escaleras</span></div>
+        </div></div>
+        <div class="sidebar-section"><div class="sidebar-title">Tokens</div><div class="tile-grid">
+          <div class="tile" onclick="selectTile(this,'hero')"><span class="tile-swatch" style="background:#496be3"></span><span data-es="Héroe" data-en="Hero">Héroe</span></div>
+          <div class="tile" onclick="selectTile(this,'enemy')"><span class="tile-swatch" style="background:#c84444"></span><span data-es="Enemigo" data-en="Enemy">Enemigo</span></div>
+          <div class="tile" onclick="selectTile(this,'boss')"><span class="tile-swatch" style="background:#8b30c8"></span>Boss</div>
+          <div class="tile" onclick="selectTile(this,'npc')"><span class="tile-swatch" style="background:#2a9c5a"></span>NPC</div>
+        </div></div>
+      </div>
+      <div class="map-canvas-wrap"><div id="mapWrap"></div></div>
+      <div class="map-sidebar-right">
+        <div class="sidebar-section"><div class="sidebar-title" data-es="Mapa" data-en="Map">Mapa</div><button class="tool-btn" onclick="clearMap()" data-es="🗑️ Limpiar" data-en="🗑️ Clear">🗑️ Limpiar</button><button class="tool-btn" data-es="💾 Guardar" data-en="💾 Save">💾 Guardar</button><button class="tool-btn" data-es="📤 Exportar" data-en="📤 Export">📤 Exportar</button></div>
+        <div class="sidebar-section"><div class="sidebar-title" data-es="Plantillas" data-en="Templates">Plantillas</div><button class="tool-btn" onclick="loadTemplate('dungeon')">🏚️ Dungeon</button><button class="tool-btn" onclick="loadTemplate('tavern')">🍺 <span data-es="Taberna" data-en="Tavern">Taberna</span></button><button class="tool-btn" onclick="loadTemplate('forest')">🌲 <span data-es="Bosque" data-en="Forest">Bosque</span></button><button class="tool-btn" onclick="loadTemplate('city')">🏙️ <span data-es="Ciudad" data-en="City">Ciudad</span></button></div>
+        <div class="sidebar-section"><div class="sidebar-title" data-es="Capas" data-en="Layers">Capas</div><div style="display:flex;flex-direction:column;gap:6px;"><label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:none;"><input type="checkbox" checked style="accent-color:var(--brand-500)"> <span data-es="Terreno" data-en="Terrain">Terreno</span></label><label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:none;"><input type="checkbox" checked style="accent-color:var(--brand-500)"> <span data-es="Objetos" data-en="Objects">Objetos</span></label><label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:none;"><input type="checkbox" checked style="accent-color:var(--brand-500)"> Tokens</label><label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:none;"><input type="checkbox" style="accent-color:var(--brand-500)"> Fog of War</label></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════ PAGE: SOUNDS -->
+<div id="page-sounds" class="page">
+  <div class="inner-page">
+    <div class="sound-layout">
+      <div class="sound-header"><div><h2 data-es="🎵 Librería de Sonidos" data-en="🎵 Sound Library">🎵 Librería de Sonidos</h2><p data-es="Ambientá cada momento de tu partida" data-en="Set the mood for every moment">Ambientá cada momento de tu partida</p></div></div>
+      <div class="now-playing" id="nowPlaying" style="display:none;"><div class="np-icon" id="npIcon">🎵</div><div class="np-info"><div class="np-name" id="npName">—</div><div class="np-meta" id="npMeta">—</div></div><div class="np-controls"><button class="np-btn">⏮</button><button class="np-btn np-play" id="npPlayBtn" onclick="togglePlay()">⏸</button><button class="np-btn">⏭</button></div><div class="np-volume">🔊 <input type="range" min="0" max="100" value="70" id="volSlider"></div></div>
+      <div class="cat-tabs"><div class="cat-tab active" onclick="filterCat('all',this)" data-es="Todos" data-en="All">Todos</div><div class="cat-tab" onclick="filterCat('combat',this)" data-es="⚔️ Combate" data-en="⚔️ Combat">⚔️ Combate</div><div class="cat-tab" onclick="filterCat('exploration',this)" data-es="🗺️ Exploración" data-en="🗺️ Exploration">🗺️ Exploración</div><div class="cat-tab" onclick="filterCat('tavern',this)" data-es="🍺 Taberna" data-en="🍺 Tavern">🍺 Taberna</div><div class="cat-tab" onclick="filterCat('dungeon',this)" data-es="🏚️ Dungeon" data-en="🏚️ Dungeon">🏚️ Dungeon</div><div class="cat-tab" onclick="filterCat('boss',this)" data-es="🐉 Boss" data-en="🐉 Boss">🐉 Boss</div><div class="cat-tab" onclick="filterCat('ambient',this)" data-es="🌧️ Ambiente" data-en="🌧️ Ambient">🌧️ Ambiente</div><div class="cat-tab sfx-tab" onclick="filterCat('sfx',this)" data-es="⚡ Efectos" data-en="⚡ Effects">⚡ Efectos</div></div>
+      <div class="sounds-grid" id="soundsGrid"></div>
+      <div class="playlist-section"><div class="playlist-title">🎧 <span data-es="Mi playlist de campaña" data-en="My campaign playlist">Mi playlist de campaña</span> <span class="tag tag-brand">5 tracks</span></div><div class="playlist-items"><div class="pl-item active" onclick="playSound({name:'The Dragon Awakens',cat:'boss',icon:'🐉',dur:'4:32'})"><div class="pl-num">▶</div><div class="pl-icon">🐉</div><div class="pl-info"><div class="pl-name">The Dragon Awakens</div><div class="pl-sub">Boss Fight</div></div><div class="pl-dur">4:32</div></div><div class="pl-item" onclick="playSound({name:'Dungeon Depths',cat:'dungeon',icon:'🏚️',dur:'6:10'})"><div class="pl-num">2</div><div class="pl-icon">🏚️</div><div class="pl-info"><div class="pl-name">Dungeon Depths</div><div class="pl-sub">Dungeon</div></div><div class="pl-dur">6:10</div></div><div class="pl-item" onclick="playSound({name:'Tavern Tales',cat:'tavern',icon:'🍺',dur:'3:45'})"><div class="pl-num">3</div><div class="pl-icon">🍺</div><div class="pl-info"><div class="pl-name">Tavern Tales</div><div class="pl-sub">Taberna</div></div><div class="pl-dur">3:45</div></div><div class="pl-item" onclick="playSound({name:'Forest Ambience',cat:'ambient',icon:'🌲',dur:'∞'})"><div class="pl-num">4</div><div class="pl-icon">🌲</div><div class="pl-info"><div class="pl-name">Forest Ambience</div><div class="pl-sub" data-es="Loop" data-en="Loop">Loop</div></div><div class="pl-dur">∞</div></div><div class="pl-item" onclick="playSound({name:'Battle Cry',cat:'combat',icon:'⚔️',dur:'3:18'})"><div class="pl-num">5</div><div class="pl-icon">⚔️</div><div class="pl-info"><div class="pl-name">Battle Cry</div><div class="pl-sub">Combate</div></div><div class="pl-dur">3:18</div></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════ MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h2>MasterDND</h2>
+    <div class="modal-sub" id="modalSub" data-es="Tu aventura comienza acá." data-en="Your adventure starts here.">Tu aventura comienza acá.</div>
+    <div class="modal-tabs"><div class="modal-tab active" id="tabLogin" onclick="switchTab('login')" data-es="Iniciar sesión" data-en="Log in">Iniciar sesión</div><div class="modal-tab" id="tabRegister" onclick="switchTab('register')" data-es="Registrarse" data-en="Sign up">Registrarse</div></div>
+    <button class="btn-google"><span>🔵</span><span data-es="Continuar con Google" data-en="Continue with Google">Continuar con Google</span></button>
+    <div class="divider-or"><span data-es="o con email" data-en="or with email">o con email</span></div>
+    <div id="registerFields" style="display:none;"><div class="form-group"><label class="form-label" data-es="Nombre de usuario" data-en="Username">Nombre de usuario</label><input class="form-input" type="text" placeholder="aventurero_123"/></div></div>
+    <div class="form-group"><label class="form-label">Email</label><input class="form-input" type="email" placeholder="tu@email.com"/></div>
+    <div class="form-group"><label class="form-label" data-es="Contraseña" data-en="Password">Contraseña</label><input class="form-input" type="password" placeholder="••••••••"/></div>
+    <button class="btn-full btn-primary" id="modalSubmitBtn" style="margin-top:8px;" data-es="Iniciar sesión" data-en="Log in">Iniciar sesión</button>
+  </div>
+</div>
+
+<script>
+/* ══ STATE ══ */
+let currentLang='es', currentStep=1, selections={}, rolledStats=null;
+let activeTile='floor', activeTool='draw', isDrawing=false, currentSoundId=null;
+
+const SOUNDS=[
+  {id:1,name:'Battle Cry',es:'Grito de Batalla',cat:'combat',icon:'⚔️',dur:'3:18'},
+  {id:2,name:'Epic Clash',es:'Choque Épico',cat:'combat',icon:'🗡️',dur:'4:05'},
+  {id:3,name:'Charge!',es:'¡Carga!',cat:'combat',icon:'💥',dur:'2:50'},
+  {id:4,name:'Into the Unknown',es:'Hacia lo Desconocido',cat:'exploration',icon:'🗺️',dur:'5:20'},
+  {id:5,name:"Explorer's Theme",es:'Tema del Explorador',cat:'exploration',icon:'🧭',dur:'4:15'},
+  {id:6,name:'Tavern Chatter',es:'Charlas de Taberna',cat:'tavern',icon:'🍺',dur:'∞'},
+  {id:7,name:'The Drinking Song',es:'Canción del Bardo',cat:'tavern',icon:'🎶',dur:'2:10'},
+  {id:8,name:'Dungeon Depths',es:'Las Profundidades',cat:'dungeon',icon:'🏚️',dur:'6:10'},
+  {id:9,name:'Ancient Crypt',es:'Cripta Antigua',cat:'dungeon',icon:'💀',dur:'5:00'},
+  {id:10,name:'The Dragon Awakens',es:'El Dragón Despierta',cat:'boss',icon:'🐉',dur:'4:32'},
+  {id:11,name:'Final Stand',es:'La Última Batalla',cat:'boss',icon:'🔥',dur:'5:45'},
+  {id:12,name:'Rain Ambience',es:'Lluvia Ambiental',cat:'ambient',icon:'🌧️',dur:'∞'},
+  {id:13,name:'Forest Ambience',es:'Bosque Ambiental',cat:'ambient',icon:'🌲',dur:'∞'},
+  {id:14,name:'Storm',es:'Tormenta',cat:'ambient',icon:'⛈️',dur:'∞'},
+  /* ── Efectos Especiales (SFX — one-shot, overlays background music) ── */
+  {id:15,name:'Fireball',es:'Bola de Fuego',cat:'sfx',icon:'🔥',sfxId:'fireball',dur:'2.5'},
+  {id:16,name:'Sword Clash',es:'Choque de Espadas',cat:'sfx',icon:'⚔️',sfxId:'sword',dur:'1.5'},
+  {id:17,name:'Arrow Shot',es:'Flecha',cat:'sfx',icon:'🏹',sfxId:'arrow',dur:'0.6'},
+  {id:18,name:'Thunder Strike',es:'Rayo',cat:'sfx',icon:'⚡',sfxId:'thunder',dur:'3.5'},
+  {id:19,name:'Magic Spell',es:'Hechizo Mágico',cat:'sfx',icon:'✨',sfxId:'magic',dur:'2.0'},
+  {id:20,name:'Battle Roar',es:'Grito de Guerra',cat:'sfx',icon:'😤',sfxId:'roar',dur:'2.0'},
+  {id:21,name:'Explosion',es:'Explosión',cat:'sfx',icon:'💥',sfxId:'explosion',dur:'3.5'},
+  {id:22,name:'Dragon Roar',es:'Rugido del Dragón',cat:'sfx',icon:'🐲',sfxId:'dragon',dur:'2.8'},
+];
+
+/* ══ WEB AUDIO ENGINE ══ */
+class SoundEngine {
+  constructor(){this.ctx=null;this.master=null;this.nodes=[];this.playing=false;this._drumInt=null;this._beatInt=null;}
+
+  _init(){
+    if(this.ctx){if(this.ctx.state==='suspended')this.ctx.resume();return;}
+    this.ctx=new(window.AudioContext||window.webkitAudioContext)();
+    this.master=this.ctx.createGain();
+    this.master.gain.value=0.7;
+    this.master.connect(this.ctx.destination);
+  }
+
+  _noise(color='white'){
+    const sr=this.ctx.sampleRate,len=sr*5;
+    const buf=this.ctx.createBuffer(2,len,sr);
+    for(let ch=0;ch<2;ch++){
+      const d=buf.getChannelData(ch);
+      if(color==='white'){for(let i=0;i<len;i++)d[i]=Math.random()*2-1;}
+      else if(color==='brown'){let last=0;for(let i=0;i<len;i++){const w=Math.random()*2-1;last=(last+0.02*w)/1.02;d[i]=last*3.5;}}
+      else if(color==='pink'){let b=[0,0,0,0,0,0,0];for(let i=0;i<len;i++){const w=Math.random()*2-1;b[0]=0.99886*b[0]+w*0.0555179;b[1]=0.99332*b[1]+w*0.0750759;b[2]=0.96900*b[2]+w*0.1538520;b[3]=0.86650*b[3]+w*0.3104856;b[4]=0.55000*b[4]+w*0.5329522;b[5]=-0.7616*b[5]-w*0.0168980;d[i]=(b[0]+b[1]+b[2]+b[3]+b[4]+b[5]+b[6]+w*0.5362)*0.11;b[6]=w*0.115926;}}
+    }
+    const src=this.ctx.createBufferSource();src.buffer=buf;src.loop=true;return src;
+  }
+
+  _osc(freq,type='sine',detune=0){const o=this.ctx.createOscillator();o.type=type;o.frequency.value=freq;o.detune.value=detune;return o;}
+
+  _gain(val,fade=0.8){const g=this.ctx.createGain();g.gain.setValueAtTime(0,this.ctx.currentTime);g.gain.setTargetAtTime(val,this.ctx.currentTime,fade);return g;}
+
+  _filter(type,freq,Q=1){const f=this.ctx.createBiquadFilter();f.type=type;f.frequency.value=freq;f.Q.value=Q;return f;}
+
+  _add(src,gain){src.start();this.nodes.push({src,gain});}
+
+  stop(){
+    if(!this.ctx)return;
+    if(this._drumInt){clearInterval(this._drumInt);this._drumInt=null;}
+    if(this._beatInt){clearInterval(this._beatInt);this._beatInt=null;}
+    this.nodes.forEach(n=>{
+      try{n.gain.gain.setTargetAtTime(0,this.ctx.currentTime,0.25);}catch(e){}
+      setTimeout(()=>{try{n.src.stop();}catch(e){}},600);
+    });
+    this.nodes=[];this.playing=false;
+  }
+
+  play(s){
+    this._init();this.stop();
+    const c=s.cat,n=(s.name||'').toLowerCase(),es=(s.es||'').toLowerCase();
+    if(n.includes('storm'))this._storm();
+    else if(n.includes('forest')||es.includes('bosque'))this._forest();
+    else if(c==='ambient')this._rain();
+    else if(c==='tavern'&&!TRACK_URLS[s.name])this._tavern();
+    else if(c==='dungeon')this._dungeon();
+    else if(n.includes('battle cry')||es.includes('grito'))this._battlecry();
+    else if(n.includes('clash')||n.includes('epic')||es.includes('choque'))this._epicclash();
+    else if(n.includes('charge')||es.includes('carga'))this._charge();
+    else if(c==='combat')this._battlecry();
+    else if(c==='boss')this._boss();
+    else if(c==='exploration')this._explore();
+    else this._rain();
+    this.playing=true;
+  }
+
+  setVolume(v){if(this.master)this.master.gain.setTargetAtTime(v/100,this.ctx.currentTime,0.1);}
+
+  togglePause(){
+    if(!this.ctx)return true;
+    if(this.ctx.state==='running'){this.ctx.suspend();return false;}
+    else{this.ctx.resume();return true;}
+  }
+
+  /* ── Soundscapes ── */
+  _rain(){
+    const r=this._noise('white'),lpf=this._filter('lowpass',1300),g=this._gain(0.38);
+    r.connect(lpf);lpf.connect(g);g.connect(this.master);this._add(r,g);
+    const rb=this._noise('brown'),lpf2=this._filter('lowpass',90),g2=this._gain(0.16);
+    rb.connect(lpf2);lpf2.connect(g2);g2.connect(this.master);this._add(rb,g2);
+  }
+
+  _storm(){
+    const r=this._noise('white'),lpf=this._filter('lowpass',2200),g=this._gain(0.42);
+    r.connect(lpf);lpf.connect(g);g.connect(this.master);this._add(r,g);
+    const w=this._noise('white'),hpf=this._filter('highpass',2000),lpf2=this._filter('lowpass',5000),g2=this._gain(0.14);
+    w.connect(hpf);hpf.connect(lpf2);lpf2.connect(g2);g2.connect(this.master);this._add(w,g2);
+    const rb=this._noise('brown'),lpf3=this._filter('lowpass',150),g3=this._gain(0.22);
+    rb.connect(lpf3);lpf3.connect(g3);g3.connect(this.master);this._add(rb,g3);
+  }
+
+  _forest(){
+    const w=this._noise('white'),bpf=this._filter('bandpass',500,0.25),g=this._gain(0.12);
+    w.connect(bpf);bpf.connect(g);g.connect(this.master);this._add(w,g);
+    const w2=this._noise('pink'),lpf=this._filter('lowpass',600),g2=this._gain(0.09);
+    w2.connect(lpf);lpf.connect(g2);g2.connect(this.master);this._add(w2,g2);
+    [880,1320,1760].forEach((f,i)=>{
+      const o=this._osc(f,'sine');const gn=this._gain(0.008,3+i);
+      const lfo=this._osc(0.2+i*0.1,'sine');const lg=this.ctx.createGain();lg.gain.value=20;
+      lfo.connect(lg);lg.connect(o.frequency);lfo.start();
+      o.connect(gn);gn.connect(this.master);this._add(o,gn);this.nodes.push({src:lfo,gain:lg});
+    });
+  }
+
+  _tavern(){
+    // Simular voces superpuestas: capas de ruido rosa con bandpass a frecuencias de voz
+    // + LFO a velocidad de habla (~2-3 Hz) para simular el ritmo de conversación
+    [[320,3,0.058,1.9],[480,2.8,0.052,2.4],[680,2.5,0.044,1.6],[920,3.2,0.036,2.9],[1350,2,0.024,1.3]].forEach(([freq,Q,vol,lfoRate],i)=>{
+      const noise=this._noise('pink');
+      const bpf=this._filter('bandpass',freq,Q);
+      const g=this._gain(vol,1.2+i*0.3);
+      // LFO simula el ritmo natural de personas hablando
+      const lfo=this._osc(lfoRate+(Math.random()*0.3-0.15),'sine');
+      const lfoG=this.ctx.createGain();lfoG.gain.value=vol*0.55;
+      lfo.connect(lfoG);lfoG.connect(g.gain);lfo.start();
+      noise.connect(bpf);bpf.connect(g);g.connect(this.master);
+      this._add(noise,g);this.nodes.push({src:lfo,gain:lfoG});
+    });
+    // Rumor de fondo de sala / madera
+    const bg=this._noise('brown'),lpf=this._filter('lowpass',320),g2=this._gain(0.09);
+    bg.connect(lpf);lpf.connect(g2);g2.connect(this.master);this._add(bg,g2);
+    // Crepitar del fuego de la chimenea
+    const fire=this._noise('white'),hpf=this._filter('highpass',3500),lpf2=this._filter('lowpass',7000),g3=this._gain(0.035);
+    fire.connect(hpf);hpf.connect(lpf2);lpf2.connect(g3);g3.connect(this.master);this._add(fire,g3);
+    // Tintineos de vasos/jarras aleatorios
+    const clink=()=>{
+      if(!this.playing)return;
+      const o=this.ctx.createOscillator(),gn=this.ctx.createGain();
+      o.type='sine';o.frequency.value=1600+Math.random()*1200;
+      gn.gain.setValueAtTime(0.1,this.ctx.currentTime);
+      gn.gain.exponentialRampToValueAtTime(0.001,this.ctx.currentTime+0.45);
+      o.connect(gn);gn.connect(this.master);o.start();o.stop(this.ctx.currentTime+0.5);
+      setTimeout(clink,1800+Math.random()*4500);
+    };
+    setTimeout(clink,800);
+  }
+
+  _dungeon(){
+    const rb=this._noise('brown'),lpf=this._filter('lowpass',75),g=this._gain(0.28);
+    rb.connect(lpf);lpf.connect(g);g.connect(this.master);this._add(rb,g);
+    const tone=this._osc(50,'sine');const g2=this._gain(0.055,2.5);
+    tone.connect(g2);g2.connect(this.master);this._add(tone,g2);
+    const shimmer=this._osc(220,'sine');
+    const lfo=this._osc(0.25,'sine');const lg=this.ctx.createGain();lg.gain.value=28;
+    lfo.connect(lg);lg.connect(shimmer.frequency);
+    const g3=this._gain(0.022,3.5);shimmer.connect(g3);g3.connect(this.master);
+    lfo.start();shimmer.start();
+    this.nodes.push({src:shimmer,gain:g3});this.nodes.push({src:lfo,gain:lg});
+  }
+
+  /* ── Percussion helpers ── */
+  _kick(t){
+    t=t||this.ctx.currentTime;
+    const o=this.ctx.createOscillator(),g=this.ctx.createGain();
+    o.type='sine';
+    o.frequency.setValueAtTime(185,t);o.frequency.exponentialRampToValueAtTime(32,t+0.09);
+    g.gain.setValueAtTime(1.0,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.48);
+    o.connect(g);g.connect(this.master);o.start(t);o.stop(t+0.55);
+  }
+
+  _snare(t){
+    t=t||this.ctx.currentTime;
+    const len=Math.floor(this.ctx.sampleRate*0.18);
+    const buf=this.ctx.createBuffer(1,len,this.ctx.sampleRate);
+    const d=buf.getChannelData(0);for(let i=0;i<len;i++)d[i]=Math.random()*2-1;
+    const src=this.ctx.createBufferSource();src.buffer=buf;
+    const hpf=this.ctx.createBiquadFilter();hpf.type='highpass';hpf.frequency.value=1300;
+    const g=this.ctx.createGain();
+    g.gain.setValueAtTime(0.38,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.16);
+    src.connect(hpf);hpf.connect(g);g.connect(this.master);src.start(t);src.stop(t+0.22);
+    const o=this.ctx.createOscillator(),g2=this.ctx.createGain();
+    o.type='triangle';o.frequency.value=190;
+    g2.gain.setValueAtTime(0.2,t);g2.gain.exponentialRampToValueAtTime(0.001,t+0.07);
+    o.connect(g2);g2.connect(this.master);o.start(t);o.stop(t+0.09);
+  }
+
+  _clash(t){
+    t=t||this.ctx.currentTime;
+    const len=Math.floor(this.ctx.sampleRate*0.4);
+    const buf=this.ctx.createBuffer(1,len,this.ctx.sampleRate);
+    const d=buf.getChannelData(0);for(let i=0;i<len;i++)d[i]=Math.random()*2-1;
+    const src=this.ctx.createBufferSource();src.buffer=buf;
+    const hpf=this.ctx.createBiquadFilter();hpf.type='highpass';hpf.frequency.value=2800;
+    const bpf=this.ctx.createBiquadFilter();bpf.type='bandpass';bpf.frequency.value=4500;bpf.Q.value=1.5;
+    const g=this.ctx.createGain();
+    g.gain.setValueAtTime(0.6,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.38);
+    src.connect(hpf);hpf.connect(bpf);bpf.connect(g);g.connect(this.master);
+    src.start(t);src.stop(t+0.45);
+  }
+
+  /* ── Battle soundscapes ── */
+  _battlecry(){
+    // Battle crowd roar
+    const crowd=this._noise('pink');
+    const bpf=this._filter('bandpass',500,0.3);
+    const g=this._gain(0.2);
+    const lfoOsc=this._osc(0.35,'sine');const lfoG=this.ctx.createGain();lfoG.gain.value=0.05;
+    lfoOsc.connect(lfoG);lfoG.connect(g.gain);lfoOsc.start();
+    crowd.connect(bpf);bpf.connect(g);g.connect(this.master);
+    this._add(crowd,g);this.nodes.push({src:lfoOsc,gain:lfoG});
+    // Deep battle rumble
+    const rb=this._noise('brown'),lpf=this._filter('lowpass',90),g2=this._gain(0.14);
+    rb.connect(lpf);lpf.connect(g2);g2.connect(this.master);this._add(rb,g2);
+    // War drum pattern: kick 1,3 / snare 2,4 / clash random
+    let beat=0;
+    const go=()=>{
+      if(!this.playing)return;
+      const b=beat%4;
+      if(b===0||b===2)this._kick();
+      if(b===1||b===3)this._snare();
+      if(b===0&&Math.random()<0.18)this._clash();
+      beat++;
+    };
+    go();this._drumInt=setInterval(()=>{if(this.playing)go();else clearInterval(this._drumInt);},520);
+  }
+
+  _epicclash(){
+    // Orchestral tension pads (stacked detuned oscillators)
+    [[55,'sawtooth',0.05],[82,'sawtooth',0.032],[110,'sine',0.022],[164,'sine',0.015]].forEach(([f,t,v])=>{
+      const o=this._osc(f,t),lpf=this._filter('lowpass',380),gn=this._gain(v,3.5);
+      o.connect(lpf);lpf.connect(gn);gn.connect(this.master);this._add(o,gn);
+    });
+    // Low tension rumble
+    const rb=this._noise('brown'),lpf=this._filter('lowpass',100),g=this._gain(0.1,1.5);
+    rb.connect(lpf);lpf.connect(g);g.connect(this.master);this._add(rb,g);
+    // Irregular dramatic metal clashes
+    let nextClash=0;
+    const doClash=()=>{
+      if(!this.playing)return;
+      this._clash();
+      nextClash=1200+Math.random()*2800;
+      setTimeout(doClash,nextClash);
+    };
+    setTimeout(doClash,600);
+    // Double-time drum pattern with heavier hits
+    let beat=0;
+    const go=()=>{
+      if(!this.playing)return;
+      const b=beat%8;
+      if(b===0||b===4)this._kick();
+      if(b===2){this._kick();setTimeout(()=>this._kick(),80);}
+      if(b===4||b===6)this._snare();
+      beat++;
+    };
+    go();this._drumInt=setInterval(()=>{if(this.playing)go();else clearInterval(this._drumInt);},380);
+  }
+
+  _charge(){
+    // Rushing wind/charge
+    const w=this._noise('white'),bpf=this._filter('bandpass',1100,0.45),g=this._gain(0.12);
+    w.connect(bpf);bpf.connect(g);g.connect(this.master);this._add(w,g);
+    // Gallop rhythm (3+3 pattern = urgency)
+    let beat=0;
+    const go=()=>{
+      if(!this.playing)return;
+      const b=beat%6;
+      if(b===0||b===3)this._kick();
+      if(b===1||b===4)this._snare();
+      if(b===2){this._kick();}
+      if(b===5&&Math.random()<0.25)this._clash();
+      beat++;
+    };
+    go();this._drumInt=setInterval(()=>{if(this.playing)go();else clearInterval(this._drumInt);},270);
+    // Tense driving drone
+    const dr=this._osc(110,'sawtooth'),lpf=this._filter('lowpass',280),g2=this._gain(0.045,1.2);
+    dr.connect(lpf);lpf.connect(g2);g2.connect(this.master);this._add(dr,g2);
+  }
+
+  _boss(){
+    const rb=this._noise('brown'),lpf=this._filter('lowpass',110),g=this._gain(0.18);
+    rb.connect(lpf);lpf.connect(g);g.connect(this.master);this._add(rb,g);
+    [[55,'sawtooth',0.10],[110,'sine',0.055],[165,'sine',0.03]].forEach(([f,t,v])=>{
+      const o=this._osc(f,t);const gn=this._gain(v,2.5);o.connect(gn);gn.connect(this.master);this._add(o,gn);
+    });
+    const beat=()=>{[0,0.13].forEach(off=>{
+      const o=this.ctx.createOscillator(),gn=this.ctx.createGain();
+      o.type='sine';o.frequency.value=48;
+      gn.gain.setValueAtTime(0,this.ctx.currentTime+off);
+      gn.gain.setTargetAtTime(0.38,this.ctx.currentTime+off,0.008);
+      gn.gain.setTargetAtTime(0,this.ctx.currentTime+off+0.09,0.04);
+      o.connect(gn);gn.connect(this.master);o.start(this.ctx.currentTime+off);o.stop(this.ctx.currentTime+off+0.35);
+    });};
+    beat();this._beatInt=setInterval(()=>{if(this.playing)beat();else clearInterval(this._beatInt);},1100);
+  }
+
+  _explore(){
+    const w=this._noise('white'),bpf=this._filter('bandpass',700,0.28),g=this._gain(0.08);
+    w.connect(bpf);bpf.connect(g);g.connect(this.master);this._add(w,g);
+    [220,277.18,329.63,369.99].forEach((f,i)=>{
+      const o=this._osc(f,'sine',(i-1.5)*4);const gn=this._gain(0.022,2+i*0.5);
+      o.connect(gn);gn.connect(this.master);this._add(o,gn);
+    });
+  }
+}
+const engine=new SoundEngine();
+
+/* ══ SFX ENGINE — plays simultaneously on top of background music ══ */
+class SFXEngine {
+  constructor(){this.ctx=null;}
+
+  _init(){
+    if(this.ctx&&this.ctx.state!=='closed')return;
+    this.ctx=new(window.AudioContext||window.webkitAudioContext)();
+  }
+
+  _noise(dur){
+    const sr=this.ctx.sampleRate,len=Math.ceil(sr*dur);
+    const buf=this.ctx.createBuffer(1,len,sr);
+    const d=buf.getChannelData(0);for(let i=0;i<len;i++)d[i]=Math.random()*2-1;
+    const src=this.ctx.createBufferSource();src.buffer=buf;return src;
+  }
+
+  fireball(){
+    const t=this.ctx.currentTime;
+    // Woosh + crackling fire
+    const s1=this._noise(2.5),bpf=this.ctx.createBiquadFilter(),g1=this.ctx.createGain();
+    bpf.type='bandpass';bpf.frequency.value=480;bpf.Q.value=0.6;
+    g1.gain.setValueAtTime(0,t);g1.gain.linearRampToValueAtTime(0.9,t+0.08);
+    g1.gain.setTargetAtTime(0.4,t+0.25,0.38);g1.gain.setTargetAtTime(0,t+1.9,0.28);
+    s1.connect(bpf);bpf.connect(g1);g1.connect(this.ctx.destination);s1.start(t);s1.stop(t+2.5);
+    // High crackle
+    const s2=this._noise(2.5),hpf=this.ctx.createBiquadFilter(),g2=this.ctx.createGain();
+    hpf.type='highpass';hpf.frequency.value=3500;
+    g2.gain.setValueAtTime(0.5,t+0.1);g2.gain.setTargetAtTime(0,t+0.6,0.55);
+    s2.connect(hpf);hpf.connect(g2);g2.connect(this.ctx.destination);s2.start(t+0.05);s2.stop(t+2.5);
+    // Boom thump
+    const o=this.ctx.createOscillator(),go=this.ctx.createGain();
+    o.type='sine';o.frequency.setValueAtTime(120,t);o.frequency.exponentialRampToValueAtTime(28,t+0.38);
+    go.gain.setValueAtTime(0.8,t);go.gain.exponentialRampToValueAtTime(0.001,t+0.5);
+    o.connect(go);go.connect(this.ctx.destination);o.start(t);o.stop(t+0.55);
+  }
+
+  sword(){
+    const t=this.ctx.currentTime;
+    // Metal ring
+    const s=this._noise(1.5),hpf=this.ctx.createBiquadFilter(),bpf=this.ctx.createBiquadFilter(),g=this.ctx.createGain();
+    hpf.type='highpass';hpf.frequency.value=3200;
+    bpf.type='bandpass';bpf.frequency.value=5800;bpf.Q.value=2.8;
+    g.gain.setValueAtTime(0.9,t);g.gain.exponentialRampToValueAtTime(0.001,t+1.3);
+    s.connect(hpf);hpf.connect(bpf);bpf.connect(g);g.connect(this.ctx.destination);s.start(t);s.stop(t+1.5);
+    // Impact thud
+    const o=this.ctx.createOscillator(),go=this.ctx.createGain();
+    o.type='sine';o.frequency.setValueAtTime(200,t);o.frequency.exponentialRampToValueAtTime(45,t+0.14);
+    go.gain.setValueAtTime(0.6,t);go.gain.exponentialRampToValueAtTime(0.001,t+0.22);
+    o.connect(go);go.connect(this.ctx.destination);o.start(t);o.stop(t+0.28);
+  }
+
+  arrow(){
+    const t=this.ctx.currentTime;
+    // Sharp whistling whoosh
+    const s=this._noise(0.6),bpf=this.ctx.createBiquadFilter(),g=this.ctx.createGain();
+    bpf.type='bandpass';bpf.frequency.value=2400;bpf.Q.value=1.4;
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(0.65,t+0.025);
+    g.gain.linearRampToValueAtTime(0,t+0.55);
+    s.connect(bpf);bpf.connect(g);g.connect(this.ctx.destination);s.start(t);s.stop(t+0.6);
+  }
+
+  thunder(){
+    const t=this.ctx.currentTime;
+    // Deep rolling rumble
+    const s1=this._noise(3.5),lpf=this.ctx.createBiquadFilter(),g1=this.ctx.createGain();
+    lpf.type='lowpass';lpf.frequency.value=260;
+    g1.gain.setValueAtTime(0,t);g1.gain.linearRampToValueAtTime(1.2,t+0.04);
+    g1.gain.setTargetAtTime(0.5,t+0.22,0.42);g1.gain.setTargetAtTime(0,t+2.1,0.48);
+    s1.connect(lpf);lpf.connect(g1);g1.connect(this.ctx.destination);s1.start(t);s1.stop(t+3.5);
+    // Lightning crack
+    const s2=this._noise(0.3),hpf=this.ctx.createBiquadFilter(),g2=this.ctx.createGain();
+    hpf.type='highpass';hpf.frequency.value=1800;
+    g2.gain.setValueAtTime(0.85,t);g2.gain.exponentialRampToValueAtTime(0.001,t+0.26);
+    s2.connect(hpf);hpf.connect(g2);g2.connect(this.ctx.destination);s2.start(t);s2.stop(t+0.32);
+  }
+
+  magic(){
+    const t=this.ctx.currentTime;
+    // Ascending sparkle tones
+    [523.25,659.25,783.99,1046.5].forEach((f,i)=>{
+      const o=this.ctx.createOscillator(),g=this.ctx.createGain();
+      o.type='sine';o.frequency.value=f;
+      const d=i*0.08;
+      g.gain.setValueAtTime(0,t+d);g.gain.linearRampToValueAtTime(0.22,t+d+0.06);
+      g.gain.setTargetAtTime(0,t+d+0.28,0.32);
+      o.connect(g);g.connect(this.ctx.destination);o.start(t+d);o.stop(t+2);
+    });
+    // Shimmer breath
+    const s=this._noise(2),bpf=this.ctx.createBiquadFilter(),g3=this.ctx.createGain();
+    bpf.type='bandpass';bpf.frequency.value=4200;bpf.Q.value=3.5;
+    g3.gain.setValueAtTime(0.28,t);g3.gain.setTargetAtTime(0,t+0.9,0.45);
+    s.connect(bpf);bpf.connect(g3);g3.connect(this.ctx.destination);s.start(t);s.stop(t+2);
+  }
+
+  roar(){
+    const t=this.ctx.currentTime;
+    // Voice-band surge
+    const s=this._noise(2),bpf=this.ctx.createBiquadFilter(),g=this.ctx.createGain();
+    bpf.type='bandpass';bpf.frequency.value=620;bpf.Q.value=0.55;
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(0.95,t+0.12);
+    g.gain.setTargetAtTime(0.5,t+0.5,0.38);g.gain.setTargetAtTime(0,t+1.2,0.38);
+    s.connect(bpf);bpf.connect(g);g.connect(this.ctx.destination);s.start(t);s.stop(t+2);
+    // Deep sawtooth growl with vibrato
+    const o=this.ctx.createOscillator(),lfo=this.ctx.createOscillator(),lfoG=this.ctx.createGain(),go=this.ctx.createGain();
+    o.type='sawtooth';o.frequency.value=115;
+    lfo.type='sine';lfo.frequency.value=4.8;lfoG.gain.value=16;
+    lfo.connect(lfoG);lfoG.connect(o.frequency);
+    go.gain.setValueAtTime(0.18,t);go.gain.setTargetAtTime(0,t+1.0,0.38);
+    o.connect(go);go.connect(this.ctx.destination);
+    o.start(t);o.stop(t+2);lfo.start(t);lfo.stop(t+2);
+  }
+
+  explosion(){
+    const t=this.ctx.currentTime;
+    // Sub-bass boom sweep
+    const o=this.ctx.createOscillator(),go=this.ctx.createGain();
+    o.type='sine';o.frequency.setValueAtTime(85,t);o.frequency.exponentialRampToValueAtTime(16,t+0.55);
+    go.gain.setValueAtTime(1.2,t);go.gain.exponentialRampToValueAtTime(0.001,t+0.7);
+    o.connect(go);go.connect(this.ctx.destination);o.start(t);o.stop(t+0.75);
+    // White noise blast (long tail)
+    const s1=this._noise(3.5),g1=this.ctx.createGain();
+    g1.gain.setValueAtTime(1.0,t);g1.gain.exponentialRampToValueAtTime(0.001,t+3.2);
+    s1.connect(g1);g1.connect(this.ctx.destination);s1.start(t);s1.stop(t+3.5);
+    // Mid crunch body
+    const s2=this._noise(1),bpf=this.ctx.createBiquadFilter(),g2=this.ctx.createGain();
+    bpf.type='bandpass';bpf.frequency.value=900;bpf.Q.value=0.85;
+    g2.gain.setValueAtTime(0.75,t);g2.gain.exponentialRampToValueAtTime(0.001,t+0.95);
+    s2.connect(bpf);bpf.connect(g2);g2.connect(this.ctx.destination);s2.start(t);s2.stop(t+1);
+  }
+
+  dragon(){
+    const t=this.ctx.currentTime;
+    // Massive pitch-sliding growl
+    const o=this.ctx.createOscillator(),lfo=this.ctx.createOscillator(),lfoG=this.ctx.createGain(),go=this.ctx.createGain();
+    o.type='sawtooth';
+    o.frequency.setValueAtTime(55,t);o.frequency.linearRampToValueAtTime(80,t+0.9);o.frequency.linearRampToValueAtTime(42,t+2.8);
+    lfo.type='sine';lfo.frequency.value=4.8;lfoG.gain.value=10;
+    lfo.connect(lfoG);lfoG.connect(o.frequency);
+    go.gain.setValueAtTime(0,t);go.gain.linearRampToValueAtTime(0.38,t+0.18);go.gain.setTargetAtTime(0,t+1.9,0.4);
+    o.connect(go);go.connect(this.ctx.destination);
+    o.start(t);o.stop(t+2.8);lfo.start(t);lfo.stop(t+2.8);
+    // Raspy breath undertone
+    const s=this._noise(2.8),bpf=this.ctx.createBiquadFilter(),g=this.ctx.createGain();
+    bpf.type='bandpass';bpf.frequency.value=380;bpf.Q.value=0.7;
+    g.gain.setValueAtTime(0.45,t+0.1);g.gain.setTargetAtTime(0,t+1.6,0.48);
+    s.connect(bpf);bpf.connect(g);g.connect(this.ctx.destination);s.start(t);s.stop(t+2.8);
+  }
+
+  play(sfxId){
+    this._init();
+    if(this.ctx.state==='suspended')this.ctx.resume();
+    if(typeof this[sfxId]==='function')this[sfxId]();
+  }
+}
+const sfxEngine=new SFXEngine();
+
+/* ── Audio ducking: lower background music when SFX fires, restore after ── */
+function _duck(durationMs){
+  const duckRatio=0.6, restoreAfter=durationMs+250;
+  // HTML5 Audio track
+  if(currentAudio){
+    const orig=currentAudio.volume;
+    currentAudio.volume=orig*duckRatio;
+    setTimeout(()=>{if(currentAudio)currentAudio.volume=orig;},restoreAfter);
+  }
+  // Web Audio engine
+  if(engine.master&&engine.ctx&&engine.ctx.state==='running'){
+    const now=engine.ctx.currentTime, orig=engine.master.gain.value;
+    engine.master.gain.cancelScheduledValues(now);
+    engine.master.gain.setTargetAtTime(orig*duckRatio,now,0.04);
+    setTimeout(()=>{
+      if(engine.master&&engine.ctx&&engine.ctx.state==='running')
+        engine.master.gain.setTargetAtTime(orig,engine.ctx.currentTime,0.35);
+    },restoreAfter);
+  }
+}
+
+/* ── playSFX: triggered by SFX card click ── */
+function playSFX(card,s){
+  const durMs=parseFloat(s.dur)*1000||2000;
+  _duck(durMs);
+  sfxEngine.play(s.sfxId);
+  if(card){card.classList.add('firing');setTimeout(()=>card.classList.remove('firing'),700);}
+}
+
+/* ══ TRACK URLs — Kevin MacLeod (CC BY 3.0 · incompetech.com) ══ */
+const BASE='https://incompetech.com/music/royalty-free/mp3-royaltyfree/';
+const TRACK_URLS={
+  'Battle Cry':         BASE+'Clash%20Defiant.mp3',
+  'Epic Clash':         BASE+'Anguish.mp3',
+  'Charge!':            BASE+'Heroic%20Age.mp3',
+  'The Dragon Awakens': BASE+'Epic%20Unease.mp3',
+  'Final Stand':        BASE+'Volatile%20Reaction.mp3',
+  'Into the Unknown':   BASE+'Arcadia.mp3',
+  "Explorer's Theme":   BASE+'Undaunted.mp3',
+  'The Drinking Song':  BASE+'Jaunty%20Gigue.mp3',
+  'Dungeon Depths':     BASE+'Shadowlands%201%20-%20The%20Horrors.mp3',
+  'Ancient Crypt':      BASE+'Myst%20on%20the%20Moor.mp3',
+};
+let currentAudio=null;
+const RACE_EMOJIS={human:'👤',elf:'🧝',dwarf:'⛏️',halfling:'🌿',dragonborn:'🐲',tiefling:'😈',halforc:'💪',gnome:'🔮',aasimar:'✨',tabaxi:'🐱',firbolg:'🌲',kenku:'🦅'};
+const CLASS_EMOJIS={fighter:'⚔️',wizard:'🧙',rogue:'🗡️',cleric:'✝️',ranger:'🏹',paladin:'🛡️',barbarian:'💢',bard:'🎶',druid:'🌿',monk:'🥋',sorcerer:'🔥',warlock:'👁️'};
+const CLASS_NAMES={es:{fighter:'Guerrero',wizard:'Mago',rogue:'Pícaro',cleric:'Clérigo',ranger:'Explorador',paladin:'Paladín',barbarian:'Bárbaro',bard:'Bardo',druid:'Druida',monk:'Monje',sorcerer:'Hechicero',warlock:'Brujo'},en:{fighter:'Fighter',wizard:'Wizard',rogue:'Rogue',cleric:'Cleric',ranger:'Ranger',paladin:'Paladin',barbarian:'Barbarian',bard:'Bard',druid:'Druid',monk:'Monk',sorcerer:'Sorcerer',warlock:'Warlock'}};
+const RACE_NAMES={es:{human:'Humano',elf:'Elfo',dwarf:'Enano',halfling:'Mediano',dragonborn:'Dragonborn',tiefling:'Tiefling',halforc:'Semiorco',gnome:'Gnomo',aasimar:'Aasimar',tabaxi:'Tabaxi',firbolg:'Firbolg',kenku:'Kenku'},en:{human:'Human',elf:'Elf',dwarf:'Dwarf',halfling:'Halfling',dragonborn:'Dragonborn',tiefling:'Tiefling',halforc:'Half-Orc',gnome:'Gnome',aasimar:'Aasimar',tabaxi:'Tabaxi',firbolg:'Firbolg',kenku:'Kenku'}};
+
+/* ══ CURSOR ══ */
+const cdot=document.getElementById('cdot'), cring=document.getElementById('cring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cdot.style.left=mx+'px';cdot.style.top=my+'px';});
+(function tickCursor(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;cring.style.left=rx+'px';cring.style.top=ry+'px';requestAnimationFrame(tickCursor);})();
+
+/* ══ LANG ══ */
+function setLang(l){
+  currentLang=l;
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));
+  document.querySelectorAll('[data-'+l+']').forEach(el=>{if(el.tagName!=='INPUT')el.textContent=el.getAttribute('data-'+l);});
+  document.documentElement.lang=l;
+}
+
+/* ══ NAV ══ */
+function goTo(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  const nav=document.getElementById('appNav');
+  if(page==='home'){nav.classList.remove('visible');}
+  else{nav.classList.add('visible');document.querySelectorAll('.anav-link').forEach(n=>n.classList.remove('active'));const nl=document.getElementById('nl-'+page);if(nl)nl.classList.add('active');}
+  window.scrollTo(0,0);
+  if(page==='sounds')renderSounds('all');
+  if(page==='maps')initMap();
+}
+
+/* ══ MODAL ══ */
+function openModal(t){document.getElementById('modalOverlay').classList.add('open');switchTab(t);}
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open');}
+function closeModalOutside(e){if(e.target===document.getElementById('modalOverlay'))closeModal();}
+function switchTab(t){
+  document.getElementById('tabLogin').classList.toggle('active',t==='login');
+  document.getElementById('tabRegister').classList.toggle('active',t==='register');
+  document.getElementById('registerFields').style.display=t==='register'?'block':'none';
+  document.getElementById('modalSubmitBtn').textContent=t==='login'?(currentLang==='es'?'Iniciar sesión':'Log in'):(currentLang==='es'?'Crear cuenta':'Create account');
+}
+
+/* ══ CHARACTER CREATOR ══ */
+function selectMode(m){selections.mode=m;document.getElementById('modeRandom').classList.toggle('selected',m==='random');document.getElementById('modeManual').classList.toggle('selected',m==='manual');}
+function selectOption(el,type,val){el.closest('.option-grid').querySelectorAll('.option-card').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');selections[type]=val;}
+function nextStep(){
+  if(currentStep===1&&!selections.mode)selectMode('manual');
+  if(currentStep===4&&!rolledStats)return;
+  if(currentStep<5){document.getElementById('step'+currentStep).classList.remove('active');currentStep++;document.getElementById('step'+currentStep).classList.add('active');updateProgress();if(currentStep===5)buildSheet();}
+}
+function prevStep(){if(currentStep>1){document.getElementById('step'+currentStep).classList.remove('active');currentStep--;document.getElementById('step'+currentStep).classList.add('active');updateProgress();}}
+function updateProgress(){for(let i=1;i<=5;i++){const d=document.getElementById('pd'+i);d.classList.remove('active','done');if(i<currentStep)d.classList.add('done');else if(i===currentStep)d.classList.add('active');if(i<5)document.getElementById('pl'+i).classList.toggle('done',i<currentStep);}}
+function rollStats(){
+  const stats=['str','dex','con','int','wis','cha'];rolledStats={};
+  stats.forEach(s=>{
+    const rolls=[1,2,3,4].map(()=>Math.ceil(Math.random()*6));
+    const val=rolls.sort((a,b)=>b-a).slice(0,3).reduce((a,b)=>a+b,0);
+    rolledStats[s]=val;
+    const mod=Math.floor((val-10)/2);
+    const el=document.getElementById('sv-'+s);
+    el.textContent=val;el.classList.add('dice-anim');setTimeout(()=>el.classList.remove('dice-anim'),400);
+    document.getElementById('sm-'+s).textContent=(mod>=0?'+':'')+mod;
+  });
+  document.getElementById('btnStep4Next').removeAttribute('disabled');
+}
+function buildSheet(){
+  if(selections.mode==='random'){
+    const races=Object.keys(RACE_EMOJIS),classes=Object.keys(CLASS_EMOJIS);
+    if(!selections.race)selections.race=races[Math.floor(Math.random()*races.length)];
+    if(!selections.class)selections.class=classes[Math.floor(Math.random()*classes.length)];
+    if(!rolledStats){rolledStats={};['str','dex','con','int','wis','cha'].forEach(s=>{const r=[1,2,3,4].map(()=>Math.ceil(Math.random()*6));rolledStats[s]=r.sort((a,b)=>b-a).slice(0,3).reduce((a,b)=>a+b,0);});}
+  }
+  const names={human:['Aldric','Elena'],elf:['Aelindra','Sylvar'],dwarf:['Thorin','Brenna'],halfling:['Perrin','Rosie'],dragonborn:['Balasar','Sora'],tiefling:['Damakos','Lerissa'],halforc:['Gorth','Shara'],gnome:['Dimble','Orra'],aasimar:['Ariel','Solenne'],tabaxi:['Whisper','Flash'],firbolg:['Elder Oak','Gentle Stream'],kenku:['Echo','Whistle']};
+  const rk=selections.race||'human', ck=selections.class||'fighter';
+  const nm=(names[rk]||['Adventurer'])[Math.floor(Math.random()*(names[rk]||['Adventurer']).length)];
+  document.getElementById('csAvatar').textContent=RACE_EMOJIS[rk]||'⚔️';
+  document.getElementById('csName').textContent=nm;
+  document.getElementById('csMeta').textContent=`${RACE_NAMES[currentLang][rk]||rk} · ${CLASS_NAMES[currentLang][ck]||ck} · ${currentLang==='es'?'Nivel':'Level'} 1`;
+  const st=rolledStats||{str:12,dex:14,con:13,int:11,wis:10,cha:15};
+  ['str','dex','con','int','wis','cha'].forEach(s=>{const v=st[s],m=Math.floor((v-10)/2);document.getElementById('c'+s).textContent=v;document.getElementById('cm'+s).textContent=(m>=0?'+':'')+m;});
+}
+function resetCreator(){
+  currentStep=1;selections={};rolledStats=null;
+  document.querySelectorAll('.creator-step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('step1').classList.add('active');
+  document.querySelectorAll('.mode-card,.option-card').forEach(c=>c.classList.remove('selected'));
+  ['str','dex','con','int','wis','cha'].forEach(s=>{document.getElementById('sv-'+s).textContent='—';document.getElementById('sm-'+s).textContent='';});
+  document.getElementById('btnStep4Next').setAttribute('disabled','');
+  updateProgress();
+}
+
+/* ══ MAP BUILDER (Canvas) ══ */
+const CELL=36,COLS=20,ROWS=14;
+let mapData=Array.from({length:ROWS},()=>Array(COLS).fill(null));
+let fogData=Array.from({length:ROWS},()=>Array(COLS).fill(false));
+let mapCvs=null,mapCtx=null;
+
+/* deterministic "noise" per cell index */
+function sr(n){const x=Math.sin(n*127.1+311.7)*43758.5;return x-Math.floor(x);}
+
+/* ── Tile Draw Functions ── */
+function dFloor(ctx,x,y,s,idx){
+  const v=sr(idx||0)*7;
+  ctx.fillStyle=`hsl(240,9%,${19+v}%)`;
+  ctx.fillRect(x,y,s,s);
+  /* stone vein */
+  if(sr((idx||0)*3+1)>0.68){
+    ctx.save();ctx.globalAlpha=0.10;ctx.strokeStyle='#000';ctx.lineWidth=0.6;
+    ctx.beginPath();const ox=x+sr((idx||0)*5)*s*.5+4;
+    ctx.moveTo(ox,y+2);ctx.lineTo(ox+sr((idx||0)*9)*8-4,y+s-2);ctx.stroke();ctx.restore();
+  }
+}
+function dWall(ctx,x,y,s){
+  ctx.fillStyle='#0c0c14';ctx.fillRect(x,y,s,s);
+  ctx.fillStyle='rgba(255,255,255,0.035)';ctx.fillRect(x+1,y+1,s-2,2);ctx.fillRect(x+1,y+1,2,s-2);
+  ctx.fillStyle='rgba(0,0,0,0.3)';ctx.fillRect(x,y+s-2,s,2);ctx.fillRect(x+s-2,y,2,s);
+}
+function dWater(ctx,x,y,s){
+  ctx.fillStyle='#0b3650';ctx.fillRect(x,y,s,s);
+  for(let i=0;i<3;i++){
+    ctx.save();ctx.globalAlpha=0.28+i*0.07;ctx.strokeStyle='#28a0d8';ctx.lineWidth=1;
+    ctx.beginPath();const wy=y+6+i*10;
+    ctx.moveTo(x+1,wy);ctx.bezierCurveTo(x+9,wy-3,x+18,wy+3,x+26,wy-1);
+    ctx.bezierCurveTo(x+30,wy-2,x+33,wy+2,x+s-1,wy);ctx.stroke();ctx.restore();
+  }
+}
+function dGrass(ctx,x,y,s){
+  ctx.fillStyle='#18381a';ctx.fillRect(x,y,s,s);
+  ctx.save();ctx.strokeStyle='#2e7030';ctx.lineWidth=1.4;
+  for(let i=0;i<5;i++){
+    const gx=x+4+i*6,gy=y+s-10-(i%3)*5;
+    ctx.beginPath();ctx.moveTo(gx,gy+5);ctx.lineTo(gx-2,gy);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(gx,gy+5);ctx.lineTo(gx+2,gy+1);ctx.stroke();
+  }
+  ctx.restore();
+}
+function dRock(ctx,x,y,s,idx){
+  dFloor(ctx,x,y,s,idx||99);
+  ctx.fillStyle='#222232';
+  ctx.beginPath();ctx.ellipse(x+s/2,y+s/2+1,s/2-7,s/2-9,0.4,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='#3c3c4e';ctx.lineWidth=1;
+  ctx.beginPath();ctx.ellipse(x+s/2,y+s/2+1,s/2-7,s/2-9,0.4,0,Math.PI*2);ctx.stroke();
+  ctx.save();ctx.globalAlpha=0.12;ctx.strokeStyle='#fff';ctx.lineWidth=0.7;
+  ctx.beginPath();ctx.moveTo(x+s/2-3,y+s/2-3);ctx.lineTo(x+s/2+3,y+s/2+3);ctx.stroke();ctx.restore();
+}
+function dBlood(ctx,x,y,s,idx){
+  dFloor(ctx,x,y,s,idx||77);
+  ctx.save();ctx.globalAlpha=0.82;ctx.fillStyle='#780808';
+  ctx.beginPath();ctx.ellipse(x+s/2-1,y+s/2+1,9,6,0.3,0,Math.PI*2);ctx.fill();
+  ctx.globalAlpha=0.55;ctx.fillStyle='#5a0505';
+  [[x+9,y+10,2.5],[x+24,y+20,2],[x+16,y+27,1.8],[x+21,y+8,1.5]].forEach(([dx,dy,r])=>{
+    ctx.beginPath();ctx.arc(dx,dy,r,0,Math.PI*2);ctx.fill();});ctx.restore();
+}
+function dDoor(ctx,x,y,s){
+  dFloor(ctx,x,y,s,11);
+  ctx.fillStyle='#2a1406';ctx.fillRect(x+4,y+4,s-8,s-8);
+  ctx.fillStyle='#7a481e';ctx.fillRect(x+7,y+7,s-14,s-14);
+  const h=(s-18)*.44;
+  ctx.strokeStyle='#5a3412';ctx.lineWidth=0.8;
+  ctx.strokeRect(x+9,y+9,s-18,h);
+  ctx.strokeRect(x+9,y+10+h+1,s-18,h);
+  ctx.fillStyle='#c8a84b';ctx.beginPath();ctx.arc(x+s-14,y+s/2,2.2,0,Math.PI*2);ctx.fill();
+}
+function dPit(ctx,x,y,s,idx){
+  dFloor(ctx,x,y,s,idx||22);
+  const g=ctx.createRadialGradient(x+s/2,y+s/2,2,x+s/2,y+s/2,s/2-4);
+  g.addColorStop(0,'#00000c');g.addColorStop(0.6,'#02020a');g.addColorStop(1,'#20202e');
+  ctx.fillStyle=g;ctx.beginPath();ctx.arc(x+s/2,y+s/2,s/2-5,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='#323244';ctx.lineWidth=2;
+  ctx.beginPath();ctx.arc(x+s/2,y+s/2,s/2-5,0,Math.PI*2);ctx.stroke();
+  ctx.save();ctx.globalAlpha=0.15;ctx.strokeStyle='#fff';ctx.lineWidth=0.5;
+  ctx.beginPath();ctx.arc(x+s/2,y+s/2,s/2-7,Math.PI*.8,Math.PI*1.5);ctx.stroke();ctx.restore();
+}
+function dFire(ctx,x,y,s,idx){
+  dFloor(ctx,x,y,s,idx||33);
+  const g=ctx.createRadialGradient(x+s/2,y+s*.65,0,x+s/2,y+s*.5,s/2+2);
+  g.addColorStop(0,'rgba(255,220,50,0.9)');g.addColorStop(0.38,'rgba(220,75,8,0.7)');g.addColorStop(1,'rgba(180,25,0,0)');
+  ctx.fillStyle=g;ctx.fillRect(x,y,s,s);
+  ctx.fillStyle='rgba(255,158,0,0.9)';
+  ctx.beginPath();ctx.moveTo(x+s/2,y+6);
+  ctx.bezierCurveTo(x+s-7,y+12,x+s-5,y+s-7,x+s/2,y+s-7);
+  ctx.bezierCurveTo(x+5,y+s-7,x+7,y+12,x+s/2,y+6);ctx.fill();
+  ctx.fillStyle='rgba(255,240,110,0.88)';
+  ctx.beginPath();ctx.moveTo(x+s/2,y+12);
+  ctx.bezierCurveTo(x+s/2+6,y+18,x+s/2+5,y+s-13,x+s/2,y+s-13);
+  ctx.bezierCurveTo(x+s/2-5,y+s-13,x+s/2-6,y+18,x+s/2,y+12);ctx.fill();
+}
+function dChest(ctx,x,y,s,idx){
+  dFloor(ctx,x,y,s,idx||44);
+  ctx.fillStyle='#3e2808';ctx.fillRect(x+6,y+14,s-12,s-20);
+  ctx.fillStyle='#7a4e16';ctx.fillRect(x+6,y+10,s-12,6);
+  ctx.beginPath();ctx.arc(x+s/2,y+14,(s-12)/2,Math.PI,0);ctx.fill();
+  ctx.strokeStyle='#c8a84b';ctx.lineWidth=1.3;ctx.strokeRect(x+6,y+14,s-12,s-20);
+  ctx.beginPath();ctx.moveTo(x+6,y+14);ctx.lineTo(x+s-6,y+14);ctx.stroke();
+  ctx.fillStyle='#c8a84b';ctx.beginPath();ctx.arc(x+s/2,y+s/2+3,2.5,0,Math.PI*2);ctx.fill();
+}
+function dBed(ctx,x,y,s,idx){
+  dFloor(ctx,x,y,s,idx||55);
+  ctx.fillStyle='#3a1e06';ctx.fillRect(x+4,y+5,s-8,s-9);
+  ctx.fillStyle='#721e4e';ctx.fillRect(x+6,y+7,s-12,s-13);
+  ctx.fillStyle='#d09aba';ctx.fillRect(x+8,y+8,s-16,9);
+  ctx.strokeStyle='#a07890';ctx.lineWidth=0.5;ctx.strokeRect(x+8,y+8,s-16,9);
+}
+function dStairs(ctx,x,y,s){
+  for(let i=0;i<5;i++){
+    ctx.fillStyle=`hsl(240,9%,${22+i*6}%)`;ctx.fillRect(x+i*2,y+i*(s/5),s-i*4,s/5+1);
+    ctx.strokeStyle='rgba(0,0,0,0.4)';ctx.lineWidth=0.5;ctx.strokeRect(x+i*2,y+i*(s/5),s-i*4,s/5);
+  }
+  ctx.fillStyle='rgba(255,255,255,0.25)';ctx.font='10px sans-serif';
+  ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('↓',x+s/2,y+s/2+2);
+}
+function dToken(ctx,x,y,s,col,lbl){
+  ctx.save();ctx.globalAlpha=0.4;ctx.fillStyle='#000';
+  ctx.beginPath();ctx.ellipse(x+s/2+1,y+s/2+2,s/2-7,s/2-9,0,0,Math.PI*2);ctx.fill();ctx.restore();
+  ctx.fillStyle=col;ctx.beginPath();ctx.arc(x+s/2,y+s/2,s/2-7,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,0.45)';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.arc(x+s/2,y+s/2,s/2-7,0,Math.PI*2);ctx.stroke();
+  ctx.fillStyle='#fff';ctx.font='bold 10px Cinzel,serif';
+  ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(lbl,x+s/2,y+s/2+1);
+}
+const TILE_DRAW={
+  wall:dWall, water:dWater, grass:dGrass,
+  rock:(c,x,y,s)=>dRock(c,x,y,s), blood:(c,x,y,s)=>dBlood(c,x,y,s),
+  door:dDoor, pit:(c,x,y,s)=>dPit(c,x,y,s), fire:(c,x,y,s)=>dFire(c,x,y,s),
+  chest:(c,x,y,s)=>dChest(c,x,y,s), bed:(c,x,y,s)=>dBed(c,x,y,s), stairs:dStairs,
+  hero:(c,x,y,s)=>dToken(c,x,y,s,'#496be3','H'),
+  enemy:(c,x,y,s)=>dToken(c,x,y,s,'#c84444','✕'),
+  boss:(c,x,y,s)=>dToken(c,x,y,s,'#8b30c8','B'),
+  npc:(c,x,y,s)=>dToken(c,x,y,s,'#2a9c5a','N'),
+};
+
+function redrawCell(row,col){
+  const x=col*CELL,y=row*CELL,s=CELL,idx=row*COLS+col;
+  const tile=mapData[row][col];
+  dFloor(mapCtx,x,y,s,idx);
+  if(tile&&TILE_DRAW[tile])TILE_DRAW[tile](mapCtx,x,y,s);
+  mapCtx.strokeStyle='rgba(0,0,0,0.32)';mapCtx.lineWidth=0.5;mapCtx.strokeRect(x,y,s,s);
+  if(fogData[row][col]){mapCtx.fillStyle='rgba(0,0,0,0.84)';mapCtx.fillRect(x,y,s,s);}
+}
+function redrawMap(){for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++)redrawCell(r,c);}
+function getCell(e){
+  const rect=mapCvs.getBoundingClientRect();
+  const col=Math.floor((e.clientX-rect.left)/CELL),row=Math.floor((e.clientY-rect.top)/CELL);
+  return(col>=0&&col<COLS&&row>=0&&row<ROWS)?{row,col}:null;
+}
+function handleMapDraw(e){
+  const cell=getCell(e);if(!cell)return;
+  const{row,col}=cell;
+  if(activeTool==='erase'){mapData[row][col]=null;fogData[row][col]=false;}
+  else if(activeTool==='fog'){fogData[row][col]=!fogData[row][col];}
+  else{mapData[row][col]=(activeTile==='floor')?null:activeTile;}
+  redrawCell(row,col);
+}
+function initMap(){
+  if(mapCvs)return;
+  const wrap=document.getElementById('mapWrap');
+  mapCvs=document.createElement('canvas');
+  mapCvs.width=COLS*CELL;mapCvs.height=ROWS*CELL;mapCvs.style.cssText='display:block;cursor:none;';
+  wrap.appendChild(mapCvs);mapCtx=mapCvs.getContext('2d');
+  mapCvs.addEventListener('mousedown',e=>{isDrawing=true;handleMapDraw(e);});
+  mapCvs.addEventListener('mousemove',e=>{if(isDrawing)handleMapDraw(e);});
+  mapCvs.addEventListener('mouseup',()=>isDrawing=false);
+  document.addEventListener('mouseup',()=>isDrawing=false);
+  redrawMap();
+}
+function selectTile(el,t){
+  activeTile=t;
+  document.querySelectorAll('.tile').forEach(x=>x.classList.remove('active'));
+  el.classList.add('active');
+}
+function selectTool(t){
+  activeTool=t;
+  document.querySelectorAll('.tool-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tool-'+t).classList.add('active');
+}
+function clearMap(){
+  mapData=Array.from({length:ROWS},()=>Array(COLS).fill(null));
+  fogData=Array.from({length:ROWS},()=>Array(COLS).fill(false));
+  if(mapCtx)redrawMap();
+}
+function loadTemplate(type){
+  mapData=Array.from({length:ROWS},()=>Array(COLS).fill(null));
+  fogData=Array.from({length:ROWS},()=>Array(COLS).fill(false));
+  const set=(r,c,t)=>{if(r>=0&&r<ROWS&&c>=0&&c<COLS)mapData[r][c]=t;};
+  if(type==='dungeon'){
+    /* perimeter walls */
+    for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
+      if(r===0||r===ROWS-1||c===0||c===COLS-1)set(r,c,'wall');
+    }
+    /* inner dividing wall with door */
+    for(let c=1;c<COLS-1;c++)set(6,c,'wall');
+    set(6,9,'door');set(6,10,'door');
+    /* north room */
+    set(2,3,'chest');set(2,16,'chest');set(1,7,'stairs');
+    /* central pit */
+    [[3,9],[3,10],[4,9],[4,10]].forEach(([r,c])=>set(r,c,'pit'));
+    /* south rooms: beds */
+    [[8,2],[8,5],[8,8],[9,2],[9,5],[9,8],[10,2],[10,5],[10,8]].forEach(([r,c])=>set(r,c,'bed'));
+    /* torches */
+    [[1,1],[1,18],[12,1],[12,18],[5,1],[5,18]].forEach(([r,c])=>set(r,c,'fire'));
+    /* blood splats */
+    [[3,4],[5,7],[10,12],[11,5],[9,17],[4,15],[2,11],[12,14]].forEach(([r,c])=>set(r,c,'blood'));
+    /* rocks */
+    [[2,7],[7,3],[11,15],[4,17],[9,11]].forEach(([r,c])=>set(r,c,'rock'));
+    /* fog in lower half */
+    for(let r=7;r<ROWS-1;r++)for(let c=1;c<COLS-1;c++)if(Math.random()<0.38)fogData[r][c]=true;
+  }
+  else if(type==='tavern'){
+    for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
+      if(r===0||r===ROWS-1||c===0||c===COLS-1)set(r,c,'wall');
+    }
+    /* interior wall + door */
+    for(let r=1;r<6;r++)set(r,9,'wall');set(5,9,'door');
+    for(let r=8;r<ROWS-1;r++)set(r,13,'wall');set(10,13,'door');
+    /* beds left */
+    [[1,1],[1,3],[1,5],[2,1],[2,3],[2,5],[9,1],[10,1],[11,1],[9,3],[10,3],[11,3]].forEach(([r,c])=>set(r,c,'bed'));
+    /* fireplace */
+    [[3,11],[3,12],[4,11],[4,12]].forEach(([r,c])=>set(r,c,'fire'));
+    set(11,16,'fire');
+    /* chests */
+    [[1,11],[7,1],[12,18],[6,6]].forEach(([r,c])=>set(r,c,'chest'));
+    /* entrance door */
+    set(ROWS-1,10,'door');
+  }
+  else if(type==='forest'){
+    for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
+      const d=Math.random();
+      if(d<0.48)set(r,c,'grass');
+      else if(d<0.60)set(r,c,'rock');
+    }
+    /* water stream */
+    [[2,0],[2,1],[3,2],[3,3],[4,4],[5,4],[5,5],[6,6],[7,6],[7,7],[8,8],[8,9]].forEach(([r,c])=>set(r,c,'water'));
+  }
+  else if(type==='city'){
+    /* building blocks */
+    [[1,1,5,7],[1,10,5,15],[1,17,5,19],[8,1,12,9],[8,12,12,19]].forEach(([r1,c1,r2,c2])=>{
+      for(let r=r1;r<=r2;r++)for(let c=c1;c<=c2;c++){
+        if(r===r1||r===r2||c===c1||c===c2)set(r,c,'wall');
+      }
+      set(r2,Math.floor((c1+c2)/2),'door');
+    });
+    /* street details */
+    [[6,4],[6,12],[6,18],[7,6]].forEach(([r,c])=>set(r,c,'fire'));
+    [[3,8],[10,10],[2,16]].forEach(([r,c])=>set(r,c,'chest'));
+    for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++)if(!mapData[r][c]&&Math.random()<0.015)set(r,c,'rock');
+  }
+  if(mapCtx)redrawMap();
+}
+
+/* ══ SOUNDS ══ */
+function renderSounds(cat){
+  const grid=document.getElementById('soundsGrid');
+  const f=cat==='all'?SOUNDS:SOUNDS.filter(s=>s.cat===cat);
+  grid.innerHTML=f.map(s=>{
+    if(s.cat==='sfx'){
+      const nm=currentLang==='es'&&s.es?s.es:s.name;
+      const trigLabel=currentLang==='es'?'▶ Lanzar':'▶ Trigger';
+      const sd=JSON.stringify(s).replace(/"/g,'&quot;');
+      return `<div class="sfx-card" onclick="playSFX(this,${sd})"><span class="sfx-badge">SFX</span><span class="sfx-icon">${s.icon}</span><div class="sfx-name">${nm}</div><div class="sfx-dur">${s.dur}s</div><button class="sfx-trigger">${trigLabel}</button></div>`;
+    }
+    const sd=JSON.stringify(s).replace(/"/g,'&quot;');
+    return `<div class="sound-card ${s.id===currentSoundId?'playing':''}" onclick="playSound(${sd})"><div class="sc-top"><div class="sc-emoji">${s.icon}</div><div><div class="sc-name">${currentLang==='es'&&s.es?s.es:s.name}</div><div class="sc-type">${s.cat}</div></div></div><div class="sc-waveform"><div class="sc-wave-fill"></div></div><div class="sc-bottom"><span class="sc-duration">${s.dur}</span><button class="sc-play-btn">${s.id===currentSoundId?'⏸':'▶'}</button></div></div>`;
+  }).join('');
+}
+let activeCat='all';
+function filterCat(cat,el){activeCat=cat;document.querySelectorAll('.cat-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderSounds(cat);}
+function _stopAll(){
+  if(currentAudio){currentAudio.pause();currentAudio.currentTime=0;currentAudio=null;}
+  engine.stop();
+}
+function _getVol(){return parseInt(document.getElementById('volSlider')?.value||70)/100;}
+function playSound(s){
+  _stopAll();
+  currentSoundId=s.id||null;
+  const url=TRACK_URLS[s.name];
+  if(url){
+    currentAudio=new Audio(url);
+    currentAudio.loop=true;
+    currentAudio.volume=_getVol();
+    currentAudio.play().catch(()=>{
+      // URL failed → fall back to Web Audio synthesis
+      currentAudio=null;
+      engine.play(s);
+    });
+  } else {
+    // Ambient sounds (rain, storm, forest) → Web Audio synthesis
+    engine.play(s);
+  }
+  document.getElementById('nowPlaying').style.display='flex';
+  document.getElementById('npIcon').textContent=s.icon||'🎵';
+  document.getElementById('npName').textContent=currentLang==='es'&&s.es?s.es:s.name;
+  document.getElementById('npMeta').textContent=s.cat+' · '+s.dur;
+  document.getElementById('npPlayBtn').textContent='⏸';
+  renderSounds(activeCat||'all');
+  const vol=document.getElementById('volSlider');
+  if(vol)vol.oninput=()=>{
+    const v=parseInt(vol.value)/100;
+    if(currentAudio)currentAudio.volume=v;
+    else engine.setVolume(parseInt(vol.value));
+  };
+}
+function togglePlay(){
+  const b=document.getElementById('npPlayBtn');
+  if(currentAudio){
+    if(currentAudio.paused){currentAudio.play();b.textContent='⏸';}
+    else{currentAudio.pause();b.textContent='▶';}
+  } else {
+    const ok=engine.togglePause();
+    b.textContent=ok===false?'▶':'⏸';
+  }
+}
+
+/* ══ THREE.JS LANDING ══ */
+(function initThree(){
+  if(typeof THREE==='undefined')return;
+
+  const canvas=document.getElementById('bg3d');
+  const W=window.innerWidth, H=window.innerHeight;
+
+  const scene=new THREE.Scene();
+  scene.background=new THREE.Color(0x06080f);
+  scene.fog=new THREE.FogExp2(0x06080f,.038);
+
+  const camera=new THREE.PerspectiveCamera(60,W/H,.1,100);
+  camera.position.set(0,0,9);
+
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true});
+  renderer.setSize(W,H);
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+
+  /* Lights */
+  scene.add(new THREE.AmbientLight(0x080d18,4));
+  const gLight=new THREE.PointLight(0xc8a84b,4,30);
+  gLight.position.set(5,4,6);
+  scene.add(gLight);
+  const tLight=new THREE.PointLight(0x2e9cca,2.5,22);
+  tLight.position.set(-7,-3,2);
+  scene.add(tLight);
+  const pLight=new THREE.PointLight(0x7b6fa8,1.5,18);
+  pLight.position.set(2,7,-4);
+  scene.add(pLight);
+
+  /* Dice geometries */
+  const geos=[
+    new THREE.IcosahedronGeometry(1,0),
+    new THREE.OctahedronGeometry(1,0),
+    new THREE.BoxGeometry(1.6,1.6,1.6),
+    new THREE.DodecahedronGeometry(1,0),
+    new THREE.TetrahedronGeometry(1.1,0),
+  ];
+
+  function dMat(col,emi){
+    return new THREE.MeshPhongMaterial({color:col,emissive:emi,emissiveIntensity:.25,shininess:55,specular:new THREE.Color(0x334466)});
+  }
+  const mats=[dMat(0x18243e,0x08101e),dMat(0x101830,0x060c18),dMat(0x1a1535,0x0a0818),dMat(0x0c1a30,0x060e18)];
+
+  const dice=[], diceGroup=new THREE.Group();
+  scene.add(diceGroup);
+
+  for(let i=0;i<17;i++){
+    const geo=geos[i%geos.length];
+    const mat=mats[i%mats.length].clone();
+    const mesh=new THREE.Mesh(geo,mat);
+    const sc=.18+Math.random()*.65;
+    mesh.scale.setScalar(sc);
+    /* Distribute more toward right side of screen for asymmetric layout */
+    mesh.position.set(
+      (Math.random()-.2)*24,
+      (Math.random()-.5)*16,
+      (Math.random()-.7)*8-1
+    );
+    mesh.rotation.set(Math.random()*Math.PI*2,Math.random()*Math.PI*2,Math.random()*Math.PI);
+    mesh.userData={
+      rx:(Math.random()-.5)*.009,
+      ry:(Math.random()-.5)*.013,
+      fy:mesh.position.y,
+      fa:(Math.random()-.5)*.28,
+      fs:.25+Math.random()*.5,
+      fo:Math.random()*Math.PI*2,
+    };
+    /* Subtle wireframe overlay */
+    const wire=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:0x1e2d47,wireframe:true,transparent:true,opacity:.18}));
+    wire.scale.setScalar(1.015);
+    mesh.add(wire);
+    diceGroup.add(mesh);
+    dice.push(mesh);
+  }
+
+  /* Particles */
+  const pCount=450, pPos=new Float32Array(pCount*3);
+  for(let i=0;i<pCount;i++){pPos[i*3]=(Math.random()-.5)*40;pPos[i*3+1]=(Math.random()-.5)*28;pPos[i*3+2]=(Math.random()-.5)*18;}
+  const pGeo=new THREE.BufferGeometry();
+  pGeo.setAttribute('position',new THREE.BufferAttribute(pPos,3));
+  scene.add(new THREE.Points(pGeo,new THREE.PointsMaterial({color:0x3a5588,size:.055,transparent:true,opacity:.65,sizeAttenuation:true})));
+
+  /* Mouse parallax */
+  let tgX=0,tgY=0,camX=0,camY=0;
+  window.addEventListener('mousemove',e=>{tgX=(e.clientX/window.innerWidth-.5)*2;tgY=-(e.clientY/window.innerHeight-.5)*2;});
+
+  /* Animate */
+  let tick=0;
+  function animate(){
+    if(!document.getElementById('page-home').classList.contains('active')){requestAnimationFrame(animate);return;}
+    requestAnimationFrame(animate);
+    tick+=.007;
+    camX+=(tgX-camX)*.04;
+    camY+=(tgY-camY)*.04;
+    camera.position.x=camX*.7;
+    camera.position.y=camY*.4;
+    camera.lookAt(0,0,0);
+    dice.forEach(d=>{
+      d.rotation.x+=d.userData.rx;
+      d.rotation.y+=d.userData.ry;
+      d.position.y=d.userData.fy+Math.sin(tick*d.userData.fs+d.userData.fo)*d.userData.fa*3;
+    });
+    /* Orbit gold light slowly */
+    gLight.position.x=Math.cos(tick*.25)*7;
+    gLight.position.z=Math.sin(tick*.25)*5+4;
+    renderer.render(scene,camera);
+  }
+  animate();
+
+  /* Resize */
+  window.addEventListener('resize',()=>{
+    const W=window.innerWidth,H=window.innerHeight;
+    camera.aspect=W/H;camera.updateProjectionMatrix();
+    renderer.setSize(W,H);
+  });
+})();
+
+/* ══ INIT ══ */
+document.addEventListener('DOMContentLoaded',()=>{setLang('es');renderSounds('all');});
+</script>
+</body>
+</html>
