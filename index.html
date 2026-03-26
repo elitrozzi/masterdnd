@@ -36,7 +36,7 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .page.active{display:block;}
 
 /* ══════════════════════════════════ LANDING */
-#page-home{position:relative;width:100vw;min-height:280vh;overflow-x:hidden;}
+#page-home{position:relative;width:100vw;min-height:240vh;overflow-x:hidden;}
 #bg3d{position:fixed;inset:0;width:100%;height:100%;z-index:0;opacity:0;animation:fadeIn 2.5s ease .3s forwards;}
 @keyframes fadeIn{to{opacity:1;}}
 
@@ -96,9 +96,6 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .feat-card-icon{font-size:26px;flex-shrink:0;margin-top:2px;}
 .feat-card-title{font-family:'Cinzel',serif;font-size:16px;font-weight:700;color:var(--gold);margin-bottom:8px;}
 .feat-card-desc{font-size:13px;color:var(--text-m);line-height:1.65;}
-/* D20 highlight */
-#d20-label{position:fixed;pointer-events:none;z-index:25;font-family:'Cinzel',serif;font-size:20px;font-weight:700;color:var(--gold);text-shadow:0 0 20px rgba(248,198,98,.9),0 0 40px rgba(248,198,98,.4);opacity:0;transform:translate(-50%,-50%);width:40px;height:40px;display:flex;align-items:center;justify-content:center;}
-#d20-ring{position:fixed;pointer-events:none;z-index:24;border:2px solid var(--gold);border-radius:50%;opacity:0;transform:translate(-50%,-50%);box-shadow:0 0 24px rgba(248,198,98,.5),inset 0 0 16px rgba(248,198,98,.1);}
 
 /* ══════════════════════════════════ APP NAV (inner pages) */
 .app-nav{display:none;position:fixed;top:0;left:0;right:0;z-index:200;height:60px;align-items:center;padding:0 32px;gap:20px;background:rgba(19,15,30,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
@@ -526,8 +523,6 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
       </div>
     </div>
   </div>
-  <div id="d20-label">20</div>
-  <div id="d20-ring"></div>
 </div>
 
 <!-- ══════════════════════════ PAGE: CHARACTERS -->
@@ -2503,22 +2498,6 @@ function togglePlay(){
       el.style.transform='translateX('+((1-eo)*50)+'px)';
     });
 
-    /* ── D20 label & ring — usa dice[6] ── */
-    const d20el=document.getElementById('d20-label');
-    const d20rg=document.getElementById('d20-ring');
-    if(d20el&&d20rg){
-      const d0=dice[6];
-      const v=d0.position.clone().project(camera);
-      const sx=(v.x*.5+.5)*window.innerWidth;
-      const sy=(-v.y*.5+.5)*window.innerHeight;
-      const lop=scrollProg>0.88?clamp((scrollProg-0.88)/0.10):0;
-      d20el.style.left=sx+'px';d20el.style.top=sy+'px';d20el.style.opacity=lop;
-      const rr=Math.max(d0.scale.x*58,46);
-      d20rg.style.left=sx+'px';d20rg.style.top=sy+'px';
-      d20rg.style.width=(rr*2)+'px';d20rg.style.height=(rr*2)+'px';
-      d20rg.style.marginLeft=(-rr)+'px';d20rg.style.marginTop=(-rr)+'px';
-      d20rg.style.opacity=(lop*.75)+'';
-    }
 
     gLight.position.x=Math.cos(tick*.25)*7;
     gLight.position.z=Math.sin(tick*.25)*5+4;
