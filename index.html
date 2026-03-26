@@ -1317,8 +1317,8 @@ const CLASS_EMOJIS={fighter:'⚔️',wizard:'🧙',rogue:'🗡️',cleric:'✝�
 const RACE_SPRITE={human:{c:0,r:0},elf:{c:1,r:0},halfling:{c:2,r:0},dwarf:{c:0,r:1},gnome:{c:1,r:1},dragonborn:{c:2,r:1},tiefling:{c:0,r:2},halforc:{c:1,r:2},aasimar:{c:2,r:2},tabaxi:{c:0,r:3},firbolg:{c:1,r:3},kenku:{c:2,r:3}};
 const CLASS_SPRITE={fighter:{c:0,r:0},wizard:{c:1,r:0},rogue:{c:2,r:0},cleric:{c:0,r:1},ranger:{c:1,r:1},paladin:{c:2,r:1},barbarian:{c:0,r:2},bard:{c:1,r:2},druid:{c:2,r:2},monk:{c:0,r:3},sorcerer:{c:1,r:3},warlock:{c:2,r:3}};
 function spritePos(s){return`background-size:300% 400%;background-position:${s.c*50}% ${(s.r/3*100).toFixed(2)}%;`;}
-function raceBg(race){const s=RACE_SPRITE[race]||{c:0,r:0};return`background-image:url('assets/raza.png');${spritePos(s)}`;}
-function classBg(cls){const s=CLASS_SPRITE[cls]||{c:0,r:0};return`background-image:url('assets/especie.png');${spritePos(s)}`;}
+function raceBg(race){const s=RACE_SPRITE[race]||{c:0,r:0};return`background-image:url('/assets/raza.png');${spritePos(s)}`;}
+function classBg(cls){const s=CLASS_SPRITE[cls]||{c:0,r:0};return`background-image:url('/assets/especie.png');${spritePos(s)}`;}
 /* ── MONSTER SPRITES ── */
 const MONSTER_SPRITES={
   'aboleth':{f:'monsters-c',c:0,r:0,tc:3,tr:4},'acolyte':{f:'monsters-c',c:1,r:0,tc:3,tr:4},
@@ -1344,14 +1344,14 @@ function monsterSpriteCss(index){
   const s=MONSTER_SPRITES[index];if(!s)return null;
   const bx=(s.tc>1?s.c/(s.tc-1)*100:0).toFixed(1)+'%';
   const by=(s.tr>1?s.r/(s.tr-1)*100:0).toFixed(1)+'%';
-  return`background-image:url('assets/${s.f}.png');background-size:${s.tc*100}% ${s.tr*100}%;background-position:${bx} ${by};background-repeat:no-repeat;`;
+  return`background-image:url('/assets/${s.f}.png');background-size:${s.tc*100}% ${s.tr*100}%;background-position:${bx} ${by};background-repeat:no-repeat;`;
 }
 function initClassCards(){
   document.querySelectorAll('.option-grid .option-card').forEach(card=>{
     const m=card.getAttribute('onclick').match(/'class','(\w+)'/);
     if(!m)return;
     const s=CLASS_SPRITE[m[1]];if(!s)return;
-    card.style.cssText+=`background-image:url('assets/especie.png');${spritePos(s)}`;
+    card.style.cssText+=`background-image:url('/assets/especie.png');${spritePos(s)}`;
     if(!card.querySelector('.oc-overlay')){const ov=document.createElement('div');ov.className='oc-overlay';card.insertBefore(ov,card.firstChild);}
     const icon=card.querySelector('.oc-icon'),name=card.querySelector('.oc-name'),sub=card.querySelector('.oc-sub');
     if(icon&&!card.querySelector('.oc-content')){const wrap=document.createElement('div');wrap.className='oc-content';if(name)wrap.appendChild(name);if(sub)wrap.appendChild(sub);card.appendChild(wrap);if(icon)icon.remove();}
@@ -1927,7 +1927,7 @@ function selectCharRace(race){
   const wrap=document.getElementById('charPortraitWrap');
   const s=RACE_SPRITE[race]||{c:0,r:0};
   const bx=s.c*50+'%', by=(s.r/3*100).toFixed(2)+'%';
-  wrap.innerHTML=`<div style="height:78%;aspect-ratio:3/4;background-image:url('assets/raza.png');background-size:300% 400%;background-position:${bx} ${by};background-repeat:no-repeat;border-radius:6px;filter:drop-shadow(0 24px 64px rgba(0,0,0,.85));opacity:0;transform:translateY(28px);transition:opacity .55s,transform .55s;"></div>`;
+  wrap.innerHTML=`<div style="height:78%;aspect-ratio:3/4;background-image:url('/assets/raza.png');background-size:300% 400%;background-position:${bx} ${by};background-repeat:no-repeat;border-radius:6px;filter:drop-shadow(0 24px 64px rgba(0,0,0,.85));opacity:0;transform:translateY(28px);transition:opacity .55s,transform .55s;"></div>`;
   const portDiv=wrap.firstElementChild;
   requestAnimationFrame(()=>{requestAnimationFrame(()=>{portDiv.style.opacity='1';portDiv.style.transform='translateY(0)';});});
   // Name & tagline
