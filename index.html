@@ -13,7 +13,7 @@
   --gold:#F8C662; --gold-l:#fad888; --gold-d:#c89630;
   --teal:#41644A; --purple:#595082;
   --dark:#130f1e; --surface:#2C263F; --card:#1e1930; --border:#3e3658;
-  --text:#e8e0f5; --text-m:#8a7fa0; --text-d:#4a3f62;
+  --text:#e8e0f5; --text-m:#a49bc0; --text-d:#6a5f82;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{width:100%;min-height:100%;overflow-x:hidden;}
@@ -334,27 +334,37 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .comp-state{grid-column:1/-1;text-align:center;padding:60px;color:var(--text-m);font-size:14px;}
 @keyframes compSpin{to{transform:rotate(360deg)}}
 .comp-spinner{width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:compSpin .8s linear infinite;margin:0 auto 12px;}
+/* Filter pills */
+.comp-filter{display:none;}
+.comp-pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px;}
+.comp-pill{padding:5px 14px;border-radius:20px;background:var(--surface);border:1px solid var(--border);font-size:12px;font-weight:500;color:var(--text-m);cursor:none;transition:.15s;white-space:nowrap;}
+.comp-pill:hover{border-color:var(--brand-400);color:var(--text);}
+.comp-pill.active{background:rgba(248,198,98,.12);border-color:var(--gold);color:var(--gold);}
+/* Detail overlay */
+.comp-overlay{position:fixed;inset:0;background:rgba(13,10,28,.75);z-index:249;opacity:0;pointer-events:none;transition:opacity .3s cubic-bezier(.4,0,.2,1);backdrop-filter:blur(3px);}
+.comp-overlay.open{opacity:1;pointer-events:auto;}
 /* Detail panel */
-.comp-panel{position:fixed;top:60px;right:0;bottom:0;width:440px;max-width:96vw;background:var(--surface);border-left:1px solid var(--border);overflow-y:auto;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:250;padding:28px 24px;}
+.comp-panel{position:fixed;top:0;right:0;bottom:0;width:460px;max-width:96vw;background:var(--surface);border-left:1px solid var(--border);overflow-y:auto;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:250;padding:28px 24px;}
 .comp-panel.open{transform:translateX(0);}
-.cp-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.06);border:none;border-radius:50%;width:32px;height:32px;color:var(--text-m);font-size:14px;cursor:none;}
-.cp-title{font-family:'Cinzel',serif;font-size:20px;color:var(--gold);margin-bottom:4px;padding-right:40px;line-height:1.3;margin-top:8px;}
+.cp-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.08);border:1px solid var(--border);border-radius:50%;width:36px;height:36px;color:var(--text);font-size:15px;cursor:none;transition:.15s;}
+.cp-close:hover{background:rgba(255,255,255,.14);}
+.cp-title{font-family:'Cinzel',serif;font-size:20px;color:var(--gold);margin-bottom:4px;padding-right:44px;line-height:1.3;margin-top:8px;}
 .cp-sub{font-size:13px;color:var(--text-m);margin-bottom:16px;}
 .cp-divider{height:1px;background:var(--border);margin:14px 0;}
-.cp-section-title{font-size:10px;font-weight:600;letter-spacing:.15em;color:var(--text-m);text-transform:uppercase;margin-bottom:8px;}
-.cp-text{font-size:13px;color:var(--text);line-height:1.7;}
+.cp-section-title{font-size:11px;font-weight:700;letter-spacing:.15em;color:var(--text-m);text-transform:uppercase;margin-bottom:8px;}
+.cp-text{font-size:13px;color:var(--text);line-height:1.75;}
 .cp-grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
-.cp-field{background:rgba(255,255,255,.03);border-radius:10px;padding:10px 12px;}
-.cp-field-label{font-size:10px;color:var(--text-m);letter-spacing:.1em;font-weight:600;margin-bottom:3px;}
+.cp-field{background:rgba(255,255,255,.04);border-radius:10px;padding:10px 12px;border:1px solid var(--border);}
+.cp-field-label{font-size:11px;color:var(--text-m);letter-spacing:.08em;font-weight:600;margin-bottom:3px;}
 .cp-field-value{font-size:13px;color:var(--text);}
 .cp-stat-row{display:flex;gap:6px;margin-bottom:12px;}
 .cp-stat{flex:1;background:var(--card);border-radius:10px;padding:10px 6px;text-align:center;}
-.cp-stat-name{font-size:9px;color:var(--text-m);letter-spacing:.1em;font-weight:600;}
+.cp-stat-name{font-size:10px;color:var(--text-m);letter-spacing:.08em;font-weight:700;}
 .cp-stat-val{font-size:17px;font-weight:600;color:var(--text);margin:3px 0 1px;}
 .cp-stat-mod{font-size:11px;color:var(--gold);}
 .cp-action{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px;}
 .cp-action-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px;}
-.cp-action-desc{font-size:12px;color:var(--text-m);line-height:1.6;}
+.cp-action-desc{font-size:12px;color:var(--text-m);line-height:1.65;}
 body:has(.page.active#page-compendium) #cdot{background:var(--gold);}
 body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);}
 </style>
@@ -697,6 +707,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
           <option value="" data-es="Todo" data-en="All">Todo</option>
         </select>
       </div>
+      <div class="comp-pills" id="compPills"></div>
       <div id="compGrid" class="comp-grid">
         <div class="comp-state"><div class="comp-spinner"></div><span data-es="Cargando..." data-en="Loading...">Cargando...</span></div>
       </div>
@@ -704,6 +715,8 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   </div>
 </div>
 
+<!-- Detail overlay -->
+<div class="comp-overlay" id="compOverlay" onclick="closeCompPanel()"></div>
 <!-- Detail panel (compendium) -->
 <div class="comp-panel" id="compPanel">
   <button class="cp-close" onclick="closeCompPanel()">✕</button>
@@ -1380,32 +1393,32 @@ function compTab(type,el){
 }
 
 function compSearchFn(v){cSearchQ=v;renderCompGrid();}
-function compFilterFn(v){cFilterQ=v;renderCompGrid();}
+function compFilterFn(v,el){
+  cFilterQ=v;
+  if(el){document.querySelectorAll('.comp-pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');}
+  renderCompGrid();
+}
 
 function buildCompFilter(){
-  const sel=document.getElementById('compFilterSel');
-  if(!sel)return;
-  const all=currentLang==='es'?'Todo':'All';
+  const pills=document.getElementById('compPills');
+  if(!pills)return;
+  const es=currentLang==='es';
+  let items=[];
   if(cActiveTab==='spells'){
-    const schools=[...new Set(cCache.spells.map(s=>s.url).map(()=>null).map((_,i)=>cCache.spells[i]))].map(s=>s);
-    const uniqueSchools=[];
-    // Just use level filter for spells
-    sel.innerHTML=`<option value="">${all}</option>`;
+    items=[{v:'',l:es?'Todos':'All'}];
     for(let i=0;i<=9;i++){
-      const lbl=i===0?(currentLang==='es'?'Truco':'Cantrip'):(currentLang==='es'?`Nivel ${i}`:`Level ${i}`);
-      sel.innerHTML+=`<option value="${i}">${lbl}</option>`;
+      items.push({v:String(i),l:i===0?(es?'Truco':'Cantrip'):(es?`Niv. ${i}`:`Lv. ${i}`)});
     }
   } else if(cActiveTab==='monsters'){
-    const crs=[...new Set(cCache.monsters.map(m=>m.challenge_rating).filter(v=>v!==undefined))].sort((a,b)=>a-b);
-    sel.innerHTML=`<option value="">${all}</option>`;
-    // CR ranges
-    sel.innerHTML+=`<option value="low">${currentLang==='es'?'CR 0-4':'CR 0-4'}</option>`;
-    sel.innerHTML+=`<option value="mid">${currentLang==='es'?'CR 5-9':'CR 5-9'}</option>`;
-    sel.innerHTML+=`<option value="high">${currentLang==='es'?'CR 10-19':'CR 10-19'}</option>`;
-    sel.innerHTML+=`<option value="epic">${currentLang==='es'?'CR 20+':'CR 20+'}</option>`;
+    items=[
+      {v:'',l:es?'Todos':'All'},
+      {v:'low',l:'CR 0–4'},{v:'mid',l:'CR 5–9'},
+      {v:'high',l:'CR 10–19'},{v:'epic',l:'CR 20+'}
+    ];
   } else {
-    sel.innerHTML=`<option value="">${all}</option>`;
+    items=[{v:'',l:es?'Todos':'All'}];
   }
+  pills.innerHTML=items.map(it=>`<div class="comp-pill${cFilterQ===it.v?' active':''}" onclick="compFilterFn('${it.v}',this)">${it.l}</div>`).join('');
 }
 
 function renderCompGrid(){
@@ -1470,6 +1483,7 @@ async function openCompDetail(type,index){
   const panelEl=document.getElementById('compPanel');
   document.getElementById('compPanelContent').innerHTML=`<div style="padding-top:40px;text-align:center;"><div class="comp-spinner"></div></div>`;
   panelEl.classList.add('open');
+  document.getElementById('compOverlay')?.classList.add('open');
   const cKey=`${type}/${index}`;
   if(!cDetailCache[cKey]){
     try{
@@ -1641,6 +1655,7 @@ function renderRaceDetail(d){
 
 function closeCompPanel(){
   document.getElementById('compPanel')?.classList.remove('open');
+  document.getElementById('compOverlay')?.classList.remove('open');
   document.querySelectorAll('.comp-card').forEach(c=>c.classList.remove('active'));
 }
 
