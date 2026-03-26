@@ -133,12 +133,14 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .step-title{font-family:'Cinzel',serif;font-size:22px;color:var(--gold);margin-bottom:8px;text-align:center;}
 .step-desc{font-size:14px;color:var(--text-m);text-align:center;margin-bottom:28px;}
 .option-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:28px;}
-.option-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 12px;text-align:center;cursor:none;transition:.2s;}
-.option-card:hover{border-color:var(--brand-400);background:rgba(89,80,130,.06);}
-.option-card.selected{border-color:var(--gold);background:rgba(248,198,98,.08);}
-.oc-icon{font-size:26px;margin-bottom:8px;}
-.oc-name{font-size:13px;font-weight:600;}
-.oc-sub{font-size:11px;color:var(--text-m);margin-top:3px;}
+.option-card{background:var(--card);border:2px solid var(--border);border-radius:12px;overflow:hidden;text-align:center;cursor:none;transition:.2s;position:relative;aspect-ratio:3/4;display:flex;flex-direction:column;justify-content:flex-end;background-size:300% 400%;background-repeat:no-repeat;}
+.option-card:hover{border-color:var(--brand-400);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.5);}
+.option-card.selected{border-color:var(--gold);box-shadow:0 0 20px rgba(248,198,98,.3);}
+.oc-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(14,10,28,.95) 30%,rgba(14,10,28,.2) 70%,transparent 100%);pointer-events:none;}
+.oc-icon{display:none;}
+.oc-content{position:relative;z-index:1;padding:0 8px 10px;}
+.oc-name{font-size:12px;font-weight:700;color:var(--text);}
+.oc-sub{font-size:10px;color:var(--text-m);margin-top:2px;}
 .step-nav{display:flex;justify-content:space-between;margin-top:24px;}
 .mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;}
 .mode-card{background:var(--card);border:2px solid var(--border);border-radius:16px;padding:28px 24px;text-align:center;cursor:none;transition:.2s;}
@@ -176,6 +178,47 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .btn-gold{background:linear-gradient(135deg,var(--gold),#e8a820);color:#1a1400;font-weight:600;}
 .btn-primary[disabled]{opacity:.4;cursor:not-allowed;}
 
+/* ══ CHARACTER SELECT (LoL-style) ══ */
+.char-select-screen{position:relative;width:100vw;height:100vh;display:flex;overflow:hidden;padding-top:60px;}
+.char-atmos-bg{position:absolute;inset:0;z-index:0;transition:background 0.9s cubic-bezier(.4,0,.2,1);}
+.char-atmos-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,#09070f 0%,transparent 50%);}
+.char-list-panel{width:196px;flex-shrink:0;height:100%;overflow-y:auto;z-index:10;padding:16px 10px 24px;background:rgba(9,7,18,.65);backdrop-filter:blur(14px);border-right:1px solid rgba(255,255,255,.06);display:flex;flex-direction:column;gap:5px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.char-list-item{display:flex;align-items:center;gap:10px;padding:7px 8px;border-radius:8px;border:1px solid transparent;cursor:none;transition:.18s;}
+.char-list-item:hover{background:rgba(255,255,255,.06);}
+.char-list-item.active{border-color:rgba(248,198,98,.5);background:rgba(248,198,98,.07);}
+.char-list-thumb{width:38px;height:38px;flex-shrink:0;border-radius:6px;overflow:hidden;background:var(--card);}
+.char-list-thumb svg{width:38px;height:38px;}
+.char-list-name{font-size:12px;font-weight:500;color:var(--text-m);line-height:1.3;}
+.char-list-item.active .char-list-name{color:var(--gold);}
+.char-list-bonus{font-size:10px;color:var(--text-d);}
+.char-list-item.active .char-list-bonus{color:rgba(248,198,98,.6);}
+.char-center-panel{flex:1;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:48px;z-index:10;overflow:hidden;}
+.char-portrait-wrap{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;pointer-events:none;}
+.char-portrait-wrap svg{height:100%;max-height:calc(100vh - 60px);opacity:0;transition:opacity .5s ease,transform .5s ease;transform:translateY(12px);}
+.char-portrait-wrap svg.loaded{opacity:1;transform:translateY(0);}
+.char-center-bottom{position:relative;z-index:2;text-align:center;pointer-events:auto;}
+.char-splash-name{font-family:'Cinzel',serif;font-size:52px;font-weight:900;color:var(--gold);letter-spacing:.1em;text-shadow:0 0 60px rgba(248,198,98,.5),0 4px 24px rgba(0,0,0,.9);margin-bottom:6px;transition:opacity .35s;}
+.char-splash-tagline{font-size:12px;color:var(--text-m);letter-spacing:.2em;text-transform:uppercase;margin-bottom:28px;transition:opacity .35s;}
+.char-confirm-btn{padding:13px 44px;font-family:'Cinzel',serif;font-size:13px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#0e0c18;background:linear-gradient(135deg,var(--gold) 0%,#d4940a 100%);border:none;border-radius:3px;cursor:none;transition:.2s;box-shadow:0 0 0 rgba(248,198,98,0);}
+.char-confirm-btn:hover{transform:scale(1.04);box-shadow:0 0 32px rgba(248,198,98,.35);}
+.char-info-panel{width:260px;flex-shrink:0;height:100%;z-index:10;padding:20px 18px 24px;background:rgba(9,7,18,.65);backdrop-filter:blur(14px);border-left:1px solid rgba(255,255,255,.06);overflow-y:auto;display:flex;flex-direction:column;gap:0;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.char-info-section{margin-bottom:22px;}
+.char-info-label{font-size:10px;font-weight:700;letter-spacing:.2em;color:var(--text-m);text-transform:uppercase;margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid rgba(248,198,98,.15);}
+.char-stat-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:4px;}
+.char-stat-chip{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;background:rgba(248,198,98,.1);color:var(--gold);border:1px solid rgba(248,198,98,.2);}
+.char-trait-item{margin-bottom:12px;}
+.char-trait-name{font-size:12px;font-weight:600;color:var(--text);margin-bottom:3px;}
+.char-trait-desc{font-size:11px;color:var(--text-m);line-height:1.6;}
+/* Creator drawer that slides in after confirming race */
+.char-creator-drawer{position:absolute;inset:0;z-index:50;display:flex;flex-direction:column;background:var(--dark);transform:translateX(100%);transition:transform .45s cubic-bezier(.4,0,.2,1);}
+.char-creator-drawer.open{transform:translateX(0);}
+.char-drawer-header{display:flex;align-items:center;gap:16px;padding:20px 32px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.char-drawer-back{background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-size:12px;color:var(--text-m);cursor:none;transition:.15s;}
+.char-drawer-back:hover{border-color:var(--gold);color:var(--gold);}
+.char-drawer-race-badge{display:flex;align-items:center;gap:8px;}
+.char-drawer-race-badge svg{width:32px;height:32px;border-radius:6px;}
+.char-drawer-race-name{font-family:'Cinzel',serif;font-size:16px;color:var(--gold);}
+.char-drawer-body{flex:1;overflow-y:auto;padding:32px;}
 /* ── MAP TABS ── */
 .map-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--surface);margin-top:60px;}
 .map-tab{padding:12px 24px;font-size:13px;font-weight:500;color:var(--text-m);border-bottom:2px solid transparent;transition:.15s;cursor:none;}
@@ -324,8 +367,9 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .cc-row{display:flex;align-items:center;justify-content:space-between;gap:6px;}
 /* Monster card with avatar */
 .monster-card{display:flex;align-items:center;gap:12px;padding:12px 14px;}
-.mc-avatar{flex-shrink:0;width:44px;height:44px;}
-.mc-avatar svg{width:44px;height:44px;border-radius:50%;}
+.mc-avatar{flex-shrink:0;width:40px;height:40px;border-radius:50%;overflow:hidden;}
+.mc-avatar svg{width:40px;height:40px;border-radius:50%;}
+.mc-avatar-img{width:40px;height:40px;border-radius:50%;background-repeat:no-repeat;}
 .mc-info{flex:1;min-width:0;}
 .mc-info .cc-name{margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;}
 .mc-info .cc-badge{font-size:10px;}
@@ -394,6 +438,12 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     <a class="anav-link" id="nl-compendium" onclick="goTo('compendium')" data-es="Compendio" data-en="Compendium">Compendio</a>
   </div>
   <div class="anav-spacer"></div>
+  <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
+    <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
+    <span class="ver-badge">v1.1.0</span>
+    <span class="ver-sep">·</span>
+    <span class="ver-date">26 Mar 2026</span>
+  </div>
   <div class="lang-toggle">
     <button class="lang-btn active" onclick="setLang('es')">ES</button>
     <button class="lang-btn" onclick="setLang('en')">EN</button>
@@ -482,108 +532,106 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 
 <!-- ══════════════════════════ PAGE: CHARACTERS -->
 <div id="page-characters" class="page">
-  <div class="inner-page">
-    <div class="creator-wrap">
-      <div class="creator-header">
-        <h2 data-es="Creador de Personajes" data-en="Character Creator">Creador de Personajes</h2>
-        <p data-es="Construí tu aventurero desde cero o de manera aleatoria." data-en="Build your adventurer from scratch or randomly.">Construí tu aventurero desde cero o de manera aleatoria.</p>
+  <!-- LoL-style race select screen -->
+  <div class="char-select-screen" id="charSelectScreen">
+    <div class="char-atmos-bg" id="charAtmosBg"></div>
+    <!-- Left: race list -->
+    <div class="char-list-panel" id="charListPanel"></div>
+    <!-- Center: splash art -->
+    <div class="char-center-panel">
+      <div class="char-portrait-wrap" id="charPortraitWrap"></div>
+      <div class="char-center-bottom">
+        <div class="char-splash-name" id="charSplashName">HUMANO</div>
+        <div class="char-splash-tagline" id="charSplashTagline">Versátil y determinado</div>
+        <button class="char-confirm-btn" onclick="confirmCharRace()" data-es="ELEGIR RAZA →" data-en="CHOOSE RACE →">ELEGIR RAZA →</button>
       </div>
-      <div class="progress-bar">
-        <div class="prog-step"><div class="prog-dot active" id="pd1">1</div><div class="prog-label" data-es="Modo" data-en="Mode">Modo</div></div>
-        <div class="prog-line" id="pl1"></div>
-        <div class="prog-step"><div class="prog-dot" id="pd2">2</div><div class="prog-label" data-es="Raza" data-en="Race">Raza</div></div>
-        <div class="prog-line" id="pl2"></div>
-        <div class="prog-step"><div class="prog-dot" id="pd3">3</div><div class="prog-label" data-es="Clase" data-en="Class">Clase</div></div>
-        <div class="prog-line" id="pl3"></div>
-        <div class="prog-step"><div class="prog-dot" id="pd4">4</div><div class="prog-label" data-es="Stats" data-en="Stats">Stats</div></div>
-        <div class="prog-line" id="pl4"></div>
-        <div class="prog-step"><div class="prog-dot" id="pd5">5</div><div class="prog-label" data-es="Ficha" data-en="Sheet">Ficha</div></div>
+    </div>
+    <!-- Right: traits -->
+    <div class="char-info-panel" id="charInfoPanel"></div>
+    <!-- Creator drawer (slides in after confirming race) -->
+    <div class="char-creator-drawer" id="charCreatorDrawer">
+      <div class="char-drawer-header">
+        <button class="char-drawer-back" onclick="backToRaceSelect()">← <span data-es="Cambiar raza" data-en="Change race">Cambiar raza</span></button>
+        <div class="char-drawer-race-badge"><div id="charDrawerRaceIcon"></div><span class="char-drawer-race-name" id="charDrawerRaceName"></span></div>
       </div>
-      <!-- Step 1 -->
-      <div class="creator-step active" id="step1">
-        <div class="step-title" data-es="¿Cómo querés crear tu personaje?" data-en="How do you want to create your character?">¿Cómo querés crear tu personaje?</div>
-        <div class="step-desc" data-es="Podés elegir todo vos o dejar que el azar decida." data-en="Choose everything yourself or let fate decide.">Podés elegir todo vos o dejar que el azar decida.</div>
-        <div class="mode-grid">
-          <div class="mode-card" id="modeManual" onclick="selectMode('manual')"><div class="mode-icon">🎯</div><div class="mode-name" data-es="Manual" data-en="Manual">Manual</div><div class="mode-desc" data-es="Elegís cada detalle de tu personaje." data-en="You choose every detail of your character.">Elegís cada detalle de tu personaje.</div></div>
-          <div class="mode-card" id="modeRandom" onclick="selectMode('random')"><div class="mode-icon">🎲</div><div class="mode-name" data-es="Aleatorio" data-en="Random">Aleatorio</div><div class="mode-desc" data-es="Los dados deciden tu destino." data-en="The dice decide your fate.">Los dados deciden tu destino.</div></div>
-        </div>
-        <div class="step-nav"><div></div><button class="btn-nav btn-primary" onclick="nextStep()" data-es="Continuar →" data-en="Continue →">Continuar →</button></div>
-      </div>
-      <!-- Step 2 -->
-      <div class="creator-step" id="step2">
-        <div class="step-title" data-es="Elegí tu raza" data-en="Choose your race">Elegí tu raza</div>
-        <div class="step-desc" data-es="Cada raza tiene habilidades y bonuses únicos." data-en="Each race has unique abilities and bonuses.">Cada raza tiene habilidades y bonuses únicos.</div>
-        <div class="option-grid">
-          <div class="option-card" onclick="selectOption(this,'race','human')"><div class="oc-icon">👤</div><div class="oc-name" data-es="Humano" data-en="Human">Humano</div><div class="oc-sub">+1 todos</div></div>
-          <div class="option-card" onclick="selectOption(this,'race','elf')"><div class="oc-icon">🧝</div><div class="oc-name" data-es="Elfo" data-en="Elf">Elfo</div><div class="oc-sub">+2 DEX</div></div>
-          <div class="option-card" onclick="selectOption(this,'race','dwarf')"><div class="oc-icon">⛏️</div><div class="oc-name" data-es="Enano" data-en="Dwarf">Enano</div><div class="oc-sub">+2 CON</div></div>
-          <div class="option-card" onclick="selectOption(this,'race','halfling')"><div class="oc-icon">🌿</div><div class="oc-name" data-es="Mediano" data-en="Halfling">Mediano</div><div class="oc-sub">+2 DEX</div></div>
-          <div class="option-card" onclick="selectOption(this,'race','dragonborn')"><div class="oc-icon">🐲</div><div class="oc-name">Dragonborn</div><div class="oc-sub">+2 STR</div></div>
-          <div class="option-card" onclick="selectOption(this,'race','tiefling')"><div class="oc-icon">😈</div><div class="oc-name">Tiefling</div><div class="oc-sub">+2 CHA</div></div>
-          <div class="option-card" onclick="selectOption(this,'race','halforc')"><div class="oc-icon">💪</div><div class="oc-name" data-es="Semiorco" data-en="Half-Orc">Semiorco</div><div class="oc-sub">+2 STR</div></div>
-          <div class="option-card" onclick="selectOption(this,'race','gnome')"><div class="oc-icon">🔮</div><div class="oc-name" data-es="Gnomo" data-en="Gnome">Gnomo</div><div class="oc-sub">+2 INT</div></div>
-          <div class="option-card" onclick="selectOption(this,'race','aasimar')"><div class="oc-icon">✨</div><div class="oc-name">Aasimar</div><div class="oc-sub">+2 CHA</div></div>
-          <div class="option-card" onclick="selectOption(this,'race','tabaxi')"><div class="oc-icon">🐱</div><div class="oc-name">Tabaxi</div><div class="oc-sub">+2 DEX</div></div>
-          <div class="option-card" onclick="selectOption(this,'race','firbolg')"><div class="oc-icon">🌲</div><div class="oc-name">Firbolg</div><div class="oc-sub">+2 WIS</div></div>
-          <div class="option-card" onclick="selectOption(this,'race','kenku')"><div class="oc-icon">🦅</div><div class="oc-name">Kenku</div><div class="oc-sub">+2 DEX</div></div>
-        </div>
-        <div class="step-nav"><button class="btn-nav btn-ghost" onclick="prevStep()" data-es="← Atrás" data-en="← Back">← Atrás</button><button class="btn-nav btn-primary" onclick="nextStep()" data-es="Continuar →" data-en="Continue →">Continuar →</button></div>
-      </div>
-      <!-- Step 3 -->
-      <div class="creator-step" id="step3">
-        <div class="step-title" data-es="Elegí tu clase" data-en="Choose your class">Elegí tu clase</div>
-        <div class="step-desc" data-es="La clase define tu rol en el grupo." data-en="Your class defines your role in the group.">La clase define tu rol en el grupo.</div>
-        <div class="option-grid">
-          <div class="option-card" onclick="selectOption(this,'class','fighter')"><div class="oc-icon">⚔️</div><div class="oc-name" data-es="Guerrero" data-en="Fighter">Guerrero</div><div class="oc-sub" data-es="Combate" data-en="Combat">Combate</div></div>
-          <div class="option-card" onclick="selectOption(this,'class','wizard')"><div class="oc-icon">🧙</div><div class="oc-name" data-es="Mago" data-en="Wizard">Mago</div><div class="oc-sub" data-es="Magia arcana" data-en="Arcane magic">Magia arcana</div></div>
-          <div class="option-card" onclick="selectOption(this,'class','rogue')"><div class="oc-icon">🗡️</div><div class="oc-name" data-es="Pícaro" data-en="Rogue">Pícaro</div><div class="oc-sub" data-es="Sigilo" data-en="Stealth">Sigilo</div></div>
-          <div class="option-card" onclick="selectOption(this,'class','cleric')"><div class="oc-icon">✝️</div><div class="oc-name" data-es="Clérigo" data-en="Cleric">Clérigo</div><div class="oc-sub" data-es="Curación" data-en="Healing">Curación</div></div>
-          <div class="option-card" onclick="selectOption(this,'class','ranger')"><div class="oc-icon">🏹</div><div class="oc-name" data-es="Explorador" data-en="Ranger">Explorador</div><div class="oc-sub" data-es="Naturaleza" data-en="Nature">Naturaleza</div></div>
-          <div class="option-card" onclick="selectOption(this,'class','paladin')"><div class="oc-icon">🛡️</div><div class="oc-name" data-es="Paladín" data-en="Paladin">Paladín</div><div class="oc-sub" data-es="Fe y combate" data-en="Faith">Fe y combate</div></div>
-          <div class="option-card" onclick="selectOption(this,'class','barbarian')"><div class="oc-icon">💢</div><div class="oc-name" data-es="Bárbaro" data-en="Barbarian">Bárbaro</div><div class="oc-sub" data-es="Furia" data-en="Rage">Furia</div></div>
-          <div class="option-card" onclick="selectOption(this,'class','bard')"><div class="oc-icon">🎶</div><div class="oc-name" data-es="Bardo" data-en="Bard">Bardo</div><div class="oc-sub" data-es="Música" data-en="Music">Música</div></div>
-          <div class="option-card" onclick="selectOption(this,'class','druid')"><div class="oc-icon">🌿</div><div class="oc-name" data-es="Druida" data-en="Druid">Druida</div><div class="oc-sub" data-es="Naturaleza" data-en="Nature">Naturaleza</div></div>
-          <div class="option-card" onclick="selectOption(this,'class','monk')"><div class="oc-icon">🥋</div><div class="oc-name" data-es="Monje" data-en="Monk">Monje</div><div class="oc-sub" data-es="Artes marciales" data-en="Martial arts">Artes marciales</div></div>
-          <div class="option-card" onclick="selectOption(this,'class','sorcerer')"><div class="oc-icon">🔥</div><div class="oc-name" data-es="Hechicero" data-en="Sorcerer">Hechicero</div><div class="oc-sub" data-es="Innato" data-en="Innate">Innato</div></div>
-          <div class="option-card" onclick="selectOption(this,'class','warlock')"><div class="oc-icon">👁️</div><div class="oc-name" data-es="Brujo" data-en="Warlock">Brujo</div><div class="oc-sub" data-es="Pacto oscuro" data-en="Dark pact">Pacto oscuro</div></div>
-        </div>
-        <div class="step-nav"><button class="btn-nav btn-ghost" onclick="prevStep()" data-es="← Atrás" data-en="← Back">← Atrás</button><button class="btn-nav btn-primary" onclick="nextStep()" data-es="Continuar →" data-en="Continue →">Continuar →</button></div>
-      </div>
-      <!-- Step 4 -->
-      <div class="creator-step" id="step4">
-        <div class="step-title" data-es="Tirar estadísticas" data-en="Roll your stats">Tirar estadísticas</div>
-        <div class="step-desc" data-es="4d6, descartás el menor. Presioná el botón para tirar." data-en="4d6, drop the lowest. Press to roll.">4d6, descartás el menor. Presioná el botón para tirar.</div>
-        <div class="stats-grid" id="statsGrid">
-          <div class="stat-box"><div class="stat-name">STR</div><div class="stat-value" id="sv-str">—</div><div class="stat-mod" id="sm-str"></div></div>
-          <div class="stat-box"><div class="stat-name">DEX</div><div class="stat-value" id="sv-dex">—</div><div class="stat-mod" id="sm-dex"></div></div>
-          <div class="stat-box"><div class="stat-name">CON</div><div class="stat-value" id="sv-con">—</div><div class="stat-mod" id="sm-con"></div></div>
-          <div class="stat-box"><div class="stat-name">INT</div><div class="stat-value" id="sv-int">—</div><div class="stat-mod" id="sm-int"></div></div>
-          <div class="stat-box"><div class="stat-name">WIS</div><div class="stat-value" id="sv-wis">—</div><div class="stat-mod" id="sm-wis"></div></div>
-          <div class="stat-box"><div class="stat-name">CHA</div><div class="stat-value" id="sv-cha">—</div><div class="stat-mod" id="sm-cha"></div></div>
-        </div>
-        <div style="text-align:center;margin-top:24px;"><button class="btn-nav btn-gold" style="padding:12px 32px;font-size:15px;" onclick="rollStats()" id="rollBtn" data-es="🎲 Tirar dados" data-en="🎲 Roll dice">🎲 Tirar dados</button></div>
-        <div class="step-nav"><button class="btn-nav btn-ghost" onclick="prevStep()" data-es="← Atrás" data-en="← Back">← Atrás</button><button class="btn-nav btn-primary" id="btnStep4Next" onclick="nextStep()" disabled data-es="Ver ficha →" data-en="View sheet →">Ver ficha →</button></div>
-      </div>
-      <!-- Step 5 -->
-      <div class="creator-step" id="step5">
-        <div class="step-title" data-es="¡Tu personaje está listo!" data-en="Your character is ready!">¡Tu personaje está listo!</div>
-        <div class="step-desc" data-es="Guardalo, compartilo o exportalo a PDF." data-en="Save it, share it, or export to PDF.">Guardalo, compartilo o exportalo a PDF.</div>
-        <div class="char-sheet" id="charSheet">
-          <div class="cs-header">
-            <div class="cs-avatar" id="csAvatar">⚔️</div>
-            <div><div class="cs-name" id="csName">Aelindra</div><div class="cs-meta" id="csMeta">Tiefling · Explorador · Nivel 1</div><div style="margin-top:8px;display:flex;gap:8px;"><span class="tag tag-brand">CA: 14</span><span class="tag tag-gold">HP: 11</span><span class="tag tag-brand">Prof: +2</span></div></div>
+      <div class="char-drawer-body">
+        <div class="creator-wrap" style="max-width:820px;padding:0;">
+          <div class="progress-bar" style="margin-bottom:28px;">
+            <div class="prog-step"><div class="prog-dot active" id="pd1">1</div><div class="prog-label" data-es="Modo" data-en="Mode">Modo</div></div>
+            <div class="prog-line" id="pl1"></div>
+            <div class="prog-step"><div class="prog-dot" id="pd2">2</div><div class="prog-label" data-es="Clase" data-en="Class">Clase</div></div>
+            <div class="prog-line" id="pl2"></div>
+            <div class="prog-step"><div class="prog-dot" id="pd3">3</div><div class="prog-label">Stats</div></div>
+            <div class="prog-line" id="pl3"></div>
+            <div class="prog-step"><div class="prog-dot" id="pd4">4</div><div class="prog-label" data-es="Ficha" data-en="Sheet">Ficha</div></div>
           </div>
-          <div class="cs-body" id="csBody">
-            <div class="cs-stat"><div class="cs-stat-name">STR</div><div class="cs-stat-val" id="cstr">—</div><div class="cs-stat-mod" id="cmstr"></div></div>
-            <div class="cs-stat"><div class="cs-stat-name">DEX</div><div class="cs-stat-val" id="cdex">—</div><div class="cs-stat-mod" id="cmdex"></div></div>
-            <div class="cs-stat"><div class="cs-stat-name">CON</div><div class="cs-stat-val" id="ccon">—</div><div class="cs-stat-mod" id="cmcon"></div></div>
-            <div class="cs-stat"><div class="cs-stat-name">INT</div><div class="cs-stat-val" id="cint">—</div><div class="cs-stat-mod" id="cmint"></div></div>
-            <div class="cs-stat"><div class="cs-stat-name">WIS</div><div class="cs-stat-val" id="cwis">—</div><div class="cs-stat-mod" id="cmwis"></div></div>
-            <div class="cs-stat"><div class="cs-stat-name">CHA</div><div class="cs-stat-val" id="ccha">—</div><div class="cs-stat-mod" id="cmcha"></div></div>
+          <!-- Step 1: Mode -->
+          <div class="creator-step active" id="step1">
+            <div class="step-title" data-es="¿Cómo querés crear tu personaje?" data-en="How do you want to create your character?">¿Cómo querés crear tu personaje?</div>
+            <div class="step-desc" data-es="Podés elegir todo vos o dejar que el azar decida." data-en="Choose everything yourself or let fate decide.">Podés elegir todo vos o dejar que el azar decida.</div>
+            <div class="mode-grid">
+              <div class="mode-card" id="modeManual" onclick="selectMode('manual')"><div class="mode-icon">🎯</div><div class="mode-name" data-es="Manual" data-en="Manual">Manual</div><div class="mode-desc" data-es="Elegís cada detalle de tu personaje." data-en="You choose every detail.">Elegís cada detalle de tu personaje.</div></div>
+              <div class="mode-card" id="modeRandom" onclick="selectMode('random')"><div class="mode-icon">🎲</div><div class="mode-name" data-es="Aleatorio" data-en="Random">Aleatorio</div><div class="mode-desc" data-es="Los dados deciden tu destino." data-en="The dice decide your fate.">Los dados deciden tu destino.</div></div>
+            </div>
+            <div class="step-nav"><div></div><button class="btn-nav btn-primary" onclick="nextStep()">Continuar →</button></div>
           </div>
-          <div class="cs-footer"><button class="btn-nav btn-primary" data-es="💾 Guardar" data-en="💾 Save">💾 Guardar</button><button class="btn-nav btn-ghost" data-es="📄 Exportar PDF" data-en="📄 Export PDF">📄 Exportar PDF</button><button class="btn-nav btn-ghost" data-es="🔗 Compartir" data-en="🔗 Share">🔗 Compartir</button></div>
+          <!-- Step 2: Class -->
+          <div class="creator-step" id="step2">
+            <div class="step-title" data-es="Elegí tu clase" data-en="Choose your class">Elegí tu clase</div>
+            <div class="step-desc" data-es="La clase define tu rol en el grupo." data-en="Your class defines your role.">La clase define tu rol en el grupo.</div>
+            <div class="option-grid">
+              <div class="option-card" onclick="selectOption(this,'class','fighter')"><div class="oc-icon">⚔️</div><div class="oc-name" data-es="Guerrero" data-en="Fighter">Guerrero</div><div class="oc-sub" data-es="Combate" data-en="Combat">Combate</div></div>
+              <div class="option-card" onclick="selectOption(this,'class','wizard')"><div class="oc-icon">🧙</div><div class="oc-name" data-es="Mago" data-en="Wizard">Mago</div><div class="oc-sub" data-es="Magia arcana" data-en="Arcane">Magia arcana</div></div>
+              <div class="option-card" onclick="selectOption(this,'class','rogue')"><div class="oc-icon">🗡️</div><div class="oc-name" data-es="Pícaro" data-en="Rogue">Pícaro</div><div class="oc-sub" data-es="Sigilo" data-en="Stealth">Sigilo</div></div>
+              <div class="option-card" onclick="selectOption(this,'class','cleric')"><div class="oc-icon">✝️</div><div class="oc-name" data-es="Clérigo" data-en="Cleric">Clérigo</div><div class="oc-sub" data-es="Curación" data-en="Healing">Curación</div></div>
+              <div class="option-card" onclick="selectOption(this,'class','ranger')"><div class="oc-icon">🏹</div><div class="oc-name" data-es="Explorador" data-en="Ranger">Explorador</div><div class="oc-sub" data-es="Naturaleza" data-en="Nature">Naturaleza</div></div>
+              <div class="option-card" onclick="selectOption(this,'class','paladin')"><div class="oc-icon">🛡️</div><div class="oc-name" data-es="Paladín" data-en="Paladin">Paladín</div><div class="oc-sub" data-es="Fe" data-en="Faith">Fe y combate</div></div>
+              <div class="option-card" onclick="selectOption(this,'class','barbarian')"><div class="oc-icon">💢</div><div class="oc-name" data-es="Bárbaro" data-en="Barbarian">Bárbaro</div><div class="oc-sub" data-es="Furia" data-en="Rage">Furia</div></div>
+              <div class="option-card" onclick="selectOption(this,'class','bard')"><div class="oc-icon">🎶</div><div class="oc-name" data-es="Bardo" data-en="Bard">Bardo</div><div class="oc-sub" data-es="Música" data-en="Music">Música</div></div>
+              <div class="option-card" onclick="selectOption(this,'class','druid')"><div class="oc-icon">🌿</div><div class="oc-name" data-es="Druida" data-en="Druid">Druida</div><div class="oc-sub" data-es="Naturaleza" data-en="Nature">Naturaleza</div></div>
+              <div class="option-card" onclick="selectOption(this,'class','monk')"><div class="oc-icon">🥋</div><div class="oc-name" data-es="Monje" data-en="Monk">Monje</div><div class="oc-sub" data-es="Artes marciales" data-en="Martial arts">Artes marciales</div></div>
+              <div class="option-card" onclick="selectOption(this,'class','sorcerer')"><div class="oc-icon">🔥</div><div class="oc-name" data-es="Hechicero" data-en="Sorcerer">Hechicero</div><div class="oc-sub" data-es="Innato" data-en="Innate">Innato</div></div>
+              <div class="option-card" onclick="selectOption(this,'class','warlock')"><div class="oc-icon">👁️</div><div class="oc-name" data-es="Brujo" data-en="Warlock">Brujo</div><div class="oc-sub" data-es="Pacto oscuro" data-en="Dark pact">Pacto oscuro</div></div>
+            </div>
+            <div class="step-nav"><button class="btn-nav btn-ghost" onclick="prevStep()">← Atrás</button><button class="btn-nav btn-primary" onclick="nextStep()">Continuar →</button></div>
+          </div>
+          <!-- Step 3: Stats -->
+          <div class="creator-step" id="step3">
+            <div class="step-title" data-es="Tirar estadísticas" data-en="Roll your stats">Tirar estadísticas</div>
+            <div class="step-desc" data-es="4d6, descartás el menor." data-en="4d6, drop the lowest.">4d6, descartás el menor. Presioná el botón para tirar.</div>
+            <div class="stats-grid" id="statsGrid">
+              <div class="stat-box"><div class="stat-name">STR</div><div class="stat-value" id="sv-str">—</div><div class="stat-mod" id="sm-str"></div></div>
+              <div class="stat-box"><div class="stat-name">DEX</div><div class="stat-value" id="sv-dex">—</div><div class="stat-mod" id="sm-dex"></div></div>
+              <div class="stat-box"><div class="stat-name">CON</div><div class="stat-value" id="sv-con">—</div><div class="stat-mod" id="sm-con"></div></div>
+              <div class="stat-box"><div class="stat-name">INT</div><div class="stat-value" id="sv-int">—</div><div class="stat-mod" id="sm-int"></div></div>
+              <div class="stat-box"><div class="stat-name">WIS</div><div class="stat-value" id="sv-wis">—</div><div class="stat-mod" id="sm-wis"></div></div>
+              <div class="stat-box"><div class="stat-name">CHA</div><div class="stat-value" id="sv-cha">—</div><div class="stat-mod" id="sm-cha"></div></div>
+            </div>
+            <div style="text-align:center;margin-top:24px;"><button class="btn-nav btn-gold" style="padding:12px 32px;font-size:15px;" onclick="rollStats()" id="rollBtn" data-es="🎲 Tirar dados" data-en="🎲 Roll dice">🎲 Tirar dados</button></div>
+            <div class="step-nav"><button class="btn-nav btn-ghost" onclick="prevStep()">← Atrás</button><button class="btn-nav btn-primary" id="btnStep4Next" onclick="nextStep()" disabled data-es="Ver ficha →" data-en="View sheet →">Ver ficha →</button></div>
+          </div>
+          <!-- Step 4: Sheet -->
+          <div class="creator-step" id="step4">
+            <div class="step-title" data-es="¡Tu personaje está listo!" data-en="Your character is ready!">¡Tu personaje está listo!</div>
+            <div class="step-desc" data-es="Guardalo, compartilo o exportalo a PDF." data-en="Save, share or export to PDF.">Guardalo, compartilo o exportalo a PDF.</div>
+            <div class="char-sheet" id="charSheet">
+              <div class="cs-header">
+                <div class="cs-avatar" id="csAvatar">⚔️</div>
+                <div><div class="cs-name" id="csName">Aelindra</div><div class="cs-meta" id="csMeta">Tiefling · Explorador · Nivel 1</div><div style="margin-top:8px;display:flex;gap:8px;"><span class="tag tag-brand">CA: 14</span><span class="tag tag-gold">HP: 11</span><span class="tag tag-brand">Prof: +2</span></div></div>
+              </div>
+              <div class="cs-body" id="csBody">
+                <div class="cs-stat"><div class="cs-stat-name">STR</div><div class="cs-stat-val" id="cstr">—</div><div class="cs-stat-mod" id="cmstr"></div></div>
+                <div class="cs-stat"><div class="cs-stat-name">DEX</div><div class="cs-stat-val" id="cdex">—</div><div class="cs-stat-mod" id="cmdex"></div></div>
+                <div class="cs-stat"><div class="cs-stat-name">CON</div><div class="cs-stat-val" id="ccon">—</div><div class="cs-stat-mod" id="cmcon"></div></div>
+                <div class="cs-stat"><div class="cs-stat-name">INT</div><div class="cs-stat-val" id="cint">—</div><div class="cs-stat-mod" id="cmint"></div></div>
+                <div class="cs-stat"><div class="cs-stat-name">WIS</div><div class="cs-stat-val" id="cwis">—</div><div class="cs-stat-mod" id="cmwis"></div></div>
+                <div class="cs-stat"><div class="cs-stat-name">CHA</div><div class="cs-stat-val" id="ccha">—</div><div class="cs-stat-mod" id="cmcha"></div></div>
+              </div>
+              <div class="cs-footer"><button class="btn-nav btn-primary" data-es="💾 Guardar" data-en="💾 Save">💾 Guardar</button><button class="btn-nav btn-ghost" data-es="📄 Exportar PDF" data-en="📄 Export PDF">📄 Exportar PDF</button><button class="btn-nav btn-ghost" data-es="🔗 Compartir" data-en="🔗 Share">🔗 Compartir</button></div>
+            </div>
+            <div class="step-nav" style="margin-top:24px;"><button class="btn-nav btn-ghost" onclick="resetCreator()" data-es="↺ Nuevo personaje" data-en="↺ New character">↺ Nuevo personaje</button><button class="btn-nav btn-gold" onclick="goTo('home')">Volver al inicio →</button></div>
+          </div>
         </div>
-        <div class="step-nav" style="margin-top:24px;"><button class="btn-nav btn-ghost" onclick="resetCreator()" data-es="↺ Nuevo personaje" data-en="↺ New character">↺ Nuevo personaje</button><button class="btn-nav btn-gold" onclick="goTo('home')" data-es="Volver al inicio →" data-en="Back to home →">Volver al inicio →</button></div>
       </div>
     </div>
   </div>
@@ -1270,6 +1318,50 @@ const TRACK_URLS={
 let currentAudio=null;
 const RACE_EMOJIS={human:'👤',elf:'🧝',dwarf:'⛏️',halfling:'🌿',dragonborn:'🐲',tiefling:'😈',halforc:'💪',gnome:'🔮',aasimar:'✨',tabaxi:'🐱',firbolg:'🌲',kenku:'🦅'};
 const CLASS_EMOJIS={fighter:'⚔️',wizard:'🧙',rogue:'🗡️',cleric:'✝️',ranger:'🏹',paladin:'🛡️',barbarian:'💢',bard:'🎶',druid:'🌿',monk:'🥋',sorcerer:'🔥',warlock:'👁️'};
+/* Sprite sheet positions (3 cols × 4 rows) */
+const RACE_SPRITE={human:{c:0,r:0},elf:{c:1,r:0},halfling:{c:2,r:0},dwarf:{c:0,r:1},gnome:{c:1,r:1},dragonborn:{c:2,r:1},tiefling:{c:0,r:2},halforc:{c:1,r:2},aasimar:{c:2,r:2},tabaxi:{c:0,r:3},firbolg:{c:1,r:3},kenku:{c:2,r:3}};
+const CLASS_SPRITE={fighter:{c:0,r:0},wizard:{c:1,r:0},rogue:{c:2,r:0},cleric:{c:0,r:1},ranger:{c:1,r:1},paladin:{c:2,r:1},barbarian:{c:0,r:2},bard:{c:1,r:2},druid:{c:2,r:2},monk:{c:0,r:3},sorcerer:{c:1,r:3},warlock:{c:2,r:3}};
+function spritePos(s){return`background-size:300% 400%;background-position:${s.c*50}% ${(s.r/3*100).toFixed(2)}%;`;}
+function raceBg(race){const s=RACE_SPRITE[race]||{c:0,r:0};return`background-image:url('assets/raza.png');${spritePos(s)}`;}
+function classBg(cls){const s=CLASS_SPRITE[cls]||{c:0,r:0};return`background-image:url('assets/especie.png');${spritePos(s)}`;}
+/* ── MONSTER SPRITES ── */
+const MONSTER_SPRITES={
+  'aboleth':{f:'monsters-c',c:0,r:0,tc:3,tr:4},'acolyte':{f:'monsters-c',c:1,r:0,tc:3,tr:4},
+  'adult-black-dragon':{f:'monsters-c',c:2,r:0,tc:3,tr:4},'adult-brass-dragon':{f:'monsters-c',c:0,r:1,tc:3,tr:4},
+  'adult-bronze-dragon':{f:'monsters-c',c:1,r:1,tc:3,tr:4},'adult-gold-dragon':{f:'monsters-c',c:2,r:1,tc:3,tr:4},
+  'adult-green-dragon':{f:'monsters-c',c:0,r:2,tc:3,tr:4},'adult-copper-dragon':{f:'monsters-c',c:1,r:2,tc:3,tr:4},
+  'air-elemental':{f:'monsters-c',c:2,r:2,tc:3,tr:4},'adult-red-dragon':{f:'monsters-c',c:1,r:3,tc:3,tr:4},
+  'ancient-black-dragon':{f:'monsters-c',c:2,r:3,tc:3,tr:4},
+  'androsphinx':{f:'monsters-a',c:0,r:0,tc:3,tr:4},'animated-armor':{f:'monsters-a',c:1,r:0,tc:3,tr:4},
+  'awakened-shrub':{f:'monsters-a',c:2,r:0,tc:3,tr:4},'awakened-tree':{f:'monsters-a',c:0,r:1,tc:3,tr:4},
+  'ankheg':{f:'monsters-a',c:1,r:1,tc:3,tr:4},'ape':{f:'monsters-a',c:2,r:1,tc:3,tr:4},
+  'archmage':{f:'monsters-a',c:0,r:2,tc:3,tr:4},'assassin':{f:'monsters-a',c:1,r:2,tc:3,tr:4},
+  'axe-beak':{f:'monsters-a',c:0,r:3,tc:3,tr:4},'azer':{f:'monsters-a',c:1,r:3,tc:3,tr:4},
+  'badger':{f:'monsters-a',c:2,r:3,tc:3,tr:4},
+  'ancient-blue-dragon':{f:'monsters-b',c:0,r:0,tc:3,tr:4},'ancient-brass-dragon':{f:'monsters-b',c:1,r:0,tc:3,tr:4},
+  'ancient-gold-dragon':{f:'monsters-b',c:2,r:0,tc:3,tr:4},
+  'baboon':{f:'monsters-d',c:0,r:0,tc:3,tr:3},'ancient-bronze-dragon':{f:'monsters-d',c:1,r:0,tc:3,tr:3},
+  'ancient-copper-dragon':{f:'monsters-d',c:2,r:0,tc:3,tr:3},'ancient-green-dragon':{f:'monsters-d',c:0,r:1,tc:3,tr:3},
+  'ancient-red-dragon':{f:'monsters-d',c:1,r:1,tc:3,tr:3},'ancient-silver-dragon':{f:'monsters-d',c:2,r:1,tc:3,tr:3},
+  'ancient-white-dragon':{f:'monsters-d',c:1,r:2,tc:3,tr:3},
+};
+function monsterSpriteCss(index){
+  const s=MONSTER_SPRITES[index];if(!s)return null;
+  const bx=(s.tc>1?s.c/(s.tc-1)*100:0).toFixed(1)+'%';
+  const by=(s.tr>1?s.r/(s.tr-1)*100:0).toFixed(1)+'%';
+  return`background-image:url('assets/${s.f}.png');background-size:${s.tc*100}% ${s.tr*100}%;background-position:${bx} ${by};background-repeat:no-repeat;`;
+}
+function initClassCards(){
+  document.querySelectorAll('.option-grid .option-card').forEach(card=>{
+    const m=card.getAttribute('onclick').match(/'class','(\w+)'/);
+    if(!m)return;
+    const s=CLASS_SPRITE[m[1]];if(!s)return;
+    card.style.cssText+=`background-image:url('assets/especie.png');${spritePos(s)}`;
+    if(!card.querySelector('.oc-overlay')){const ov=document.createElement('div');ov.className='oc-overlay';card.insertBefore(ov,card.firstChild);}
+    const icon=card.querySelector('.oc-icon'),name=card.querySelector('.oc-name'),sub=card.querySelector('.oc-sub');
+    if(icon&&!card.querySelector('.oc-content')){const wrap=document.createElement('div');wrap.className='oc-content';if(name)wrap.appendChild(name);if(sub)wrap.appendChild(sub);card.appendChild(wrap);if(icon)icon.remove();}
+  });
+}
 const CLASS_NAMES={es:{fighter:'Guerrero',wizard:'Mago',rogue:'Pícaro',cleric:'Clérigo',ranger:'Explorador',paladin:'Paladín',barbarian:'Bárbaro',bard:'Bardo',druid:'Druida',monk:'Monje',sorcerer:'Hechicero',warlock:'Brujo'},en:{fighter:'Fighter',wizard:'Wizard',rogue:'Rogue',cleric:'Cleric',ranger:'Ranger',paladin:'Paladin',barbarian:'Barbarian',bard:'Bard',druid:'Druid',monk:'Monk',sorcerer:'Sorcerer',warlock:'Warlock'}};
 const RACE_NAMES={es:{human:'Humano',elf:'Elfo',dwarf:'Enano',halfling:'Mediano',dragonborn:'Dragonborn',tiefling:'Tiefling',halforc:'Semiorco',gnome:'Gnomo',aasimar:'Aasimar',tabaxi:'Tabaxi',firbolg:'Firbolg',kenku:'Kenku'},en:{human:'Human',elf:'Elf',dwarf:'Dwarf',halfling:'Halfling',dragonborn:'Dragonborn',tiefling:'Tiefling',halforc:'Half-Orc',gnome:'Gnome',aasimar:'Aasimar',tabaxi:'Tabaxi',firbolg:'Firbolg',kenku:'Kenku'}};
 
@@ -1503,7 +1595,9 @@ const _MVG={
   monstrosity:(c)=>`<circle cx="20" cy="20" r="20" fill="#12101e"/><g fill="${c}"><ellipse cx="20" cy="23" rx="12" ry="10"/><ellipse cx="20" cy="14" rx="9" ry="7"/></g><circle cx="15" cy="13" r="3" fill="#12101e"/><circle cx="20" cy="11" r="3" fill="#12101e"/><circle cx="25" cy="13" r="3" fill="#12101e"/><circle cx="15.5" cy="12.5" r="1" fill="${c}"/><circle cx="20.5" cy="10.5" r="1" fill="${c}"/><circle cx="25.5" cy="12.5" r="1" fill="${c}"/><path d="M8,27 L4,22 L8,24 M8,29 L4,31 L8,28" stroke="${c}" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M32,27 L36,22 L32,24 M32,29 L36,31 L32,28" stroke="${c}" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M13,20 L15,18 L17,21 L19,18 L21,21 L23,18 L25,21 L27,18 L27,20 Q22,27 13,20Z" fill="#12101e"/>`,
 };
 const _MVCOL={dragon:'#F8C662',undead:'#7fc8c0',fiend:'#e07878',aberration:'#9b78e0',humanoid:'#a898c8',beast:'#c8a060',elemental:'#e8a040',construct:'#8898b0',plant:'#60a868',ooze:'#60c890',celestial:'#c8d8f8',fey:'#e0b8f8',giant:'#b8a068',monstrosity:'#c87858'};
-function monsterAvatar(name){
+function monsterAvatar(name, index){
+  const css=monsterSpriteCss(index);
+  if(css)return`<div class="mc-avatar-img" style="${css}"></div>`;
   const t=getMonsterType(name);
   const c=_MVCOL[t]||'#a898c8';
   const body=(_MVG[t]||_MVG.monstrosity)(c);
@@ -1512,7 +1606,7 @@ function monsterAvatar(name){
 function renderMonsterCard(m){
   const cr=m.challenge_rating!==undefined?m.challenge_rating:'?';
   return`<div class="comp-card monster-card" onclick="openCompDetail('monsters','${m.index}')">
-    <div class="mc-avatar">${monsterAvatar(m.name)}</div>
+    <div class="mc-avatar">${monsterAvatar(m.name, m.index)}</div>
     <div class="mc-info">
       <div class="cc-name">${m.name}</div>
       <span class="cc-badge cb-teal">CR ${cr}</span>
@@ -1629,9 +1723,12 @@ function renderMonsterDetail(d){
   }).join(' · '):null;
   const aDesc=a=>(currentLang==='es'?(a._desc_es||a.desc):a.desc)||'';
   const langStr=currentLang==='es'?(d._lang_es||d.languages||''):(d.languages||'');
+  const mCss=monsterSpriteCss(d.index);
+  const portraitHtml=mCss
+    ?`<div style="display:flex;gap:16px;align-items:flex-start;padding-top:6px;margin-bottom:4px;"><div style="width:120px;height:120px;flex-shrink:0;border-radius:12px;overflow:hidden;${mCss}"></div><div style="flex:1;min-width:0;"><div class="cp-title" style="margin-top:0;">${d.name}</div><div class="cp-sub">${sz} ${tp} · <span class="cc-badge cb-teal">CR ${d.challenge_rating}</span></div></div></div>`
+    :`<div class="cp-title">${d.name}</div><div class="cp-sub">${sz} ${tp} · <span class="cc-badge cb-teal">CR ${d.challenge_rating}</span></div>`;
   document.getElementById('compPanelContent').innerHTML=`
-    <div class="cp-title">${d.name}</div>
-    <div class="cp-sub">${sz} ${tp} · <span class="cc-badge cb-teal">CR ${d.challenge_rating}</span></div>
+    ${portraitHtml}
     <div class="cp-divider"></div>
     <div class="cp-grid2">
       <div class="cp-field"><div class="cp-field-label">${L('Puntos de Golpe','HP')}</div><div class="cp-field-value">${d.hit_points} (${d.hit_dice||'—'})</div></div>
@@ -1722,6 +1819,7 @@ function goTo(page,fromPop){
   if(page==='sounds')renderSounds('all');
   if(page==='maps'){initMap();_mapsExploreLoaded=false;}
   if(page==='compendium')initCompendium();
+  if(page==='characters')initCharSelect();
   if(!fromPop)history.pushState({page},'',(PAGE_URLS[page]||'/'));
 }
 window.addEventListener('popstate',e=>{goTo(e.state&&e.state.page?e.state.page:'home',true);});
@@ -1742,11 +1840,11 @@ function selectMode(m){selections.mode=m;document.getElementById('modeRandom').c
 function selectOption(el,type,val){el.closest('.option-grid').querySelectorAll('.option-card').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');selections[type]=val;}
 function nextStep(){
   if(currentStep===1&&!selections.mode)selectMode('manual');
-  if(currentStep===4&&!rolledStats)return;
-  if(currentStep<5){document.getElementById('step'+currentStep).classList.remove('active');currentStep++;document.getElementById('step'+currentStep).classList.add('active');updateProgress();if(currentStep===5)buildSheet();}
+  if(currentStep===3&&!rolledStats)return;
+  if(currentStep<4){document.getElementById('step'+currentStep).classList.remove('active');currentStep++;document.getElementById('step'+currentStep).classList.add('active');updateProgress();if(currentStep===4)buildSheet();}
 }
 function prevStep(){if(currentStep>1){document.getElementById('step'+currentStep).classList.remove('active');currentStep--;document.getElementById('step'+currentStep).classList.add('active');updateProgress();}}
-function updateProgress(){for(let i=1;i<=5;i++){const d=document.getElementById('pd'+i);d.classList.remove('active','done');if(i<currentStep)d.classList.add('done');else if(i===currentStep)d.classList.add('active');if(i<5)document.getElementById('pl'+i).classList.toggle('done',i<currentStep);}}
+function updateProgress(){for(let i=1;i<=4;i++){const d=document.getElementById('pd'+i);if(!d)return;d.classList.remove('active','done');if(i<currentStep)d.classList.add('done');else if(i===currentStep)d.classList.add('active');if(i<4){const l=document.getElementById('pl'+i);if(l)l.classList.toggle('done',i<currentStep);}}}
 function rollStats(){
   const stats=['str','dex','con','int','wis','cha'];rolledStats={};
   stats.forEach(s=>{
@@ -1762,15 +1860,15 @@ function rollStats(){
 }
 function buildSheet(){
   if(selections.mode==='random'){
-    const races=Object.keys(RACE_EMOJIS),classes=Object.keys(CLASS_EMOJIS);
-    if(!selections.race)selections.race=races[Math.floor(Math.random()*races.length)];
+    const classes=Object.keys(CLASS_EMOJIS);
     if(!selections.class)selections.class=classes[Math.floor(Math.random()*classes.length)];
     if(!rolledStats){rolledStats={};['str','dex','con','int','wis','cha'].forEach(s=>{const r=[1,2,3,4].map(()=>Math.ceil(Math.random()*6));rolledStats[s]=r.sort((a,b)=>b-a).slice(0,3).reduce((a,b)=>a+b,0);});}
   }
   const names={human:['Aldric','Elena'],elf:['Aelindra','Sylvar'],dwarf:['Thorin','Brenna'],halfling:['Perrin','Rosie'],dragonborn:['Balasar','Sora'],tiefling:['Damakos','Lerissa'],halforc:['Gorth','Shara'],gnome:['Dimble','Orra'],aasimar:['Ariel','Solenne'],tabaxi:['Whisper','Flash'],firbolg:['Elder Oak','Gentle Stream'],kenku:['Echo','Whistle']};
-  const rk=selections.race||'human', ck=selections.class||'fighter';
+  const rk=selections.race||_selectedRace||'human', ck=selections.class||'fighter';
   const nm=(names[rk]||['Adventurer'])[Math.floor(Math.random()*(names[rk]||['Adventurer']).length)];
-  document.getElementById('csAvatar').textContent=RACE_EMOJIS[rk]||'⚔️';
+  const avatarEl=document.getElementById('csAvatar');
+  avatarEl.style.cssText=`width:56px;height:56px;border-radius:50%;overflow:hidden;flex-shrink:0;${raceBg(rk)};background-repeat:no-repeat;`;
   document.getElementById('csName').textContent=nm;
   document.getElementById('csMeta').textContent=`${RACE_NAMES[currentLang][rk]||rk} · ${CLASS_NAMES[currentLang][ck]||ck} · ${currentLang==='es'?'Nivel':'Level'} 1`;
   const st=rolledStats||{str:12,dex:14,con:13,int:11,wis:10,cha:15};
@@ -1784,6 +1882,93 @@ function resetCreator(){
   ['str','dex','con','int','wis','cha'].forEach(s=>{document.getElementById('sv-'+s).textContent='—';document.getElementById('sm-'+s).textContent='';});
   document.getElementById('btnStep4Next').setAttribute('disabled','');
   updateProgress();
+}
+
+/* ══ CHARACTER SELECT (LoL-style) ══ */
+const RACE_DATA={
+  human:{color:'#c8b060',bg:'linear-gradient(160deg,#1a1408 0%,#2e2010 40%,#4a3418 100%)',nameEs:'HUMANO',nameEn:'HUMAN',tagEs:'Versátil y determinado',tagEn:'Versatile and determined',bonus:['+1 a todas las estadísticas'],traits:['Lengua extra','Habilidad extra','Dote extra al nivel 1','Adaptabilidad innata']},
+  elf:{color:'#60c8b0',bg:'linear-gradient(160deg,#081a16 0%,#102a20 40%,#1a4030 100%)',nameEs:'ELFO',nameEn:'ELF',tagEs:'Gracia ancestral e intuición mística',tagEn:'Ancestral grace and mystic intuition',bonus:['+2 DES','+1 INT o SAB'],traits:['Visión en la oscuridad','Resistencia al encantamiento','Trance élfico','Percepción aguda']},
+  dwarf:{color:'#b08040',bg:'linear-gradient(160deg,#1a1208 0%,#2a1e10 40%,#3a2810 100%)',nameEs:'ENANO',nameEn:'DWARF',tagEs:'Tenaz como la roca, fiel hasta la muerte',tagEn:'Tenacious as rock, loyal unto death',bonus:['+2 CON','+1 SAB o FUE'],traits:['Visión en la oscuridad','Resistencia al veneno','Entrenamiento con armas enanas','Conocimiento de piedra']},
+  halfling:{color:'#80c060',bg:'linear-gradient(160deg,#0c1808 0%,#1a2c10 40%,#264018 100%)',nameEs:'MEDIANO',nameEn:'HALFLING',tagEs:'Pequeño en estatura, enorme en suerte',tagEn:'Small in stature, enormous in luck',bonus:['+2 DES','+1 CAR o SAB'],traits:['Suerte del mediano','Valentía innata','Agilidad mediana','Discreción natural']},
+  dragonborn:{color:'#e06840',bg:'linear-gradient(160deg,#200a04 0%,#3a1008 40%,#5a1808 100%)',nameEs:'DRAGONBORN',nameEn:'DRAGONBORN',tagEs:'Herencia dracónica, voluntad de acero',tagEn:'Draconic heritage, iron will',bonus:['+2 FUE','+1 CAR'],traits:['Resistencia elemental','Arma de aliento','Ascendencia dracónica','Presencia imponente']},
+  tiefling:{color:'#c040a0',bg:'linear-gradient(160deg,#1a0818 0%,#2e1028 40%,#3e1438 100%)',nameEs:'TIEFLING',nameEn:'TIEFLING',tagEs:'Maldito por la sangre, libre por la voluntad',tagEn:'Cursed by blood, freed by will',bonus:['+2 CAR','+1 INT'],traits:['Visión en la oscuridad','Resistencia al fuego','Herencia infernal','Legado oscuro']},
+  halforc:{color:'#80a840',bg:'linear-gradient(160deg,#0c1808 0%,#1c2e08 40%,#2c3e10 100%)',nameEs:'SEMIORCO',nameEn:'HALF-ORC',tagEs:'Furia ancestral, fuerza sin igual',tagEn:'Ancestral fury, unmatched strength',bonus:['+2 FUE','+1 CON'],traits:['Visión en la oscuridad','Implacable','Amenazante','Ataques salvajes']},
+  gnome:{color:'#60a8e0',bg:'linear-gradient(160deg,#080e1a 0%,#101a2e 40%,#182840 100%)',nameEs:'GNOMO',nameEn:'GNOME',tagEs:'Mente brillante y espíritu inquieto',tagEn:'Brilliant mind and restless spirit',bonus:['+2 INT','+1 DES o CON'],traits:['Visión en la oscuridad','Astucia gnómica','Resistencia mágica','Conocimiento arcano']},
+  aasimar:{color:'#e8d880',bg:'linear-gradient(160deg,#181408 0%,#2a2010 40%,#3a2e10 100%)',nameEs:'AASIMAR',nameEn:'AASIMAR',tagEs:'Luz divina en un mundo de sombras',tagEn:'Divine light in a world of shadows',bonus:['+2 CAR','+1 SAB'],traits:['Visión en la oscuridad','Resistencia radiante','Llevar la luz','Transformación celestial']},
+  tabaxi:{color:'#e0a040',bg:'linear-gradient(160deg,#1a1008 0%,#2e1c08 40%,#3e2810 100%)',nameEs:'TABAXI',nameEn:'TABAXI',tagEs:'Curioso por naturaleza, veloz como el viento',tagEn:'Curious by nature, swift as the wind',bonus:['+2 DES','+1 CAR'],traits:['Visión en la oscuridad','Garras felinas','Caída de gato','Impulso felino']},
+  firbolg:{color:'#60b878',bg:'linear-gradient(160deg,#081410 0%,#102218 40%,#183020 100%)',nameEs:'FIRBOLG',nameEn:'FIRBOLG',tagEs:'Guardián del bosque, habla con la naturaleza',tagEn:'Guardian of the forest, speaks with nature',bonus:['+2 SAB','+1 FUE'],traits:['Magia firbolg','Hablar con bestias','Paso oculto','Lengua de bestias']},
+  kenku:{color:'#9878c8',bg:'linear-gradient(160deg,#100c18 0%,#1c1428 40%,#281c38 100%)',nameEs:'KENKU',nameEn:'KENKU',tagEs:'Maestros del mimetismo y el engaño',tagEn:'Masters of mimicry and deception',bonus:['+2 DES','+1 SAB'],traits:['Imitación perfecta','Maestría del experto','Experto en sigilo','Manos expertas']}
+};
+
+
+let _selectedRace='human';
+
+function initCharSelect(){
+  _selectedRace='human';
+  const list=document.getElementById('charListPanel');
+  list.innerHTML=Object.keys(RACE_DATA).map(k=>{
+    const d=RACE_DATA[k];
+    return`<div class="char-list-item" id="cli-${k}" onclick="selectCharRace('${k}')">
+      <div style="width:44px;height:44px;flex-shrink:0;border-radius:8px;overflow:hidden;${raceBg(k)};background-repeat:no-repeat;"></div>
+      <div style="min-width:0;"><div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${currentLang==='es'?d.nameEs:d.nameEn}</div></div>
+    </div>`;
+  }).join('');
+  selectCharRace('human');
+  document.getElementById('charCreatorDrawer').classList.remove('open');
+  resetCreator();
+  initClassCards();
+}
+
+function selectCharRace(race){
+  _selectedRace=race;
+  const d=RACE_DATA[race];
+  // Highlight list item
+  document.querySelectorAll('.char-list-item').forEach(el=>el.classList.remove('active'));
+  const cli=document.getElementById('cli-'+race);
+  if(cli)cli.classList.add('active');
+  // Background
+  document.getElementById('charAtmosBg').style.background=d.bg;
+  // Portrait
+  const wrap=document.getElementById('charPortraitWrap');
+  const s=RACE_SPRITE[race]||{c:0,r:0};
+  const bx=s.c*50+'%', by=(s.r/3*100).toFixed(2)+'%';
+  wrap.innerHTML=`<div style="height:78%;aspect-ratio:3/4;background-image:url('assets/raza.png');background-size:300% 400%;background-position:${bx} ${by};background-repeat:no-repeat;border-radius:6px;filter:drop-shadow(0 24px 64px rgba(0,0,0,.85));opacity:0;transform:translateY(28px);transition:opacity .55s,transform .55s;"></div>`;
+  const portDiv=wrap.firstElementChild;
+  requestAnimationFrame(()=>{requestAnimationFrame(()=>{portDiv.style.opacity='1';portDiv.style.transform='translateY(0)';});});
+  // Name & tagline
+  document.getElementById('charSplashName').textContent=currentLang==='es'?d.nameEs:d.nameEn;
+  document.getElementById('charSplashTagline').textContent=currentLang==='es'?d.tagEs:d.tagEn;
+  // Info panel
+  const info=document.getElementById('charInfoPanel');
+  info.innerHTML=`
+    <div style="padding:24px 20px;height:100%;overflow-y:auto;">
+      <div style="font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:${d.color};margin-bottom:6px;">${currentLang==='es'?d.nameEs:d.nameEn}</div>
+      <div style="font-size:12px;color:var(--text-m);margin-bottom:20px;">${currentLang==='es'?d.tagEs:d.tagEn}</div>
+      <div style="margin-bottom:18px;">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-d);margin-bottom:8px;">${currentLang==='es'?'Bonificaciones':'Bonuses'}</div>
+        ${d.bonus.map(b=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;"><span style="color:${d.color};font-weight:700;">+</span>${b}</div>`).join('')}
+      </div>
+      <div>
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-d);margin-bottom:8px;">${currentLang==='es'?'Rasgos':'Traits'}</div>
+        ${d.traits.map(t=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;"><span style="color:${d.color};">◆</span>${t}</div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function confirmCharRace(){
+  selections.race=_selectedRace;
+  const d=RACE_DATA[_selectedRace];
+  const iconEl=document.getElementById('charDrawerRaceIcon');
+  iconEl.style.cssText=`width:36px;height:36px;border-radius:6px;overflow:hidden;flex-shrink:0;${raceBg(_selectedRace)};background-repeat:no-repeat;`;
+  iconEl.innerHTML='';
+  document.getElementById('charDrawerRaceName').textContent=currentLang==='es'?d.nameEs:d.nameEn;
+  document.getElementById('charCreatorDrawer').classList.add('open');
+  resetCreator();
+  selections.race=_selectedRace;
+}
+
+function backToRaceSelect(){
+  document.getElementById('charCreatorDrawer').classList.remove('open');
 }
 
 /* ══ MAP BUILDER (Canvas) ══ */
