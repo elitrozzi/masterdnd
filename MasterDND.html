@@ -88,7 +88,7 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 @keyframes slideUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
 
 /* ══════════════════════════════════ FEATURES SECTION */
-#section-features{position:absolute;top:100vh;left:0;right:0;height:100vh;display:flex;align-items:center;z-index:11;pointer-events:none;padding:0 48px;}
+#section-features{position:fixed;top:0;left:0;right:0;height:100vh;display:flex;align-items:center;z-index:11;pointer-events:none;padding:0 48px;opacity:0;}
 .feat-left{flex:0 0 48%;}
 .feat-right{flex:1;display:flex;flex-direction:column;gap:20px;pointer-events:auto;}
 .feat-card{background:rgba(13,19,30,0.88);border:1px solid var(--border);border-radius:16px;padding:22px 26px;backdrop-filter:blur(16px);opacity:0;transform:translateX(50px);display:flex;gap:18px;align-items:flex-start;transition:border-color .25s,transform .25s,box-shadow .25s;cursor:none;}
@@ -2274,38 +2274,48 @@ function togglePlay(){
       landUi.style.pointerEvents=op>0.05?'auto':'none';
     }
 
-    /* ── Fases de animación — más lentas y con más stagger ── */
+    /* ── Dados: arco directo START→END sin convergencia ── */
     dice.forEach((d,i)=>{
       const hp=homePos[i],ep=END[i];
-      const stagger=i*0.038; // separación amplia entre cada dado
-
-      if(scrollProg<0.30){
+      const stagger=i*0.045;
+      if(scrollProg<0.20){
         /* Fase 1: flotando */
         d.position.x=hp.x;
         d.position.y=hp.y+Math.sin(tick*d.userData.fs+d.userData.fo)*d.userData.fa*3;
         d.position.z=hp.z;
         d.rotation.x+=d.userData.rx;d.rotation.y+=d.userData.ry;
-
-      } else if(scrollProg<0.64){
-        /* Fase 2: convergencia lenta hacia el centro */
-        const t=smooth(clamp((scrollProg-0.30-stagger*.35)/0.34));
-        d.position.x=lrp(hp.x,GP.x,t);
-        d.position.y=lrp(hp.y,GP.y,t);
-        d.position.z=lrp(hp.z,GP.z,t);
-        d.rotation.x+=d.userData.rx*(1-t*.85);
-        d.rotation.y+=d.userData.ry*(1-t*.85);
-
       } else {
-        /* Fase 3: lanzamiento suave hacia la izquierda con arco y rebote */
-        const rawT=clamp((scrollProg-0.64-stagger)/0.36);
-        const arc=Math.sin(clamp(rawT)*Math.PI)*(0.9+(i%3)*.3);
-        d.position.x=lrp(GP.x,ep.x,eout(rawT));
-        d.position.y=lrp(GP.y,ep.y,eoutBack(rawT))+arc;
-        d.position.z=lrp(GP.z,ep.z,eout(rawT));
-        const spinFade=clamp(1-rawT*1.1);
-        d.rotation.x+=d.userData.rx*1.8*spinFade;
-        d.rotation.y+=d.userData.ry*1.8*spinFade;
+        /* Fase 2: vuelo directo con arco suave, cada dado staggered */
+        const rawT=clamp((scrollProg-0.20-stagger)/0.60);
+        const t=smooth(rawT);
+        const arc=Math.sin(rawT*Math.PI)*(1.0+(i%3)*.5);
+        d.position.x=lrp(hp.x,ep.x,t);
+        d.position.y=lrp(hp.y,ep.y,t)+arc;
+        d.position.z=lrp(hp.z,ep.z,t);
+        const spinFade=Math.max(1-rawT*1.4,0);
+        d.rotation.x+=d.userData.rx*(1+spinFade*.8);
+        d.rotation.y+=d.userData.ry*(1+spinFade*.8);
       }
+    });
+
+    /* ── Sección features: fixed, entra/sale con scroll ── */
+    const featSec=document.getElementById('section-features');
+    if(featSec){
+      const fi=clamp((scrollProg-0.35)/0.12);
+      const fo=clamp((scrollProg-0.84)/0.12);
+      const secOp=eout(fi)*(1-eout(fo));
+      featSec.style.opacity=secOp;
+      featSec.style.pointerEvents=secOp>0.05?'auto':'none';
+    }
+
+    /* ── Feature cards en cascada ── */
+    [['fc1',0],['fc2',0.07],['fc3',0.14]].forEach(([id,delay])=>{
+      const el=document.getElementById(id);
+      if(!el)return;
+      const cp=clamp((scrollProg-0.40-delay)/0.15);
+      const eo=eout(cp);
+      el.style.opacity=eo;
+      el.style.transform='translateX('+((1-eo)*50)+'px)';
     });
 
     /* ── D20 label & ring — usa dice[6] ── */
@@ -2316,7 +2326,7 @@ function togglePlay(){
       const v=d0.position.clone().project(camera);
       const sx=(v.x*.5+.5)*window.innerWidth;
       const sy=(-v.y*.5+.5)*window.innerHeight;
-      const lop=scrollProg>0.90?Math.min((scrollProg-0.90)/0.10,1):0;
+      const lop=scrollProg>0.88?clamp((scrollProg-0.88)/0.10):0;
       d20el.style.left=sx+'px';d20el.style.top=sy+'px';d20el.style.opacity=lop;
       const rr=Math.max(d0.scale.x*58,46);
       d20rg.style.left=sx+'px';d20rg.style.top=sy+'px';
@@ -2324,16 +2334,6 @@ function togglePlay(){
       d20rg.style.marginLeft=(-rr)+'px';d20rg.style.marginTop=(-rr)+'px';
       d20rg.style.opacity=(lop*.75)+'';
     }
-
-    /* ── Feature cards en cascada ── */
-    [['fc1',0],['fc2',0.09],['fc3',0.18]].forEach(([id,delay])=>{
-      const el=document.getElementById(id);
-      if(!el)return;
-      const cp=Math.max(0,Math.min((scrollProg-0.78-delay)/0.18,1));
-      const eo=eout(cp);
-      el.style.opacity=eo;
-      el.style.transform='translateX('+((1-eo)*50)+'px)';
-    });
 
     gLight.position.x=Math.cos(tick*.25)*7;
     gLight.position.z=Math.sin(tick*.25)*5+4;
