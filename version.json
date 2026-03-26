@@ -1,7 +1,12 @@
 {
-  "version": "1.1.1",
+  "version": "1.1.2",
   "date": "2026-03-26",
   "history": [
+    {
+      "version": "1.1.2",
+      "date": "2026-03-26",
+      "note": "Nuevo flujo de personaje: Mode→Race carousel→Class carousel→Stats/Sheet, slide animation en carousels"
+    },
     {
       "version": "1.1.1",
       "date": "2026-03-26",

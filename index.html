@@ -195,6 +195,30 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .race-bonus-pill{padding:4px 14px;border-radius:20px;font-size:12px;font-weight:700;background:rgba(248,198,98,.1);color:var(--gold);border:1px solid rgba(248,198,98,.2);}
 .char-confirm-btn{padding:13px 44px;font-family:'Cinzel',serif;font-size:13px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#0e0c18;background:linear-gradient(135deg,var(--gold) 0%,#d4940a 100%);border:none;border-radius:3px;cursor:none;transition:.2s;box-shadow:0 0 0 rgba(248,198,98,0);}
 .char-confirm-btn:hover{transform:scale(1.04);box-shadow:0 0 32px rgba(248,198,98,.35);}
+/* ── Panel slide system ── */
+.cs-panel{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:60px;transition:transform .48s cubic-bezier(.4,0,.2,1);gap:28px;}
+.cs-panel.active{transform:translateX(0);}
+.cs-panel.cs-left{transform:translateX(-100%);}
+.cs-panel.cs-right{transform:translateX(100%);}
+/* ── Mode panel ── */
+.cs-mode-bg{position:absolute;inset:0;z-index:0;background:linear-gradient(160deg,#09070f 0%,#141025 50%,#0d0b1a 100%);}
+.cs-mode-bg::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(89,80,130,.25) 0%,transparent 65%);}
+.cs-mode-content{position:relative;z-index:1;text-align:center;max-width:520px;padding:0 24px;width:100%;}
+.cs-mode-title{font-family:'Cinzel',serif;font-size:34px;font-weight:900;color:var(--gold);letter-spacing:.1em;margin-bottom:8px;text-shadow:0 0 40px rgba(248,198,98,.4);}
+.cs-mode-sub{font-size:13px;color:var(--text-m);margin-bottom:40px;letter-spacing:.06em;}
+.cs-mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.cs-mode-card{background:rgba(89,80,130,.07);border:1px solid rgba(89,80,130,.2);border-radius:14px;padding:32px 24px;cursor:none;transition:.2s;text-align:center;}
+.cs-mode-card:hover{background:rgba(89,80,130,.14);border-color:var(--brand-500);transform:translateY(-3px);}
+.cs-mode-card.selected{border-color:var(--gold);background:rgba(248,198,98,.07);}
+.cs-mode-icon{font-size:38px;margin-bottom:12px;}
+.cs-mode-name{font-family:'Cinzel',serif;font-size:17px;font-weight:700;color:var(--text);margin-bottom:8px;}
+.cs-mode-desc{font-size:12px;color:var(--text-m);line-height:1.6;}
+/* ── Carousel slide animation ── */
+@keyframes rcTrackIn{from{transform:translateX(var(--rc-from));opacity:.55;}to{transform:translateX(0);opacity:1;}}
+.race-carousel-track.slide-right{animation:rcTrackIn .34s cubic-bezier(.4,0,.2,1) both;--rc-from:90px;}
+.race-carousel-track.slide-left{animation:rcTrackIn .34s cubic-bezier(.4,0,.2,1) both;--rc-from:-90px;}
+/* ── Step label ── */
+.cs-step-label{position:absolute;top:72px;left:50%;transform:translateX(-50%);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-d);z-index:20;white-space:nowrap;}
 /* Creator drawer that slides in after confirming race */
 .char-creator-drawer{position:absolute;inset:0;z-index:50;display:flex;flex-direction:column;background:var(--dark);transform:translateX(100%);transition:transform .45s cubic-bezier(.4,0,.2,1);}
 .char-creator-drawer.open{transform:translateX(0);}
@@ -426,7 +450,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.1.1</span>
+    <span class="ver-badge">v1.1.2</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">26 Mar 2026</span>
   </div>
@@ -519,20 +543,67 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <!-- LoL-style race select screen -->
   <div class="char-select-screen" id="charSelectScreen">
     <div class="char-atmos-bg" id="charAtmosBg"></div>
-    <!-- Carousel -->
-    <div class="race-carousel-section">
-      <button class="race-arrow" onclick="carouselMove(-1)">&#8249;</button>
-      <div class="race-carousel-track" id="raceCarouselTrack"></div>
-      <button class="race-arrow" onclick="carouselMove(1)">&#8250;</button>
+
+    <!-- Panel 0: Mode selection -->
+    <div class="cs-panel active" id="csPanelMode">
+      <div class="cs-mode-bg"></div>
+      <div class="cs-mode-content">
+        <div class="cs-mode-title">CREAR PERSONAJE</div>
+        <div class="cs-mode-sub">¿Cómo querés armar tu aventurero?</div>
+        <div class="cs-mode-grid">
+          <div class="cs-mode-card" id="modeManual" onclick="selectMode('manual')">
+            <div class="cs-mode-icon">🎯</div>
+            <div class="cs-mode-name" data-es="Manual" data-en="Manual">Manual</div>
+            <div class="cs-mode-desc" data-es="Elegís cada detalle de tu personaje." data-en="You choose every detail.">Elegís cada detalle de tu personaje.</div>
+          </div>
+          <div class="cs-mode-card" id="modeRandom" onclick="selectMode('random')">
+            <div class="cs-mode-icon">🎲</div>
+            <div class="cs-mode-name" data-es="Aleatorio" data-en="Random">Aleatorio</div>
+            <div class="cs-mode-desc" data-es="Los dados deciden tu destino." data-en="The dice decide your fate.">Los dados deciden tu destino.</div>
+          </div>
+        </div>
+      </div>
     </div>
-    <!-- Info below carousel -->
-    <div class="race-info-section">
-      <div class="race-info-name" id="raceInfoName">HUMANO</div>
-      <div class="race-info-tag" id="raceInfoTag">Versátil y determinado</div>
-      <div class="race-info-bonuses" id="raceInfoBonuses"></div>
-      <button class="char-confirm-btn" onclick="confirmCharRace()" data-es="ELEGIR RAZA →" data-en="CHOOSE RACE →">ELEGIR RAZA →</button>
+
+    <!-- Panel 1: Race carousel -->
+    <div class="cs-panel cs-right" id="csPanelRace">
+      <span class="cs-step-label">Paso 1 de 2 · Elige tu raza</span>
+      <div class="race-carousel-section">
+        <button class="race-arrow" onclick="carouselMove(-1)">&#8249;</button>
+        <div class="race-carousel-track" id="raceCarouselTrack"></div>
+        <button class="race-arrow" onclick="carouselMove(1)">&#8250;</button>
+      </div>
+      <div class="race-info-section">
+        <div class="race-info-name" id="raceInfoName">HUMANO</div>
+        <div class="race-info-tag" id="raceInfoTag">Versátil y determinado</div>
+        <div class="race-info-bonuses" id="raceInfoBonuses"></div>
+        <div style="display:flex;gap:12px;align-items:center;margin-top:4px;">
+          <button class="char-drawer-back" onclick="csGoTo('csPanelMode','back')" style="cursor:none;">← Modo</button>
+          <button class="char-confirm-btn" onclick="confirmCharRace()">ELEGIR RAZA →</button>
+        </div>
+      </div>
     </div>
-    <!-- Creator drawer (slides in after confirming race) -->
+
+    <!-- Panel 2: Class carousel -->
+    <div class="cs-panel cs-right" id="csPanelClass">
+      <span class="cs-step-label">Paso 2 de 2 · Elige tu clase</span>
+      <div class="race-carousel-section">
+        <button class="race-arrow" onclick="classCarouselMove(-1)">&#8249;</button>
+        <div class="race-carousel-track" id="classCarouselTrack"></div>
+        <button class="race-arrow" onclick="classCarouselMove(1)">&#8250;</button>
+      </div>
+      <div class="race-info-section">
+        <div class="race-info-name" id="classInfoName">GUERRERO</div>
+        <div class="race-info-tag" id="classInfoTag">Maestro del combate</div>
+        <div class="race-info-bonuses" id="classInfoBonuses"></div>
+        <div style="display:flex;gap:12px;align-items:center;margin-top:4px;">
+          <button class="char-drawer-back" onclick="csGoTo('csPanelRace','back')" style="cursor:none;">← Raza</button>
+          <button class="char-confirm-btn" onclick="confirmCharClass()">ELEGIR CLASE →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Creator drawer (stats + sheet) -->
     <div class="char-creator-drawer" id="charCreatorDrawer">
       <div class="char-drawer-header">
         <button class="char-drawer-back" onclick="backToRaceSelect()">← <span data-es="Cambiar raza" data-en="Change race">Cambiar raza</span></button>
@@ -541,46 +612,12 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
       <div class="char-drawer-body">
         <div class="creator-wrap" style="max-width:820px;padding:0;">
           <div class="progress-bar" style="margin-bottom:28px;">
-            <div class="prog-step"><div class="prog-dot active" id="pd1">1</div><div class="prog-label" data-es="Modo" data-en="Mode">Modo</div></div>
+            <div class="prog-step"><div class="prog-dot active" id="pd1">1</div><div class="prog-label">Stats</div></div>
             <div class="prog-line" id="pl1"></div>
-            <div class="prog-step"><div class="prog-dot" id="pd2">2</div><div class="prog-label" data-es="Clase" data-en="Class">Clase</div></div>
-            <div class="prog-line" id="pl2"></div>
-            <div class="prog-step"><div class="prog-dot" id="pd3">3</div><div class="prog-label">Stats</div></div>
-            <div class="prog-line" id="pl3"></div>
-            <div class="prog-step"><div class="prog-dot" id="pd4">4</div><div class="prog-label" data-es="Ficha" data-en="Sheet">Ficha</div></div>
+            <div class="prog-step"><div class="prog-dot" id="pd2">2</div><div class="prog-label" data-es="Ficha" data-en="Sheet">Ficha</div></div>
           </div>
-          <!-- Step 1: Mode -->
+          <!-- Step 1: Stats -->
           <div class="creator-step active" id="step1">
-            <div class="step-title" data-es="¿Cómo querés crear tu personaje?" data-en="How do you want to create your character?">¿Cómo querés crear tu personaje?</div>
-            <div class="step-desc" data-es="Podés elegir todo vos o dejar que el azar decida." data-en="Choose everything yourself or let fate decide.">Podés elegir todo vos o dejar que el azar decida.</div>
-            <div class="mode-grid">
-              <div class="mode-card" id="modeManual" onclick="selectMode('manual')"><div class="mode-icon">🎯</div><div class="mode-name" data-es="Manual" data-en="Manual">Manual</div><div class="mode-desc" data-es="Elegís cada detalle de tu personaje." data-en="You choose every detail.">Elegís cada detalle de tu personaje.</div></div>
-              <div class="mode-card" id="modeRandom" onclick="selectMode('random')"><div class="mode-icon">🎲</div><div class="mode-name" data-es="Aleatorio" data-en="Random">Aleatorio</div><div class="mode-desc" data-es="Los dados deciden tu destino." data-en="The dice decide your fate.">Los dados deciden tu destino.</div></div>
-            </div>
-            <div class="step-nav"><div></div><button class="btn-nav btn-primary" onclick="nextStep()">Continuar →</button></div>
-          </div>
-          <!-- Step 2: Class -->
-          <div class="creator-step" id="step2">
-            <div class="step-title" data-es="Elegí tu clase" data-en="Choose your class">Elegí tu clase</div>
-            <div class="step-desc" data-es="La clase define tu rol en el grupo." data-en="Your class defines your role.">La clase define tu rol en el grupo.</div>
-            <div class="option-grid">
-              <div class="option-card" onclick="selectOption(this,'class','fighter')"><div class="oc-icon">⚔️</div><div class="oc-name" data-es="Guerrero" data-en="Fighter">Guerrero</div><div class="oc-sub" data-es="Combate" data-en="Combat">Combate</div></div>
-              <div class="option-card" onclick="selectOption(this,'class','wizard')"><div class="oc-icon">🧙</div><div class="oc-name" data-es="Mago" data-en="Wizard">Mago</div><div class="oc-sub" data-es="Magia arcana" data-en="Arcane">Magia arcana</div></div>
-              <div class="option-card" onclick="selectOption(this,'class','rogue')"><div class="oc-icon">🗡️</div><div class="oc-name" data-es="Pícaro" data-en="Rogue">Pícaro</div><div class="oc-sub" data-es="Sigilo" data-en="Stealth">Sigilo</div></div>
-              <div class="option-card" onclick="selectOption(this,'class','cleric')"><div class="oc-icon">✝️</div><div class="oc-name" data-es="Clérigo" data-en="Cleric">Clérigo</div><div class="oc-sub" data-es="Curación" data-en="Healing">Curación</div></div>
-              <div class="option-card" onclick="selectOption(this,'class','ranger')"><div class="oc-icon">🏹</div><div class="oc-name" data-es="Explorador" data-en="Ranger">Explorador</div><div class="oc-sub" data-es="Naturaleza" data-en="Nature">Naturaleza</div></div>
-              <div class="option-card" onclick="selectOption(this,'class','paladin')"><div class="oc-icon">🛡️</div><div class="oc-name" data-es="Paladín" data-en="Paladin">Paladín</div><div class="oc-sub" data-es="Fe" data-en="Faith">Fe y combate</div></div>
-              <div class="option-card" onclick="selectOption(this,'class','barbarian')"><div class="oc-icon">💢</div><div class="oc-name" data-es="Bárbaro" data-en="Barbarian">Bárbaro</div><div class="oc-sub" data-es="Furia" data-en="Rage">Furia</div></div>
-              <div class="option-card" onclick="selectOption(this,'class','bard')"><div class="oc-icon">🎶</div><div class="oc-name" data-es="Bardo" data-en="Bard">Bardo</div><div class="oc-sub" data-es="Música" data-en="Music">Música</div></div>
-              <div class="option-card" onclick="selectOption(this,'class','druid')"><div class="oc-icon">🌿</div><div class="oc-name" data-es="Druida" data-en="Druid">Druida</div><div class="oc-sub" data-es="Naturaleza" data-en="Nature">Naturaleza</div></div>
-              <div class="option-card" onclick="selectOption(this,'class','monk')"><div class="oc-icon">🥋</div><div class="oc-name" data-es="Monje" data-en="Monk">Monje</div><div class="oc-sub" data-es="Artes marciales" data-en="Martial arts">Artes marciales</div></div>
-              <div class="option-card" onclick="selectOption(this,'class','sorcerer')"><div class="oc-icon">🔥</div><div class="oc-name" data-es="Hechicero" data-en="Sorcerer">Hechicero</div><div class="oc-sub" data-es="Innato" data-en="Innate">Innato</div></div>
-              <div class="option-card" onclick="selectOption(this,'class','warlock')"><div class="oc-icon">👁️</div><div class="oc-name" data-es="Brujo" data-en="Warlock">Brujo</div><div class="oc-sub" data-es="Pacto oscuro" data-en="Dark pact">Pacto oscuro</div></div>
-            </div>
-            <div class="step-nav"><button class="btn-nav btn-ghost" onclick="prevStep()">← Atrás</button><button class="btn-nav btn-primary" onclick="nextStep()">Continuar →</button></div>
-          </div>
-          <!-- Step 3: Stats -->
-          <div class="creator-step" id="step3">
             <div class="step-title" data-es="Tirar estadísticas" data-en="Roll your stats">Tirar estadísticas</div>
             <div class="step-desc" data-es="4d6, descartás el menor." data-en="4d6, drop the lowest.">4d6, descartás el menor. Presioná el botón para tirar.</div>
             <div class="stats-grid" id="statsGrid">
@@ -592,10 +629,10 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
               <div class="stat-box"><div class="stat-name">CHA</div><div class="stat-value" id="sv-cha">—</div><div class="stat-mod" id="sm-cha"></div></div>
             </div>
             <div style="text-align:center;margin-top:24px;"><button class="btn-nav btn-gold" style="padding:12px 32px;font-size:15px;" onclick="rollStats()" id="rollBtn" data-es="🎲 Tirar dados" data-en="🎲 Roll dice">🎲 Tirar dados</button></div>
-            <div class="step-nav"><button class="btn-nav btn-ghost" onclick="prevStep()">← Atrás</button><button class="btn-nav btn-primary" id="btnStep4Next" onclick="nextStep()" disabled data-es="Ver ficha →" data-en="View sheet →">Ver ficha →</button></div>
+            <div class="step-nav"><button class="btn-nav btn-ghost" onclick="csGoTo('csPanelClass','back');document.getElementById('charCreatorDrawer').classList.remove('open');">← Clase</button><button class="btn-nav btn-primary" id="btnStep4Next" onclick="nextStep()" disabled data-es="Ver ficha →" data-en="View sheet →">Ver ficha →</button></div>
           </div>
-          <!-- Step 4: Sheet -->
-          <div class="creator-step" id="step4">
+          <!-- Step 2: Sheet -->
+          <div class="creator-step" id="step2">
             <div class="step-title" data-es="¡Tu personaje está listo!" data-en="Your character is ready!">¡Tu personaje está listo!</div>
             <div class="step-desc" data-es="Guardalo, compartilo o exportalo a PDF." data-en="Save, share or export to PDF.">Guardalo, compartilo o exportalo a PDF.</div>
             <div class="char-sheet" id="charSheet">
@@ -613,7 +650,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
               </div>
               <div class="cs-footer"><button class="btn-nav btn-primary" data-es="💾 Guardar" data-en="💾 Save">💾 Guardar</button><button class="btn-nav btn-ghost" data-es="📄 Exportar PDF" data-en="📄 Export PDF">📄 Exportar PDF</button><button class="btn-nav btn-ghost" data-es="🔗 Compartir" data-en="🔗 Share">🔗 Compartir</button></div>
             </div>
-            <div class="step-nav" style="margin-top:24px;"><button class="btn-nav btn-ghost" onclick="resetCreator()" data-es="↺ Nuevo personaje" data-en="↺ New character">↺ Nuevo personaje</button><button class="btn-nav btn-gold" onclick="goTo('home')">Volver al inicio →</button></div>
+            <div class="step-nav" style="margin-top:24px;"><button class="btn-nav btn-ghost" onclick="document.getElementById('charCreatorDrawer').classList.remove('open');initCharSelect();" data-es="↺ Nuevo personaje" data-en="↺ New character">↺ Nuevo personaje</button><button class="btn-nav btn-gold" onclick="goTo('home')">Volver al inicio →</button></div>
           </div>
         </div>
       </div>
@@ -1820,15 +1857,35 @@ function switchTab(t){
 }
 
 /* ══ CHARACTER CREATOR ══ */
-function selectMode(m){selections.mode=m;document.getElementById('modeRandom').classList.toggle('selected',m==='random');document.getElementById('modeManual').classList.toggle('selected',m==='manual');}
+function selectMode(m){
+  selections.mode=m;
+  document.querySelectorAll('.cs-mode-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('mode'+m.charAt(0).toUpperCase()+m.slice(1)).classList.add('selected');
+  if(m==='manual'){
+    csGoTo('csPanelRace','forward');
+  } else {
+    _selectedRace=RACE_KEYS[Math.floor(Math.random()*RACE_KEYS.length)];
+    selections.race=_selectedRace;
+    _classCarouselIdx=Math.floor(Math.random()*CLASS_KEYS.length);
+    selections.class=CLASS_KEYS[_classCarouselIdx];
+    _carouselIdx=RACE_KEYS.indexOf(_selectedRace);
+    const d=RACE_DATA[_selectedRace]||{};
+    const cd=CLASS_DATA[selections.class]||{};
+    const iconEl=document.getElementById('charDrawerRaceIcon');
+    iconEl.style.cssText=`width:36px;height:36px;border-radius:6px;overflow:hidden;flex-shrink:0;${raceBg(_selectedRace)};background-repeat:no-repeat;`;
+    iconEl.innerHTML='';
+    document.getElementById('charDrawerRaceName').textContent=`${currentLang==='es'?d.nameEs:d.nameEn} · ${currentLang==='es'?cd.nameEs:cd.nameEn}`;
+    document.getElementById('charCreatorDrawer').classList.add('open');
+    resetCreator();selections.race=_selectedRace;selections.class=CLASS_KEYS[_classCarouselIdx];
+  }
+}
 function selectOption(el,type,val){el.closest('.option-grid').querySelectorAll('.option-card').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');selections[type]=val;}
 function nextStep(){
-  if(currentStep===1&&!selections.mode)selectMode('manual');
-  if(currentStep===3&&!rolledStats)return;
-  if(currentStep<4){document.getElementById('step'+currentStep).classList.remove('active');currentStep++;document.getElementById('step'+currentStep).classList.add('active');updateProgress();if(currentStep===4)buildSheet();}
+  if(currentStep===1&&!rolledStats)return;
+  if(currentStep<2){document.getElementById('step'+currentStep).classList.remove('active');currentStep++;document.getElementById('step'+currentStep).classList.add('active');updateProgress();if(currentStep===2)buildSheet();}
 }
 function prevStep(){if(currentStep>1){document.getElementById('step'+currentStep).classList.remove('active');currentStep--;document.getElementById('step'+currentStep).classList.add('active');updateProgress();}}
-function updateProgress(){for(let i=1;i<=4;i++){const d=document.getElementById('pd'+i);if(!d)return;d.classList.remove('active','done');if(i<currentStep)d.classList.add('done');else if(i===currentStep)d.classList.add('active');if(i<4){const l=document.getElementById('pl'+i);if(l)l.classList.toggle('done',i<currentStep);}}}
+function updateProgress(){for(let i=1;i<=2;i++){const d=document.getElementById('pd'+i);if(!d)continue;d.classList.remove('active','done');if(i<currentStep)d.classList.add('done');else if(i===currentStep)d.classList.add('active');if(i<2){const l=document.getElementById('pl'+i);if(l)l.classList.toggle('done',i<currentStep);}}}
 function rollStats(){
   const stats=['str','dex','con','int','wis','cha'];rolledStats={};
   stats.forEach(s=>{
@@ -1844,8 +1901,7 @@ function rollStats(){
 }
 function buildSheet(){
   if(selections.mode==='random'){
-    const classes=Object.keys(CLASS_EMOJIS);
-    if(!selections.class)selections.class=classes[Math.floor(Math.random()*classes.length)];
+    if(!selections.class)selections.class=CLASS_KEYS[Math.floor(Math.random()*CLASS_KEYS.length)];
     if(!rolledStats){rolledStats={};['str','dex','con','int','wis','cha'].forEach(s=>{const r=[1,2,3,4].map(()=>Math.ceil(Math.random()*6));rolledStats[s]=r.sort((a,b)=>b-a).slice(0,3).reduce((a,b)=>a+b,0);});}
   }
   const names={human:['Aldric','Elena'],elf:['Aelindra','Sylvar'],dwarf:['Thorin','Brenna'],halfling:['Perrin','Rosie'],dragonborn:['Balasar','Sora'],tiefling:['Damakos','Lerissa'],halforc:['Gorth','Shara'],gnome:['Dimble','Orra'],aasimar:['Ariel','Solenne'],tabaxi:['Whisper','Flash'],firbolg:['Elder Oak','Gentle Stream'],kenku:['Echo','Whistle']};
@@ -1862,7 +1918,6 @@ function resetCreator(){
   currentStep=1;selections={};rolledStats=null;
   document.querySelectorAll('.creator-step').forEach(s=>s.classList.remove('active'));
   document.getElementById('step1').classList.add('active');
-  document.querySelectorAll('.mode-card,.option-card').forEach(c=>c.classList.remove('selected'));
   ['str','dex','con','int','wis','cha'].forEach(s=>{document.getElementById('sv-'+s).textContent='—';document.getElementById('sm-'+s).textContent='';});
   document.getElementById('btnStep4Next').setAttribute('disabled','');
   updateProgress();
@@ -1887,43 +1942,46 @@ const RACE_DATA={
 
 let _selectedRace='human';
 let _carouselIdx=0;
+let _classCarouselIdx=0;
 const RACE_KEYS=Object.keys(RACE_DATA);
 
-/* raza.png is 1024×1536, 3×4 grid → natural cell 341.33×384px
-   Scale to cardW wide; cell height = cardW * (1536/4) / (1024/3) = cardW * 1.125
-   Crop bottom ~18% to remove embedded text labels */
-function _raceCellH(cardW){return Math.round(cardW*1152/1024);}
-function _raceCropH(cardW){return Math.round(_raceCellH(cardW)*0.82);}
+/* especie.png and raza.png are both 1024×1536, 3×4 grid
+   Scale to cardW; cell height = cardW*1152/1024; crop 18% bottom (text labels) */
+function _spriteCellH(cardW){return Math.round(cardW*1152/1024);}
+function _spriteCropH(cardW){return Math.round(_spriteCellH(cardW)*0.82);}
 
-function _raceCardHtml(raceKey,cardW,cls){
-  const s=RACE_SPRITE[raceKey]||{c:0,r:0};
-  const cellH=_raceCellH(cardW);
-  const cropH=_raceCropH(cardW);
-  const bgX=-s.c*cardW, bgY=-s.r*cellH;
-  return`<div class="race-card ${cls}" style="width:${cardW}px;height:${cropH}px;" onclick="selectCarouselRace('${raceKey}')"><div class="race-card-inner" style="width:${cardW}px;height:${cellH}px;background-image:url('/assets/raza.png');background-size:${cardW*3}px ${cellH*4}px;background-position:${bgX}px ${bgY}px;"></div></div>`;
+function _spriteCardHtml(key,sprite,imgUrl,cardW,cls,onclickFn){
+  const s=sprite[key]||{c:0,r:0};
+  const cellH=_spriteCellH(cardW);
+  const cropH=_spriteCropH(cardW);
+  return`<div class="race-card ${cls}" style="width:${cardW}px;height:${cropH}px;" onclick="${onclickFn}('${key}')"><div class="race-card-inner" style="width:${cardW}px;height:${cellH}px;background-image:url('${imgUrl}');background-size:${cardW*3}px ${cellH*4}px;background-position:${-s.c*cardW}px ${-s.r*cellH}px;"></div></div>`;
 }
 
-function renderCarousel(){
-  const track=document.getElementById('raceCarouselTrack');
+const CAROUSEL_SLOTS=[{off:-2,cls:'rc-adj2',w:100},{off:-1,cls:'rc-adj1',w:155},{off:0,cls:'rc-active',w:240},{off:1,cls:'rc-adj1',w:155},{off:2,cls:'rc-adj2',w:100}];
+
+function _renderCarouselTrack(trackId,keys,idx,sprite,imgUrl,onclickFn,dir){
+  const track=document.getElementById(trackId);
   if(!track)return;
-  const total=RACE_KEYS.length;
-  const slots=[
-    {off:-2,cls:'rc-adj2',w:100},
-    {off:-1,cls:'rc-adj1',w:155},
-    {off: 0,cls:'rc-active',w:240},
-    {off: 1,cls:'rc-adj1',w:155},
-    {off: 2,cls:'rc-adj2',w:100}
-  ];
-  track.innerHTML=slots.map(({off,cls,w})=>{
-    const idx=((_carouselIdx+off)%total+total)%total;
-    return _raceCardHtml(RACE_KEYS[idx],w,cls);
+  const total=keys.length;
+  track.innerHTML=CAROUSEL_SLOTS.map(({off,cls,w})=>{
+    const i=((idx+off)%total+total)%total;
+    return _spriteCardHtml(keys[i],sprite,imgUrl,w,cls,onclickFn);
   }).join('');
+  if(dir){
+    track.classList.remove('slide-right','slide-left');
+    void track.offsetWidth;
+    track.classList.add(dir>0?'slide-right':'slide-left');
+  }
+}
+
+function renderCarousel(dir){
+  _renderCarouselTrack('raceCarouselTrack',RACE_KEYS,_carouselIdx,RACE_SPRITE,'/assets/raza.png','selectCarouselRace',dir);
   selectCharRace(RACE_KEYS[_carouselIdx]);
 }
 
 function carouselMove(dir){
   _carouselIdx=((_carouselIdx+dir)%RACE_KEYS.length+RACE_KEYS.length)%RACE_KEYS.length;
-  renderCarousel();
+  renderCarousel(dir);
 }
 
 function selectCarouselRace(raceKey){
@@ -1931,13 +1989,67 @@ function selectCarouselRace(raceKey){
   if(idx!==-1){_carouselIdx=idx;renderCarousel();}
 }
 
+/* ── Class carousel ── */
+const CLASS_KEYS=Object.keys(CLASS_SPRITE);
+const CLASS_DATA={
+  fighter:{color:'#c8a060',nameEs:'GUERRERO',nameEn:'FIGHTER',tagEs:'Maestro del combate y las armas',tagEn:'Master of combat and weapons',role:['Combate','Armas','Armadura']},
+  wizard:{color:'#6080c8',nameEs:'MAGO',nameEn:'WIZARD',tagEs:'Domina el poder arcano',tagEn:'Commands arcane power',role:['Magia','Conocimiento','Hechizos']},
+  rogue:{color:'#a0c068',nameEs:'PÍCARO',nameEn:'ROGUE',tagEs:'Las sombras son su hogar',tagEn:'The shadows are home',role:['Sigilo','Trampas','Daño crítico']},
+  cleric:{color:'#c8c060',nameEs:'CLÉRIGO',nameEn:'CLERIC',tagEs:'Canal de poder divino',tagEn:'Channel of divine power',role:['Curación','Divinidad','Protección']},
+  ranger:{color:'#60c890',nameEs:'EXPLORADOR',nameEn:'RANGER',tagEs:'Guardián del entorno natural',tagEn:'Guardian of the wild',role:['Naturaleza','Rastreo','Arco']},
+  paladin:{color:'#c8d080',nameEs:'PALADÍN',nameEn:'PALADIN',tagEs:'Campeón de la justicia divina',tagEn:'Champion of divine justice',role:['Fe','Combate','Aura']},
+  barbarian:{color:'#c87060',nameEs:'BÁRBARO',nameEn:'BARBARIAN',tagEs:'Furia sin igual en batalla',tagEn:'Unmatched rage in battle',role:['Furia','Resistencia','Golpes']},
+  bard:{color:'#c860c8',nameEs:'BARDO',nameEn:'BARD',tagEs:'La magia vive en su música',tagEn:'Magic lives in their music',role:['Música','Inspiración','Hechizos']},
+  druid:{color:'#78c860',nameEs:'DRUIDA',nameEn:'DRUID',tagEs:'Una con la naturaleza y sus ciclos',tagEn:'One with nature and its cycles',role:['Naturaleza','Transformación','Magia']},
+  monk:{color:'#60c8c8',nameEs:'MONJE',nameEn:'MONK',tagEs:'Disciplina y artes marciales',tagEn:'Discipline and martial arts',role:['Artes marciales','Ki','Velocidad']},
+  sorcerer:{color:'#c86060',nameEs:'HECHICERO',nameEn:'SORCERER',tagEs:'La magia fluye en su sangre',tagEn:'Magic flows in their blood',role:['Magia innata','Metamagia','Poder crudo']},
+  warlock:{color:'#9060c8',nameEs:'BRUJO',nameEn:'WARLOCK',tagEs:'Un pacto oscuro con fuerzas antiguas',tagEn:'A dark pact with ancient forces',role:['Pacto','Poder oscuro','Invocaciones']}
+};
+
+function renderClassCarousel(dir){
+  _renderCarouselTrack('classCarouselTrack',CLASS_KEYS,_classCarouselIdx,CLASS_SPRITE,'/assets/especie.png','selectCarouselClass',dir);
+  selectCharClass(CLASS_KEYS[_classCarouselIdx]);
+}
+
+function classCarouselMove(dir){
+  _classCarouselIdx=((_classCarouselIdx+dir)%CLASS_KEYS.length+CLASS_KEYS.length)%CLASS_KEYS.length;
+  renderClassCarousel(dir);
+}
+
+function selectCarouselClass(classKey){
+  const idx=CLASS_KEYS.indexOf(classKey);
+  if(idx!==-1){_classCarouselIdx=idx;renderClassCarousel();}
+}
+
+function selectCharClass(cls){
+  const d=CLASS_DATA[cls];if(!d)return;
+  document.getElementById('classInfoName').textContent=currentLang==='es'?d.nameEs:d.nameEn;
+  document.getElementById('classInfoTag').textContent=currentLang==='es'?d.tagEs:d.tagEn;
+  const el=document.getElementById('classInfoBonuses');
+  if(el)el.innerHTML=(d.role||[]).map(r=>`<div class="race-bonus-pill">${r}</div>`).join('');
+}
+
+/* ── Panel navigation ── */
+function csGoTo(panelId,dir){
+  const current=document.querySelector('.cs-panel.active');
+  const next=document.getElementById(panelId);
+  if(!next||next===current)return;
+  const isBack=dir==='back';
+  next.className=`cs-panel ${isBack?'cs-left':'cs-right'}`;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    if(current)current.className=`cs-panel ${isBack?'cs-right':'cs-left'}`;
+    next.className='cs-panel active';
+  }));
+}
+
 function initCharSelect(){
-  _selectedRace='human';
-  _carouselIdx=0;
-  renderCarousel();
+  _selectedRace='human';_carouselIdx=0;_classCarouselIdx=0;
+  renderCarousel();renderClassCarousel();
+  document.getElementById('csPanelMode').className='cs-panel active';
+  document.getElementById('csPanelRace').className='cs-panel cs-right';
+  document.getElementById('csPanelClass').className='cs-panel cs-right';
   document.getElementById('charCreatorDrawer').classList.remove('open');
   resetCreator();
-  initClassCards();
 }
 
 function selectCharRace(race){
@@ -1952,14 +2064,22 @@ function selectCharRace(race){
 
 function confirmCharRace(){
   selections.race=_selectedRace;
-  const d=RACE_DATA[_selectedRace];
+  csGoTo('csPanelClass','forward');
+  setTimeout(()=>renderClassCarousel(),30);
+}
+
+function confirmCharClass(){
+  selections.class=CLASS_KEYS[_classCarouselIdx];
+  const d=RACE_DATA[_selectedRace]||{};
   const iconEl=document.getElementById('charDrawerRaceIcon');
   iconEl.style.cssText=`width:36px;height:36px;border-radius:6px;overflow:hidden;flex-shrink:0;${raceBg(_selectedRace)};background-repeat:no-repeat;`;
   iconEl.innerHTML='';
-  document.getElementById('charDrawerRaceName').textContent=currentLang==='es'?d.nameEs:d.nameEn;
+  const cd=CLASS_DATA[selections.class]||{};
+  document.getElementById('charDrawerRaceName').textContent=`${currentLang==='es'?d.nameEs:d.nameEn} · ${currentLang==='es'?cd.nameEs:cd.nameEn}`;
   document.getElementById('charCreatorDrawer').classList.add('open');
   resetCreator();
   selections.race=_selectedRace;
+  selections.class=CLASS_KEYS[_classCarouselIdx];
 }
 
 function backToRaceSelect(){
@@ -1967,11 +2087,18 @@ function backToRaceSelect(){
 }
 
 document.addEventListener('keydown',function(e){
-  if(document.getElementById('page-characters').classList.contains('active')&&
-     !document.getElementById('charCreatorDrawer').classList.contains('open')){
+  if(!document.getElementById('page-characters').classList.contains('active'))return;
+  if(document.getElementById('charCreatorDrawer').classList.contains('open'))return;
+  const raceActive=document.getElementById('csPanelRace').classList.contains('active');
+  const classActive=document.getElementById('csPanelClass').classList.contains('active');
+  if(raceActive){
     if(e.key==='ArrowLeft')carouselMove(-1);
     else if(e.key==='ArrowRight')carouselMove(1);
     else if(e.key==='Enter')confirmCharRace();
+  } else if(classActive){
+    if(e.key==='ArrowLeft')classCarouselMove(-1);
+    else if(e.key==='ArrowRight')classCarouselMove(1);
+    else if(e.key==='Enter')confirmCharClass();
   }
 });
 
