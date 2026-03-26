@@ -203,10 +203,18 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 @keyframes diceAnim{0%,100%{transform:scale(1);}50%{transform:scale(1.12);color:var(--gold);}}
 .dice-anim{animation:diceAnim .35s ease;}
 .char-sheet{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;max-width:580px;margin:0 auto;}
-.cs-header{display:flex;align-items:center;gap:16px;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border);}
-.cs-avatar{font-size:42px;width:64px;height:64px;background:var(--surface);border-radius:14px;display:flex;align-items:center;justify-content:center;}
-.cs-name{font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--gold);}
+.cs-portrait-wrap{text-align:center;padding-bottom:20px;border-bottom:1px solid var(--border);margin-bottom:20px;}
+.cs-portrait{width:120px;height:111px;border-radius:14px;overflow:hidden;margin:0 auto 14px;border:2px solid rgba(248,198,98,.25);box-shadow:0 4px 24px rgba(0,0,0,.6);}
+.cs-portrait-inner{width:120px;height:135px;background-repeat:no-repeat;}
+.cs-name-input{font-family:'Cinzel',serif;font-size:19px;font-weight:700;color:var(--gold);background:transparent;border:none;border-bottom:1.5px solid rgba(248,198,98,.3);text-align:center;width:100%;max-width:260px;padding:4px 8px;outline:none;letter-spacing:.05em;display:block;margin:0 auto 6px;}
+.cs-name-input:focus{border-bottom-color:var(--gold);}
+.cs-name-input::placeholder{color:rgba(248,198,98,.28);}
 .cs-meta{font-size:13px;color:var(--text-m);margin-top:4px;}
+.cs-race-section{margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border);}
+.cs-race-flavor{font-style:italic;color:var(--text-m);font-size:13px;text-align:center;margin-bottom:10px;line-height:1.5;}
+.cs-race-bonuses{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:8px;}
+.cs-race-traits{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;}
+.cs-trait-pill{padding:3px 10px;border-radius:20px;font-size:11px;background:rgba(255,255,255,.05);color:var(--text-m);border:1px solid rgba(255,255,255,.09);}
 .cs-body{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:20px;}
 .cs-stat{background:var(--surface);border-radius:10px;padding:10px 6px;text-align:center;}
 .cs-stat-name{font-size:10px;color:var(--text-m);letter-spacing:.1em;font-weight:600;}
@@ -532,7 +540,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.2.4</span>
+    <span class="ver-badge">v1.2.5</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">26 Mar 2026</span>
   </div>
@@ -865,10 +873,24 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
             <div class="step-title" data-es="¡Tu personaje está listo!" data-en="Your character is ready!">¡Tu personaje está listo!</div>
             <div class="step-desc" data-es="Guardalo, compartilo o exportalo a PDF." data-en="Save, share or export to PDF.">Guardalo, compartilo o exportalo a PDF.</div>
             <div class="char-sheet" id="charSheet">
-              <div class="cs-header">
-                <div class="cs-avatar" id="csAvatar">⚔️</div>
-                <div><div class="cs-name" id="csName">Aelindra</div><div class="cs-meta" id="csMeta">Tiefling · Explorador · Nivel 1</div><div style="margin-top:8px;display:flex;gap:8px;"><span class="tag tag-brand">CA: 14</span><span class="tag tag-gold">HP: 11</span><span class="tag tag-brand">Prof: +2</span></div></div>
+              <!-- Portrait + Name -->
+              <div class="cs-portrait-wrap">
+                <div class="cs-portrait"><div class="cs-portrait-inner" id="csAvatar"></div></div>
+                <input class="cs-name-input" id="csNameInput" placeholder="Nombre del personaje..." autocomplete="off" spellcheck="false">
+                <div class="cs-meta" id="csMeta">Raza · Clase · Nivel 1</div>
+                <div style="display:flex;gap:8px;justify-content:center;margin-top:8px;">
+                  <span class="tag tag-brand" id="csCA">CA: —</span>
+                  <span class="tag tag-gold" id="csHP">HP: —</span>
+                  <span class="tag tag-brand">Prof: +2</span>
+                </div>
               </div>
+              <!-- Race info -->
+              <div class="cs-race-section">
+                <div class="cs-race-flavor" id="csRaceFlavor"></div>
+                <div class="cs-race-bonuses" id="csRaceBonuses"></div>
+                <div class="cs-race-traits" id="csRaceTraits"></div>
+              </div>
+              <!-- Stats -->
               <div class="cs-body" id="csBody">
                 <div class="cs-stat"><div class="cs-stat-name">STR</div><div class="cs-stat-val" id="cstr">—</div><div class="cs-stat-mod" id="cmstr"></div></div>
                 <div class="cs-stat"><div class="cs-stat-name">DEX</div><div class="cs-stat-val" id="cdex">—</div><div class="cs-stat-mod" id="cmdex"></div></div>
@@ -2196,15 +2218,41 @@ function buildSheet(){
     if(!selections.class)selections.class=CLASS_KEYS[Math.floor(Math.random()*CLASS_KEYS.length)];
     if(!rolledStats){rolledStats={};['str','dex','con','int','wis','cha'].forEach(s=>{const r=[1,2,3,4].map(()=>Math.ceil(Math.random()*6));rolledStats[s]=r.sort((a,b)=>b-a).slice(0,3).reduce((a,b)=>a+b,0);});}
   }
-  const names={human:['Aldric','Elena'],elf:['Aelindra','Sylvar'],dwarf:['Thorin','Brenna'],halfling:['Perrin','Rosie'],dragonborn:['Balasar','Sora'],tiefling:['Damakos','Lerissa'],halforc:['Gorth','Shara'],gnome:['Dimble','Orra'],aasimar:['Ariel','Solenne'],tabaxi:['Whisper','Flash'],firbolg:['Elder Oak','Gentle Stream'],kenku:['Echo','Whistle']};
+  const names={human:['Aldric','Elena','Mira','Cael'],elf:['Aelindra','Sylvar','Liriel','Fenris'],dwarf:['Thorin','Brenna','Dolgrin','Marta'],halfling:['Perrin','Rosie','Tobias','Cora'],dragonborn:['Balasar','Sora','Kriv','Mishann'],tiefling:['Damakos','Lerissa','Kairon','Raven'],halforc:['Gorth','Shara','Rendar','Morda'],gnome:['Dimble','Orra','Fizwick','Zanna'],aasimar:['Ariel','Solenne','Zephyr','Naomi'],tabaxi:['Whisper','Flash','River','Cloud'],firbolg:['Elder Oak','Gentle Stream','Root Walker','Moon Leaf'],kenku:['Echo','Whistle','Scratch','Tatter']};
   const rk=selections.race||_selectedRace||'human', ck=selections.class||'fighter';
-  const nm=(names[rk]||['Adventurer'])[Math.floor(Math.random()*(names[rk]||['Adventurer']).length)];
-  const avatarEl=document.getElementById('csAvatar');
-  avatarEl.style.cssText=`width:56px;height:56px;border-radius:50%;overflow:hidden;flex-shrink:0;${raceBg(rk)};background-repeat:no-repeat;`;
-  document.getElementById('csName').textContent=nm;
-  document.getElementById('csMeta').textContent=`${RACE_NAMES[currentLang][rk]||rk} · ${CLASS_NAMES[currentLang][ck]||ck} · ${currentLang==='es'?'Nivel':'Level'} 1`;
+  const pool=names[rk]||['Adventurer'];
+  const nm=pool[Math.floor(Math.random()*pool.length)];
+  const rd=RACE_DATA[rk]||{};
   const st=rolledStats||{str:12,dex:14,con:13,int:11,wis:10,cha:15};
+
+  // Portrait
+  const avatarEl=document.getElementById('csAvatar');
+  if(avatarEl) avatarEl.style.cssText=`width:120px;height:135px;${raceBg(rk)};background-repeat:no-repeat;`;
+
+  // Name (editable input — pre-fill suggestion)
+  const nameInput=document.getElementById('csNameInput');
+  if(nameInput) nameInput.value=nm;
+
+  // Meta line
+  document.getElementById('csMeta').textContent=`${RACE_NAMES[currentLang][rk]||rk} · ${CLASS_NAMES[currentLang][ck]||ck} · ${currentLang==='es'?'Nivel':'Level'} 1`;
+
+  // Stats
   ['str','dex','con','int','wis','cha'].forEach(s=>{const v=st[s],m=Math.floor((v-10)/2);document.getElementById('c'+s).textContent=v;document.getElementById('cm'+s).textContent=(m>=0?'+':'')+m;});
+
+  // CA and HP (calculated from stats + class)
+  const dexMod=Math.floor((st.dex-10)/2), conMod=Math.floor((st.con-10)/2);
+  const hpBase={fighter:10,paladin:10,barbarian:12,wizard:6,sorcerer:6,warlock:8,rogue:8,ranger:8,druid:8,bard:8,cleric:8,monk:8}[ck]||8;
+  const caEl=document.getElementById('csCA'), hpEl=document.getElementById('csHP');
+  if(caEl) caEl.textContent='CA: '+(10+dexMod);
+  if(hpEl) hpEl.textContent='HP: '+(hpBase+conMod);
+
+  // Race info
+  const flavorEl=document.getElementById('csRaceFlavor');
+  const bonusEl=document.getElementById('csRaceBonuses');
+  const traitsEl=document.getElementById('csRaceTraits');
+  if(flavorEl) flavorEl.textContent=currentLang==='es'?(rd.tagEs||''):(rd.tagEn||'');
+  if(bonusEl) bonusEl.innerHTML=(rd.bonus||[]).map(b=>`<div class="race-bonus-pill">${b}</div>`).join('');
+  if(traitsEl) traitsEl.innerHTML=(rd.traits||[]).map(t=>`<div class="cs-trait-pill">${t}</div>`).join('');
 }
 function resetCreator(){
   currentStep=1;selections={};rolledStats=null;

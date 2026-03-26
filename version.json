@@ -1,7 +1,12 @@
 {
-  "version": "1.2.4",
+  "version": "1.2.5",
   "date": "2026-03-26",
   "history": [
+    {
+      "version": "1.2.5",
+      "date": "2026-03-26",
+      "note": "Ficha de personaje rediseñada: portrait grande de la raza, input de nombre editable, info de raza con bonuses y traits, CA y HP dinámicos"
+    },
     {
       "version": "1.2.4",
       "date": "2026-03-26",
