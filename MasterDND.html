@@ -1867,7 +1867,7 @@ function togglePlay(){
   const W=window.innerWidth,H=window.innerHeight;
   const scene=new THREE.Scene();
   scene.background=new THREE.Color(0x06080f);
-  scene.fog=new THREE.FogExp2(0x06080f,.038);
+  scene.fog=new THREE.FogExp2(0x06080f,.035);
   const camera=new THREE.PerspectiveCamera(60,W/H,.1,100);
   camera.position.set(0,0,9);
   const renderer=new THREE.WebGLRenderer({canvas,antialias:true});
@@ -1882,88 +1882,90 @@ function togglePlay(){
   const pLight=new THREE.PointLight(0x7b6fa8,1.5,18);
   pLight.position.set(2,7,-4);scene.add(pLight);
 
-  const geos=[
-    new THREE.IcosahedronGeometry(1,0),   // D20 — index 0
-    new THREE.OctahedronGeometry(1,0),
-    new THREE.BoxGeometry(1.6,1.6,1.6),
-    new THREE.DodecahedronGeometry(1,0),
-    new THREE.TetrahedronGeometry(1.1,0),
+  /* ── D10: bipirámide pentagonal ── */
+  function makeD10Geo(){
+    const v=[0,1.35,0, 0,-1.35,0],idx=[];
+    for(let i=0;i<5;i++){const a=i*Math.PI*2/5;v.push(Math.cos(a),0,Math.sin(a));}
+    for(let i=0;i<5;i++){const a=2+i,b=2+(i+1)%5;idx.push(0,a,b,1,b,a);}
+    const g=new THREE.BufferGeometry();
+    g.setAttribute('position',new THREE.Float32BufferAttribute(v,3));
+    g.setIndex(idx);g.computeVertexNormals();return g;
+  }
+
+  /* 7 dados D&D: D4 D6 D8 D10 D% D12 D20 */
+  const DEFS=[
+    {label:'D4',  geo:new THREE.TetrahedronGeometry(1.05,0), col:0x1a1040,emi:0x0a0820,wc:0x4455aa,sc:0.78},
+    {label:'D6',  geo:new THREE.BoxGeometry(1.5,1.5,1.5),   col:0x0d1f3a,emi:0x060e1a,wc:0x1e3055,sc:0.76},
+    {label:'D8',  geo:new THREE.OctahedronGeometry(1,0),     col:0x102035,emi:0x080f1a,wc:0x1e3055,sc:0.80},
+    {label:'D10', geo:makeD10Geo(),                          col:0x18102e,emi:0x0c0818,wc:0x3344aa,sc:0.76},
+    {label:'D%',  geo:makeD10Geo(),                          col:0x0e1a30,emi:0x070f1a,wc:0x1e3055,sc:0.74},
+    {label:'D12', geo:new THREE.DodecahedronGeometry(1,0),   col:0x1a1535,emi:0x0a0818,wc:0x1e3055,sc:0.82},
+    {label:'D20', geo:new THREE.IcosahedronGeometry(1,0),    col:0x05070d,emi:0x0c1030,wc:0x5577cc,sc:1.00},
   ];
-  function dMat(col,emi){return new THREE.MeshPhongMaterial({color:col,emissive:emi,emissiveIntensity:.25,shininess:55,specular:new THREE.Color(0x334466)});}
-  const mats=[dMat(0x18243e,0x08101e),dMat(0x101830,0x060c18),dMat(0x1a1535,0x0a0818),dMat(0x0c1a30,0x060e18)];
+
+  /* Sprite de etiqueta por dado */
+  function makeLabel(text){
+    const c=document.createElement('canvas');c.width=128;c.height=128;
+    const cx=c.getContext('2d');
+    cx.font='bold 50px Georgia,serif';cx.fillStyle='#e8c860';
+    cx.textAlign='center';cx.textBaseline='middle';
+    cx.shadowColor='rgba(200,168,75,.9)';cx.shadowBlur=10;
+    cx.fillText(text,64,64);
+    return new THREE.CanvasTexture(c);
+  }
+
+  /* Posiciones de inicio dispersas por la pantalla */
+  const START=[
+    { x:  7.5, y:  3.5, z:-1.0},  // D4
+    { x: -8.5, y:  2.2, z: 0.5},  // D6
+    { x:  9.5, y: -2.8, z: 1.0},  // D8
+    { x: -5.0, y: -4.0, z:-0.5},  // D10
+    { x:  6.0, y:  5.5, z: 0.0},  // D%
+    { x:-10.5, y:  0.5, z: 1.5},  // D12
+    { x:  2.5, y: -5.5, z:-1.5},  // D20
+  ];
+
+  /* Posiciones finales — izquierda. D20 (índice 6) al frente */
+  const END=[
+    {x:-3.8, y:-2.2, z:0.8},   // D4
+    {x:-7.8, y: 1.6, z:0.4},   // D6
+    {x:-4.8, y: 2.8, z:0.6},   // D8
+    {x:-9.2, y:-1.4, z:0.0},   // D10
+    {x:-6.5, y:-3.8, z:0.3},   // D%
+    {x:-6.0, y: 4.5, z:-0.6},  // D12
+    {x:-4.2, y: 0.3, z:3.2},   // D20 — frente y al centro
+  ];
+
   const dice=[],diceGroup=new THREE.Group();
   scene.add(diceGroup);
 
-  /* Canvas "20" para el sprite del D20 */
-  const d20Canvas=document.createElement('canvas');
-  d20Canvas.width=128;d20Canvas.height=128;
-  const d20Cx=d20Canvas.getContext('2d');
-  d20Cx.clearRect(0,0,128,128);
-  d20Cx.font='bold 58px Georgia,serif';
-  d20Cx.fillStyle='#e8c860';
-  d20Cx.textAlign='center';d20Cx.textBaseline='middle';
-  d20Cx.shadowColor='rgba(200,168,75,1)';d20Cx.shadowBlur=12;
-  d20Cx.fillText('20',64,64);
-  const d20SpriteTex=new THREE.CanvasTexture(d20Canvas);
-
-  for(let i=0;i<17;i++){
-    const geo=geos[i%geos.length];
-    const mat=i===0
-      ? new THREE.MeshPhongMaterial({color:0x05070d,emissive:0x0c1030,emissiveIntensity:.5,shininess:140,specular:new THREE.Color(0x8899cc)})
-      : mats[i%mats.length].clone();
-    const mesh=new THREE.Mesh(geo,mat);
-    const sc=i===0?.9:(.18+Math.random()*.55);
-    mesh.scale.setScalar(sc);
-    mesh.position.set((Math.random()-.2)*24,(Math.random()-.5)*16,(Math.random()-.7)*8-1);
+  DEFS.forEach((def,i)=>{
+    const mat=new THREE.MeshPhongMaterial({color:def.col,emissive:def.emi,emissiveIntensity:.45,shininess:120,specular:new THREE.Color(0x5577aa)});
+    const mesh=new THREE.Mesh(def.geo,mat);
+    mesh.scale.setScalar(def.sc);
+    mesh.position.set(START[i].x,START[i].y,START[i].z);
     mesh.rotation.set(Math.random()*Math.PI*2,Math.random()*Math.PI*2,Math.random()*Math.PI);
-    mesh.userData={rx:(Math.random()-.5)*.009,ry:(Math.random()-.5)*.013,fy:mesh.position.y,fa:(Math.random()-.5)*.28,fs:.25+Math.random()*.5,fo:Math.random()*Math.PI*2};
-    /* Wireframe — más visible en D20 */
-    const wCol=i===0?0x5577cc:0x1e2d47;
-    const wOp=i===0?.55:.18;
-    const wire=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:wCol,wireframe:true,transparent:true,opacity:wOp}));
+    mesh.userData={
+      rx:(Math.random()-.5)*.008,ry:(Math.random()-.5)*.012,
+      fy:START[i].y,fa:(Math.random()-.5)*.22,
+      fs:.2+Math.random()*.4,fo:Math.random()*Math.PI*2
+    };
+    const wOp=i===6?.50:.20;
+    const wire=new THREE.Mesh(def.geo,new THREE.MeshBasicMaterial({color:def.wc,wireframe:true,transparent:true,opacity:wOp}));
     wire.scale.setScalar(1.015);mesh.add(wire);
-    /* Sprite "20" solo en D20 */
-    if(i===0){
-      const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:d20SpriteTex,transparent:true,depthTest:false}));
-      sp.scale.set(0.9,0.9,1);mesh.add(sp);
-    }
+    const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:makeLabel(def.label),transparent:true,depthTest:false}));
+    sp.scale.set(0.75,0.75,1);mesh.add(sp);
     diceGroup.add(mesh);dice.push(mesh);
-  }
+  });
 
-  /* Store original positions */
   const homePos=dice.map(d=>({x:d.position.x,y:d.position.y,z:d.position.z}));
-
-  /* Gather point — center-right, los dados se juntan acá antes de ser arrojados */
-  const GP={x:3.5,y:0,z:1.5};
-
-  /* Posiciones finales — lado izquierdo. D20 (índice 0) el más prominente al frente */
-  const SP=[
-    {x:-4.5,y:0.2,z:3.2},   // D20 — frente, prominente
-    {x:-7.2,y:1.8,z:0.5},
-    {x:-3.8,y:-2.4,z:1.2},
-    {x:-8.5,y:-0.5,z:-0.5},
-    {x:-6.2,y:3.0,z:-0.5},
-    {x:-9.2,y:-2.0,z:0.8},
-    {x:-3.2,y:1.8,z:-1.2},
-    {x:-7.5,y:-3.5,z:0.8},
-    {x:-5.5,y:4.0,z:0.8},
-    {x:-8.8,y:1.2,z:1.5},
-    {x:-4.2,y:-1.8,z:-1.8},
-    {x:-6.5,y:-5.0,z:0.2},
-    {x:-10.0,y:2.8,z:-0.5},
-    {x:-2.8,y:-3.5,z:0.2},
-    {x:-7.8,y:0.2,z:-2.2},
-    {x:-5.0,y:5.0,z:0.5},
-    {x:-11.0,y:-0.5,z:0.2},
-  ];
+  /* Punto de convergencia antes del lanzamiento */
+  const GP={x:3.2,y:0,z:1.5};
 
   function lrp(a,b,t){return a+(b-a)*t;}
   function clamp(t){return Math.max(0,Math.min(1,t));}
-  /* Smooth Hermite — muy suave en extremos */
   function smooth(t){t=clamp(t);return t*t*t*(t*(t*6-15)+10);}
-  /* Ease out cúbico */
   function eout(t){t=clamp(t);return 1-Math.pow(1-t,3);}
-  /* Ease out con leve rebote */
   function eoutBack(t){t=clamp(t);const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2);}
 
   const pCount=450,pPos=new Float32Array(pCount*3);
@@ -1981,66 +1983,60 @@ function togglePlay(){
     requestAnimationFrame(animate);
     tick+=.007;
 
-    /* scrollProg: 0 = top, 1 = sección 2 completamente visible */
-    const scrollProg=Math.min(window.scrollY/window.innerHeight,1);
+    /* scrollProg: rango extendido para transición más lenta */
+    const scrollProg=Math.min(window.scrollY/(window.innerHeight*1.4),1);
 
-    /* Parallax de cámara se reduce al scrollear */
     const pStr=Math.max(1-scrollProg*2.5,0);
     camX+=(tgX-camX)*.04;camY+=(tgY-camY)*.04;
     camera.position.x=camX*.7*pStr;camera.position.y=camY*.4*pStr;
     camera.lookAt(0,0,0);
 
-    /* Desvanecer hero UI */
     const landUi=document.querySelector('.land-ui');
     if(landUi){
-      const op=scrollProg<0.20?1:scrollProg<0.45?1-(scrollProg-0.20)/0.25:0;
+      const op=scrollProg<0.18?1:scrollProg<0.42?1-(scrollProg-0.18)/0.24:0;
       landUi.style.opacity=op;
       landUi.style.pointerEvents=op>0.05?'auto':'none';
     }
 
-    /* ── Animación de dados por fase de scroll ── */
+    /* ── Fases de animación — más lentas y con más stagger ── */
     dice.forEach((d,i)=>{
-      const hp=homePos[i],sp=SP[i]||SP[0];
-      /* offset por dado para que no todos lleguen al mismo tiempo */
-      const stagger=i*0.012;
+      const hp=homePos[i],ep=END[i];
+      const stagger=i*0.038; // separación amplia entre cada dado
 
-      if(scrollProg<0.28){
-        /* Fase 1: flotando libremente */
+      if(scrollProg<0.30){
+        /* Fase 1: flotando */
         d.position.x=hp.x;
         d.position.y=hp.y+Math.sin(tick*d.userData.fs+d.userData.fo)*d.userData.fa*3;
         d.position.z=hp.z;
         d.rotation.x+=d.userData.rx;d.rotation.y+=d.userData.ry;
 
-      } else if(scrollProg<0.60){
-        /* Fase 2: convergencia suave hacia el punto de reunión */
-        const t=smooth(clamp((scrollProg-0.28-stagger*.5)/0.32));
+      } else if(scrollProg<0.64){
+        /* Fase 2: convergencia lenta hacia el centro */
+        const t=smooth(clamp((scrollProg-0.30-stagger*.35)/0.34));
         d.position.x=lrp(hp.x,GP.x,t);
         d.position.y=lrp(hp.y,GP.y,t);
         d.position.z=lrp(hp.z,GP.z,t);
-        d.rotation.x+=d.userData.rx*(1-t*.8);
-        d.rotation.y+=d.userData.ry*(1-t*.8);
+        d.rotation.x+=d.userData.rx*(1-t*.85);
+        d.rotation.y+=d.userData.ry*(1-t*.85);
 
       } else {
-        /* Fase 3: tirada hacia la izquierda — arco suave + leve rebote al llegar */
-        const rawT=clamp((scrollProg-0.60-stagger)/0.40);
-        const t=eoutBack(rawT);
-        /* Arco en Y: sube levemente en el medio de la tirada */
-        const arc=Math.sin(clamp(rawT)*Math.PI)*(1.2+(i%3)*.4);
-        d.position.x=lrp(GP.x,sp.x,eout(rawT));
-        d.position.y=lrp(GP.y,sp.y,eout(rawT))+arc;
-        d.position.z=lrp(GP.z,sp.z,eout(rawT));
-        /* Spin: rápido en el vuelo, se frena gradualmente */
+        /* Fase 3: lanzamiento suave hacia la izquierda con arco y rebote */
+        const rawT=clamp((scrollProg-0.64-stagger)/0.36);
+        const arc=Math.sin(clamp(rawT)*Math.PI)*(0.9+(i%3)*.3);
+        d.position.x=lrp(GP.x,ep.x,eout(rawT));
+        d.position.y=lrp(GP.y,ep.y,eoutBack(rawT))+arc;
+        d.position.z=lrp(GP.z,ep.z,eout(rawT));
         const spinFade=clamp(1-rawT*1.1);
-        d.rotation.x+=d.userData.rx*2.2*spinFade;
-        d.rotation.y+=d.userData.ry*2.2*spinFade;
+        d.rotation.x+=d.userData.rx*1.8*spinFade;
+        d.rotation.y+=d.userData.ry*1.8*spinFade;
       }
     });
 
-    /* ── D20 label & ring — aparece cuando el dado está asentado ── */
+    /* ── D20 label & ring — usa dice[6] ── */
     const d20el=document.getElementById('d20-label');
     const d20rg=document.getElementById('d20-ring');
     if(d20el&&d20rg){
-      const d0=dice[0];
+      const d0=dice[6];
       const v=d0.position.clone().project(camera);
       const sx=(v.x*.5+.5)*window.innerWidth;
       const sy=(-v.y*.5+.5)*window.innerHeight;
@@ -2053,14 +2049,14 @@ function togglePlay(){
       d20rg.style.opacity=(lop*.75)+'';
     }
 
-    /* ── Feature cards: aparecen en cascada ── */
+    /* ── Feature cards en cascada ── */
     [['fc1',0],['fc2',0.09],['fc3',0.18]].forEach(([id,delay])=>{
       const el=document.getElementById(id);
       if(!el)return;
-      const cp=Math.max(0,Math.min((scrollProg-0.76-delay)/0.20,1));
+      const cp=Math.max(0,Math.min((scrollProg-0.78-delay)/0.18,1));
       const eo=eout(cp);
       el.style.opacity=eo;
-      el.style.transform='translateX('+(( 1-eo)*50)+'px)';
+      el.style.transform='translateX('+((1-eo)*50)+'px)';
     });
 
     gLight.position.x=Math.cos(tick*.25)*7;
