@@ -175,37 +175,26 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .btn-gold{background:linear-gradient(135deg,var(--gold),#e8a820);color:#1a1400;font-weight:600;}
 .btn-primary[disabled]{opacity:.4;cursor:not-allowed;}
 
-/* ══ CHARACTER SELECT (LoL-style) ══ */
-.char-select-screen{position:relative;width:100vw;height:100vh;display:flex;overflow:hidden;padding-top:60px;}
-.char-atmos-bg{position:absolute;inset:0;z-index:0;transition:background 0.9s cubic-bezier(.4,0,.2,1);}
-.char-atmos-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,#09070f 0%,transparent 50%);}
-.char-list-panel{width:196px;flex-shrink:0;height:100%;overflow-y:auto;z-index:10;padding:16px 10px 24px;background:rgba(9,7,18,.65);backdrop-filter:blur(14px);border-right:1px solid rgba(255,255,255,.06);display:flex;flex-direction:column;gap:5px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
-.char-list-item{display:flex;align-items:center;gap:10px;padding:7px 8px;border-radius:8px;border:1px solid transparent;cursor:none;transition:.18s;}
-.char-list-item:hover{background:rgba(255,255,255,.06);}
-.char-list-item.active{border-color:rgba(248,198,98,.5);background:rgba(248,198,98,.07);}
-.char-list-thumb{width:38px;height:38px;flex-shrink:0;border-radius:6px;overflow:hidden;background:var(--card);}
-.char-list-thumb svg{width:38px;height:38px;}
-.char-list-name{font-size:12px;font-weight:500;color:var(--text-m);line-height:1.3;}
-.char-list-item.active .char-list-name{color:var(--gold);}
-.char-list-bonus{font-size:10px;color:var(--text-d);}
-.char-list-item.active .char-list-bonus{color:rgba(248,198,98,.6);}
-.char-center-panel{flex:1;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:48px;z-index:10;overflow:hidden;}
-.char-portrait-wrap{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;pointer-events:none;}
-.char-portrait-wrap svg{height:100%;max-height:calc(100vh - 60px);opacity:0;transition:opacity .5s ease,transform .5s ease;transform:translateY(12px);}
-.char-portrait-wrap svg.loaded{opacity:1;transform:translateY(0);}
-.char-center-bottom{position:relative;z-index:2;text-align:center;pointer-events:auto;}
-.char-splash-name{font-family:'Cinzel',serif;font-size:52px;font-weight:900;color:var(--gold);letter-spacing:.1em;text-shadow:0 0 60px rgba(248,198,98,.5),0 4px 24px rgba(0,0,0,.9);margin-bottom:6px;transition:opacity .35s;}
-.char-splash-tagline{font-size:12px;color:var(--text-m);letter-spacing:.2em;text-transform:uppercase;margin-bottom:28px;transition:opacity .35s;}
+/* ══ CHARACTER SELECT (Netflix carousel) ══ */
+.char-select-screen{position:relative;width:100vw;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;padding-top:60px;gap:28px;}
+.char-atmos-bg{position:absolute;inset:0;z-index:0;transition:background 1s cubic-bezier(.4,0,.2,1);}
+.char-atmos-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(9,7,15,.5) 0%,transparent 30%,transparent 60%,#09070f 100%);}
+.race-carousel-section{position:relative;z-index:10;display:flex;align-items:center;width:100%;justify-content:center;}
+.race-carousel-track{display:flex;align-items:flex-end;gap:10px;position:relative;}
+.race-card{flex-shrink:0;border-radius:10px;overflow:hidden;cursor:none;transition:opacity .4s ease,box-shadow .4s ease,transform .4s ease;position:relative;border:2px solid transparent;transform:scale(1);}
+.race-card.rc-active{border-color:var(--gold);box-shadow:0 0 40px rgba(248,198,98,.4),0 12px 48px rgba(0,0,0,.9);z-index:3;}
+.race-card.rc-adj1{opacity:.7;z-index:2;}
+.race-card.rc-adj2{opacity:.38;z-index:1;}
+.race-card-inner{display:block;background-repeat:no-repeat;}
+.race-arrow{position:relative;z-index:10;background:rgba(9,7,18,.75);border:1px solid rgba(255,255,255,.12);color:var(--text-m);font-size:32px;width:48px;height:48px;border-radius:50%;cursor:none;display:flex;align-items:center;justify-content:center;transition:.2s;margin:0 18px;line-height:1;padding-bottom:3px;flex-shrink:0;}
+.race-arrow:hover{border-color:var(--gold);color:var(--gold);background:rgba(248,198,98,.12);}
+.race-info-section{position:relative;z-index:10;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;}
+.race-info-name{font-family:'Cinzel',serif;font-size:40px;font-weight:900;color:var(--gold);letter-spacing:.12em;text-shadow:0 0 50px rgba(248,198,98,.55),0 4px 20px rgba(0,0,0,.9);transition:opacity .3s;}
+.race-info-tag{font-size:11px;color:var(--text-m);letter-spacing:.22em;text-transform:uppercase;transition:opacity .3s;}
+.race-info-bonuses{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:2px 0 6px;}
+.race-bonus-pill{padding:4px 14px;border-radius:20px;font-size:12px;font-weight:700;background:rgba(248,198,98,.1);color:var(--gold);border:1px solid rgba(248,198,98,.2);}
 .char-confirm-btn{padding:13px 44px;font-family:'Cinzel',serif;font-size:13px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#0e0c18;background:linear-gradient(135deg,var(--gold) 0%,#d4940a 100%);border:none;border-radius:3px;cursor:none;transition:.2s;box-shadow:0 0 0 rgba(248,198,98,0);}
 .char-confirm-btn:hover{transform:scale(1.04);box-shadow:0 0 32px rgba(248,198,98,.35);}
-.char-info-panel{width:260px;flex-shrink:0;height:100%;z-index:10;padding:20px 18px 24px;background:rgba(9,7,18,.65);backdrop-filter:blur(14px);border-left:1px solid rgba(255,255,255,.06);overflow-y:auto;display:flex;flex-direction:column;gap:0;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
-.char-info-section{margin-bottom:22px;}
-.char-info-label{font-size:10px;font-weight:700;letter-spacing:.2em;color:var(--text-m);text-transform:uppercase;margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid rgba(248,198,98,.15);}
-.char-stat-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:4px;}
-.char-stat-chip{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;background:rgba(248,198,98,.1);color:var(--gold);border:1px solid rgba(248,198,98,.2);}
-.char-trait-item{margin-bottom:12px;}
-.char-trait-name{font-size:12px;font-weight:600;color:var(--text);margin-bottom:3px;}
-.char-trait-desc{font-size:11px;color:var(--text-m);line-height:1.6;}
 /* Creator drawer that slides in after confirming race */
 .char-creator-drawer{position:absolute;inset:0;z-index:50;display:flex;flex-direction:column;background:var(--dark);transform:translateX(100%);transition:transform .45s cubic-bezier(.4,0,.2,1);}
 .char-creator-drawer.open{transform:translateX(0);}
@@ -437,7 +426,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.1.0</span>
+    <span class="ver-badge">v1.1.1</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">26 Mar 2026</span>
   </div>
@@ -530,19 +519,19 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <!-- LoL-style race select screen -->
   <div class="char-select-screen" id="charSelectScreen">
     <div class="char-atmos-bg" id="charAtmosBg"></div>
-    <!-- Left: race list -->
-    <div class="char-list-panel" id="charListPanel"></div>
-    <!-- Center: splash art -->
-    <div class="char-center-panel">
-      <div class="char-portrait-wrap" id="charPortraitWrap"></div>
-      <div class="char-center-bottom">
-        <div class="char-splash-name" id="charSplashName">HUMANO</div>
-        <div class="char-splash-tagline" id="charSplashTagline">Versátil y determinado</div>
-        <button class="char-confirm-btn" onclick="confirmCharRace()" data-es="ELEGIR RAZA →" data-en="CHOOSE RACE →">ELEGIR RAZA →</button>
-      </div>
+    <!-- Carousel -->
+    <div class="race-carousel-section">
+      <button class="race-arrow" onclick="carouselMove(-1)">&#8249;</button>
+      <div class="race-carousel-track" id="raceCarouselTrack"></div>
+      <button class="race-arrow" onclick="carouselMove(1)">&#8250;</button>
     </div>
-    <!-- Right: traits -->
-    <div class="char-info-panel" id="charInfoPanel"></div>
+    <!-- Info below carousel -->
+    <div class="race-info-section">
+      <div class="race-info-name" id="raceInfoName">HUMANO</div>
+      <div class="race-info-tag" id="raceInfoTag">Versátil y determinado</div>
+      <div class="race-info-bonuses" id="raceInfoBonuses"></div>
+      <button class="char-confirm-btn" onclick="confirmCharRace()" data-es="ELEGIR RAZA →" data-en="CHOOSE RACE →">ELEGIR RAZA →</button>
+    </div>
     <!-- Creator drawer (slides in after confirming race) -->
     <div class="char-creator-drawer" id="charCreatorDrawer">
       <div class="char-drawer-header">
@@ -1897,18 +1886,55 @@ const RACE_DATA={
 
 
 let _selectedRace='human';
+let _carouselIdx=0;
+const RACE_KEYS=Object.keys(RACE_DATA);
+
+/* raza.png is 1024×1536, 3×4 grid → natural cell 341.33×384px
+   Scale to cardW wide; cell height = cardW * (1536/4) / (1024/3) = cardW * 1.125
+   Crop bottom ~18% to remove embedded text labels */
+function _raceCellH(cardW){return Math.round(cardW*1152/1024);}
+function _raceCropH(cardW){return Math.round(_raceCellH(cardW)*0.82);}
+
+function _raceCardHtml(raceKey,cardW,cls){
+  const s=RACE_SPRITE[raceKey]||{c:0,r:0};
+  const cellH=_raceCellH(cardW);
+  const cropH=_raceCropH(cardW);
+  const bgX=-s.c*cardW, bgY=-s.r*cellH;
+  return`<div class="race-card ${cls}" style="width:${cardW}px;height:${cropH}px;" onclick="selectCarouselRace('${raceKey}')"><div class="race-card-inner" style="width:${cardW}px;height:${cellH}px;background-image:url('/assets/raza.png');background-size:${cardW*3}px ${cellH*4}px;background-position:${bgX}px ${bgY}px;"></div></div>`;
+}
+
+function renderCarousel(){
+  const track=document.getElementById('raceCarouselTrack');
+  if(!track)return;
+  const total=RACE_KEYS.length;
+  const slots=[
+    {off:-2,cls:'rc-adj2',w:100},
+    {off:-1,cls:'rc-adj1',w:155},
+    {off: 0,cls:'rc-active',w:240},
+    {off: 1,cls:'rc-adj1',w:155},
+    {off: 2,cls:'rc-adj2',w:100}
+  ];
+  track.innerHTML=slots.map(({off,cls,w})=>{
+    const idx=((_carouselIdx+off)%total+total)%total;
+    return _raceCardHtml(RACE_KEYS[idx],w,cls);
+  }).join('');
+  selectCharRace(RACE_KEYS[_carouselIdx]);
+}
+
+function carouselMove(dir){
+  _carouselIdx=((_carouselIdx+dir)%RACE_KEYS.length+RACE_KEYS.length)%RACE_KEYS.length;
+  renderCarousel();
+}
+
+function selectCarouselRace(raceKey){
+  const idx=RACE_KEYS.indexOf(raceKey);
+  if(idx!==-1){_carouselIdx=idx;renderCarousel();}
+}
 
 function initCharSelect(){
   _selectedRace='human';
-  const list=document.getElementById('charListPanel');
-  list.innerHTML=Object.keys(RACE_DATA).map(k=>{
-    const d=RACE_DATA[k];
-    return`<div class="char-list-item" id="cli-${k}" onclick="selectCharRace('${k}')">
-      <div style="width:44px;height:44px;flex-shrink:0;border-radius:8px;overflow:hidden;${raceBg(k)};background-repeat:no-repeat;"></div>
-      <div style="min-width:0;"><div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${currentLang==='es'?d.nameEs:d.nameEn}</div></div>
-    </div>`;
-  }).join('');
-  selectCharRace('human');
+  _carouselIdx=0;
+  renderCarousel();
   document.getElementById('charCreatorDrawer').classList.remove('open');
   resetCreator();
   initClassCards();
@@ -1917,37 +1943,11 @@ function initCharSelect(){
 function selectCharRace(race){
   _selectedRace=race;
   const d=RACE_DATA[race];
-  // Highlight list item
-  document.querySelectorAll('.char-list-item').forEach(el=>el.classList.remove('active'));
-  const cli=document.getElementById('cli-'+race);
-  if(cli)cli.classList.add('active');
-  // Background
   document.getElementById('charAtmosBg').style.background=d.bg;
-  // Portrait
-  const wrap=document.getElementById('charPortraitWrap');
-  const s=RACE_SPRITE[race]||{c:0,r:0};
-  const bx=s.c*50+'%', by=(s.r/3*100).toFixed(2)+'%';
-  wrap.innerHTML=`<div style="height:78%;aspect-ratio:3/4;background-image:url('/assets/raza.png');background-size:300% 400%;background-position:${bx} ${by};background-repeat:no-repeat;border-radius:6px;filter:drop-shadow(0 24px 64px rgba(0,0,0,.85));opacity:0;transform:translateY(28px);transition:opacity .55s,transform .55s;"></div>`;
-  const portDiv=wrap.firstElementChild;
-  requestAnimationFrame(()=>{requestAnimationFrame(()=>{portDiv.style.opacity='1';portDiv.style.transform='translateY(0)';});});
-  // Name & tagline
-  document.getElementById('charSplashName').textContent=currentLang==='es'?d.nameEs:d.nameEn;
-  document.getElementById('charSplashTagline').textContent=currentLang==='es'?d.tagEs:d.tagEn;
-  // Info panel
-  const info=document.getElementById('charInfoPanel');
-  info.innerHTML=`
-    <div style="padding:24px 20px;height:100%;overflow-y:auto;">
-      <div style="font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:${d.color};margin-bottom:6px;">${currentLang==='es'?d.nameEs:d.nameEn}</div>
-      <div style="font-size:12px;color:var(--text-m);margin-bottom:20px;">${currentLang==='es'?d.tagEs:d.tagEn}</div>
-      <div style="margin-bottom:18px;">
-        <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-d);margin-bottom:8px;">${currentLang==='es'?'Bonificaciones':'Bonuses'}</div>
-        ${d.bonus.map(b=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;"><span style="color:${d.color};font-weight:700;">+</span>${b}</div>`).join('')}
-      </div>
-      <div>
-        <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-d);margin-bottom:8px;">${currentLang==='es'?'Rasgos':'Traits'}</div>
-        ${d.traits.map(t=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;"><span style="color:${d.color};">◆</span>${t}</div>`).join('')}
-      </div>
-    </div>`;
+  document.getElementById('raceInfoName').textContent=currentLang==='es'?d.nameEs:d.nameEn;
+  document.getElementById('raceInfoTag').textContent=currentLang==='es'?d.tagEs:d.tagEn;
+  const bonusEl=document.getElementById('raceInfoBonuses');
+  if(bonusEl)bonusEl.innerHTML=d.bonus.map(b=>`<div class="race-bonus-pill">${b}</div>`).join('');
 }
 
 function confirmCharRace(){
@@ -1965,6 +1965,15 @@ function confirmCharRace(){
 function backToRaceSelect(){
   document.getElementById('charCreatorDrawer').classList.remove('open');
 }
+
+document.addEventListener('keydown',function(e){
+  if(document.getElementById('page-characters').classList.contains('active')&&
+     !document.getElementById('charCreatorDrawer').classList.contains('open')){
+    if(e.key==='ArrowLeft')carouselMove(-1);
+    else if(e.key==='ArrowRight')carouselMove(1);
+    else if(e.key==='Enter')confirmCharRace();
+  }
+});
 
 /* ══ MAP BUILDER (Canvas) ══ */
 const CELL=36,COLS=20,ROWS=14;
