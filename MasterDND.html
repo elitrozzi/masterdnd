@@ -36,7 +36,7 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .page.active{display:block;}
 
 /* ══════════════════════════════════ LANDING */
-#page-home{position:relative;width:100vw;min-height:200vh;overflow-x:hidden;}
+#page-home{position:relative;width:100vw;min-height:280vh;overflow-x:hidden;}
 #bg3d{position:fixed;inset:0;width:100%;height:100%;z-index:0;opacity:0;animation:fadeIn 2.5s ease .3s forwards;}
 @keyframes fadeIn{to{opacity:1;}}
 
@@ -176,8 +176,36 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .btn-gold{background:linear-gradient(135deg,var(--gold),#e8a820);color:#1a1400;font-weight:600;}
 .btn-primary[disabled]{opacity:.4;cursor:not-allowed;}
 
+/* ── MAP TABS ── */
+.map-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--surface);}
+.map-tab{padding:12px 24px;font-size:13px;font-weight:500;color:var(--text-m);border-bottom:2px solid transparent;transition:.15s;cursor:none;}
+.map-tab:hover{color:var(--text);}
+.map-tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+.map-panel{display:none;height:calc(100vh - 97px);}
+.map-panel.active{display:block;}
+/* ── MAP EXPLORE ── */
+.explore-wrap{height:100%;overflow-y:auto;padding:32px;background:var(--dark);}
+.explore-section{margin-bottom:40px;}
+.explore-section-title{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--text-m);margin-bottom:18px;display:flex;align-items:center;gap:10px;}
+.explore-section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.gen-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;}
+.gen-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;transition:.2s;cursor:none;}
+.gen-card:hover{border-color:var(--brand-500);transform:translateY(-2px);}
+.gen-card-icon{font-size:28px;margin-bottom:10px;}
+.gen-card-name{font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px;}
+.gen-card-desc{font-size:12px;color:var(--text-m);line-height:1.5;margin-bottom:14px;}
+.gen-card-btn{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--gold);background:rgba(248,198,98,.08);border:1px solid rgba(248,198,98,.25);border-radius:8px;padding:6px 14px;transition:.15s;cursor:none;}
+.gen-card-btn:hover{background:rgba(248,198,98,.16);}
+.comm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;}
+.comm-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:.2s;cursor:none;}
+.comm-card:hover{border-color:var(--brand-500);transform:translateY(-2px);}
+.comm-card img{width:100%;height:130px;object-fit:cover;display:block;background:var(--card);}
+.comm-card-body{padding:10px 12px;}
+.comm-card-title{font-size:12px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.comm-card-meta{font-size:11px;color:var(--text-m);margin-top:3px;}
+.comm-loading{text-align:center;padding:48px;color:var(--text-m);font-size:13px;}
 /* ── MAP BUILDER ── */
-.map-layout{display:grid;grid-template-columns:200px 1fr 180px;height:calc(100vh - 60px);}
+.map-layout{display:grid;grid-template-columns:200px 1fr 180px;height:calc(100vh - 97px);}
 .map-sidebar-left,.map-sidebar-right{background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;padding:12px;}
 .map-sidebar-right{border-right:none;border-left:1px solid var(--border);}
 .sidebar-section{margin-bottom:18px;}
@@ -546,7 +574,11 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 
 <!-- ══════════════════════════ PAGE: MAPS -->
 <div id="page-maps" class="page">
-  <div class="inner-page">
+  <div class="map-tabs">
+    <div class="map-tab active" id="mtab-editor" onclick="mapTab('editor',this)">🗺️ <span data-es="Editor" data-en="Editor">Editor</span></div>
+    <div class="map-tab" id="mtab-explore" onclick="mapTab('explore',this)">🔍 <span data-es="Explorar" data-en="Explore">Explorar</span></div>
+  </div>
+  <div class="map-panel active" id="mpanel-editor">
     <div class="map-layout">
       <div class="map-sidebar-left">
         <div class="sidebar-section"><div class="sidebar-title" data-es="Herramientas" data-en="Tools">Herramientas</div><button class="tool-btn active" id="tool-draw" onclick="selectTool('draw')">✏️ <span data-es="Dibujar" data-en="Draw">Dibujar</span></button><button class="tool-btn" id="tool-erase" onclick="selectTool('erase')">⬜ <span data-es="Borrar" data-en="Erase">Borrar</span></button><button class="tool-btn" id="tool-fog" onclick="selectTool('fog')">🌫️ Fog of War</button><button class="tool-btn" id="tool-token" onclick="selectTool('token')">🧙 Token</button></div>
@@ -579,6 +611,55 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <div class="sidebar-section"><div class="sidebar-title" data-es="Plantillas" data-en="Templates">Plantillas</div><button class="tool-btn" onclick="loadTemplate('dungeon')">🏚️ Dungeon</button><button class="tool-btn" onclick="loadTemplate('tavern')">🍺 <span data-es="Taberna" data-en="Tavern">Taberna</span></button><button class="tool-btn" onclick="loadTemplate('forest')">🌲 <span data-es="Bosque" data-en="Forest">Bosque</span></button><button class="tool-btn" onclick="loadTemplate('city')">🏙️ <span data-es="Ciudad" data-en="City">Ciudad</span></button></div>
         <div class="sidebar-section"><div class="sidebar-title" data-es="Capas" data-en="Layers">Capas</div><div style="display:flex;flex-direction:column;gap:6px;"><label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:none;"><input type="checkbox" checked style="accent-color:var(--brand-500)"> <span data-es="Terreno" data-en="Terrain">Terreno</span></label><label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:none;"><input type="checkbox" checked style="accent-color:var(--brand-500)"> <span data-es="Objetos" data-en="Objects">Objetos</span></label><label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:none;"><input type="checkbox" checked style="accent-color:var(--brand-500)"> Tokens</label><label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:none;"><input type="checkbox" style="accent-color:var(--brand-500)"> Fog of War</label></div></div>
       </div>
+    </div>
+  </div>
+  <div class="map-panel" id="mpanel-explore">
+    <div class="explore-wrap">
+      <div class="explore-section">
+        <div class="explore-section-title" data-es="Generadores Procedurales" data-en="Procedural Generators">Generadores Procedurales</div>
+        <div class="gen-grid">
+          <div class="gen-card">
+            <div class="gen-card-icon">🏚️</div>
+            <div class="gen-card-name" data-es="Generador de Mazmorras" data-en="Dungeon Generator">Generador de Mazmorras</div>
+            <div class="gen-card-desc" data-es="Genera mazmorras de una página con habitaciones, pasillos y detalles únicos cada vez." data-en="Generate one-page dungeons with rooms, corridors and unique details every time.">Genera mazmorras de una página con habitaciones, pasillos y detalles únicos cada vez.</div>
+            <div class="gen-card-btn" onclick="openGenModal('https://watabou.github.io/one-page-dungeon/')">🎲 <span data-es="Generar" data-en="Generate">Generar</span></div>
+          </div>
+          <div class="gen-card">
+            <div class="gen-card-icon">🏙️</div>
+            <div class="gen-card-name" data-es="Generador de Ciudades" data-en="City Generator">Generador de Ciudades</div>
+            <div class="gen-card-desc" data-es="Crea mapas de ciudades medievales con distritos, calles y puntos de interés." data-en="Create medieval city maps with districts, streets and points of interest.">Crea mapas de ciudades medievales con distritos, calles y puntos de interés.</div>
+            <div class="gen-card-btn" onclick="openGenModal('https://watabou.github.io/city-generator/')">🎲 <span data-es="Generar" data-en="Generate">Generar</span></div>
+          </div>
+          <div class="gen-card">
+            <div class="gen-card-icon">🌲</div>
+            <div class="gen-card-name" data-es="Costas Peligrosas" data-en="Perilous Shores">Costas Peligrosas</div>
+            <div class="gen-card-desc" data-es="Genera mapas de zonas costeras con islas, bahías, bosques y asentamientos." data-en="Generate coastal area maps with islands, bays, forests and settlements.">Genera mapas de zonas costeras con islas, bahías, bosques y asentamientos.</div>
+            <div class="gen-card-btn" onclick="openGenModal('https://watabou.github.io/perilous-shores/')">🎲 <span data-es="Generar" data-en="Generate">Generar</span></div>
+          </div>
+          <div class="gen-card">
+            <div class="gen-card-icon">🏡</div>
+            <div class="gen-card-name" data-es="Generador de Aldeas" data-en="Village Generator">Generador de Aldeas</div>
+            <div class="gen-card-desc" data-es="Diseña aldeas rurales con casas, granjas y caminos dispuestos de forma orgánica." data-en="Design rural villages with houses, farms and organically arranged roads.">Diseña aldeas rurales con casas, granjas y caminos dispuestos de forma orgánica.</div>
+            <div class="gen-card-btn" onclick="openGenModal('https://watabou.github.io/village-generator/')">🎲 <span data-es="Generar" data-en="Generate">Generar</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="explore-section">
+        <div class="explore-section-title" data-es="Mapas de la Comunidad" data-en="Community Maps">Mapas de la Comunidad</div>
+        <div id="commMapsGrid" class="comm-grid">
+          <div class="comm-loading" data-es="Cargando mapas..." data-en="Loading maps...">Cargando mapas...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Generator Modal -->
+  <div id="genModal" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.85);display:none;flex-direction:column;align-items:center;justify-content:center;">
+    <div style="width:90vw;height:85vh;background:var(--surface);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;border:1px solid var(--border);">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid var(--border);">
+        <span id="genModalTitle" style="font-size:14px;font-weight:600;color:var(--text);">Generador</span>
+        <button onclick="closeGenModal()" style="background:transparent;border:none;font-size:20px;color:var(--text-m);cursor:none;line-height:1;">×</button>
+      </div>
+      <iframe id="genIframe" src="" style="flex:1;border:none;width:100%;"></iframe>
     </div>
   </div>
 </div>
@@ -1574,7 +1655,7 @@ function goTo(page,fromPop){
   else{nav.classList.add('visible');document.querySelectorAll('.anav-link').forEach(n=>n.classList.remove('active'));const nl=document.getElementById('nl-'+page);if(nl)nl.classList.add('active');}
   window.scrollTo(0,0);
   if(page==='sounds')renderSounds('all');
-  if(page==='maps')initMap();
+  if(page==='maps'){initMap();_mapsExploreLoaded=false;}
   if(page==='compendium')initCompendium();
   if(!fromPop)history.pushState({page},'',(PAGE_URLS[page]||'/'));
 }
@@ -1898,6 +1979,47 @@ function loadTemplate(type){
   if(mapCtx)redrawMap();
 }
 
+/* ══ MAP TABS & EXPLORE ══ */
+function mapTab(tab,el){
+  document.querySelectorAll('.map-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.map-panel').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('mpanel-'+tab).classList.add('active');
+  if(tab==='editor'&&!mapCvs)initMap();
+  if(tab==='explore')initMapsExplore();
+}
+let _mapsExploreLoaded=false;
+async function initMapsExplore(){
+  if(_mapsExploreLoaded)return;
+  _mapsExploreLoaded=true;
+  const grid=document.getElementById('commMapsGrid');
+  try{
+    const r=await fetch('https://www.reddit.com/r/battlemaps/hot.json?limit=24&raw_json=1');
+    const j=await r.json();
+    const posts=j.data.children.filter(p=>p.data.post_hint==='image'||p.data.url?.match(/\.(jpg|jpeg|png|webp)/i));
+    if(!posts.length){grid.innerHTML='<div class="comm-loading">No se encontraron mapas.</div>';return;}
+    grid.innerHTML=posts.slice(0,24).map(p=>{
+      const d=p.data;
+      const img=d.preview?.images?.[0]?.resolutions?.slice(-1)[0]?.url?.replace(/&amp;/g,'&')||d.url;
+      const title=d.title.length>60?d.title.slice(0,57)+'…':d.title;
+      const ups=d.ups>999?(d.ups/1000).toFixed(1)+'k':d.ups;
+      return `<div class="comm-card" onclick="window.open('${d.url}','_blank')"><img src="${img}" loading="lazy" alt="${title}"><div class="comm-card-body"><div class="comm-card-title">${title}</div><div class="comm-card-meta">▲ ${ups} · r/battlemaps</div></div></div>`;
+    }).join('');
+  }catch(e){
+    grid.innerHTML='<div class="comm-loading" style="color:var(--text-m)">No se pudo cargar.<br>Verifica tu conexión.</div>';
+  }
+}
+function openGenModal(url){
+  const m=document.getElementById('genModal');
+  document.getElementById('genIframe').src=url;
+  m.style.display='flex';
+}
+function closeGenModal(){
+  const m=document.getElementById('genModal');
+  m.style.display='none';
+  document.getElementById('genIframe').src='';
+}
+
 /* ══ SOUNDS ══ */
 function renderSounds(cat){
   const grid=document.getElementById('soundsGrid');
@@ -1994,37 +2116,26 @@ function togglePlay(){
     g.setIndex(idx);g.computeVertexNormals();return g;
   }
 
-  /* 7 dados D&D: D4 D6 D8 D10 D% D12 D20 */
+  /* 7 dados D&D — sin etiquetas */
   const DEFS=[
-    {label:'D4',  geo:new THREE.TetrahedronGeometry(1.05,0), col:0x1a1535,emi:0x0d0b1e,wc:0x595082,sc:0.78},
-    {label:'D6',  geo:new THREE.BoxGeometry(1.5,1.5,1.5),   col:0x1a2a20,emi:0x0c1510,wc:0x2e4838,sc:0.76},
-    {label:'D8',  geo:new THREE.OctahedronGeometry(1,0),     col:0x1e1930,emi:0x0d0b18,wc:0x2e2848,sc:0.80},
-    {label:'D10', geo:makeD10Geo(),                          col:0x18102e,emi:0x0c0818,wc:0x595082,sc:0.76},
-    {label:'D%',  geo:makeD10Geo(),                          col:0x162820,emi:0x0a1510,wc:0x2e4838,sc:0.74},
-    {label:'D12', geo:new THREE.DodecahedronGeometry(1,0),   col:0x1a1535,emi:0x0a0818,wc:0x2e2848,sc:0.82},
-    {label:'D20', geo:new THREE.IcosahedronGeometry(1,0),    col:0x0d0b18,emi:0x1c1835,wc:0x595082,sc:1.00},
+    {geo:new THREE.TetrahedronGeometry(1.05,0), col:0x1a1535,emi:0x0d0b1e,wc:0x595082,sc:0.78},
+    {geo:new THREE.BoxGeometry(1.5,1.5,1.5),   col:0x1a2a20,emi:0x0c1510,wc:0x2e4838,sc:0.76},
+    {geo:new THREE.OctahedronGeometry(1,0),     col:0x1e1930,emi:0x0d0b18,wc:0x2e2848,sc:0.80},
+    {geo:makeD10Geo(),                          col:0x18102e,emi:0x0c0818,wc:0x595082,sc:0.76},
+    {geo:makeD10Geo(),                          col:0x162820,emi:0x0a1510,wc:0x2e4838,sc:0.74},
+    {geo:new THREE.DodecahedronGeometry(1,0),   col:0x1a1535,emi:0x0a0818,wc:0x2e2848,sc:0.82},
+    {geo:new THREE.IcosahedronGeometry(1,0),    col:0x0d0b18,emi:0x1c1835,wc:0x595082,sc:1.00},
   ];
 
-  /* Sprite de etiqueta por dado */
-  function makeLabel(text){
-    const c=document.createElement('canvas');c.width=128;c.height=128;
-    const cx=c.getContext('2d');
-    cx.font='bold 50px Georgia,serif';cx.fillStyle='#F8C662';
-    cx.textAlign='center';cx.textBaseline='middle';
-    cx.shadowColor='rgba(248,198,98,.9)';cx.shadowBlur=10;
-    cx.fillText(text,64,64);
-    return new THREE.CanvasTexture(c);
-  }
-
-  /* Posiciones de inicio dispersas por la pantalla */
+  /* Posiciones de inicio — lado DERECHO, juntos */
   const START=[
-    { x:  7.5, y:  3.5, z:-1.0},  // D4
-    { x: -8.5, y:  2.2, z: 0.5},  // D6
-    { x:  9.5, y: -2.8, z: 1.0},  // D8
-    { x: -5.0, y: -4.0, z:-0.5},  // D10
-    { x:  6.0, y:  5.5, z: 0.0},  // D%
-    { x:-10.5, y:  0.5, z: 1.5},  // D12
-    { x:  2.5, y: -5.5, z:-1.5},  // D20
+    { x:  5.2, y:  2.2, z:-0.5},  // D4
+    { x:  7.2, y: -0.8, z: 0.5},  // D6
+    { x:  4.6, y: -1.8, z: 1.0},  // D8
+    { x:  8.0, y:  1.2, z:-0.5},  // D10
+    { x:  6.2, y:  0.2, z: 0.5},  // D%
+    { x:  8.8, y: -2.2, z: 0.8},  // D12
+    { x:  5.6, y:  0.8, z: 2.0},  // D20 — más al frente
   ];
 
   /* Posiciones finales — izquierda. D20 (índice 6) al frente */
@@ -2055,8 +2166,6 @@ function togglePlay(){
     const wOp=i===6?.50:.20;
     const wire=new THREE.Mesh(def.geo,new THREE.MeshBasicMaterial({color:def.wc,wireframe:true,transparent:true,opacity:wOp}));
     wire.scale.setScalar(1.015);mesh.add(wire);
-    const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:makeLabel(def.label),transparent:true,depthTest:false}));
-    sp.scale.set(0.75,0.75,1);mesh.add(sp);
     diceGroup.add(mesh);dice.push(mesh);
   });
 
@@ -2086,7 +2195,7 @@ function togglePlay(){
     tick+=.007;
 
     /* scrollProg: rango extendido para transición más lenta */
-    const scrollProg=Math.min(window.scrollY/(window.innerHeight*1.4),1);
+    const scrollProg=Math.min(window.scrollY/(window.innerHeight*1.8),1);
 
     const pStr=Math.max(1-scrollProg*2.5,0);
     camX+=(tgX-camX)*.04;camY+=(tgY-camY)*.04;
