@@ -1216,6 +1216,51 @@ const SIZES={tiny:{es:'Diminuto',en:'Tiny'},small:{es:'Pequeño',en:'Small'},med
 const STAT_NAMES={strength:{es:'FUE',en:'STR'},dexterity:{es:'DES',en:'DEX'},constitution:{es:'CON',en:'CON'},intelligence:{es:'INT',en:'INT'},wisdom:{es:'SAB',en:'WIS'},charisma:{es:'CAR',en:'CHA'}};
 const DMG_TYPES={fire:{es:'Fuego',en:'Fire'},cold:{es:'Frío',en:'Cold'},lightning:{es:'Rayo',en:'Lightning'},thunder:{es:'Trueno',en:'Thunder'},acid:{es:'Ácido',en:'Acid'},poison:{es:'Veneno',en:'Poison'},necrotic:{es:'Necrótico',en:'Necrotic'},radiant:{es:'Radiante',en:'Radiant'},psychic:{es:'Psíquico',en:'Psychic'},force:{es:'Fuerza',en:'Force'},bludgeoning:{es:'Contundente',en:'Bludgeoning'},piercing:{es:'Perforante',en:'Piercing'},slashing:{es:'Cortante',en:'Slashing'}};
 
+const SPEED_TR={walk:'Desplazamiento',fly:'Vuelo',swim:'Nado',climb:'Escala',burrow:'Excava',hover:'Flotar'};
+const SENSE_TR={darkvision:'Visión en la oscuridad',blindsight:'Percepción a ciegas',truesight:'Visión verdadera',tremorsense:'Detección de vibraciones',passive_perception:'Percepción pasiva'};
+const CAST_TR={'1 action':'1 acción','1 bonus action':'1 acción adicional','1 reaction':'1 reacción','1 minute':'1 minuto','10 minutes':'10 minutos','1 hour':'1 hora','8 hours':'8 horas','24 hours':'24 horas','12 hours':'12 horas'};
+
+/* Traducciones locales para valores comunes */
+function trVal(v){
+  if(!v||currentLang!=='es')return v;
+  const low=String(v).toLowerCase().trim();
+  if(CAST_TR[low])return CAST_TR[low];
+  return String(v)
+    .replace(/\b(\d+)\s*(?:feet|foot)\b/gi,'$1 pies')
+    .replace(/\b(\d+)\s*ft\.?\b/g,'$1 pies')
+    .replace(/\bmiles?\b/gi,m=>m.toLowerCase()==='mile'?'milla':'millas')
+    .replace(/\bConcentration,?\s*up to\b/gi,'Concentración, hasta')
+    .replace(/\bConcentration\b/gi,'Concentración')
+    .replace(/\bInstantaneous\b/gi,'Instantánea')
+    .replace(/\bUntil dispelled\b/gi,'Hasta ser disipado')
+    .replace(/\bSelf(?:\s*\([^)]+\))?\b/gi,'Personal')
+    .replace(/\bTouch\b/gi,'Toque').replace(/\bSight\b/gi,'Vista')
+    .replace(/\bUnlimited\b/gi,'Ilimitado').replace(/\bPermanent\b/gi,'Permanente')
+    .replace(/\bSpecial\b/gi,'Especial')
+    .replace(/\bminutes?\b/gi,m=>m.toLowerCase()==='minute'?'minuto':'minutos')
+    .replace(/\bhours?\b/gi,m=>m.toLowerCase()==='hour'?'hora':'horas')
+    .replace(/\bdays?\b/gi,m=>m.toLowerCase()==='day'?'día':'días')
+    .replace(/\brounds?\b/gi,m=>m.toLowerCase()==='round'?'turno':'turnos');
+}
+
+/* Traducción con Google Translate + caché localStorage */
+const _trMem={};
+function _trKey(t){let h=0;for(let i=0;i<Math.min(t.length,180);i++)h=(h*31+t.charCodeAt(i))&0x7fffffff;return'mdnd_'+h+'_'+t.length;}
+async function translateES(text){
+  if(!text||currentLang!=='es')return text;
+  const k=_trKey(text);
+  if(_trMem[k])return _trMem[k];
+  try{const ls=localStorage.getItem(k);if(ls){_trMem[k]=ls;return ls;}}catch(e){}
+  try{
+    const url='https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=es&dt=t&q='+encodeURIComponent(text);
+    const r=await fetch(url);const j=await r.json();
+    const out=(j[0]||[]).map(x=>x?x[0]:'').join('');
+    _trMem[k]=out;
+    try{localStorage.setItem(k,out);}catch(e){}
+    return out;
+  }catch(e){return text;}
+}
+
 function cT(map,val){if(!val)return val;const k=val.toLowerCase().trim();const m={SPELL_SCHOOLS,MONSTER_TYPES,SIZES,STAT_NAMES,DMG_TYPES}[map];return m&&m[k]?m[k][currentLang]||val:val;}
 
 let cCache={spells:[],monsters:[],classes:[],races:[]};
@@ -1355,6 +1400,30 @@ async function openCompDetail(type,index){
     }
   }
   const d=cDetailCache[cKey];
+  /* Pre-traducción en paralelo si idioma es ES */
+  if(currentLang==='es'){
+    if(type==='spells'){
+      const rawDesc=(d.desc||[]).join('\n\n');
+      const rawHigher=(d.higher_level||[]).join('\n\n');
+      [d._desc_es,d._higher_es,d._mat_es]=await Promise.all([
+        translateES(rawDesc),translateES(rawHigher),translateES(d.material||'')
+      ]);
+    } else if(type==='monsters'){
+      const items=[...(d.special_abilities||[]),...(d.actions||[]),...(d.legendary_actions||[])].filter(a=>a.desc&&!a._desc_es);
+      await Promise.all(items.map(async a=>{a._desc_es=await translateES(a.desc);}));
+      if(d.languages&&!d._lang_es)d._lang_es=await translateES(d.languages);
+    } else if(type==='classes'){
+      const items=(d.proficiencies||[]).filter(p=>!p._name_es);
+      await Promise.all(items.map(async p=>{p._name_es=await translateES(p.name);}));
+      if(d.subclasses){const sc=d.subclasses.filter(s=>!s._name_es);await Promise.all(sc.map(async s=>{s._name_es=await translateES(s.name);}));}
+    } else if(type==='races'){
+      if(d.age&&!d._age_es)d._age_es=await translateES(d.age);
+      if(d.alignment&&!d._align_es)d._align_es=await translateES(d.alignment);
+      if(d.size_description&&!d._size_es)d._size_es=await translateES(d.size_description);
+      if(d.language_desc&&!d._langd_es)d._langd_es=await translateES(d.language_desc);
+      if(d.traits){const tr=d.traits.filter(t=>!t._name_es);await Promise.all(tr.map(async t=>{t._name_es=await translateES(t.name);}));}
+    }
+  }
   if(type==='spells')renderSpellDetail(d);
   else if(type==='monsters')renderMonsterDetail(d);
   else if(type==='classes')renderClassDetail(d);
@@ -1370,8 +1439,9 @@ function renderSpellDetail(d){
   const badge=schoolObj.badge||'cb-gray';
   const lvl=d.level===0?L('Truco','Cantrip'):`${L('Nivel','Level')} ${d.level}`;
   const comps=(d.components||[]).join(', ');
-  const desc=(d.desc||[]).join('\n\n');
-  const higher=(d.higher_level||[]).join('\n\n');
+  const desc=currentLang==='es'?(d._desc_es||(d.desc||[]).join('\n\n')):(d.desc||[]).join('\n\n');
+  const higher=currentLang==='es'?(d._higher_es||(d.higher_level||[]).join('\n\n')):(d.higher_level||[]).join('\n\n');
+  const material=currentLang==='es'?(d._mat_es||d.material||''):(d.material||'');
   const ritual=d.ritual?`<span class="cc-badge cb-teal" style="font-size:10px;">Ritual</span>`:'';
   const conc=d.concentration?`<span class="cc-badge cb-purple" style="font-size:10px;">${L('Concentración','Concentration')}</span>`:'';
   document.getElementById('compPanelContent').innerHTML=`
@@ -1383,12 +1453,12 @@ function renderSpellDetail(d){
     </div>
     <div class="cp-divider"></div>
     <div class="cp-grid2">
-      <div class="cp-field"><div class="cp-field-label">${L('Lanzamiento','Casting Time')}</div><div class="cp-field-value">${d.casting_time||'—'}</div></div>
-      <div class="cp-field"><div class="cp-field-label">${L('Alcance','Range')}</div><div class="cp-field-value">${d.range||'—'}</div></div>
-      <div class="cp-field"><div class="cp-field-label">${L('Duración','Duration')}</div><div class="cp-field-value">${d.duration||'—'}</div></div>
+      <div class="cp-field"><div class="cp-field-label">${L('Lanzamiento','Casting Time')}</div><div class="cp-field-value">${trVal(d.casting_time)||'—'}</div></div>
+      <div class="cp-field"><div class="cp-field-label">${L('Alcance','Range')}</div><div class="cp-field-value">${trVal(d.range)||'—'}</div></div>
+      <div class="cp-field"><div class="cp-field-label">${L('Duración','Duration')}</div><div class="cp-field-value">${trVal(d.duration)||'—'}</div></div>
       <div class="cp-field"><div class="cp-field-label">${L('Componentes','Components')}</div><div class="cp-field-value">${comps||'—'}</div></div>
     </div>
-    ${d.material?`<div class="cp-field" style="margin-bottom:10px;"><div class="cp-field-label">${L('Material','Material')}</div><div class="cp-field-value" style="font-style:italic;font-size:12px;">${d.material}</div></div>`:''}
+    ${material?`<div class="cp-field" style="margin-bottom:10px;"><div class="cp-field-label">${L('Material','Material')}</div><div class="cp-field-value" style="font-style:italic;font-size:12px;">${material}</div></div>`:''}
     <div class="cp-divider"></div>
     <div class="cp-section-title">${L('Descripción','Description')}</div>
     <div class="cp-text">${desc.replace(/\n/g,'<br>')}</div>
@@ -1404,13 +1474,22 @@ function renderMonsterDetail(d){
   const sz=cT('SIZES',d.size||'');
   const tp=cT('MONSTER_TYPES',d.type||'');
   const ac=(d.armor_class||[])[0]?.value||'—';
-  const spd=d.speed?Object.entries(d.speed).map(([k,v])=>`${k}: ${v}`).join(', '):'—';
+  const spd=d.speed?Object.entries(d.speed).map(([k,v])=>{
+    const lbl=currentLang==='es'?(SPEED_TR[k]||k):k;
+    return`${lbl}: ${trVal(String(v))}`;
+  }).join(', '):'—';
+  const senseStr=d.senses?Object.entries(d.senses).map(([k,v])=>{
+    const lbl=currentLang==='es'?(SENSE_TR[k]||k.replace(/_/g,' ')):k.replace(/_/g,' ');
+    return`${lbl}: ${trVal(String(v))}`;
+  }).join(' · '):null;
+  const aDesc=a=>(currentLang==='es'?(a._desc_es||a.desc):a.desc)||'';
+  const langStr=currentLang==='es'?(d._lang_es||d.languages||''):(d.languages||'');
   document.getElementById('compPanelContent').innerHTML=`
     <div class="cp-title">${d.name}</div>
     <div class="cp-sub">${sz} ${tp} · <span class="cc-badge cb-teal">CR ${d.challenge_rating}</span></div>
     <div class="cp-divider"></div>
     <div class="cp-grid2">
-      <div class="cp-field"><div class="cp-field-label">${L('Golpe','HP')}</div><div class="cp-field-value">${d.hit_points} (${d.hit_dice||'—'})</div></div>
+      <div class="cp-field"><div class="cp-field-label">${L('Puntos de Golpe','HP')}</div><div class="cp-field-value">${d.hit_points} (${d.hit_dice||'—'})</div></div>
       <div class="cp-field"><div class="cp-field-label">${L('Armadura','AC')}</div><div class="cp-field-value">${ac}</div></div>
       <div class="cp-field" style="grid-column:1/-1;"><div class="cp-field-label">${L('Velocidad','Speed')}</div><div class="cp-field-value">${spd}</div></div>
     </div>
@@ -1419,41 +1498,64 @@ function renderMonsterDetail(d){
     <div class="cp-stat-row">
       ${stats.map(s=>`<div class="cp-stat"><div class="cp-stat-name">${cT('STAT_NAMES',s)}</div><div class="cp-stat-val">${d[s]||'—'}</div><div class="cp-stat-mod">${d[s]?mod(d[s]):''}</div></div>`).join('')}
     </div>
-    ${d.senses?`<div class="cp-divider"></div><div class="cp-field"><div class="cp-field-label">${L('Sentidos','Senses')}</div><div class="cp-field-value">${Object.entries(d.senses).map(([k,v])=>`${k}: ${v}`).join(' · ')}</div></div>`:''}
-    ${d.languages?`<div class="cp-field" style="margin-top:8px;"><div class="cp-field-label">${L('Idiomas','Languages')}</div><div class="cp-field-value">${d.languages}</div></div>`:''}
-    ${d.special_abilities?.length?`<div class="cp-divider"></div><div class="cp-section-title">${L('Habilidades especiales','Special Abilities')}</div>${d.special_abilities.map(a=>`<div class="cp-action"><div class="cp-action-name">${a.name}</div><div class="cp-action-desc">${a.desc}</div></div>`).join('')}`:''}
-    ${d.actions?.length?`<div class="cp-divider"></div><div class="cp-section-title">${L('Acciones','Actions')}</div>${d.actions.map(a=>`<div class="cp-action"><div class="cp-action-name">${a.name}</div><div class="cp-action-desc">${a.desc}</div></div>`).join('')}`:''}`;
+    ${senseStr?`<div class="cp-divider"></div><div class="cp-field"><div class="cp-field-label">${L('Sentidos','Senses')}</div><div class="cp-field-value">${senseStr}</div></div>`:''}
+    ${langStr?`<div class="cp-field" style="margin-top:8px;"><div class="cp-field-label">${L('Idiomas','Languages')}</div><div class="cp-field-value">${langStr}</div></div>`:''}
+    ${d.special_abilities?.length?`<div class="cp-divider"></div><div class="cp-section-title">${L('Habilidades especiales','Special Abilities')}</div>${d.special_abilities.map(a=>`<div class="cp-action"><div class="cp-action-name">${a.name}</div><div class="cp-action-desc">${aDesc(a)}</div></div>`).join('')}`:''}
+    ${d.actions?.length?`<div class="cp-divider"></div><div class="cp-section-title">${L('Acciones','Actions')}</div>${d.actions.map(a=>`<div class="cp-action"><div class="cp-action-name">${a.name}</div><div class="cp-action-desc">${aDesc(a)}</div></div>`).join('')}`:''}
+    ${d.legendary_actions?.length?`<div class="cp-divider"></div><div class="cp-section-title">${L('Acciones legendarias','Legendary Actions')}</div>${d.legendary_actions.map(a=>`<div class="cp-action"><div class="cp-action-name">${a.name}</div><div class="cp-action-desc">${aDesc(a)}</div></div>`).join('')}`:''}`;
 }
 
 function renderClassDetail(d){
-  const profs=(d.proficiencies||[]).map(p=>p.name).join(', ');
+  const profs=(d.proficiencies||[]).map(p=>currentLang==='es'?(p._name_es||p.name):p.name).join(', ');
   const saves=(d.saving_throws||[]).map(s=>cT('STAT_NAMES',s.name)||s.name).join(', ');
+  const CLASS_DESC_ES={
+    barbarian:'El bárbaro es un guerrero feroz que canaliza una furia primitiva. En combate entra en estado de Furia, obteniendo resistencia al daño físico y bonificadores de ataque. Son maestros del combate cuerpo a cuerpo y se fortalecen al recibir daño.',
+    bard:'El bardo es un artista arcano que usa la magia a través de la música y las palabras. Tiene acceso a una amplia variedad de conjuros de cualquier clase, habilidades de curación e inspiración que potencian a sus aliados.',
+    cleric:'El clérigo es un servidor divino que obtiene magia de su deidad. Pueden curar, proteger y dañar. Según su dominio divino tienen acceso a distintos conjuros y habilidades únicas.',
+    druid:'El druida es un guardián de la naturaleza con poderes para transformarse en animales (Forma Salvaje) y lanzar conjuros del ámbito natural. Tienen una fuerte conexión con los elementos y los animales.',
+    fighter:'El guerrero es el maestro del combate por excelencia. Domina toda clase de armas y armaduras. Con Surge de Acción puede atacar múltiples veces. Muy versátil en estilos de combate.',
+    monk:'El monje es un maestro de las artes marciales que canaliza energía ki. Puede golpear sin armas con gran velocidad, deflectar proyectiles y moverse a velocidades sobrehumanas.',
+    paladin:'El paladín es un guerrero sagrado que combina magia divina con habilidades de combate. Puede curar con imposición de manos, proteger con su aura divina y dañar a los malvados.',
+    ranger:'El explorador es un cazador y rastreador experto. Tiene favoritos de terreno y enemigos jurados. Puede lanzar conjuros de naturaleza y tiene un compañero animal.',
+    rogue:'El pícaro es un especialista en sigilo y precisión. Con Ataque Furtivo inflige daño masivo cuando ataca por sorpresa. Experto en trapas, cerraduras y actividades ilícitas.',
+    sorcerer:'El hechicero tiene magia innata en su sangre, producto de un linaje sobrenatural. Puede usar Puntos de Hechicería para potenciar o modificar sus conjuros de maneras únicas.',
+    warlock:'El brujo obtiene su magia de un pacto con una entidad poderosa. Sus conjuros se recargan en descanso corto. Tiene invocaciones únicas que mejoran sus capacidades mágicas.',
+    wizard:'El mago es el lanzador de conjuros más versátil, con acceso al mayor grimorio del juego. Aprende conjuros de cualquier escuela de magia y puede especializarse en una para obtener ventajas únicas.',
+  };
+  const classDesc=currentLang==='es'?(CLASS_DESC_ES[d.index]||''):'';
   document.getElementById('compPanelContent').innerHTML=`
     <div class="cp-title">${d.name}</div>
+    ${classDesc?`<div class="cp-text" style="margin:12px 0 0;opacity:.85;">${classDesc}</div>`:''}
     <div class="cp-divider"></div>
     <div class="cp-grid2">
       <div class="cp-field"><div class="cp-field-label">${L('Dado de Golpe','Hit Die')}</div><div class="cp-field-value">d${d.hit_die}</div></div>
       <div class="cp-field"><div class="cp-field-label">${L('Tiradas de Salvación','Saving Throws')}</div><div class="cp-field-value">${saves||'—'}</div></div>
     </div>
     ${profs?`<div class="cp-field" style="margin-top:8px;"><div class="cp-field-label">${L('Competencias','Proficiencies')}</div><div class="cp-field-value" style="font-size:12px;">${profs}</div></div>`:''}
-    ${d.subclasses?.length?`<div class="cp-divider"></div><div class="cp-section-title">${L('Subclases','Subclasses')}</div><div style="display:flex;flex-wrap:wrap;gap:6px;">${d.subclasses.map(s=>`<span class="cc-badge cb-gold">${s.name}</span>`).join('')}</div>`:''}`;
+    ${d.subclasses?.length?`<div class="cp-divider"></div><div class="cp-section-title">${L('Subclases','Subclasses')}</div><div style="display:flex;flex-wrap:wrap;gap:6px;">${d.subclasses.map(s=>`<span class="cc-badge cb-gold">${currentLang==='es'?(s._name_es||s.name):s.name}</span>`).join('')}</div>`:''}`;
 }
 
 function renderRaceDetail(d){
   const bonuses=(d.ability_bonuses||[]).map(b=>`${cT('STAT_NAMES',b.ability_score?.name||'')} +${b.bonus}`).join(', ');
-  const traits=(d.traits||[]).map(t=>t.name).join(', ');
+  const traitNames=(d.traits||[]).map(t=>currentLang==='es'?(t._name_es||t.name):t.name);
+  const age=currentLang==='es'?(d._age_es||d.age||''):(d.age||'');
+  const align=currentLang==='es'?(d._align_es||d.alignment||''):(d.alignment||'');
+  const sizeDesc=currentLang==='es'?(d._size_es||d.size_description||''):(d.size_description||'');
+  const LANG_NAMES_ES={Common:'Común',Dwarvish:'Enano',Elvish:'Élfico',Giant:'Gigante',Gnomish:'Gnómico',Goblin:'Goblin',Halfling:'Mediano',Orc:'Orco',Abyssal:'Abisal',Celestial:'Celestial',Draconic:'Dracónico',Deep Speech:'Habla Profunda',Infernal:'Infernal',Primordial:'Primordial',Sylvan:'Silvano',Undercommon:'Infracomún'};
+  const langList=(d.languages||[]).map(l=>currentLang==='es'?(LANG_NAMES_ES[l.name]||l.name):l.name).join(', ');
   document.getElementById('compPanelContent').innerHTML=`
     <div class="cp-title">${d.name}</div>
     <div class="cp-divider"></div>
     <div class="cp-grid2">
       <div class="cp-field"><div class="cp-field-label">${L('Tamaño','Size')}</div><div class="cp-field-value">${cT('SIZES',d.size||'')}</div></div>
-      <div class="cp-field"><div class="cp-field-label">${L('Velocidad','Speed')}</div><div class="cp-field-value">${d.speed} ft.</div></div>
+      <div class="cp-field"><div class="cp-field-label">${L('Velocidad','Speed')}</div><div class="cp-field-value">${d.speed} ${currentLang==='es'?'pies':'ft.'}</div></div>
     </div>
     ${bonuses?`<div class="cp-field" style="margin-top:8px;"><div class="cp-field-label">${L('Bonos de Característica','Ability Bonuses')}</div><div class="cp-field-value">${bonuses}</div></div>`:''}
-    ${d.languages?.length?`<div class="cp-field" style="margin-top:8px;"><div class="cp-field-label">${L('Idiomas','Languages')}</div><div class="cp-field-value">${d.languages.map(l=>l.name).join(', ')}</div></div>`:''}
-    ${traits?`<div class="cp-divider"></div><div class="cp-section-title">${L('Rasgos','Traits')}</div><div style="display:flex;flex-wrap:wrap;gap:6px;">${(d.traits||[]).map(t=>`<span class="cc-badge cb-teal">${t.name}</span>`).join('')}</div>`:''}
-    ${d.age?`<div class="cp-divider"></div><div class="cp-section-title">${L('Edad','Age')}</div><div class="cp-text">${d.age}</div>`:''}
-    ${d.alignment?`<div class="cp-divider"></div><div class="cp-section-title">${L('Alineamiento','Alignment')}</div><div class="cp-text">${d.alignment}</div>`:''}`;
+    ${langList?`<div class="cp-field" style="margin-top:8px;"><div class="cp-field-label">${L('Idiomas','Languages')}</div><div class="cp-field-value">${langList}</div></div>`:''}
+    ${traitNames.length?`<div class="cp-divider"></div><div class="cp-section-title">${L('Rasgos','Traits')}</div><div style="display:flex;flex-wrap:wrap;gap:6px;">${traitNames.map(n=>`<span class="cc-badge cb-teal">${n}</span>`).join('')}</div>`:''}
+    ${age?`<div class="cp-divider"></div><div class="cp-section-title">${L('Edad','Age')}</div><div class="cp-text">${age}</div>`:''}
+    ${align?`<div class="cp-divider"></div><div class="cp-section-title">${L('Alineamiento','Alignment')}</div><div class="cp-text">${align}</div>`:''}
+    ${sizeDesc?`<div class="cp-divider"></div><div class="cp-section-title">${L('Descripción del Tamaño','Size Description')}</div><div class="cp-text">${sizeDesc}</div>`:''}`;
 }
 
 function closeCompPanel(){
