@@ -263,6 +263,11 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .race-bonus-pill{padding:4px 14px;border-radius:20px;font-size:12px;font-weight:700;background:rgba(248,198,98,.1);color:var(--gold);border:1px solid rgba(248,198,98,.2);}
 .char-confirm-btn{padding:13px 44px;font-family:'Cinzel',serif;font-size:13px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#0e0c18;background:linear-gradient(135deg,var(--gold) 0%,#d4940a 100%);border:none;border-radius:3px;cursor:none;transition:.2s;box-shadow:0 0 0 rgba(248,198,98,0);}
 .char-confirm-btn:hover{transform:scale(1.04);box-shadow:0 0 32px rgba(248,198,98,.35);}
+/* ── Quick-select chips ── */
+.cs-chips-wrap{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:4px 20px 8px;max-width:540px;width:100%;}
+.cs-chip{padding:4px 13px;border-radius:20px;font-size:10px;font-family:'Cinzel',serif;letter-spacing:.5px;cursor:pointer;border:1px solid rgba(212,168,67,.25);background:rgba(0,0,0,.3);color:rgba(212,168,67,.6);transition:all .15s;text-transform:uppercase;user-select:none;}
+.cs-chip:hover{background:rgba(212,168,67,.12);border-color:rgba(212,168,67,.55);color:#d4a843;}
+.cs-chip.active{background:rgba(212,168,67,.18);border-color:#d4a843;color:#d4a843;font-weight:700;}
 /* ── Panel slide system ── */
 .cs-panel{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:60px;transition:transform .48s cubic-bezier(.4,0,.2,1);gap:28px;}
 .cs-panel.active{transform:translateX(0);}
@@ -551,7 +556,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.2.7</span>
+    <span class="ver-badge">v1.2.8</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">26 Mar 2026</span>
   </div>
@@ -871,6 +876,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
           <button class="char-confirm-btn" onclick="confirmCharRace()">ELEGIR RAZA →</button>
         </div>
       </div>
+      <div class="cs-chips-wrap" id="raceChips"></div>
     </div>
 
     <!-- Panel 2: Class carousel -->
@@ -890,6 +896,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
           <button class="char-confirm-btn" onclick="confirmCharClass()">ELEGIR CLASE →</button>
         </div>
       </div>
+      <div class="cs-chips-wrap" id="classChips"></div>
     </div>
 
     <!-- Creator drawer (stats + sheet) -->
@@ -2372,9 +2379,19 @@ function _renderCarouselTrack(trackId,keys,idx,sprite,imgUrl,onclickFn,dir){
   }
 }
 
+function _renderRaceChips(){
+  const wrap=document.getElementById('raceChips');
+  if(!wrap)return;
+  wrap.innerHTML=RACE_KEYS.map((k,i)=>{
+    const name=RACE_NAMES[currentLang][k]||k;
+    return `<div class="cs-chip${i===_carouselIdx?' active':''}" onclick="selectCarouselRace('${k}')">${name}</div>`;
+  }).join('');
+}
+
 function renderCarousel(dir){
   _renderCarouselTrack('raceCarouselTrack',RACE_KEYS,_carouselIdx,RACE_SPRITE,'/assets/raza.png','selectCarouselRace',dir);
   selectCharRace(RACE_KEYS[_carouselIdx]);
+  _renderRaceChips();
 }
 
 function carouselMove(dir){
@@ -2404,9 +2421,19 @@ const CLASS_DATA={
   warlock:{color:'#9060c8',nameEs:'BRUJO',nameEn:'WARLOCK',tagEs:'Un pacto oscuro con fuerzas antiguas',tagEn:'A dark pact with ancient forces',role:['Pacto','Poder oscuro','Invocaciones']}
 };
 
+function _renderClassChips(){
+  const wrap=document.getElementById('classChips');
+  if(!wrap)return;
+  wrap.innerHTML=CLASS_KEYS.map((k,i)=>{
+    const name=CLASS_NAMES[currentLang][k]||k;
+    return `<div class="cs-chip${i===_classCarouselIdx?' active':''}" onclick="selectCarouselClass('${k}')">${name}</div>`;
+  }).join('');
+}
+
 function renderClassCarousel(dir){
   _renderCarouselTrack('classCarouselTrack',CLASS_KEYS,_classCarouselIdx,CLASS_SPRITE,'/assets/especie.png','selectCarouselClass',dir);
   selectCharClass(CLASS_KEYS[_classCarouselIdx]);
+  _renderClassChips();
 }
 
 function classCarouselMove(dir){

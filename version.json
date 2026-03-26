@@ -1,7 +1,12 @@
 {
-  "version": "1.2.7",
+  "version": "1.2.8",
   "date": "2026-03-26",
   "history": [
+    {
+      "version": "1.2.8",
+      "date": "2026-03-26",
+      "note": "Chips de selección rápida de raza y clase bajo el carrusel, sincronizados con el carrusel al navegar"
+    },
     {
       "version": "1.2.7",
       "date": "2026-03-26",
