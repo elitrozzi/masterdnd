@@ -1,7 +1,12 @@
 {
-  "version": "1.2.6",
+  "version": "1.2.7",
   "date": "2026-03-26",
   "history": [
+    {
+      "version": "1.2.7",
+      "date": "2026-03-26",
+      "note": "Favicon: d20 dorado sobre fondo oscuro en SVG inline"
+    },
     {
       "version": "1.2.6",
       "date": "2026-03-26",
