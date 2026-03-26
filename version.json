@@ -1,7 +1,12 @@
 {
-  "version": "1.2.1",
+  "version": "1.2.2",
   "date": "2026-03-26",
   "history": [
+    {
+      "version": "1.2.2",
+      "date": "2026-03-26",
+      "note": "Dados estilo DND: oscuros con pips dorados y borde dorado, pausa de 2.5s antes de pasar a la siguiente pantalla"
+    },
     {
       "version": "1.2.1",
       "date": "2026-03-26",

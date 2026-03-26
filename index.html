@@ -290,20 +290,28 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .dice-total{font-family:'Cinzel',serif;font-size:20px;font-weight:900;color:var(--gold);opacity:0;transform:scale(.65);transition:opacity .3s,transform .3s cubic-bezier(.34,1.56,.64,1);}
 .dice-total.show{opacity:1;transform:scale(1);}
 /* 3D Die */
-.die3d-scene{perspective:220px;width:38px;height:38px;flex-shrink:0;}
-.die3d{width:38px;height:38px;position:relative;transform-style:preserve-3d;transform:rotateX(-20deg) rotateY(25deg);background:#1a1228;}
-.die3d.die-spinning{animation:d3Spin .18s linear infinite;}
-.die3d-face{position:absolute;inset:0;background:linear-gradient(145deg,#f4edd8 0%,#e8dfc0 100%);border-radius:6px;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr 1fr;padding:5px;box-sizing:border-box;gap:2px;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:inset 0 0 0 1px rgba(0,0,0,.14);}
-.die3d-face.df-1{transform:translateZ(19px);}
-.die3d-face.df-6{transform:rotateY(180deg) translateZ(19px);}
-.die3d-face.df-2{transform:rotateY(90deg) translateZ(19px);}
-.die3d-face.df-5{transform:rotateY(-90deg) translateZ(19px);}
-.die3d-face.df-4{transform:rotateX(90deg) translateZ(19px);}
-.die3d-face.df-3{transform:rotateX(-90deg) translateZ(19px);}
-.die-pip{border-radius:50%;background:#2d1a48;width:100%;height:100%;}
+.die3d-scene{perspective:280px;width:44px;height:44px;flex-shrink:0;}
+.die3d{width:44px;height:44px;position:relative;transform-style:preserve-3d;transform:rotateX(-20deg) rotateY(25deg);filter:drop-shadow(0 4px 8px rgba(0,0,0,.7));}
+.die3d.die-spinning{animation:d3Spin .16s linear infinite;}
+.die3d-face{
+  position:absolute;inset:0;
+  background:linear-gradient(145deg,#1e1030 0%,#110820 50%,#1a0e2a 100%);
+  border-radius:7px;
+  display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr 1fr;
+  padding:6px;box-sizing:border-box;gap:3px;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  box-shadow:inset 0 0 0 1.5px rgba(212,168,67,.55),inset 0 2px 6px rgba(255,255,255,.05);
+}
+.die3d-face.df-1{transform:translateZ(22px);}
+.die3d-face.df-6{transform:rotateY(180deg) translateZ(22px);}
+.die3d-face.df-2{transform:rotateY(90deg) translateZ(22px);}
+.die3d-face.df-5{transform:rotateY(-90deg) translateZ(22px);}
+.die3d-face.df-4{transform:rotateX(90deg) translateZ(22px);}
+.die3d-face.df-3{transform:rotateX(-90deg) translateZ(22px);}
+.die-pip{border-radius:50%;background:radial-gradient(circle at 38% 32%,#f5d078,#c8880a);width:100%;height:100%;box-shadow:0 0 3px rgba(212,168,67,.6);}
 .die-pip.ep{opacity:0;}
-.die3d.die-dropped .die3d-face{background:linear-gradient(145deg,#2e2e2e 0%,#1e1e1e 100%)!important;}
-.die3d.die-dropped .die-pip{background:#555!important;}
+.die3d.die-dropped .die3d-face{background:linear-gradient(145deg,#1a1a1a 0%,#111 100%)!important;box-shadow:inset 0 0 0 1.5px rgba(80,80,80,.4)!important;}
+.die3d.die-dropped .die-pip{background:radial-gradient(circle,#555,#333)!important;box-shadow:none!important;}
 @keyframes d3Spin{0%{transform:rotateX(0) rotateY(0) rotateZ(0);}100%{transform:rotateX(360deg) rotateY(480deg) rotateZ(120deg);}}
 /* ── MAP TABS ── */
 .map-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--surface);margin-top:60px;}
@@ -526,7 +534,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.2.1</span>
+    <span class="ver-badge">v1.2.2</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">26 Mar 2026</span>
   </div>
@@ -2113,7 +2121,7 @@ function updateProgress(){for(let i=1;i<=2;i++){const d=document.getElementById(
 const _PIP_CELLS={1:[4],2:[2,6],3:[2,4,6],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]};
 const _D6_ROT={1:'rotateX(0deg) rotateY(0deg)',2:'rotateX(0deg) rotateY(-90deg)',3:'rotateX(90deg) rotateY(0deg)',4:'rotateX(-90deg) rotateY(0deg)',5:'rotateX(0deg) rotateY(90deg)',6:'rotateX(0deg) rotateY(180deg)'};
 function _diePips(v){const p=_PIP_CELLS[v]||[];return Array(9).fill(0).map((_,i)=>`<div class="die-pip${p.includes(i)?'':' ep'}"></div>`).join('');}
-function _dieHtml(id){return `<div class="die3d-scene"><div class="die3d die-spinning" id="${id}"><div class="die3d-face df-1">${_diePips(1)}</div><div class="die3d-face df-6">${_diePips(6)}</div><div class="die3d-face df-2">${_diePips(2)}</div><div class="die3d-face df-5">${_diePips(5)}</div><div class="die3d-face df-4">${_diePips(4)}</div><div class="die3d-face df-3">${_diePips(3)}</div></div></div>`;}
+function _dieHtml(id){return `<div class="die3d-scene"><div class="die3d die-spinning" id="${id}"><div class="die3d-face df-1">${_diePips(1)}</div><div class="die3d-face df-6">${_diePips(6)}</div><div class="die3d-face df-2">${_diePips(2)}</div><div class="die3d-face df-5">${_diePips(5)}</div><div class="die3d-face df-4">${_diePips(4)}</div><div class="die3d-face df-3">${_diePips(3)}</div></div></div>`;/* size:44px, half=22px — matches CSS translateZ(22px) */}
 function rollStats(){
   const stats=['str','dex','con','int','wis','cha'];
   const labels={str:'STR',dex:'DEX',con:'CON',int:'INT',wis:'WIS',cha:'CHA'};
@@ -2162,21 +2170,23 @@ function rollStats(){
       },540);
     },850+si*110);
   });
-  // Hide overlay + update stat boxes
+  // Hide overlay + update stat boxes (2.5s pause so players can admire results)
   const done=850+5*110+700;
   setTimeout(()=>{
-    overlay.classList.remove('active');
     setTimeout(()=>{
-      stats.forEach(s=>{
-        const val=rolledStats[s];
-        const mod=Math.floor((val-10)/2);
-        const el=document.getElementById('sv-'+s);
-        el.textContent=val;el.classList.add('dice-anim');
-        setTimeout(()=>el.classList.remove('dice-anim'),400);
-        document.getElementById('sm-'+s).textContent=(mod>=0?'+':'')+mod;
-      });
-      document.getElementById('btnStep4Next').removeAttribute('disabled');
-    },350);
+      overlay.classList.remove('active');
+      setTimeout(()=>{
+        stats.forEach(s=>{
+          const val=rolledStats[s];
+          const mod=Math.floor((val-10)/2);
+          const el=document.getElementById('sv-'+s);
+          el.textContent=val;el.classList.add('dice-anim');
+          setTimeout(()=>el.classList.remove('dice-anim'),400);
+          document.getElementById('sm-'+s).textContent=(mod>=0?'+':'')+mod;
+        });
+        document.getElementById('btnStep4Next').removeAttribute('disabled');
+      },350);
+    },2500);
   },done);
 }
 function buildSheet(){
