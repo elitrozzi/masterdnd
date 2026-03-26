@@ -274,6 +274,61 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .form-input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:14px;color:var(--text);font-family:'Roboto',sans-serif;outline:none;transition:.15s;}
 .form-input:focus{border-color:var(--brand-500);}
 .btn-full{width:100%;padding:12px;border-radius:10px;font-size:14px;font-weight:600;cursor:none;}
+
+/* ══════════════════════════════════ COMPENDIO */
+.comp-wrap{max-width:1100px;margin:0 auto;padding:32px 24px;}
+.comp-header{margin-bottom:20px;}
+.comp-header h2{font-family:'Cinzel',serif;font-size:24px;color:var(--gold);margin-bottom:4px;}
+.comp-header p{font-size:14px;color:var(--text-m);}
+.comp-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.comp-tab{padding:7px 18px;border-radius:20px;background:var(--surface);border:1px solid var(--border);font-size:13px;color:var(--text-m);cursor:none;transition:.15s;}
+.comp-tab:hover,.comp-tab.active{background:rgba(200,168,75,.1);border-color:var(--gold);color:var(--gold);}
+.comp-toolbar{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
+.comp-search{flex:1;min-width:180px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:9px 14px;font-size:13px;color:var(--text);font-family:'Roboto',sans-serif;outline:none;transition:.15s;}
+.comp-search:focus{border-color:var(--brand-500);}
+.comp-filter{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:9px 12px;font-size:12px;color:var(--text-m);font-family:'Roboto',sans-serif;outline:none;cursor:none;min-width:140px;}
+.comp-filter:focus{border-color:var(--brand-500);}
+.comp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:32px;}
+.comp-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;cursor:none;transition:.2s;}
+.comp-card:hover{border-color:var(--brand-400);transform:translateY(-2px);}
+.comp-card.active{border-color:var(--gold);background:rgba(200,168,75,.05);}
+.cc-name{font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px;line-height:1.3;}
+.cc-row{display:flex;align-items:center;justify-content:space-between;gap:6px;}
+.cc-meta{font-size:11px;color:var(--text-m);}
+.cc-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;letter-spacing:.05em;white-space:nowrap;}
+.cb-gold{background:rgba(200,168,75,.15);color:var(--gold);border:1px solid rgba(200,168,75,.25);}
+.cb-brand{background:rgba(73,107,227,.15);color:var(--brand-400);border:1px solid rgba(73,107,227,.25);}
+.cb-teal{background:rgba(46,156,202,.15);color:var(--teal);border:1px solid rgba(46,156,202,.25);}
+.cb-purple{background:rgba(123,111,168,.15);color:var(--purple);border:1px solid rgba(123,111,168,.25);}
+.cb-red{background:rgba(200,68,68,.15);color:#e07878;border:1px solid rgba(200,68,68,.25);}
+.cb-green{background:rgba(46,160,80,.15);color:#5dca7a;border:1px solid rgba(46,160,80,.25);}
+.cb-gray{background:rgba(255,255,255,.06);color:var(--text-m);border:1px solid rgba(255,255,255,.1);}
+.comp-state{grid-column:1/-1;text-align:center;padding:60px;color:var(--text-m);font-size:14px;}
+@keyframes compSpin{to{transform:rotate(360deg)}}
+.comp-spinner{width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:compSpin .8s linear infinite;margin:0 auto 12px;}
+/* Detail panel */
+.comp-panel{position:fixed;top:60px;right:0;bottom:0;width:440px;max-width:96vw;background:var(--surface);border-left:1px solid var(--border);overflow-y:auto;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:250;padding:28px 24px;}
+.comp-panel.open{transform:translateX(0);}
+.cp-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.06);border:none;border-radius:50%;width:32px;height:32px;color:var(--text-m);font-size:14px;cursor:none;}
+.cp-title{font-family:'Cinzel',serif;font-size:20px;color:var(--gold);margin-bottom:4px;padding-right:40px;line-height:1.3;margin-top:8px;}
+.cp-sub{font-size:13px;color:var(--text-m);margin-bottom:16px;}
+.cp-divider{height:1px;background:var(--border);margin:14px 0;}
+.cp-section-title{font-size:10px;font-weight:600;letter-spacing:.15em;color:var(--text-m);text-transform:uppercase;margin-bottom:8px;}
+.cp-text{font-size:13px;color:var(--text);line-height:1.7;}
+.cp-grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.cp-field{background:rgba(255,255,255,.03);border-radius:10px;padding:10px 12px;}
+.cp-field-label{font-size:10px;color:var(--text-m);letter-spacing:.1em;font-weight:600;margin-bottom:3px;}
+.cp-field-value{font-size:13px;color:var(--text);}
+.cp-stat-row{display:flex;gap:6px;margin-bottom:12px;}
+.cp-stat{flex:1;background:var(--card);border-radius:10px;padding:10px 6px;text-align:center;}
+.cp-stat-name{font-size:9px;color:var(--text-m);letter-spacing:.1em;font-weight:600;}
+.cp-stat-val{font-size:17px;font-weight:600;color:var(--text);margin:3px 0 1px;}
+.cp-stat-mod{font-size:11px;color:var(--gold);}
+.cp-action{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px;}
+.cp-action-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px;}
+.cp-action-desc{font-size:12px;color:var(--text-m);line-height:1.6;}
+body:has(.page.active#page-compendium) #cdot{background:var(--gold);}
+body:has(.page.active#page-compendium) #cring{border-color:rgba(200,168,75,.35);}
 </style>
 </head>
 <body>
@@ -291,6 +346,7 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
     <a class="anav-link" id="nl-characters" onclick="goTo('characters')" data-es="Personajes" data-en="Characters">Personajes</a>
     <a class="anav-link" id="nl-maps" onclick="goTo('maps')" data-es="Mapas" data-en="Maps">Mapas</a>
     <a class="anav-link" id="nl-sounds" onclick="goTo('sounds')" data-es="Sonidos" data-en="Sounds">Sonidos</a>
+    <a class="anav-link" id="nl-compendium" onclick="goTo('compendium')" data-es="Compendio" data-en="Compendium">Compendio</a>
   </div>
   <div class="anav-spacer"></div>
   <div class="lang-toggle">
@@ -313,6 +369,7 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
         <a onclick="goTo('characters')" data-es="Personajes" data-en="Characters">Personajes</a>
         <a onclick="goTo('maps')" data-es="Mapas" data-en="Maps">Mapas</a>
         <a onclick="goTo('sounds')" data-es="Sonidos" data-en="Sounds">Sonidos</a>
+        <a onclick="goTo('compendium')" data-es="Compendio" data-en="Compendium">Compendio</a>
       </div>
       <div class="land-nav-spacer"></div>
       <div class="land-nav-right">
@@ -537,6 +594,39 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
       <div class="playlist-section"><div class="playlist-title">🎧 <span data-es="Mi playlist de campaña" data-en="My campaign playlist">Mi playlist de campaña</span> <span class="tag tag-brand">5 tracks</span></div><div class="playlist-items"><div class="pl-item active" onclick="playSound({name:'The Dragon Awakens',cat:'boss',icon:'🐉',dur:'4:32'})"><div class="pl-num">▶</div><div class="pl-icon">🐉</div><div class="pl-info"><div class="pl-name">The Dragon Awakens</div><div class="pl-sub">Boss Fight</div></div><div class="pl-dur">4:32</div></div><div class="pl-item" onclick="playSound({name:'Dungeon Depths',cat:'dungeon',icon:'🏚️',dur:'6:10'})"><div class="pl-num">2</div><div class="pl-icon">🏚️</div><div class="pl-info"><div class="pl-name">Dungeon Depths</div><div class="pl-sub">Dungeon</div></div><div class="pl-dur">6:10</div></div><div class="pl-item" onclick="playSound({name:'Tavern Tales',cat:'tavern',icon:'🍺',dur:'3:45'})"><div class="pl-num">3</div><div class="pl-icon">🍺</div><div class="pl-info"><div class="pl-name">Tavern Tales</div><div class="pl-sub">Taberna</div></div><div class="pl-dur">3:45</div></div><div class="pl-item" onclick="playSound({name:'Forest Ambience',cat:'ambient',icon:'🌲',dur:'∞'})"><div class="pl-num">4</div><div class="pl-icon">🌲</div><div class="pl-info"><div class="pl-name">Forest Ambience</div><div class="pl-sub" data-es="Loop" data-en="Loop">Loop</div></div><div class="pl-dur">∞</div></div><div class="pl-item" onclick="playSound({name:'Battle Cry',cat:'combat',icon:'⚔️',dur:'3:18'})"><div class="pl-num">5</div><div class="pl-icon">⚔️</div><div class="pl-info"><div class="pl-name">Battle Cry</div><div class="pl-sub">Combate</div></div><div class="pl-dur">3:18</div></div></div></div>
     </div>
   </div>
+</div>
+
+<!-- ══════════════════════════ PAGE: COMPENDIUM -->
+<div id="page-compendium" class="page">
+  <div class="inner-page">
+    <div class="comp-wrap">
+      <div class="comp-header">
+        <h2 data-es="📖 Compendio D&D 5e" data-en="📖 D&D 5e Compendium">📖 Compendio D&D 5e</h2>
+        <p data-es="Hechizos, monstruos, clases y razas del SRD oficial" data-en="Spells, monsters, classes and races from the official SRD">Hechizos, monstruos, clases y razas del SRD oficial</p>
+      </div>
+      <div class="comp-tabs" id="compTabs">
+        <div class="comp-tab active" id="ctab-spells" onclick="compTab('spells',this)">🔮 <span data-es="Hechizos" data-en="Spells">Hechizos</span></div>
+        <div class="comp-tab" id="ctab-monsters" onclick="compTab('monsters',this)">👹 <span data-es="Monstruos" data-en="Monsters">Monstruos</span></div>
+        <div class="comp-tab" id="ctab-classes" onclick="compTab('classes',this)">⚔️ <span data-es="Clases" data-en="Classes">Clases</span></div>
+        <div class="comp-tab" id="ctab-races" onclick="compTab('races',this)">🧝 <span data-es="Razas" data-en="Races">Razas</span></div>
+      </div>
+      <div class="comp-toolbar">
+        <input class="comp-search" id="compSearchInput" data-placeholder-es="Buscar..." data-placeholder-en="Search..." placeholder="Buscar..." oninput="compSearchFn(this.value)">
+        <select class="comp-filter" id="compFilterSel" onchange="compFilterFn(this.value)">
+          <option value="" data-es="Todo" data-en="All">Todo</option>
+        </select>
+      </div>
+      <div id="compGrid" class="comp-grid">
+        <div class="comp-state"><div class="comp-spinner"></div><span data-es="Cargando..." data-en="Loading...">Cargando...</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Detail panel (compendium) -->
+<div class="comp-panel" id="compPanel">
+  <button class="cp-close" onclick="closeCompPanel()">✕</button>
+  <div id="compPanelContent"></div>
 </div>
 
 <!-- ══════════════════════════ MODAL -->
@@ -1094,11 +1184,286 @@ function setLang(l){
   document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));
   document.querySelectorAll('[data-'+l+']').forEach(el=>{if(el.tagName!=='INPUT')el.textContent=el.getAttribute('data-'+l);});
   document.documentElement.lang=l;
+  if(document.getElementById('page-compendium')?.classList.contains('active')){
+    const tab=document.querySelector('.comp-tab.active')?.dataset.tab||'spells';
+    renderCompGrid(tab);
+  }
+}
+
+/* ══ COMPENDIUM ══ */
+const DND_API='https://www.dnd5eapi.co/api';
+
+const SPELL_SCHOOLS={
+  abjuration:{es:'Abjuración',en:'Abjuration',badge:'cb-green'},
+  conjuration:{es:'Conjuración',en:'Conjuration',badge:'cb-brand'},
+  divination:{es:'Adivinación',en:'Divination',badge:'cb-teal'},
+  enchantment:{es:'Encantamiento',en:'Enchantment',badge:'cb-gold'},
+  evocation:{es:'Evocación',en:'Evocation',badge:'cb-red'},
+  illusion:{es:'Ilusión',en:'Illusion',badge:'cb-purple'},
+  necromancy:{es:'Nigromancia',en:'Necromancy',badge:'cb-gray'},
+  transmutation:{es:'Transmutación',en:'Transmutation',badge:'cb-teal'},
+};
+const MONSTER_TYPES={
+  beast:{es:'Bestia',en:'Beast'},dragon:{es:'Dragón',en:'Dragon'},
+  humanoid:{es:'Humanoide',en:'Humanoid'},undead:{es:'No Muerto',en:'Undead'},
+  fiend:{es:'Demonio',en:'Fiend'},celestial:{es:'Celestial',en:'Celestial'},
+  construct:{es:'Construcción',en:'Construct'},elemental:{es:'Elemental',en:'Elemental'},
+  fey:{es:'Feérico',en:'Fey'},giant:{es:'Gigante',en:'Giant'},
+  monstrosity:{es:'Monstruosidad',en:'Monstrosity'},ooze:{es:'Ooze',en:'Ooze'},
+  plant:{es:'Planta',en:'Plant'},aberration:{es:'Aberración',en:'Aberration'},
+};
+const SIZES={tiny:{es:'Diminuto',en:'Tiny'},small:{es:'Pequeño',en:'Small'},medium:{es:'Mediano',en:'Medium'},large:{es:'Grande',en:'Large'},huge:{es:'Enorme',en:'Huge'},gargantuan:{es:'Gargantuesco',en:'Gargantuan'}};
+const STAT_NAMES={strength:{es:'FUE',en:'STR'},dexterity:{es:'DES',en:'DEX'},constitution:{es:'CON',en:'CON'},intelligence:{es:'INT',en:'INT'},wisdom:{es:'SAB',en:'WIS'},charisma:{es:'CAR',en:'CHA'}};
+const DMG_TYPES={fire:{es:'Fuego',en:'Fire'},cold:{es:'Frío',en:'Cold'},lightning:{es:'Rayo',en:'Lightning'},thunder:{es:'Trueno',en:'Thunder'},acid:{es:'Ácido',en:'Acid'},poison:{es:'Veneno',en:'Poison'},necrotic:{es:'Necrótico',en:'Necrotic'},radiant:{es:'Radiante',en:'Radiant'},psychic:{es:'Psíquico',en:'Psychic'},force:{es:'Fuerza',en:'Force'},bludgeoning:{es:'Contundente',en:'Bludgeoning'},piercing:{es:'Perforante',en:'Piercing'},slashing:{es:'Cortante',en:'Slashing'}};
+
+function cT(map,val){if(!val)return val;const k=val.toLowerCase().trim();const m={SPELL_SCHOOLS,MONSTER_TYPES,SIZES,STAT_NAMES,DMG_TYPES}[map];return m&&m[k]?m[k][currentLang]||val:val;}
+
+let cCache={spells:[],monsters:[],classes:[],races:[]};
+let cDetailCache={};
+let cActiveTab='spells';
+let cSearchQ='';
+let cFilterQ='';
+let cCacheLoaded={};
+
+async function initCompendium(){
+  if(!cCacheLoaded[cActiveTab]){
+    document.getElementById('compGrid').innerHTML='<div class="comp-state"><div class="comp-spinner"></div></div>';
+    try{
+      const r=await fetch(`${DND_API}/${cActiveTab}?limit=500`);
+      const j=await r.json();
+      cCache[cActiveTab]=j.results||[];
+      cCacheLoaded[cActiveTab]=true;
+    }catch(e){
+      document.getElementById('compGrid').innerHTML='<div class="comp-state">Error al cargar / Error loading</div>';
+      return;
+    }
+  }
+  buildCompFilter();
+  renderCompGrid();
+}
+
+function compTab(type,el){
+  cActiveTab=type;cSearchQ='';cFilterQ='';
+  const si=document.getElementById('compSearchInput');
+  const fi=document.getElementById('compFilterSel');
+  if(si)si.value='';if(fi)fi.value='';
+  document.querySelectorAll('.comp-tab').forEach(t=>t.classList.remove('active'));
+  if(el)el.classList.add('active');
+  closeCompPanel();
+  initCompendium();
+}
+
+function compSearchFn(v){cSearchQ=v;renderCompGrid();}
+function compFilterFn(v){cFilterQ=v;renderCompGrid();}
+
+function buildCompFilter(){
+  const sel=document.getElementById('compFilterSel');
+  if(!sel)return;
+  const all=currentLang==='es'?'Todo':'All';
+  if(cActiveTab==='spells'){
+    const schools=[...new Set(cCache.spells.map(s=>s.url).map(()=>null).map((_,i)=>cCache.spells[i]))].map(s=>s);
+    const uniqueSchools=[];
+    // Just use level filter for spells
+    sel.innerHTML=`<option value="">${all}</option>`;
+    for(let i=0;i<=9;i++){
+      const lbl=i===0?(currentLang==='es'?'Truco':'Cantrip'):(currentLang==='es'?`Nivel ${i}`:`Level ${i}`);
+      sel.innerHTML+=`<option value="${i}">${lbl}</option>`;
+    }
+  } else if(cActiveTab==='monsters'){
+    const crs=[...new Set(cCache.monsters.map(m=>m.challenge_rating).filter(v=>v!==undefined))].sort((a,b)=>a-b);
+    sel.innerHTML=`<option value="">${all}</option>`;
+    // CR ranges
+    sel.innerHTML+=`<option value="low">${currentLang==='es'?'CR 0-4':'CR 0-4'}</option>`;
+    sel.innerHTML+=`<option value="mid">${currentLang==='es'?'CR 5-9':'CR 5-9'}</option>`;
+    sel.innerHTML+=`<option value="high">${currentLang==='es'?'CR 10-19':'CR 10-19'}</option>`;
+    sel.innerHTML+=`<option value="epic">${currentLang==='es'?'CR 20+':'CR 20+'}</option>`;
+  } else {
+    sel.innerHTML=`<option value="">${all}</option>`;
+  }
+}
+
+function renderCompGrid(){
+  let list=cCache[cActiveTab];
+  if(cSearchQ)list=list.filter(i=>i.name.toLowerCase().includes(cSearchQ.toLowerCase()));
+  if(cFilterQ){
+    if(cActiveTab==='spells'){
+      list=list.filter(i=>(i.level||0).toString()===cFilterQ);
+    } else if(cActiveTab==='monsters'){
+      const cr=i=>parseFloat(i.challenge_rating)||0;
+      if(cFilterQ==='low')list=list.filter(i=>cr(i)<5);
+      else if(cFilterQ==='mid')list=list.filter(i=>cr(i)>=5&&cr(i)<10);
+      else if(cFilterQ==='high')list=list.filter(i=>cr(i)>=10&&cr(i)<20);
+      else if(cFilterQ==='epic')list=list.filter(i=>cr(i)>=20);
+    }
+  }
+  if(!list.length){
+    document.getElementById('compGrid').innerHTML=`<div class="comp-state">${currentLang==='es'?'Sin resultados':'No results'}</div>`;
+    return;
+  }
+  const limit=200;
+  document.getElementById('compGrid').innerHTML=list.slice(0,limit).map(item=>{
+    if(cActiveTab==='spells')return renderSpellCard(item);
+    if(cActiveTab==='monsters')return renderMonsterCard(item);
+    return renderSimpleCard(item);
+  }).join('');
+  if(list.length>limit){
+    document.getElementById('compGrid').innerHTML+=`<div class="comp-state" style="padding:16px;font-size:12px;">${currentLang==='es'?`Mostrando ${limit} de ${list.length}. Buscá para filtrar.`:`Showing ${limit} of ${list.length}. Search to filter.`}</div>`;
+  }
+}
+
+function spellLevelBadge(level){
+  if(level===0)return`<span class="cc-badge cb-purple">${currentLang==='es'?'Truco':'Cantrip'}</span>`;
+  return`<span class="cc-badge cb-gold">${currentLang==='es'?`Niv. ${level}`:`Lvl ${level}`}</span>`;
+}
+
+function renderSpellCard(s){
+  return`<div class="comp-card" onclick="openCompDetail('spells','${s.index}')">
+    <div class="cc-row">${spellLevelBadge(s.level||0)}</div>
+    <div class="cc-name" style="margin-top:8px;">${s.name}</div>
+  </div>`;
+}
+
+function renderMonsterCard(m){
+  const cr=m.challenge_rating!==undefined?m.challenge_rating:'?';
+  return`<div class="comp-card" onclick="openCompDetail('monsters','${m.index}')">
+    <div class="cc-row"><span class="cc-badge cb-teal">CR ${cr}</span></div>
+    <div class="cc-name" style="margin-top:8px;">${m.name}</div>
+  </div>`;
+}
+
+function renderSimpleCard(item){
+  return`<div class="comp-card" onclick="openCompDetail('${cActiveTab}','${item.index}')">
+    <div class="cc-name">${item.name}</div>
+  </div>`;
+}
+
+async function openCompDetail(type,index){
+  document.querySelectorAll('.comp-card').forEach(c=>c.classList.remove('active'));
+  const clicked=document.querySelector(`.comp-card[onclick*="${index}"]`);
+  if(clicked)clicked.classList.add('active');
+  const panelEl=document.getElementById('compPanel');
+  document.getElementById('compPanelContent').innerHTML=`<div style="padding-top:40px;text-align:center;"><div class="comp-spinner"></div></div>`;
+  panelEl.classList.add('open');
+  const cKey=`${type}/${index}`;
+  if(!cDetailCache[cKey]){
+    try{
+      const r=await fetch(`${DND_API}/${type}/${index}`);
+      cDetailCache[cKey]=await r.json();
+    }catch(e){
+      document.getElementById('compPanelContent').innerHTML='<p style="color:var(--text-m);padding-top:40px;">Error</p>';
+      return;
+    }
+  }
+  const d=cDetailCache[cKey];
+  if(type==='spells')renderSpellDetail(d);
+  else if(type==='monsters')renderMonsterDetail(d);
+  else if(type==='classes')renderClassDetail(d);
+  else if(type==='races')renderRaceDetail(d);
+}
+
+function L(es,en){return currentLang==='es'?es:en;}
+
+function renderSpellDetail(d){
+  const school=d.school?.name||'';
+  const schoolObj=SPELL_SCHOOLS[school.toLowerCase()]||{};
+  const schoolLabel=schoolObj[currentLang]||school;
+  const badge=schoolObj.badge||'cb-gray';
+  const lvl=d.level===0?L('Truco','Cantrip'):`${L('Nivel','Level')} ${d.level}`;
+  const comps=(d.components||[]).join(', ');
+  const desc=(d.desc||[]).join('\n\n');
+  const higher=(d.higher_level||[]).join('\n\n');
+  const ritual=d.ritual?`<span class="cc-badge cb-teal" style="font-size:10px;">Ritual</span>`:'';
+  const conc=d.concentration?`<span class="cc-badge cb-purple" style="font-size:10px;">${L('Concentración','Concentration')}</span>`:'';
+  document.getElementById('compPanelContent').innerHTML=`
+    <div class="cp-title">${d.name}</div>
+    <div class="cp-sub" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+      <span class="cc-badge ${badge}">${schoolLabel}</span>
+      <span class="cc-badge cb-gold">${lvl}</span>
+      ${ritual}${conc}
+    </div>
+    <div class="cp-divider"></div>
+    <div class="cp-grid2">
+      <div class="cp-field"><div class="cp-field-label">${L('Lanzamiento','Casting Time')}</div><div class="cp-field-value">${d.casting_time||'—'}</div></div>
+      <div class="cp-field"><div class="cp-field-label">${L('Alcance','Range')}</div><div class="cp-field-value">${d.range||'—'}</div></div>
+      <div class="cp-field"><div class="cp-field-label">${L('Duración','Duration')}</div><div class="cp-field-value">${d.duration||'—'}</div></div>
+      <div class="cp-field"><div class="cp-field-label">${L('Componentes','Components')}</div><div class="cp-field-value">${comps||'—'}</div></div>
+    </div>
+    ${d.material?`<div class="cp-field" style="margin-bottom:10px;"><div class="cp-field-label">${L('Material','Material')}</div><div class="cp-field-value" style="font-style:italic;font-size:12px;">${d.material}</div></div>`:''}
+    <div class="cp-divider"></div>
+    <div class="cp-section-title">${L('Descripción','Description')}</div>
+    <div class="cp-text">${desc.replace(/\n/g,'<br>')}</div>
+    ${higher?`<div class="cp-divider"></div><div class="cp-section-title">${L('A niveles superiores','At Higher Levels')}</div><div class="cp-text">${higher.replace(/\n/g,'<br>')}</div>`:''}
+    <div class="cp-divider"></div>
+    <div class="cp-section-title">${L('Clases','Classes')}</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;">${(d.classes||[]).map(c=>`<span class="cc-badge cb-brand">${c.name}</span>`).join('')}</div>`;
+}
+
+function renderMonsterDetail(d){
+  const stats=['strength','dexterity','constitution','intelligence','wisdom','charisma'];
+  const mod=v=>{const m=Math.floor((v-10)/2);return(m>=0?'+':'')+m;};
+  const sz=cT('SIZES',d.size||'');
+  const tp=cT('MONSTER_TYPES',d.type||'');
+  const ac=(d.armor_class||[])[0]?.value||'—';
+  const spd=d.speed?Object.entries(d.speed).map(([k,v])=>`${k}: ${v}`).join(', '):'—';
+  document.getElementById('compPanelContent').innerHTML=`
+    <div class="cp-title">${d.name}</div>
+    <div class="cp-sub">${sz} ${tp} · <span class="cc-badge cb-teal">CR ${d.challenge_rating}</span></div>
+    <div class="cp-divider"></div>
+    <div class="cp-grid2">
+      <div class="cp-field"><div class="cp-field-label">${L('Golpe','HP')}</div><div class="cp-field-value">${d.hit_points} (${d.hit_dice||'—'})</div></div>
+      <div class="cp-field"><div class="cp-field-label">${L('Armadura','AC')}</div><div class="cp-field-value">${ac}</div></div>
+      <div class="cp-field" style="grid-column:1/-1;"><div class="cp-field-label">${L('Velocidad','Speed')}</div><div class="cp-field-value">${spd}</div></div>
+    </div>
+    <div class="cp-divider"></div>
+    <div class="cp-section-title">${L('Características','Ability Scores')}</div>
+    <div class="cp-stat-row">
+      ${stats.map(s=>`<div class="cp-stat"><div class="cp-stat-name">${cT('STAT_NAMES',s)}</div><div class="cp-stat-val">${d[s]||'—'}</div><div class="cp-stat-mod">${d[s]?mod(d[s]):''}</div></div>`).join('')}
+    </div>
+    ${d.senses?`<div class="cp-divider"></div><div class="cp-field"><div class="cp-field-label">${L('Sentidos','Senses')}</div><div class="cp-field-value">${Object.entries(d.senses).map(([k,v])=>`${k}: ${v}`).join(' · ')}</div></div>`:''}
+    ${d.languages?`<div class="cp-field" style="margin-top:8px;"><div class="cp-field-label">${L('Idiomas','Languages')}</div><div class="cp-field-value">${d.languages}</div></div>`:''}
+    ${d.special_abilities?.length?`<div class="cp-divider"></div><div class="cp-section-title">${L('Habilidades especiales','Special Abilities')}</div>${d.special_abilities.map(a=>`<div class="cp-action"><div class="cp-action-name">${a.name}</div><div class="cp-action-desc">${a.desc}</div></div>`).join('')}`:''}
+    ${d.actions?.length?`<div class="cp-divider"></div><div class="cp-section-title">${L('Acciones','Actions')}</div>${d.actions.map(a=>`<div class="cp-action"><div class="cp-action-name">${a.name}</div><div class="cp-action-desc">${a.desc}</div></div>`).join('')}`:''}`;
+}
+
+function renderClassDetail(d){
+  const profs=(d.proficiencies||[]).map(p=>p.name).join(', ');
+  const saves=(d.saving_throws||[]).map(s=>cT('STAT_NAMES',s.name)||s.name).join(', ');
+  document.getElementById('compPanelContent').innerHTML=`
+    <div class="cp-title">${d.name}</div>
+    <div class="cp-divider"></div>
+    <div class="cp-grid2">
+      <div class="cp-field"><div class="cp-field-label">${L('Dado de Golpe','Hit Die')}</div><div class="cp-field-value">d${d.hit_die}</div></div>
+      <div class="cp-field"><div class="cp-field-label">${L('Tiradas de Salvación','Saving Throws')}</div><div class="cp-field-value">${saves||'—'}</div></div>
+    </div>
+    ${profs?`<div class="cp-field" style="margin-top:8px;"><div class="cp-field-label">${L('Competencias','Proficiencies')}</div><div class="cp-field-value" style="font-size:12px;">${profs}</div></div>`:''}
+    ${d.subclasses?.length?`<div class="cp-divider"></div><div class="cp-section-title">${L('Subclases','Subclasses')}</div><div style="display:flex;flex-wrap:wrap;gap:6px;">${d.subclasses.map(s=>`<span class="cc-badge cb-gold">${s.name}</span>`).join('')}</div>`:''}`;
+}
+
+function renderRaceDetail(d){
+  const bonuses=(d.ability_bonuses||[]).map(b=>`${cT('STAT_NAMES',b.ability_score?.name||'')} +${b.bonus}`).join(', ');
+  const traits=(d.traits||[]).map(t=>t.name).join(', ');
+  document.getElementById('compPanelContent').innerHTML=`
+    <div class="cp-title">${d.name}</div>
+    <div class="cp-divider"></div>
+    <div class="cp-grid2">
+      <div class="cp-field"><div class="cp-field-label">${L('Tamaño','Size')}</div><div class="cp-field-value">${cT('SIZES',d.size||'')}</div></div>
+      <div class="cp-field"><div class="cp-field-label">${L('Velocidad','Speed')}</div><div class="cp-field-value">${d.speed} ft.</div></div>
+    </div>
+    ${bonuses?`<div class="cp-field" style="margin-top:8px;"><div class="cp-field-label">${L('Bonos de Característica','Ability Bonuses')}</div><div class="cp-field-value">${bonuses}</div></div>`:''}
+    ${d.languages?.length?`<div class="cp-field" style="margin-top:8px;"><div class="cp-field-label">${L('Idiomas','Languages')}</div><div class="cp-field-value">${d.languages.map(l=>l.name).join(', ')}</div></div>`:''}
+    ${traits?`<div class="cp-divider"></div><div class="cp-section-title">${L('Rasgos','Traits')}</div><div style="display:flex;flex-wrap:wrap;gap:6px;">${(d.traits||[]).map(t=>`<span class="cc-badge cb-teal">${t.name}</span>`).join('')}</div>`:''}
+    ${d.age?`<div class="cp-divider"></div><div class="cp-section-title">${L('Edad','Age')}</div><div class="cp-text">${d.age}</div>`:''}
+    ${d.alignment?`<div class="cp-divider"></div><div class="cp-section-title">${L('Alineamiento','Alignment')}</div><div class="cp-text">${d.alignment}</div>`:''}`;
+}
+
+function closeCompPanel(){
+  document.getElementById('compPanel')?.classList.remove('open');
+  document.querySelectorAll('.comp-card').forEach(c=>c.classList.remove('active'));
 }
 
 /* ══ NAV ══ */
-const PAGE_URLS={home:'/',characters:'/personajes',maps:'/mapas',sounds:'/efectos-sonoros'};
-const URL_PAGES={'/personajes':'characters','/mapas':'maps','/efectos-sonoros':'sounds'};
+const PAGE_URLS={home:'/',characters:'/personajes',maps:'/mapas',sounds:'/efectos-sonidos',compendium:'/compendio'};
+const URL_PAGES={'/personajes':'characters','/mapas':'maps','/efectos-sonidos':'sounds','/compendio':'compendium'};
 function goTo(page,fromPop){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+page).classList.add('active');
@@ -1108,6 +1473,7 @@ function goTo(page,fromPop){
   window.scrollTo(0,0);
   if(page==='sounds')renderSounds('all');
   if(page==='maps')initMap();
+  if(page==='compendium')initCompendium();
   if(!fromPop)history.pushState({page},'',(PAGE_URLS[page]||'/'));
 }
 window.addEventListener('popstate',e=>{goTo(e.state&&e.state.page?e.state.page:'home',true);});
