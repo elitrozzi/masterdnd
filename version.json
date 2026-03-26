@@ -1,7 +1,12 @@
 {
-  "version": "1.2.2",
+  "version": "1.2.3",
   "date": "2026-03-26",
   "history": [
+    {
+      "version": "1.2.3",
+      "date": "2026-03-26",
+      "note": "Dados DND: números grandes en Cinzel dorado en lugar de puntos, settle garantizado mostrando el valor correcto"
+    },
     {
       "version": "1.2.2",
       "date": "2026-03-26",

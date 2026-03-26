@@ -290,17 +290,16 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .dice-total{font-family:'Cinzel',serif;font-size:20px;font-weight:900;color:var(--gold);opacity:0;transform:scale(.65);transition:opacity .3s,transform .3s cubic-bezier(.34,1.56,.64,1);}
 .dice-total.show{opacity:1;transform:scale(1);}
 /* 3D Die */
-.die3d-scene{perspective:280px;width:44px;height:44px;flex-shrink:0;}
-.die3d{width:44px;height:44px;position:relative;transform-style:preserve-3d;transform:rotateX(-20deg) rotateY(25deg);filter:drop-shadow(0 4px 8px rgba(0,0,0,.7));}
-.die3d.die-spinning{animation:d3Spin .16s linear infinite;}
+.die3d-scene{perspective:300px;width:44px;height:44px;flex-shrink:0;}
+.die3d{width:44px;height:44px;position:relative;transform-style:preserve-3d;transform:rotateX(-18deg) rotateY(22deg);filter:drop-shadow(0 4px 12px rgba(0,0,0,.85));}
+.die3d.die-spinning{animation:d3Spin .15s linear infinite;}
 .die3d-face{
   position:absolute;inset:0;
-  background:linear-gradient(145deg,#1e1030 0%,#110820 50%,#1a0e2a 100%);
-  border-radius:7px;
-  display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr 1fr;
-  padding:6px;box-sizing:border-box;gap:3px;
+  background:linear-gradient(150deg,#22103a 0%,#0f071d 55%,#1c0d30 100%);
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
   backface-visibility:hidden;-webkit-backface-visibility:hidden;
-  box-shadow:inset 0 0 0 1.5px rgba(212,168,67,.55),inset 0 2px 6px rgba(255,255,255,.05);
+  box-shadow:inset 0 0 0 1.5px rgba(212,168,67,.5),inset 0 1px 8px rgba(255,255,255,.07),inset 0 -1px 4px rgba(0,0,0,.5);
 }
 .die3d-face.df-1{transform:translateZ(22px);}
 .die3d-face.df-6{transform:rotateY(180deg) translateZ(22px);}
@@ -308,10 +307,9 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .die3d-face.df-5{transform:rotateY(-90deg) translateZ(22px);}
 .die3d-face.df-4{transform:rotateX(90deg) translateZ(22px);}
 .die3d-face.df-3{transform:rotateX(-90deg) translateZ(22px);}
-.die-pip{border-radius:50%;background:radial-gradient(circle at 38% 32%,#f5d078,#c8880a);width:100%;height:100%;box-shadow:0 0 3px rgba(212,168,67,.6);}
-.die-pip.ep{opacity:0;}
-.die3d.die-dropped .die3d-face{background:linear-gradient(145deg,#1a1a1a 0%,#111 100%)!important;box-shadow:inset 0 0 0 1.5px rgba(80,80,80,.4)!important;}
-.die3d.die-dropped .die-pip{background:radial-gradient(circle,#555,#333)!important;box-shadow:none!important;}
+.die-num{font-family:'Cinzel',serif;font-size:21px;font-weight:700;color:#d4a843;line-height:1;text-shadow:0 0 10px rgba(212,168,67,.7),0 1px 2px rgba(0,0,0,.8);pointer-events:none;user-select:none;}
+.die3d.die-dropped .die3d-face{background:linear-gradient(150deg,#181818 0%,#0e0e0e 100%)!important;box-shadow:inset 0 0 0 1.5px rgba(90,90,90,.3)!important;}
+.die3d.die-dropped .die-num{color:#3a3a3a!important;text-shadow:none!important;}
 @keyframes d3Spin{0%{transform:rotateX(0) rotateY(0) rotateZ(0);}100%{transform:rotateX(360deg) rotateY(480deg) rotateZ(120deg);}}
 /* ── MAP TABS ── */
 .map-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--surface);margin-top:60px;}
@@ -534,7 +532,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.2.2</span>
+    <span class="ver-badge">v1.2.3</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">26 Mar 2026</span>
   </div>
@@ -2118,10 +2116,10 @@ function nextStep(){
 function prevStep(){if(currentStep>1){document.getElementById('step'+currentStep).classList.remove('active');currentStep--;document.getElementById('step'+currentStep).classList.add('active');updateProgress();}}
 function updateProgress(){for(let i=1;i<=2;i++){const d=document.getElementById('pd'+i);if(!d)continue;d.classList.remove('active','done');if(i<currentStep)d.classList.add('done');else if(i===currentStep)d.classList.add('active');if(i<2){const l=document.getElementById('pl'+i);if(l)l.classList.toggle('done',i<currentStep);}}}
 /* ── 3D dice helpers ── */
-const _PIP_CELLS={1:[4],2:[2,6],3:[2,4,6],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]};
-const _D6_ROT={1:'rotateX(0deg) rotateY(0deg)',2:'rotateX(0deg) rotateY(-90deg)',3:'rotateX(90deg) rotateY(0deg)',4:'rotateX(-90deg) rotateY(0deg)',5:'rotateX(0deg) rotateY(90deg)',6:'rotateX(0deg) rotateY(180deg)'};
-function _diePips(v){const p=_PIP_CELLS[v]||[];return Array(9).fill(0).map((_,i)=>`<div class="die-pip${p.includes(i)?'':' ep'}"></div>`).join('');}
-function _dieHtml(id){return `<div class="die3d-scene"><div class="die3d die-spinning" id="${id}"><div class="die3d-face df-1">${_diePips(1)}</div><div class="die3d-face df-6">${_diePips(6)}</div><div class="die3d-face df-2">${_diePips(2)}</div><div class="die3d-face df-5">${_diePips(5)}</div><div class="die3d-face df-4">${_diePips(4)}</div><div class="die3d-face df-3">${_diePips(3)}</div></div></div>`;/* size:44px, half=22px — matches CSS translateZ(22px) */}
+function _dieHtml(id){
+  // Each face shows its number during spin; on settle df-1 is updated to the rolled value
+  return `<div class="die3d-scene"><div class="die3d die-spinning" id="${id}"><div class="die3d-face df-1"><span class="die-num">·</span></div><div class="die3d-face df-6"><span class="die-num">6</span></div><div class="die3d-face df-2"><span class="die-num">2</span></div><div class="die3d-face df-5"><span class="die-num">5</span></div><div class="die3d-face df-4"><span class="die-num">4</span></div><div class="die3d-face df-3"><span class="die-num">3</span></div></div></div>`;
+}
 function rollStats(){
   const stats=['str','dex','con','int','wis','cha'];
   const labels={str:'STR',dex:'DEX',con:'CON',int:'INT',wis:'WIS',cha:'CHA'};
@@ -2148,26 +2146,30 @@ function rollStats(){
       [0,1,2,3].forEach((i,ii)=>{
         const die=document.getElementById(`die-${s}-${i}`);
         if(!die)return;
-        // Freeze at current animated position
-        const mat=getComputedStyle(die).transform;
-        die.style.animation='none';
-        void die.offsetWidth;
-        die.style.transform=mat;
-        // Land on correct face (stagger dice within group)
         setTimeout(()=>{
-          die.style.transition='transform .52s cubic-bezier(.2,.8,.32,1.2)';
-          die.style.transform=_D6_ROT[rolls[i]];
-          // Grey out the dropped die after landing
-          setTimeout(()=>{if(i===minI)die.classList.add('die-dropped');},530);
-        },ii*55+20);
+          // Stop spin, capture mid-tumble position
+          const mat=getComputedStyle(die).transform;
+          die.style.animation='none';
+          void die.offsetWidth;
+          die.style.transform=mat;
+          // Write rolled value onto the front face (df-1), then land face-forward
+          const frontNum=die.querySelector('.df-1 .die-num');
+          if(frontNum) frontNum.textContent=rolls[i];
+          // Land: transition to face-1-forward (rotateX/Y=0) from current matrix
+          requestAnimationFrame(()=>{
+            die.style.transition='transform .55s cubic-bezier(.2,.8,.3,1.25)';
+            die.style.transform='rotateX(0deg) rotateY(0deg)';
+            setTimeout(()=>{if(i===minI)die.classList.add('die-dropped');},560);
+          });
+        },ii*65);
       });
-      // Show total after landing
+      // Show total after last die lands
       setTimeout(()=>{
         const dt=document.getElementById(`dt-${s}`);
         dt.textContent=rolledStats[s];
         dt.classList.add('show');
         document.getElementById(`dsg-${s}`).classList.add('done');
-      },540);
+      },3*65+600);
     },850+si*110);
   });
   // Hide overlay + update stat boxes (2.5s pause so players can admire results)
