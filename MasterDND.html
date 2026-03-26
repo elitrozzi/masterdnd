@@ -1541,7 +1541,7 @@ function renderRaceDetail(d){
   const age=currentLang==='es'?(d._age_es||d.age||''):(d.age||'');
   const align=currentLang==='es'?(d._align_es||d.alignment||''):(d.alignment||'');
   const sizeDesc=currentLang==='es'?(d._size_es||d.size_description||''):(d.size_description||'');
-  const LANG_NAMES_ES={Common:'Común',Dwarvish:'Enano',Elvish:'Élfico',Giant:'Gigante',Gnomish:'Gnómico',Goblin:'Goblin',Halfling:'Mediano',Orc:'Orco',Abyssal:'Abisal',Celestial:'Celestial',Draconic:'Dracónico',Deep Speech:'Habla Profunda',Infernal:'Infernal',Primordial:'Primordial',Sylvan:'Silvano',Undercommon:'Infracomún'};
+  const LANG_NAMES_ES={Common:'Común',Dwarvish:'Enano',Elvish:'Élfico',Giant:'Gigante',Gnomish:'Gnómico',Goblin:'Goblin',Halfling:'Mediano',Orc:'Orco',Abyssal:'Abisal',Celestial:'Celestial',Draconic:'Dracónico','Deep Speech':'Habla Profunda',Infernal:'Infernal',Primordial:'Primordial',Sylvan:'Silvano',Undercommon:'Infracomún'};
   const langList=(d.languages||[]).map(l=>currentLang==='es'?(LANG_NAMES_ES[l.name]||l.name):l.name).join(', ');
   document.getElementById('compPanelContent').innerHTML=`
     <div class="cp-title">${d.name}</div>
