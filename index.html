@@ -91,8 +91,8 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 #section-features{position:absolute;top:100vh;left:0;right:0;height:100vh;display:flex;align-items:center;z-index:11;pointer-events:none;padding:0 48px;}
 .feat-left{flex:0 0 48%;}
 .feat-right{flex:1;display:flex;flex-direction:column;gap:20px;pointer-events:auto;}
-.feat-card{background:rgba(13,19,30,0.88);border:1px solid var(--border);border-radius:16px;padding:22px 26px;backdrop-filter:blur(16px);opacity:0;transform:translateX(50px);display:flex;gap:18px;align-items:flex-start;transition:border-color .2s;}
-.feat-card:hover{border-color:var(--gold-d);}
+.feat-card{background:rgba(13,19,30,0.88);border:1px solid var(--border);border-radius:16px;padding:22px 26px;backdrop-filter:blur(16px);opacity:0;transform:translateX(50px);display:flex;gap:18px;align-items:flex-start;transition:border-color .25s,transform .25s,box-shadow .25s;cursor:none;}
+.feat-card:hover{border-color:var(--gold);box-shadow:0 0 24px rgba(200,168,75,.12);transform:translateX(0) translateY(-2px) !important;}
 .feat-card-icon{font-size:26px;flex-shrink:0;margin-top:2px;}
 .feat-card-title{font-family:'Cinzel',serif;font-size:16px;font-weight:700;color:var(--gold);margin-bottom:8px;}
 .feat-card-desc{font-size:13px;color:var(--text-m);line-height:1.65;}
@@ -351,21 +351,21 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
   <div id="section-features">
     <div class="feat-left"></div>
     <div class="feat-right">
-      <div class="feat-card" id="fc1">
+      <div class="feat-card" id="fc1" onclick="goTo('characters')">
         <div class="feat-card-icon">⚔️</div>
         <div>
           <div class="feat-card-title" data-es="Crea tu Personaje" data-en="Build your Character">Crea tu Personaje</div>
           <div class="feat-card-desc" data-es="Construí aventureros únicos eligiendo raza, clase y estadísticas. Modo manual o tirada aleatoria con un solo clic." data-en="Build unique adventurers choosing race, class and stats. Manual or one-click random roll.">Construí aventureros únicos eligiendo raza, clase y estadísticas. Modo manual o tirada aleatoria con un solo clic.</div>
         </div>
       </div>
-      <div class="feat-card" id="fc2">
+      <div class="feat-card" id="fc2" onclick="goTo('maps')">
         <div class="feat-card-icon">🗺️</div>
         <div>
           <div class="feat-card-title" data-es="Diseñá tus Mapas" data-en="Design your Maps">Diseñá tus Mapas</div>
           <div class="feat-card-desc" data-es="Editor por celdas con terrenos, objetos, tokens y niebla de guerra. Dungeons, tabernas, bosques y ciudades listas para jugar." data-en="Cell editor with terrain, objects, tokens and fog of war. Dungeons, taverns, forests and cities ready to play.">Editor por celdas con terrenos, objetos, tokens y niebla de guerra. Dungeons, tabernas, bosques y ciudades listas para jugar.</div>
         </div>
       </div>
-      <div class="feat-card" id="fc3">
+      <div class="feat-card" id="fc3" onclick="goTo('sounds')">
         <div class="feat-card-icon">🎵</div>
         <div>
           <div class="feat-card-title" data-es="Ambientá la Partida" data-en="Set the Mood">Ambientá la Partida</div>
@@ -1097,7 +1097,9 @@ function setLang(l){
 }
 
 /* ══ NAV ══ */
-function goTo(page){
+const PAGE_URLS={home:'/',characters:'/personajes',maps:'/mapas',sounds:'/efectos-sonoros'};
+const URL_PAGES={'/personajes':'characters','/mapas':'maps','/efectos-sonoros':'sounds'};
+function goTo(page,fromPop){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+page).classList.add('active');
   const nav=document.getElementById('appNav');
@@ -1106,7 +1108,9 @@ function goTo(page){
   window.scrollTo(0,0);
   if(page==='sounds')renderSounds('all');
   if(page==='maps')initMap();
+  if(!fromPop)history.pushState({page},'',(PAGE_URLS[page]||'/'));
 }
+window.addEventListener('popstate',e=>{goTo(e.state&&e.state.page?e.state.page:'home',true);});
 
 /* ══ MODAL ══ */
 function openModal(t){document.getElementById('modalOverlay').classList.add('open');switchTab(t);}
@@ -1481,11 +1485,11 @@ function playSound(s){
 function togglePlay(){
   const b=document.getElementById('npPlayBtn');
   if(currentAudio){
-    if(currentAudio.paused){currentAudio.play();b.textContent='⏸';}
+    if(currentAudio.paused){currentAudio.play().catch(()=>{});b.textContent='⏸';}
     else{currentAudio.pause();b.textContent='▶';}
-  } else {
-    const ok=engine.togglePause();
-    b.textContent=ok===false?'▶':'⏸';
+  } else if(engine.ctx){
+    if(engine.ctx.state==='running'){engine.ctx.suspend();b.textContent='▶';}
+    else{engine.ctx.resume();b.textContent='⏸';}
   }
 }
 
@@ -1524,17 +1528,39 @@ function togglePlay(){
   const dice=[],diceGroup=new THREE.Group();
   scene.add(diceGroup);
 
+  /* Canvas "20" para el sprite del D20 */
+  const d20Canvas=document.createElement('canvas');
+  d20Canvas.width=128;d20Canvas.height=128;
+  const d20Cx=d20Canvas.getContext('2d');
+  d20Cx.clearRect(0,0,128,128);
+  d20Cx.font='bold 58px Georgia,serif';
+  d20Cx.fillStyle='#e8c860';
+  d20Cx.textAlign='center';d20Cx.textBaseline='middle';
+  d20Cx.shadowColor='rgba(200,168,75,1)';d20Cx.shadowBlur=12;
+  d20Cx.fillText('20',64,64);
+  const d20SpriteTex=new THREE.CanvasTexture(d20Canvas);
+
   for(let i=0;i<17;i++){
     const geo=geos[i%geos.length];
-    const mat=mats[i%mats.length].clone();
+    const mat=i===0
+      ? new THREE.MeshPhongMaterial({color:0x05070d,emissive:0x0c1030,emissiveIntensity:.5,shininess:140,specular:new THREE.Color(0x8899cc)})
+      : mats[i%mats.length].clone();
     const mesh=new THREE.Mesh(geo,mat);
-    const sc=i===0?.85:(.18+Math.random()*.55); // D20 más grande
+    const sc=i===0?.9:(.18+Math.random()*.55);
     mesh.scale.setScalar(sc);
     mesh.position.set((Math.random()-.2)*24,(Math.random()-.5)*16,(Math.random()-.7)*8-1);
     mesh.rotation.set(Math.random()*Math.PI*2,Math.random()*Math.PI*2,Math.random()*Math.PI);
     mesh.userData={rx:(Math.random()-.5)*.009,ry:(Math.random()-.5)*.013,fy:mesh.position.y,fa:(Math.random()-.5)*.28,fs:.25+Math.random()*.5,fo:Math.random()*Math.PI*2};
-    const wire=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:0x1e2d47,wireframe:true,transparent:true,opacity:.18}));
+    /* Wireframe — más visible en D20 */
+    const wCol=i===0?0x5577cc:0x1e2d47;
+    const wOp=i===0?.55:.18;
+    const wire=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:wCol,wireframe:true,transparent:true,opacity:wOp}));
     wire.scale.setScalar(1.015);mesh.add(wire);
+    /* Sprite "20" solo en D20 */
+    if(i===0){
+      const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:d20SpriteTex,transparent:true,depthTest:false}));
+      sp.scale.set(0.9,0.9,1);mesh.add(sp);
+    }
     diceGroup.add(mesh);dice.push(mesh);
   }
 
@@ -1566,8 +1592,13 @@ function togglePlay(){
   ];
 
   function lrp(a,b,t){return a+(b-a)*t;}
-  function eio(t){return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;}
-  function eout(t){return 1-Math.pow(1-t,3);}
+  function clamp(t){return Math.max(0,Math.min(1,t));}
+  /* Smooth Hermite — muy suave en extremos */
+  function smooth(t){t=clamp(t);return t*t*t*(t*(t*6-15)+10);}
+  /* Ease out cúbico */
+  function eout(t){t=clamp(t);return 1-Math.pow(1-t,3);}
+  /* Ease out con leve rebote */
+  function eoutBack(t){t=clamp(t);const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2);}
 
   const pCount=450,pPos=new Float32Array(pCount*3);
   for(let i=0;i<pCount;i++){pPos[i*3]=(Math.random()-.5)*40;pPos[i*3+1]=(Math.random()-.5)*28;pPos[i*3+2]=(Math.random()-.5)*18;}
@@ -1604,33 +1635,38 @@ function togglePlay(){
     /* ── Animación de dados por fase de scroll ── */
     dice.forEach((d,i)=>{
       const hp=homePos[i],sp=SP[i]||SP[0];
+      /* offset por dado para que no todos lleguen al mismo tiempo */
+      const stagger=i*0.012;
 
-      if(scrollProg<0.30){
-        /* Fase 1: flotando libremente en la derecha */
+      if(scrollProg<0.28){
+        /* Fase 1: flotando libremente */
         d.position.x=hp.x;
         d.position.y=hp.y+Math.sin(tick*d.userData.fs+d.userData.fo)*d.userData.fa*3;
         d.position.z=hp.z;
         d.rotation.x+=d.userData.rx;d.rotation.y+=d.userData.ry;
 
-      } else if(scrollProg<0.62){
-        /* Fase 2: convergencia — se juntan en el punto de reunión */
-        const t=eio((scrollProg-0.30)/0.32);
+      } else if(scrollProg<0.60){
+        /* Fase 2: convergencia suave hacia el punto de reunión */
+        const t=smooth(clamp((scrollProg-0.28-stagger*.5)/0.32));
         d.position.x=lrp(hp.x,GP.x,t);
         d.position.y=lrp(hp.y,GP.y,t);
         d.position.z=lrp(hp.z,GP.z,t);
-        d.rotation.x+=d.userData.rx*(1-t*.75);
-        d.rotation.y+=d.userData.ry*(1-t*.75);
+        d.rotation.x+=d.userData.rx*(1-t*.8);
+        d.rotation.y+=d.userData.ry*(1-t*.8);
 
       } else {
-        /* Fase 3: tirada — vuelan hacia la izquierda */
-        const t=eout((scrollProg-0.62)/0.38);
-        d.position.x=lrp(GP.x,sp.x,t);
-        d.position.y=lrp(GP.y,sp.y,t);
-        d.position.z=lrp(GP.z,sp.z,t);
-        /* Spin fuerte al inicio de la tirada, se calma al asentarse */
-        const spin=scrollProg<0.82?1.8:Math.max(0,(1-(scrollProg-0.82)/0.18))*0.8;
-        d.rotation.x+=d.userData.rx*spin;
-        d.rotation.y+=d.userData.ry*spin;
+        /* Fase 3: tirada hacia la izquierda — arco suave + leve rebote al llegar */
+        const rawT=clamp((scrollProg-0.60-stagger)/0.40);
+        const t=eoutBack(rawT);
+        /* Arco en Y: sube levemente en el medio de la tirada */
+        const arc=Math.sin(clamp(rawT)*Math.PI)*(1.2+(i%3)*.4);
+        d.position.x=lrp(GP.x,sp.x,eout(rawT));
+        d.position.y=lrp(GP.y,sp.y,eout(rawT))+arc;
+        d.position.z=lrp(GP.z,sp.z,eout(rawT));
+        /* Spin: rápido en el vuelo, se frena gradualmente */
+        const spinFade=clamp(1-rawT*1.1);
+        d.rotation.x+=d.userData.rx*2.2*spinFade;
+        d.rotation.y+=d.userData.ry*2.2*spinFade;
       }
     });
 
@@ -1674,7 +1710,14 @@ function togglePlay(){
 })();
 
 /* ══ INIT ══ */
-document.addEventListener('DOMContentLoaded',()=>{setLang('es');renderSounds('all');});
+document.addEventListener('DOMContentLoaded',()=>{
+  setLang('es');
+  renderSounds('all');
+  /* Routing por URL al cargar directamente */
+  const initPage=URL_PAGES[window.location.pathname];
+  if(initPage){goTo(initPage,true);}
+  else{history.replaceState({page:'home'},'','/');}
+});
 </script>
 </body>
 </html>
