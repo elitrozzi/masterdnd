@@ -1,7 +1,12 @@
 {
-  "version": "1.2.0",
+  "version": "1.2.1",
   "date": "2026-03-26",
   "history": [
+    {
+      "version": "1.2.1",
+      "date": "2026-03-26",
+      "note": "Shooting star, night→dawn scroll transition, campfire smoke, rogue wakes up"
+    },
     {
       "version": "1.2.0",
       "date": "2026-03-26",
