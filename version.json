@@ -1,7 +1,12 @@
 {
-  "version": "1.1.4",
+  "version": "1.1.5",
   "date": "2026-03-26",
   "history": [
+    {
+      "version": "1.1.5",
+      "date": "2026-03-26",
+      "note": "Tirada de dados 3D: dados con caras y puntos reales, animación de giro y aterrizaje en la cara correcta"
+    },
     {
       "version": "1.1.4",
       "date": "2026-03-26",

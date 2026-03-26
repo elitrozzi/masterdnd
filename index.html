@@ -229,21 +229,33 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .char-drawer-race-badge svg{width:32px;height:32px;border-radius:6px;}
 .char-drawer-race-name{font-family:'Cinzel',serif;font-size:16px;color:var(--gold);}
 .char-drawer-body{flex:1;overflow-y:auto;padding:32px;}
-/* ── Dice roll overlay ── */
-.dice-overlay{position:absolute;inset:0;z-index:70;display:flex;align-items:center;justify-content:center;background:rgba(9,7,15,.92);backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .35s;}
+/* ── Dice overlay 3D ── */
+.dice-overlay{position:absolute;inset:0;z-index:70;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(9,7,15,.96);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .35s;gap:20px;padding:16px;}
 .dice-overlay.active{opacity:1;pointer-events:auto;}
-.dice-overlay-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:520px;width:100%;padding:0 24px;}
-.dice-stat-group{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 10px;text-align:center;transition:border-color .3s;}
-.dice-stat-group.done{border-color:rgba(248,198,98,.35);}
+.dice-overlay-title{font-family:'Cinzel',serif;font-size:17px;font-weight:700;letter-spacing:.15em;color:var(--gold);}
+.dice-overlay-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:560px;width:100%;}
+.dice-stat-group{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px 8px;text-align:center;transition:border-color .4s;}
+.dice-stat-group.done{border-color:rgba(248,198,98,.4);}
 .dice-stat-label{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--text-m);margin-bottom:10px;}
-.dice-row{display:flex;gap:5px;justify-content:center;margin-bottom:8px;}
-.die{width:30px;height:30px;border-radius:6px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--text-m);transition:all .25s;}
-.die.die-rolling{border-color:rgba(248,198,98,.5);color:var(--gold);background:rgba(248,198,98,.07);}
-.die.die-dropped{opacity:.28;color:var(--text-d);position:relative;}
-.die.die-dropped::after{content:'';position:absolute;width:80%;height:1px;background:var(--text-d);top:50%;left:10%;}
-.die.die-kept{border-color:rgba(96,200,144,.55);background:rgba(96,200,144,.07);color:#7dd8a8;}
-.dice-total{font-family:'Cinzel',serif;font-size:24px;font-weight:900;color:var(--gold);opacity:0;transform:scale(.75);transition:opacity .3s,transform .3s;}
+.dice-row{display:flex;gap:6px;justify-content:center;margin-bottom:8px;}
+.dice-total{font-family:'Cinzel',serif;font-size:20px;font-weight:900;color:var(--gold);opacity:0;transform:scale(.65);transition:opacity .3s,transform .3s cubic-bezier(.34,1.56,.64,1);}
 .dice-total.show{opacity:1;transform:scale(1);}
+/* 3D Die */
+.die3d-scene{perspective:220px;width:38px;height:38px;flex-shrink:0;}
+.die3d{width:38px;height:38px;position:relative;transform-style:preserve-3d;transform:rotateX(-20deg) rotateY(25deg);background:#1a1228;}
+.die3d.die-spinning{animation:d3Spin .18s linear infinite;}
+.die3d-face{position:absolute;inset:0;background:linear-gradient(145deg,#f4edd8 0%,#e8dfc0 100%);border-radius:6px;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr 1fr;padding:5px;box-sizing:border-box;gap:2px;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:inset 0 0 0 1px rgba(0,0,0,.14);}
+.die3d-face.df-1{transform:translateZ(19px);}
+.die3d-face.df-6{transform:rotateY(180deg) translateZ(19px);}
+.die3d-face.df-2{transform:rotateY(90deg) translateZ(19px);}
+.die3d-face.df-5{transform:rotateY(-90deg) translateZ(19px);}
+.die3d-face.df-4{transform:rotateX(90deg) translateZ(19px);}
+.die3d-face.df-3{transform:rotateX(-90deg) translateZ(19px);}
+.die-pip{border-radius:50%;background:#2d1a48;width:100%;height:100%;}
+.die-pip.ep{opacity:0;}
+.die3d.die-dropped .die3d-face{background:linear-gradient(145deg,#2e2e2e 0%,#1e1e1e 100%)!important;}
+.die3d.die-dropped .die-pip{background:#555!important;}
+@keyframes d3Spin{0%{transform:rotateX(0) rotateY(0) rotateZ(0);}100%{transform:rotateX(360deg) rotateY(480deg) rotateZ(120deg);}}
 /* ── MAP TABS ── */
 .map-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--surface);margin-top:60px;}
 .map-tab{padding:12px 24px;font-size:13px;font-weight:500;color:var(--text-m);border-bottom:2px solid transparent;transition:.15s;cursor:none;}
@@ -465,7 +477,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.1.3</span>
+    <span class="ver-badge">v1.1.5</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">26 Mar 2026</span>
   </div>
@@ -622,6 +634,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     <div class="char-creator-drawer" id="charCreatorDrawer">
       <!-- Dice roll overlay (covers full drawer during animation) -->
       <div class="dice-overlay" id="diceOverlay">
+        <div class="dice-overlay-title" id="diceOverlayTitle">TIRANDO DADOS</div>
         <div class="dice-overlay-grid" id="diceOverlayGrid"></div>
       </div>
       <!-- Context header (subtle, not a nav bar) -->
@@ -1906,65 +1919,61 @@ function nextStep(){
 }
 function prevStep(){if(currentStep>1){document.getElementById('step'+currentStep).classList.remove('active');currentStep--;document.getElementById('step'+currentStep).classList.add('active');updateProgress();}}
 function updateProgress(){for(let i=1;i<=2;i++){const d=document.getElementById('pd'+i);if(!d)continue;d.classList.remove('active','done');if(i<currentStep)d.classList.add('done');else if(i===currentStep)d.classList.add('active');if(i<2){const l=document.getElementById('pl'+i);if(l)l.classList.toggle('done',i<currentStep);}}}
+/* ── 3D dice helpers ── */
+const _PIP_CELLS={1:[4],2:[2,6],3:[2,4,6],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]};
+const _D6_ROT={1:'rotateX(0deg) rotateY(0deg)',2:'rotateX(0deg) rotateY(-90deg)',3:'rotateX(90deg) rotateY(0deg)',4:'rotateX(-90deg) rotateY(0deg)',5:'rotateX(0deg) rotateY(90deg)',6:'rotateX(0deg) rotateY(180deg)'};
+function _diePips(v){const p=_PIP_CELLS[v]||[];return Array(9).fill(0).map((_,i)=>`<div class="die-pip${p.includes(i)?'':' ep'}"></div>`).join('');}
+function _dieHtml(id){return `<div class="die3d-scene"><div class="die3d die-spinning" id="${id}"><div class="die3d-face df-1">${_diePips(1)}</div><div class="die3d-face df-6">${_diePips(6)}</div><div class="die3d-face df-2">${_diePips(2)}</div><div class="die3d-face df-5">${_diePips(5)}</div><div class="die3d-face df-4">${_diePips(4)}</div><div class="die3d-face df-3">${_diePips(3)}</div></div></div>`;}
 function rollStats(){
   const stats=['str','dex','con','int','wis','cha'];
   const labels={str:'STR',dex:'DEX',con:'CON',int:'INT',wis:'WIS',cha:'CHA'};
-  rolledStats={};
-  const allRolls={};
-
-  // Pre-calculate all dice
+  rolledStats={};const allRolls={};
   stats.forEach(s=>{
-    const rolls=[1,2,3,4].map(()=>Math.ceil(Math.random()*6));
+    const rolls=[0,1,2,3].map(()=>Math.floor(Math.random()*6)+1);
     allRolls[s]=rolls;
     rolledStats[s]=[...rolls].sort((a,b)=>b-a).slice(0,3).reduce((a,b)=>a+b,0);
   });
-
-  // Build overlay
   const grid=document.getElementById('diceOverlayGrid');
   grid.innerHTML=stats.map(s=>`
     <div class="dice-stat-group" id="dsg-${s}">
       <div class="dice-stat-label">${labels[s]}</div>
-      <div class="dice-row">${[0,1,2,3].map(i=>`<div class="die die-rolling" id="die-${s}-${i}">?</div>`).join('')}</div>
+      <div class="dice-row">${[0,1,2,3].map(i=>_dieHtml(`die-${s}-${i}`)).join('')}</div>
       <div class="dice-total" id="dt-${s}"></div>
     </div>`).join('');
-
-  // Show overlay
   const overlay=document.getElementById('diceOverlay');
   overlay.classList.add('active');
-
-  // Phase 1: rolling (0–700ms)
-  const ivs={};
-  stats.forEach(s=>[0,1,2,3].forEach(i=>{
-    ivs[s+i]=setInterval(()=>{document.getElementById(`die-${s}-${i}`).textContent=Math.ceil(Math.random()*6);},75);
-  }));
-
-  // Phase 2: settle (700ms) — show final dice, cross out lowest
-  setTimeout(()=>{
-    stats.forEach(s=>{
+  // Settle each stat group staggered (after 850ms of rolling)
+  stats.forEach((s,si)=>{
+    setTimeout(()=>{
       const rolls=allRolls[s];
-      const minV=Math.min(...rolls);
-      let minI=rolls.indexOf(minV);
-      [0,1,2,3].forEach(i=>{
-        clearInterval(ivs[s+i]);
-        const d=document.getElementById(`die-${s}-${i}`);
-        d.textContent=rolls[i];
-        d.classList.remove('die-rolling');
-        d.classList.add(i===minI?'die-dropped':'die-kept');
+      const minI=rolls.indexOf(Math.min(...rolls));
+      [0,1,2,3].forEach((i,ii)=>{
+        const die=document.getElementById(`die-${s}-${i}`);
+        if(!die)return;
+        // Freeze at current animated position
+        const mat=getComputedStyle(die).transform;
+        die.style.animation='none';
+        void die.offsetWidth;
+        die.style.transform=mat;
+        // Land on correct face (stagger dice within group)
+        setTimeout(()=>{
+          die.style.transition='transform .52s cubic-bezier(.2,.8,.32,1.2)';
+          die.style.transform=_D6_ROT[rolls[i]];
+          // Grey out the dropped die after landing
+          setTimeout(()=>{if(i===minI)die.classList.add('die-dropped');},530);
+        },ii*55+20);
       });
-    });
-  },700);
-
-  // Phase 3: show totals (1100ms)
-  setTimeout(()=>{
-    stats.forEach(s=>{
-      const dt=document.getElementById(`dt-${s}`);
-      dt.textContent=rolledStats[s];
-      dt.classList.add('show');
-      document.getElementById(`dsg-${s}`).classList.add('done');
-    });
-  },1100);
-
-  // Phase 4: hide overlay + update stat boxes (2600ms)
+      // Show total after landing
+      setTimeout(()=>{
+        const dt=document.getElementById(`dt-${s}`);
+        dt.textContent=rolledStats[s];
+        dt.classList.add('show');
+        document.getElementById(`dsg-${s}`).classList.add('done');
+      },540);
+    },850+si*110);
+  });
+  // Hide overlay + update stat boxes
+  const done=850+5*110+700;
   setTimeout(()=>{
     overlay.classList.remove('active');
     setTimeout(()=>{
@@ -1978,7 +1987,7 @@ function rollStats(){
       });
       document.getElementById('btnStep4Next').removeAttribute('disabled');
     },350);
-  },2600);
+  },done);
 }
 function buildSheet(){
   if(selections.mode==='random'){
