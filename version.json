@@ -1,7 +1,12 @@
 {
-  "version": "1.2.5",
+  "version": "1.2.6",
   "date": "2026-03-26",
   "history": [
+    {
+      "version": "1.2.6",
+      "date": "2026-03-26",
+      "note": "Dragón volando lentamente en la landing nocturna: silueta SVG con aleteo animado y trayectoria ondulante a través del cielo"
+    },
     {
       "version": "1.2.5",
       "date": "2026-03-26",
