@@ -229,7 +229,7 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .char-atmos-bg{position:absolute;inset:0;z-index:0;transition:background 1s cubic-bezier(.4,0,.2,1);}
 .char-atmos-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(9,7,15,.5) 0%,transparent 30%,transparent 60%,#09070f 100%);}
 .race-carousel-section{position:relative;z-index:10;display:flex;align-items:center;width:100%;justify-content:center;}
-.race-carousel-track{display:flex;align-items:flex-end;gap:10px;position:relative;}
+.race-carousel-track{display:flex;align-items:flex-end;gap:10px;position:relative;cursor:grab;user-select:none;touch-action:pan-y;}
 .race-card{flex-shrink:0;border-radius:10px;overflow:hidden;cursor:none;transition:opacity .4s ease,box-shadow .4s ease,transform .4s ease;position:relative;border:2px solid transparent;transform:scale(1);}
 .race-card.rc-active{border-color:var(--gold);box-shadow:0 0 40px rgba(248,198,98,.4),0 12px 48px rgba(0,0,0,.9);z-index:3;}
 .race-card.rc-adj1{opacity:.7;z-index:2;}
@@ -532,7 +532,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.2.3</span>
+    <span class="ver-badge">v1.2.4</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">26 Mar 2026</span>
   </div>
@@ -2334,6 +2334,48 @@ function csGoTo(panelId,dir){
   }));
 }
 
+/* ── Carousel swipe / drag ── */
+function _attachCarouselSwipe(trackId,moveFn){
+  const wrap=document.getElementById(trackId);
+  if(!wrap)return;
+  let sx=0,sy=0,dragging=false,didDrag=false,touchActive=false;
+  const THRESH=45;
+
+  function start(x,y){sx=x;sy=y;dragging=true;didDrag=false;}
+  function end(x){
+    if(!dragging)return;
+    dragging=false;
+    const dx=x-sx;
+    if(Math.abs(dx)>THRESH){didDrag=true;moveFn(dx<0?1:-1);}
+  }
+
+  // Touch
+  wrap.addEventListener('touchstart',e=>{touchActive=true;start(e.touches[0].clientX,e.touches[0].clientY);},{passive:true});
+  wrap.addEventListener('touchmove',e=>{
+    if(!dragging)return;
+    const dx=Math.abs(e.touches[0].clientX-sx);
+    const dy=Math.abs(e.touches[0].clientY-sy);
+    if(dx>dy&&dx>8)e.preventDefault(); // prevent scroll only on horizontal swipe
+  },{passive:false});
+  wrap.addEventListener('touchend',e=>{end(e.changedTouches[0].clientX);touchActive=false;},{passive:true});
+  wrap.addEventListener('touchcancel',()=>{dragging=false;touchActive=false;},{passive:true});
+
+  // Mouse (desktop drag)
+  wrap.addEventListener('mousedown',e=>{if(touchActive)return;start(e.clientX,e.clientY);wrap.style.cursor='grabbing';});
+  window.addEventListener('mouseup',e=>{
+    if(!dragging||touchActive)return;
+    end(e.clientX);
+    wrap.style.cursor='';
+  });
+  window.addEventListener('mousemove',e=>{
+    if(!dragging||touchActive)return;
+    if(Math.abs(e.clientX-sx)>8)e.preventDefault();
+  },{passive:false});
+
+  // Block card click if the gesture was a drag
+  wrap.addEventListener('click',e=>{if(didDrag){didDrag=false;e.stopPropagation();}},true);
+}
+
 function initCharSelect(){
   _selectedRace='human';_carouselIdx=0;_classCarouselIdx=0;
   renderCarousel();renderClassCarousel();
@@ -2914,6 +2956,8 @@ function togglePlay(){
 document.addEventListener('DOMContentLoaded',()=>{
   setLang('es');
   renderSounds('all');
+  _attachCarouselSwipe('raceCarouselTrack',carouselMove);
+  _attachCarouselSwipe('classCarouselTrack',classCarouselMove);
   /* Routing por URL al cargar directamente */
   const initPage=URL_PAGES[window.location.pathname];
   if(initPage){goTo(initPage,true);}

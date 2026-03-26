@@ -1,7 +1,12 @@
 {
-  "version": "1.2.3",
+  "version": "1.2.4",
   "date": "2026-03-26",
   "history": [
+    {
+      "version": "1.2.4",
+      "date": "2026-03-26",
+      "note": "Swipe y drag en carruseles de raza y clase: touch horizontal + arrastre con mouse, sin interferir con clicks ni scroll vertical"
+    },
     {
       "version": "1.2.3",
       "date": "2026-03-26",
