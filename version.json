@@ -1,7 +1,12 @@
 {
-  "version": "1.1.5",
+  "version": "1.2.0",
   "date": "2026-03-26",
   "history": [
+    {
+      "version": "1.2.0",
+      "date": "2026-03-26",
+      "note": "Nueva landing: escena nocturna medieval con siluetas de aventureros, fogata CSS, aurora, montañas y partículas mágicas"
+    },
     {
       "version": "1.1.5",
       "date": "2026-03-26",
