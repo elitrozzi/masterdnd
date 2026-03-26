@@ -108,7 +108,8 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .land-ui *{pointer-events:auto;}
 
 /* Landing nav */
-.land-nav{position:absolute;top:0;left:0;right:0;height:68px;display:flex;align-items:center;padding:0 48px;gap:32px;}
+.land-nav{position:fixed;top:0;left:0;right:0;height:68px;display:flex;align-items:center;padding:0 48px;gap:32px;z-index:100;transition:background .3s,backdrop-filter .3s,border-bottom .3s;}
+.land-nav.scrolled{background:rgba(9,7,15,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.06);}
 .land-logo{display:flex;align-items:baseline;gap:0;text-decoration:none;cursor:none;}
 .llogo-m{font-family:'Cinzel',serif;font-size:13px;font-weight:400;letter-spacing:.4em;color:rgba(220,230,245,.6);text-transform:uppercase;}
 .llogo-d{font-family:'Cinzel',serif;font-size:20px;font-weight:700;color:var(--gold);letter-spacing:.1em;margin-left:6px;}
@@ -556,7 +557,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.2.8</span>
+    <span class="ver-badge">v1.2.9</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">26 Mar 2026</span>
   </div>
@@ -3089,6 +3090,10 @@ function togglePlay(){
 document.addEventListener('DOMContentLoaded',()=>{
   setLang('es');
   renderSounds('all');
+  const landNav=document.querySelector('.land-nav');
+  if(landNav){
+    window.addEventListener('scroll',()=>landNav.classList.toggle('scrolled',window.scrollY>40),{passive:true});
+  }
   _attachCarouselSwipe('raceCarouselTrack',carouselMove);
   _attachCarouselSwipe('classCarouselTrack',classCarouselMove);
   /* Routing por URL al cargar directamente */
