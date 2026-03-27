@@ -451,7 +451,8 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 /* ── NAV DROPDOWN ── */
 .nav-dropdown{position:relative;}
 .nav-dropdown-menu{position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%) translateY(-6px);background:rgba(10,7,20,.97);border:1px solid rgba(255,255,255,.1);border-radius:11px;padding:6px;min-width:190px;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;z-index:200;backdrop-filter:blur(12px);}
-.nav-dropdown:hover .nav-dropdown-menu{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0);}
+.nav-dropdown.open .nav-dropdown-menu{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0);}
+.nav-dropdown .anav-link{cursor:pointer;}
 .nav-dd-item{display:flex;align-items:center;gap:10px;padding:10px 13px;border-radius:8px;font-size:13px;font-weight:500;color:var(--text-m);cursor:pointer;transition:background .15s,color .15s;white-space:nowrap;}
 .nav-dd-item:hover{background:rgba(248,198,98,.1);color:var(--gold);}
 .nav-dd-icon{font-size:15px;line-height:1;}
@@ -890,27 +891,27 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     <span class="llogo-m">MASTER</span><span class="llogo-d">DND</span>
   </div>
   <div class="anav-links">
-    <div class="nav-dropdown">
-      <a class="anav-link" id="nl-characters" data-es="Personajes" data-en="Characters">Personajes</a>
+    <div class="nav-dropdown" id="navdd-characters">
+      <a class="anav-link" id="nl-characters" onclick="toggleNavDropdown('navdd-characters',event)" data-es="Personajes" data-en="Characters">Personajes</a>
       <div class="nav-dropdown-menu">
-        <div class="nav-dd-item" id="dd-my-chars" onclick="goToMyChars()" style="display:none;">
+        <div class="nav-dd-item" id="dd-my-chars" onclick="closeNavDropdowns();goToMyChars()" style="display:none;">
           <span class="nav-dd-icon">⚔️</span>
           <div class="nav-dd-label"><span data-es="Mis personajes" data-en="My characters">Mis personajes</span><span class="nav-dd-sub">Ver personajes guardados</span></div>
         </div>
-        <div class="nav-dd-item" onclick="goToCreateChar()">
+        <div class="nav-dd-item" onclick="closeNavDropdowns();goToCreateChar()">
           <span class="nav-dd-icon">✨</span>
           <div class="nav-dd-label"><span data-es="Crear personaje" data-en="Create character">Crear personaje</span><span class="nav-dd-sub">Nuevo aventurero</span></div>
         </div>
       </div>
     </div>
-    <div class="nav-dropdown">
-      <a class="anav-link" id="nl-maps" data-es="Mapas" data-en="Maps">Mapas</a>
+    <div class="nav-dropdown" id="navdd-maps">
+      <a class="anav-link" id="nl-maps" onclick="toggleNavDropdown('navdd-maps',event)" data-es="Mapas" data-en="Maps">Mapas</a>
       <div class="nav-dropdown-menu">
-        <div class="nav-dd-item" onclick="goToMaps('editor')">
+        <div class="nav-dd-item" onclick="closeNavDropdowns();goToMaps('editor')">
           <span class="nav-dd-icon">🗺️</span>
           <div class="nav-dd-label"><span data-es="Crear mapa" data-en="Create map">Crear mapa</span><span class="nav-dd-sub">Editor de terreno</span></div>
         </div>
-        <div class="nav-dd-item" onclick="goToMaps('explore')">
+        <div class="nav-dd-item" onclick="closeNavDropdowns();goToMaps('explore')">
           <span class="nav-dd-icon">🔍</span>
           <div class="nav-dd-label"><span data-es="Mapas existentes" data-en="Existing maps">Mapas existentes</span><span class="nav-dd-sub">Explorar la comunidad</span></div>
         </div>
@@ -922,7 +923,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.4.4</span>
+    <span class="ver-badge">v1.4.5</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">27 Mar 2026</span>
   </div>
@@ -3498,6 +3499,9 @@ function loadTemplate(type){
 }
 
 /* ══ MAP TABS & EXPLORE ══ */
+function toggleNavDropdown(id,e){e.stopPropagation();const el=document.getElementById(id);const isOpen=el.classList.contains('open');closeNavDropdowns();if(!isOpen)el.classList.add('open');}
+function closeNavDropdowns(){document.querySelectorAll('.nav-dropdown.open').forEach(d=>d.classList.remove('open'));}
+document.addEventListener('click',closeNavDropdowns);
 let _suppressSavedChars=false;
 function goToMyChars(){
   _suppressSavedChars=false;
