@@ -283,11 +283,11 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .cs-race-bonuses{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:6px;}
 .cs-race-traits{display:flex;flex-wrap:wrap;gap:5px;}
 .cs-trait-pill{padding:3px 10px;border-radius:20px;font-size:11px;background:rgba(255,255,255,.05);color:var(--text-m);border:1px solid rgba(255,255,255,.09);}
-.cs-body{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;}
-.cs-stat{background:var(--surface);border-radius:10px;padding:10px 5px;text-align:center;}
-.cs-stat-name{font-size:9px;color:var(--text-m);letter-spacing:.1em;font-weight:600;}
-.cs-stat-val{font-size:24px;font-weight:700;color:var(--text);}
-.cs-stat-mod{font-size:12px;color:var(--gold);font-weight:600;}
+.cs-body{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+.cs-stat{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:10px 4px 8px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:1px;}
+.cs-stat-name{font-size:8px;color:var(--text-d);letter-spacing:.12em;font-weight:700;text-transform:uppercase;order:2;margin-top:2px;}
+.cs-stat-val{font-size:11px;font-weight:600;color:var(--text-d);order:3;}
+.cs-stat-mod{font-size:26px;font-weight:700;color:var(--gold);order:1;line-height:1;font-family:'Cinzel',serif;}
 .cs-footer{display:flex;flex-wrap:wrap;gap:8px;}
 .saved-chars-section{position:relative;z-index:10;padding:80px 24px 0;background:rgba(9,7,15,.85);border-bottom:1px solid rgba(255,255,255,.06);}
 /* ── Character picker modal ── */
@@ -348,12 +348,12 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .sheet-hp-input:focus{border-color:rgba(212,175,55,.7);}
 .sheet-hp-input::-webkit-inner-spin-button,.sheet-hp-input::-webkit-outer-spin-button{-webkit-appearance:none;}
 /* ── Status Conditions ── */
-.cs-conditions{margin-top:16px;padding-top:16px;border-top:1px solid var(--border);}
+.cs-conditions{flex:1;display:flex;flex-direction:column;}
 .cs-cond-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
 .cs-cond-label{font:600 10px/1 'Cinzel',serif;letter-spacing:.18em;color:var(--text-m);text-transform:uppercase;}
 .cs-cond-count{font-size:10px;font-weight:600;color:var(--text-d);transition:color .2s;}
 .cs-cond-count.has-conds{color:#ff8080;}
-.cs-cond-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;}
+.cs-cond-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:5px;}
 .cs-cond-pill{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 3px 6px;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);cursor:pointer;transition:.18s;position:relative;user-select:none;}
 .cs-cond-pill:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.2);}
 .cs-cond-pill.active{background:rgba(200,50,50,.2);border-color:rgba(220,80,80,.65);box-shadow:0 0 10px rgba(200,50,50,.28);}
@@ -788,9 +788,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   .cs-portrait{align-self:auto;}
   .cs-panel-center{flex:unset;border-right:none;border-bottom:1px solid var(--border);}
   .cs-panel-right{flex:unset;}
-  .cs-body{grid-template-columns:repeat(3,1fr);gap:7px;}
-  .cs-stat-val{font-size:20px;}
-  .cs-cond-grid{grid-template-columns:repeat(4,1fr);}
+  .cs-body{grid-template-columns:repeat(3,1fr);gap:6px;}
+  .cs-stat-mod{font-size:22px;}
+  .cs-cond-grid{grid-template-columns:repeat(auto-fill,minmax(64px,1fr));}
   .cs-panel-actions{margin-top:0;}
   .saved-chars-section{padding:74px 14px 0;}
   .saved-char-card{min-width:0;flex:1 1 100%;}
@@ -942,7 +942,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.4.7</span>
+    <span class="ver-badge">v1.4.8</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">27 Mar 2026</span>
   </div>

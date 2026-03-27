@@ -1,7 +1,12 @@
 {
-  "version": "1.4.7",
+  "version": "1.4.8",
   "date": "2026-03-27",
   "history": [
+    {
+      "version": "1.4.8",
+      "date": "2026-03-27",
+      "note": "Stats DnDBeyond-style: modificador grande arriba, condiciones con wrap automático sin scroll"
+    },
     {
       "version": "1.4.7",
       "date": "2026-03-27",
