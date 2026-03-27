@@ -1,7 +1,12 @@
 {
-  "version": "1.4.6",
+  "version": "1.4.7",
   "date": "2026-03-27",
   "history": [
+    {
+      "version": "1.4.7",
+      "date": "2026-03-27",
+      "note": "Landing hook: elimina botón Crear personaje, renombra Nueva misión a Nueva inspiración, chips de categoría con fondo oscuro para contraste"
+    },
     {
       "version": "1.4.6",
       "date": "2026-03-27",

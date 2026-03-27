@@ -182,7 +182,7 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .hook-intro-em{color:var(--gold);display:block;}
 .hook-intro-desc{font-size:14px;color:var(--text-m);line-height:1.75;max-width:340px;margin-bottom:28px;}
 .hook-intro-cats{display:flex;flex-wrap:wrap;gap:7px;}
-.hook-intro-cat{padding:4px 13px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:.14em;border:1px solid rgba(255,255,255,.1);color:var(--text-d);text-transform:uppercase;}
+.hook-intro-cat{padding:4px 13px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:.14em;border:1px solid rgba(255,255,255,.18);color:var(--text);text-transform:uppercase;background:rgba(0,0,0,.45);backdrop-filter:blur(6px);}
 .hook-card-wrap{flex:1;display:flex;align-items:center;justify-content:center;pointer-events:auto;}
 .hook-card{background:rgba(9,7,18,.94);border:1px solid rgba(248,198,98,.22);border-radius:20px;padding:36px 38px;width:100%;max-width:520px;backdrop-filter:blur(20px);box-shadow:0 0 80px rgba(248,198,98,.07),0 24px 64px rgba(0,0,0,.8);text-align:center;position:relative;overflow:hidden;}
 .hook-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(248,198,98,.07) 0%,transparent 65%);pointer-events:none;}
@@ -942,7 +942,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.4.6</span>
+    <span class="ver-badge">v1.4.7</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">27 Mar 2026</span>
   </div>
@@ -1225,8 +1225,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <div class="hook-cat" id="hookCat"><span class="hook-icon" id="hookIcon">🗡️</span><span id="hookCatName">Mazmorra</span></div>
         <div class="hook-text" id="hookText"></div>
         <div class="hook-actions">
-          <button class="hook-roll-btn" onclick="rollHook()"><span class="hook-roll-icon">⚄</span><span data-es="Nueva misión" data-en="New quest">Nueva misión</span></button>
-          <button class="hook-cta" onclick="goTo('characters')"><span>⚔️</span><span data-es="Crear personaje" data-en="Create character">Crear personaje</span></button>
+          <button class="hook-roll-btn" onclick="rollHook()"><span class="hook-roll-icon">⚄</span><span data-es="Nueva inspiración" data-en="New inspiration">Nueva inspiración</span></button>
         </div>
       </div>
     </div>
