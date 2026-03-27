@@ -1,7 +1,12 @@
 {
-  "version": "1.4.0",
+  "version": "1.4.1",
   "date": "2026-03-27",
   "history": [
+    {
+      "version": "1.4.1",
+      "date": "2026-03-27",
+      "note": "Ficha de personaje rediseñada como dashboard apaisado: layout de 2 columnas con retrato+identidad arriba, stats+raza en fila central, condiciones en grilla de 7 columnas"
+    },
     {
       "version": "1.4.0",
       "date": "2026-03-27",
