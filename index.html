@@ -536,6 +536,26 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 body:has(.page.active#page-compendium) #cdot{background:var(--gold);}
 body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);}
 
+/* ── Hamburger button (hidden on desktop) ── */
+.hamb-btn{display:none;flex-direction:column;justify-content:center;gap:5px;background:none;border:none;padding:6px 4px;cursor:pointer;flex-shrink:0;}
+.hamb-line{display:block;width:22px;height:2px;background:var(--text-m);border-radius:2px;transition:transform .25s,opacity .25s,background .15s;}
+.hamb-btn:hover .hamb-line{background:var(--gold);}
+/* Mobile menu drawer */
+.mobile-menu{position:fixed;top:0;right:0;bottom:0;width:100%;max-width:340px;z-index:400;background:rgba(7,5,18,.97);backdrop-filter:blur(20px);border-left:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);pointer-events:none;}
+.mobile-menu.open{transform:translateX(0);pointer-events:auto;}
+.mm-backdrop{position:fixed;inset:0;z-index:399;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .32s;}
+.mm-backdrop.open{opacity:1;pointer-events:auto;}
+.mm-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid rgba(255,255,255,.07);flex-shrink:0;}
+.mm-close{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:50%;width:34px;height:34px;color:var(--text-m);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s;}
+.mm-close:hover{background:rgba(255,255,255,.14);color:var(--text);}
+.mm-links{flex:1;display:flex;flex-direction:column;padding:8px 0;overflow-y:auto;}
+.mm-link{display:flex;align-items:center;gap:14px;padding:18px 24px;font-family:'Cinzel',serif;font-size:16px;font-weight:700;color:var(--text-m);border-bottom:1px solid rgba(255,255,255,.04);letter-spacing:.08em;transition:color .15s,background .15s;cursor:pointer;}
+.mm-link:last-child{border-bottom:none;}
+.mm-link:hover,.mm-link:active{color:var(--gold);background:rgba(248,198,98,.05);}
+.mm-link-icon{font-size:20px;flex-shrink:0;}
+.mm-footer{padding:20px 24px;border-top:1px solid rgba(255,255,255,.07);flex-shrink:0;}
+.mm-footer-label{font-size:10px;letter-spacing:.2em;color:var(--text-d);text-transform:uppercase;margin-bottom:10px;}
+
 /* ══════════════════════════════════ RESPONSIVE MOBILE */
 @media (max-width:700px){
   /* ── Cursor: hide on touch screens ── */
@@ -543,14 +563,14 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   *{cursor:auto!important;}
   button,a,[onclick]{cursor:pointer!important;}
 
+  /* ── Hamburger ── */
+  .hamb-btn{display:flex;}
+
   /* ── Landing nav ── */
   .land-nav{padding:0 16px;height:56px;gap:8px;}
   .land-nav-links{display:none;}
+  .land-nav-right{display:none;}
   .land-nav-spacer{flex:1;}
-  .lang-toggle{border-radius:6px;}
-  .lang-btn{padding:5px 9px;font-size:11px;}
-  .lbtn-ghost{padding:7px 12px;font-size:12px;}
-  .lbtn-gold{padding:7px 12px;font-size:12px;}
 
   /* ── Landing hero ── */
   .land-hero{bottom:14vh;left:5vw;right:5vw;max-width:100%;}
@@ -576,13 +596,10 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   .feat-card-desc{font-size:12px;}
 
   /* ── App nav ── */
-  .app-nav{padding:0 10px;gap:4px;}
+  .app-nav{padding:0 14px;gap:4px;}
   .anav-logo .llogo-m{display:none;}
   .anav-logo .llogo-d{font-size:15px;}
-  .anav-links{gap:0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
-  .anav-links::-webkit-scrollbar{display:none;}
-  .anav-link{padding:5px 9px;font-size:12px;white-space:nowrap;}
-  .anav-spacer,.anav-btn{display:none;}
+  .anav-links,.anav-spacer,.anav-btn{display:none;}
 
   /* ── Character creator ── */
   .creator-wrap{padding:20px 12px;}
@@ -666,6 +683,28 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 <div id="cdot"></div>
 <div id="cring"></div>
 
+<!-- ══════════════════════════ MOBILE MENU ══════════════════════════ -->
+<div class="mm-backdrop" id="mmBackdrop" onclick="closeMobileMenu()"></div>
+<div class="mobile-menu" id="mobileMenu">
+  <div class="mm-header">
+    <div class="land-logo"><span class="llogo-m">MASTER</span><span class="llogo-d">DND</span></div>
+    <button class="mm-close" onclick="closeMobileMenu()">✕</button>
+  </div>
+  <div class="mm-links">
+    <div class="mm-link" onclick="goTo('characters');closeMobileMenu()"><span class="mm-link-icon">⚔️</span><span data-es="Personajes" data-en="Characters">Personajes</span></div>
+    <div class="mm-link" onclick="goTo('maps');closeMobileMenu()"><span class="mm-link-icon">🗺️</span><span data-es="Mapas" data-en="Maps">Mapas</span></div>
+    <div class="mm-link" onclick="goTo('sounds');closeMobileMenu()"><span class="mm-link-icon">🎵</span><span data-es="Sonidos" data-en="Sounds">Sonidos</span></div>
+    <div class="mm-link" onclick="goTo('compendium');closeMobileMenu()"><span class="mm-link-icon">📖</span><span data-es="Compendio" data-en="Compendium">Compendio</span></div>
+  </div>
+  <div class="mm-footer">
+    <div class="mm-footer-label">Idioma</div>
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('es')">ES</button>
+      <button class="lang-btn" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+</div>
+
 <!-- ══════════════════════════ APP NAV (inner pages) -->
 <nav class="app-nav" id="appNav">
   <div class="anav-logo" onclick="goTo('home')">
@@ -680,7 +719,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.3.0</span>
+    <span class="ver-badge">v1.3.1</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">27 Mar 2026</span>
   </div>
@@ -690,6 +729,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   </div>
   <button class="btn-nav btn-ghost" onclick="openModal('login')" data-es="Entrar" data-en="Log in">Entrar</button>
   <button class="btn-nav btn-gold" onclick="openModal('register')" data-es="Comenzar" data-en="Get started">Comenzar</button>
+  <button class="hamb-btn" onclick="openMobileMenu()" aria-label="Menú"><span class="hamb-line"></span><span class="hamb-line"></span><span class="hamb-line"></span></button>
 </nav>
 
 <!-- ══════════════════════════ PAGE: LANDING -->
@@ -903,6 +943,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="lbtn-ghost" onclick="openModal('login')" data-es="Entrar" data-en="Log in">Entrar</button>
         <button class="lbtn-gold" onclick="openModal('register')" data-es="Comenzar" data-en="Get started">Comenzar</button>
       </div>
+      <button class="hamb-btn" onclick="openMobileMenu()" aria-label="Menú"><span class="hamb-line"></span><span class="hamb-line"></span><span class="hamb-line"></span></button>
     </nav>
 
     <div class="land-hero">
@@ -3212,6 +3253,18 @@ function togglePlay(){
   }
   animate();
 })();
+
+/* ══ MOBILE MENU ══ */
+function openMobileMenu(){
+  document.getElementById('mobileMenu').classList.add('open');
+  document.getElementById('mmBackdrop').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeMobileMenu(){
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.getElementById('mmBackdrop').classList.remove('open');
+  document.body.style.overflow='';
+}
 
 /* ══ INIT ══ */
 document.addEventListener('DOMContentLoaded',()=>{
