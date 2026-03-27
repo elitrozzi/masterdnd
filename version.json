@@ -1,7 +1,12 @@
 {
-  "version": "1.4.2",
+  "version": "1.4.3",
   "date": "2026-03-27",
   "history": [
+    {
+      "version": "1.4.3",
+      "date": "2026-03-27",
+      "note": "Nav Mapas con dropdown: hover despliega Crear mapa (editor) y Mapas existentes (explorar), sin click directo"
+    },
     {
       "version": "1.4.2",
       "date": "2026-03-27",

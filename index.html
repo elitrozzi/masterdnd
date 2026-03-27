@@ -448,6 +448,15 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .die3d.die-dropped .die3d-face{background:linear-gradient(150deg,#181818 0%,#0e0e0e 100%)!important;box-shadow:inset 0 0 0 1.5px rgba(90,90,90,.3)!important;}
 .die3d.die-dropped .die-num{color:#3a3a3a!important;text-shadow:none!important;}
 @keyframes d3Spin{0%{transform:rotateX(0) rotateY(0) rotateZ(0);}100%{transform:rotateX(360deg) rotateY(480deg) rotateZ(120deg);}}
+/* ── NAV DROPDOWN ── */
+.nav-dropdown{position:relative;}
+.nav-dropdown-menu{position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%) translateY(-6px);background:rgba(10,7,20,.97);border:1px solid rgba(255,255,255,.1);border-radius:11px;padding:6px;min-width:190px;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;z-index:200;backdrop-filter:blur(12px);}
+.nav-dropdown:hover .nav-dropdown-menu{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0);}
+.nav-dd-item{display:flex;align-items:center;gap:10px;padding:10px 13px;border-radius:8px;font-size:13px;font-weight:500;color:var(--text-m);cursor:pointer;transition:background .15s,color .15s;white-space:nowrap;}
+.nav-dd-item:hover{background:rgba(248,198,98,.1);color:var(--gold);}
+.nav-dd-icon{font-size:15px;line-height:1;}
+.nav-dd-label{display:flex;flex-direction:column;gap:1px;}
+.nav-dd-sub{font-size:10px;color:var(--text-d);font-weight:400;}
 /* ── MAP TABS ── */
 .map-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--surface);margin-top:60px;}
 .map-tab{padding:12px 24px;font-size:13px;font-weight:500;color:var(--text-m);border-bottom:2px solid transparent;transition:.15s;cursor:none;}
@@ -860,7 +869,8 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   </div>
   <div class="mm-links">
     <div class="mm-link" onclick="goTo('characters');closeMobileMenu()"><span class="mm-link-icon">⚔️</span><span data-es="Personajes" data-en="Characters">Personajes</span></div>
-    <div class="mm-link" onclick="goTo('maps');closeMobileMenu()"><span class="mm-link-icon">🗺️</span><span data-es="Mapas" data-en="Maps">Mapas</span></div>
+    <div class="mm-link" onclick="goToMaps('editor');closeMobileMenu()"><span class="mm-link-icon">🗺️</span><span data-es="Crear mapa" data-en="Create map">Crear mapa</span></div>
+    <div class="mm-link" onclick="goToMaps('explore');closeMobileMenu()"><span class="mm-link-icon">🔍</span><span data-es="Mapas existentes" data-en="Existing maps">Mapas existentes</span></div>
     <div class="mm-link" onclick="goTo('sounds');closeMobileMenu()"><span class="mm-link-icon">🎵</span><span data-es="Sonidos" data-en="Sounds">Sonidos</span></div>
     <div class="mm-link" onclick="goTo('compendium');closeMobileMenu()"><span class="mm-link-icon">📖</span><span data-es="Compendio" data-en="Compendium">Compendio</span></div>
   </div>
@@ -880,14 +890,26 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   </div>
   <div class="anav-links">
     <a class="anav-link" id="nl-characters" onclick="goTo('characters')" data-es="Personajes" data-en="Characters">Personajes</a>
-    <a class="anav-link" id="nl-maps" onclick="goTo('maps')" data-es="Mapas" data-en="Maps">Mapas</a>
+    <div class="nav-dropdown">
+      <a class="anav-link" id="nl-maps" data-es="Mapas" data-en="Maps">Mapas</a>
+      <div class="nav-dropdown-menu">
+        <div class="nav-dd-item" onclick="goToMaps('editor')">
+          <span class="nav-dd-icon">🗺️</span>
+          <div class="nav-dd-label"><span data-es="Crear mapa" data-en="Create map">Crear mapa</span><span class="nav-dd-sub">Editor de terreno</span></div>
+        </div>
+        <div class="nav-dd-item" onclick="goToMaps('explore')">
+          <span class="nav-dd-icon">🔍</span>
+          <div class="nav-dd-label"><span data-es="Mapas existentes" data-en="Existing maps">Mapas existentes</span><span class="nav-dd-sub">Explorar la comunidad</span></div>
+        </div>
+      </div>
+    </div>
     <a class="anav-link" id="nl-sounds" onclick="goTo('sounds')" data-es="Sonidos" data-en="Sounds">Sonidos</a>
     <a class="anav-link" id="nl-compendium" onclick="goTo('compendium')" data-es="Compendio" data-en="Compendium">Compendio</a>
   </div>
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.4.2</span>
+    <span class="ver-badge">v1.4.3</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">27 Mar 2026</span>
   </div>
@@ -3462,6 +3484,13 @@ function loadTemplate(type){
 }
 
 /* ══ MAP TABS & EXPLORE ══ */
+function goToMaps(tab){
+  goTo('maps');
+  requestAnimationFrame(()=>{
+    const tabEl=document.getElementById('mtab-'+tab);
+    if(tabEl)mapTab(tab,tabEl);
+  });
+}
 function mapTab(tab,el){
   document.querySelectorAll('.map-tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.map-panel').forEach(p=>p.classList.remove('active'));
