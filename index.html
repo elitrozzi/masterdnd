@@ -868,7 +868,8 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     <button class="mm-close" onclick="closeMobileMenu()">✕</button>
   </div>
   <div class="mm-links">
-    <div class="mm-link" onclick="goTo('characters');closeMobileMenu()"><span class="mm-link-icon">⚔️</span><span data-es="Personajes" data-en="Characters">Personajes</span></div>
+    <div class="mm-link" id="mm-my-chars" onclick="goToMyChars();closeMobileMenu()" style="display:none;"><span class="mm-link-icon">⚔️</span><span data-es="Mis personajes" data-en="My characters">Mis personajes</span></div>
+    <div class="mm-link" onclick="goToCreateChar();closeMobileMenu()"><span class="mm-link-icon">✨</span><span data-es="Crear personaje" data-en="Create character">Crear personaje</span></div>
     <div class="mm-link" onclick="goToMaps('editor');closeMobileMenu()"><span class="mm-link-icon">🗺️</span><span data-es="Crear mapa" data-en="Create map">Crear mapa</span></div>
     <div class="mm-link" onclick="goToMaps('explore');closeMobileMenu()"><span class="mm-link-icon">🔍</span><span data-es="Mapas existentes" data-en="Existing maps">Mapas existentes</span></div>
     <div class="mm-link" onclick="goTo('sounds');closeMobileMenu()"><span class="mm-link-icon">🎵</span><span data-es="Sonidos" data-en="Sounds">Sonidos</span></div>
@@ -889,7 +890,19 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     <span class="llogo-m">MASTER</span><span class="llogo-d">DND</span>
   </div>
   <div class="anav-links">
-    <a class="anav-link" id="nl-characters" onclick="goTo('characters')" data-es="Personajes" data-en="Characters">Personajes</a>
+    <div class="nav-dropdown">
+      <a class="anav-link" id="nl-characters" data-es="Personajes" data-en="Characters">Personajes</a>
+      <div class="nav-dropdown-menu">
+        <div class="nav-dd-item" id="dd-my-chars" onclick="goToMyChars()" style="display:none;">
+          <span class="nav-dd-icon">⚔️</span>
+          <div class="nav-dd-label"><span data-es="Mis personajes" data-en="My characters">Mis personajes</span><span class="nav-dd-sub">Ver personajes guardados</span></div>
+        </div>
+        <div class="nav-dd-item" onclick="goToCreateChar()">
+          <span class="nav-dd-icon">✨</span>
+          <div class="nav-dd-label"><span data-es="Crear personaje" data-en="Create character">Crear personaje</span><span class="nav-dd-sub">Nuevo aventurero</span></div>
+        </div>
+      </div>
+    </div>
     <div class="nav-dropdown">
       <a class="anav-link" id="nl-maps" data-es="Mapas" data-en="Maps">Mapas</a>
       <div class="nav-dropdown-menu">
@@ -909,7 +922,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.4.3</span>
+    <span class="ver-badge">v1.4.4</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">27 Mar 2026</span>
   </div>
@@ -2793,11 +2806,12 @@ function saveCharacter(btn){
   renderSavedChars();
 }
 function renderSavedChars(){
+  updateCharsNavDropdown();
   const chars=_loadSavedChars();
   const section=document.getElementById('savedCharsSection');
   const grid=document.getElementById('savedCharsGrid');
   if(!section||!grid)return;
-  if(chars.length===0){section.style.display='none';return;}
+  if(chars.length===0||_suppressSavedChars){section.style.display='none';return;}
   section.style.display='block';
   const titleEl=document.getElementById('savedCharsTitle');
   if(titleEl)titleEl.textContent=currentLang==='es'?'Mis personajes':'My characters';
@@ -3484,6 +3498,23 @@ function loadTemplate(type){
 }
 
 /* ══ MAP TABS & EXPLORE ══ */
+let _suppressSavedChars=false;
+function goToMyChars(){
+  _suppressSavedChars=false;
+  goTo('characters');
+}
+function goToCreateChar(){
+  _suppressSavedChars=true;
+  goTo('characters');
+  _suppressSavedChars=false;
+}
+function updateCharsNavDropdown(){
+  const n=_loadSavedChars().length;
+  const dd=document.getElementById('dd-my-chars');
+  if(dd)dd.style.display=n>0?'flex':'none';
+  const mm=document.getElementById('mm-my-chars');
+  if(mm)mm.style.display=n>0?'flex':'none';
+}
 function goToMaps(tab){
   goTo('maps');
   requestAnimationFrame(()=>{
@@ -3953,6 +3984,7 @@ function closeMobileMenu(){
 /* ══ INIT ══ */
 document.addEventListener('DOMContentLoaded',()=>{
   setLang('es');
+  updateCharsNavDropdown();
   renderSounds('all');
   const landNav=document.querySelector('.land-nav');
   if(landNav){
