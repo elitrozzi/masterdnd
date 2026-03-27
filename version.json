@@ -1,7 +1,12 @@
 {
-  "version": "1.5.1",
+  "version": "1.5.2",
   "date": "2026-03-27",
   "history": [
+    {
+      "version": "1.5.2",
+      "date": "2026-03-27",
+      "note": "Niveles en la ficha: botón Subir nivel, dado de vida por clase, prof bonus escalable, persistencia en localStorage"
+    },
     {
       "version": "1.5.1",
       "date": "2026-03-27",

@@ -370,6 +370,8 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .btn-nav{padding:8px 18px;border-radius:8px;font-size:13px;font-weight:600;cursor:none;transition:.15s;}
 .btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text-m);}
 .btn-ghost:hover{border-color:var(--gold);color:var(--gold);}
+.btn-levelup{background:rgba(139,92,246,.18);border:1px solid rgba(139,92,246,.4);color:#c4b5fd;}
+.btn-levelup:hover{background:rgba(139,92,246,.32);color:#ddd6fe;}
 .btn-primary{background:var(--brand-500);color:#fff;}
 .btn-primary:hover{background:var(--brand-600);}
 .btn-gold{background:linear-gradient(135deg,var(--gold),#e8a820);color:#1a1400;font-weight:600;}
@@ -1073,7 +1075,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.5.1</span>
+    <span class="ver-badge">v1.5.2</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">27 Mar 2026</span>
   </div>
@@ -1527,7 +1529,8 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
                   <div class="cs-badges">
                     <span class="tag tag-brand" id="csCA">CA: —</span>
                     <span class="tag tag-gold" id="csHP">HP: —</span>
-                    <span class="tag tag-brand">Prof: +2</span>
+                    <span class="tag tag-brand" id="csProf">Prof: +2</span>
+                    <span class="tag tag-brand" id="csLevel">Nv. 1</span>
                   </div>
                   <div class="sheet-hp-tracker" id="sheetHpTracker" style="display:none;">
                     <div class="sheet-hp-nums"><span id="sheetHpCur" class="">—</span><span class="hp-sep2">/</span><span class="hp-max2" id="sheetHpMax">—</span></div>
@@ -1539,6 +1542,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
                     <div class="cs-action-row">
                       <button class="btn-nav btn-primary" onclick="saveCharacter(this)" data-es="💾 Guardar" data-en="💾 Save">💾 Guardar</button>
                       <button class="btn-nav btn-ghost" data-es="📄 PDF" data-en="📄 PDF">📄 PDF</button>
+                    </div>
+                    <div class="cs-action-row">
+                      <button class="btn-nav btn-levelup" id="btnLevelUp" onclick="levelUp(this)">⬆ Subir nivel</button>
                     </div>
                     <div class="cs-nav-links">
                       <button class="cs-nav-link" onclick="document.getElementById('charCreatorDrawer').classList.remove('open');initCharSelect();">↺ Nuevo personaje</button>
@@ -3019,6 +3025,9 @@ function buildSheet(){
   const nameInput=document.getElementById('csNameInput');
   if(nameInput) nameInput.value=nm;
 
+  // Level / prof reset on new character
+  _currentLevel=1;
+  _updateLevelBadges();
   // Meta line
   document.getElementById('csMeta').textContent=`${RACE_NAMES[currentLang][rk]||rk} · ${CLASS_NAMES[currentLang][ck]||ck} · ${currentLang==='es'?'Nivel':'Level'} 1`;
 
@@ -3054,7 +3063,10 @@ function saveCharacter(btn){
   const hpBase={fighter:10,paladin:10,barbarian:12,wizard:6,sorcerer:6,warlock:8,rogue:8,ranger:8,druid:8,bard:8,cleric:8,monk:8}[ck]||8;
   const chars=_loadSavedChars();
   const maxHp=hpBase+conMod;
-  chars.unshift({id:Date.now().toString(),name,race:rk,class:ck,stats:st,hp:maxHp,currentHp:maxHp,ca:10+dexMod,conditions:[..._activeConditions],savedAt:Date.now()});
+  const existingIdx=_loadedCharId?chars.findIndex(c=>c.id===_loadedCharId):-1;
+  const charObj={id:_loadedCharId||Date.now().toString(),name,race:rk,class:ck,stats:st,hp:maxHp,currentHp:maxHp,ca:10+dexMod,level:_currentLevel||1,conditions:[..._activeConditions],savedAt:Date.now()};
+  if(existingIdx>=0){charObj.hp=chars[existingIdx].hp;charObj.currentHp=chars[existingIdx].currentHp;chars.splice(existingIdx,1,charObj);}
+  else chars.unshift(charObj);
   localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));
   const orig=btn.innerHTML;
   btn.innerHTML=currentLang==='es'?'✓ Guardado':'✓ Saved';
@@ -3086,7 +3098,7 @@ function renderSavedChars(){
         <div class="saved-char-top">
           <div class="saved-char-info">
             <div class="saved-char-name">${c.name}</div>
-            <div class="saved-char-sub">${rn} · ${cn} · CA ${c.ca}</div>
+            <div class="saved-char-sub">${rn} · ${cn} · Nv.${c.level||1} · CA ${c.ca}</div>
           </div>
           <div class="saved-char-actions">
             <button class="btn-load-char" onclick="loadChar('${c.id}')">${currentLang==='es'?'Cargar':'Load'}</button>
@@ -3132,6 +3144,9 @@ function loadChar(id){
   const nameInput=document.getElementById('csNameInput');
   if(nameInput)nameInput.value=c.name;
   _loadedCharId=id;
+  _currentLevel=c.level||1;
+  _updateLevelBadges();
+  document.getElementById('csMeta').textContent=`${RACE_NAMES[currentLang][c.race]||c.race} · ${CLASS_NAMES[currentLang][c.class]||c.class} · ${currentLang==='es'?'Nivel':'Level'} ${_currentLevel}`;
   _renderSheetHpTracker(c);
   _activeConditions=new Set(c.conditions||[]);
   _renderConditions();
@@ -3143,6 +3158,54 @@ function deleteChar(id){
   renderSavedChars();
 }
 let _loadedCharId=null;
+let _currentLevel=1;
+const HIT_DICE={fighter:10,paladin:10,barbarian:12,wizard:6,sorcerer:6,warlock:8,rogue:8,ranger:8,druid:8,bard:8,cleric:8,monk:8};
+function profBonus(lv){return lv<=4?2:lv<=8?3:lv<=12?4:lv<=16?5:6;}
+function _updateLevelBadges(){
+  const pb=profBonus(_currentLevel);
+  const lvEl=document.getElementById('csLevel');
+  const pbEl=document.getElementById('csProf');
+  if(lvEl)lvEl.textContent='Nv. '+_currentLevel;
+  if(pbEl)pbEl.textContent='Prof: +'+ pb;
+}
+function levelUp(btn){
+  if(_currentLevel>=20){
+    const orig=btn.innerHTML;btn.innerHTML='Nivel máx. 🎉';
+    setTimeout(()=>{btn.innerHTML=orig;},1500);return;
+  }
+  const ck=selections.class||'fighter';
+  const st=rolledStats||{con:10};
+  const conMod=Math.floor(((st.con||10)-10)/2);
+  const die=HIT_DICE[ck]||8;
+  const roll=Math.floor(Math.random()*die)+1;
+  const gain=Math.max(1,roll+conMod);
+  _currentLevel++;
+  _updateLevelBadges();
+  // Update HP in UI
+  const hpEl=document.getElementById('csHP');
+  const curHpEl=document.getElementById('sheetHpCur');
+  const maxHpEl=document.getElementById('sheetHpMax');
+  if(hpEl){
+    const prev=parseInt(hpEl.textContent.replace('HP: ',''))||0;
+    hpEl.textContent='HP: '+(prev+gain);
+  }
+  if(maxHpEl){const prev=parseInt(maxHpEl.textContent)||0;maxHpEl.textContent=prev+gain;}
+  if(curHpEl){const prev=parseInt(curHpEl.textContent)||0;curHpEl.textContent=prev+gain;}
+  // Update meta line
+  const rk=selections.race||'human';
+  document.getElementById('csMeta').textContent=`${RACE_NAMES[currentLang][rk]||rk} · ${CLASS_NAMES[currentLang][ck]||ck} · ${currentLang==='es'?'Nivel':'Level'} ${_currentLevel}`;
+  // Persist if char is loaded
+  if(_loadedCharId){
+    const chars=_loadSavedChars();
+    const c=chars.find(x=>x.id===_loadedCharId);
+    if(c){c.level=_currentLevel;c.hp=(c.hp||0)+gain;c.currentHp=Math.min((c.currentHp||c.hp),c.hp)+gain;localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));}
+  }
+  // Button feedback
+  const orig=btn.innerHTML;
+  btn.innerHTML=`✨ ¡Nivel ${_currentLevel}! (+${gain} HP)`;
+  btn.style.background='rgba(139,92,246,.45)';
+  setTimeout(()=>{btn.innerHTML=orig;btn.style.background='';},2200);
+}
 function applyHpCard(id,mode){
   const input=document.getElementById('hpi-'+id);
   const val=parseInt(input?.value)||0;
