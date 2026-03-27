@@ -1,7 +1,12 @@
 {
-  "version": "1.5.2",
+  "version": "1.5.3",
   "date": "2026-03-27",
   "history": [
+    {
+      "version": "1.5.3",
+      "date": "2026-03-27",
+      "note": "Bestiario mejorado: tipo de monstruo en cards, filtro por tipo, botón Añadir al Combate desde el detalle"
+    },
     {
       "version": "1.5.2",
       "date": "2026-03-27",

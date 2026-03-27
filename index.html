@@ -1075,7 +1075,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.5.2</span>
+    <span class="ver-badge">v1.5.3</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">27 Mar 2026</span>
   </div>
@@ -1729,6 +1729,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         </select>
       </div>
       <div class="comp-pills" id="compPills"></div>
+      <div class="comp-pills" id="compTypePills" style="display:none;"></div>
       <div id="compGrid" class="comp-grid">
         <div class="comp-state"><div class="comp-spinner"></div><span data-es="Cargando..." data-en="Loading...">Cargando...</span></div>
       </div>
@@ -2522,6 +2523,7 @@ let cDetailCache={};
 let cActiveTab='spells';
 let cSearchQ='';
 let cFilterQ='';
+let cTypeFilterQ='';
 let cCacheLoaded={};
 
 async function initCompendium(){
@@ -2542,7 +2544,7 @@ async function initCompendium(){
 }
 
 function compTab(type,el){
-  cActiveTab=type;cSearchQ='';cFilterQ='';
+  cActiveTab=type;cSearchQ='';cFilterQ='';cTypeFilterQ='';
   const si=document.getElementById('compSearchInput');
   const fi=document.getElementById('compFilterSel');
   if(si)si.value='';if(fi)fi.value='';
@@ -2559,8 +2561,12 @@ function compFilterFn(v,el){
   renderCompGrid();
 }
 
+const MONSTER_TYPE_LABELS={es:{dragon:'Dragón',undead:'Muerto viviente',humanoid:'Humanoide',beast:'Bestia',monstrosity:'Monstruosidad',elemental:'Elemental',aberration:'Aberración',construct:'Constructo',plant:'Planta',fiend:'Demonio',fey:'Hada',giant:'Gigante',celestial:'Celestial',ooze:'Cieno'},en:{dragon:'Dragon',undead:'Undead',humanoid:'Humanoid',beast:'Beast',monstrosity:'Monstrosity',elemental:'Elemental',aberration:'Aberration',construct:'Construct',plant:'Plant',fiend:'Fiend',fey:'Fey',giant:'Giant',celestial:'Celestial',ooze:'Ooze'}};
+const MONSTER_TYPE_BADGE={dragon:'cb-gold',undead:'cb-purple',humanoid:'cb-brand',beast:'cb-green',monstrosity:'cb-red',elemental:'cb-teal',aberration:'cb-purple',construct:'cb-gray',plant:'cb-green',fiend:'cb-red',fey:'cb-teal',giant:'cb-brand',celestial:'cb-gold',ooze:'cb-gray'};
+
 function buildCompFilter(){
   const pills=document.getElementById('compPills');
+  const tpills=document.getElementById('compTypePills');
   if(!pills)return;
   const es=currentLang==='es';
   let items=[];
@@ -2569,16 +2575,31 @@ function buildCompFilter(){
     for(let i=0;i<=9;i++){
       items.push({v:String(i),l:i===0?(es?'Truco':'Cantrip'):(es?`Niv. ${i}`:`Lv. ${i}`)});
     }
+    if(tpills)tpills.style.display='none';
   } else if(cActiveTab==='monsters'){
     items=[
       {v:'',l:es?'Todos':'All'},
       {v:'low',l:'CR 0–4'},{v:'mid',l:'CR 5–9'},
       {v:'high',l:'CR 10–19'},{v:'epic',l:'CR 20+'}
     ];
+    // Build type pills from available data
+    if(tpills){
+      const types=[...new Set(cCache.monsters.map(m=>m.type).filter(Boolean))].sort();
+      const typeItems=[{v:'',l:es?'Todos los tipos':'All types'},...types.map(t=>({v:t,l:(es?MONSTER_TYPE_LABELS.es[t]:MONSTER_TYPE_LABELS.en[t])||t}))];
+      tpills.innerHTML=typeItems.map(it=>`<div class="comp-pill${cTypeFilterQ===it.v?' active':''}" onclick="compTypeFn('${it.v}',this)">${it.l}</div>`).join('');
+      tpills.style.display='flex';
+    }
   } else {
     items=[{v:'',l:es?'Todos':'All'}];
+    if(tpills)tpills.style.display='none';
   }
   pills.innerHTML=items.map(it=>`<div class="comp-pill${cFilterQ===it.v?' active':''}" onclick="compFilterFn('${it.v}',this)">${it.l}</div>`).join('');
+}
+
+function compTypeFn(v,el){
+  cTypeFilterQ=v;
+  if(el){document.querySelectorAll('#compTypePills .comp-pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');}
+  renderCompGrid();
 }
 
 function renderCompGrid(){
@@ -2594,6 +2615,9 @@ function renderCompGrid(){
       else if(cFilterQ==='high')list=list.filter(i=>cr(i)>=10&&cr(i)<20);
       else if(cFilterQ==='epic')list=list.filter(i=>cr(i)>=20);
     }
+  }
+  if(cTypeFilterQ&&cActiveTab==='monsters'){
+    list=list.filter(i=>(i.type||'').toLowerCase()===cTypeFilterQ.toLowerCase());
   }
   if(!list.length){
     document.getElementById('compGrid').innerHTML=`<div class="comp-state">${currentLang==='es'?'Sin resultados':'No results'}</div>`;
@@ -2666,11 +2690,17 @@ function monsterAvatar(name, index){
 }
 function renderMonsterCard(m){
   const cr=m.challenge_rating!==undefined?m.challenge_rating:'?';
+  const type=(m.type||'').toLowerCase();
+  const typeBadge=MONSTER_TYPE_BADGE[type]||'cb-gray';
+  const typeLbl=currentLang==='es'?(MONSTER_TYPE_LABELS.es[type]||m.type||''):(MONSTER_TYPE_LABELS.en[type]||m.type||'');
   return`<div class="comp-card monster-card" onclick="openCompDetail('monsters','${m.index}')">
     <div class="mc-avatar">${monsterAvatar(m.name, m.index)}</div>
     <div class="mc-info">
       <div class="cc-name">${m.name}</div>
-      <span class="cc-badge cb-teal">CR ${cr}</span>
+      <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px;">
+        <span class="cc-badge cb-teal">CR ${cr}</span>
+        ${typeLbl?`<span class="cc-badge ${typeBadge}" style="font-size:9px;">${typeLbl}</span>`:''}
+      </div>
     </div>
   </div>`;
 }
@@ -2805,7 +2835,20 @@ function renderMonsterDetail(d){
     ${langStr?`<div class="cp-field" style="margin-top:8px;"><div class="cp-field-label">${L('Idiomas','Languages')}</div><div class="cp-field-value">${langStr}</div></div>`:''}
     ${d.special_abilities?.length?`<div class="cp-divider"></div><div class="cp-section-title">${L('Habilidades especiales','Special Abilities')}</div>${d.special_abilities.map(a=>`<div class="cp-action"><div class="cp-action-name">${a.name}</div><div class="cp-action-desc">${aDesc(a)}</div></div>`).join('')}`:''}
     ${d.actions?.length?`<div class="cp-divider"></div><div class="cp-section-title">${L('Acciones','Actions')}</div>${d.actions.map(a=>`<div class="cp-action"><div class="cp-action-name">${a.name}</div><div class="cp-action-desc">${aDesc(a)}</div></div>`).join('')}`:''}
-    ${d.legendary_actions?.length?`<div class="cp-divider"></div><div class="cp-section-title">${L('Acciones legendarias','Legendary Actions')}</div>${d.legendary_actions.map(a=>`<div class="cp-action"><div class="cp-action-name">${a.name}</div><div class="cp-action-desc">${aDesc(a)}</div></div>`).join('')}`:''}`;
+    ${d.legendary_actions?.length?`<div class="cp-divider"></div><div class="cp-section-title">${L('Acciones legendarias','Legendary Actions')}</div>${d.legendary_actions.map(a=>`<div class="cp-action"><div class="cp-action-name">${a.name}</div><div class="cp-action-desc">${aDesc(a)}</div></div>`).join('')}`:''}
+    <div class="cp-divider"></div>
+    <button onclick="combatAddFromBestiary('${d.name.replace(/'/g,"\\'")}',${d.hit_points||10},${ac||10})" style="width:100%;padding:9px;border-radius:8px;border:1px solid rgba(248,113,113,.4);background:rgba(248,113,113,.12);color:#f87171;font-size:13px;font-weight:600;cursor:pointer;margin-top:4px;" onmouseover="this.style.background='rgba(248,113,113,.25)'" onmouseout="this.style.background='rgba(248,113,113,.12)'"">⚔️ ${L('Añadir al Combate','Add to Combat')}</button>`;
+}
+
+function combatAddFromBestiary(name,hp,ac){
+  const ini=Math.floor(Math.random()*20)+1;
+  combatAddCombatant(name,ini,hp,ac,'enemy');
+  // Show feedback
+  const btn=event.target;
+  const orig=btn.innerHTML;
+  btn.innerHTML=`✓ ${name} ${currentLang==='es'?'añadido':'added'}!`;
+  btn.style.background='rgba(110,231,183,.2)';btn.style.borderColor='rgba(110,231,183,.4)';btn.style.color='#6ee7b7';
+  setTimeout(()=>{btn.innerHTML=orig;btn.style.background='rgba(248,113,113,.12)';btn.style.borderColor='rgba(248,113,113,.4)';btn.style.color='#f87171';},1800);
 }
 
 function renderClassDetail(d){
