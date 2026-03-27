@@ -535,6 +535,129 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .cp-action-desc{font-size:12px;color:var(--text-m);line-height:1.65;}
 body:has(.page.active#page-compendium) #cdot{background:var(--gold);}
 body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);}
+
+/* ══════════════════════════════════ RESPONSIVE MOBILE */
+@media (max-width:700px){
+  /* ── Cursor: hide on touch screens ── */
+  #cdot,#cring{display:none;}
+  *{cursor:auto!important;}
+  button,a,[onclick]{cursor:pointer!important;}
+
+  /* ── Landing nav ── */
+  .land-nav{padding:0 16px;height:56px;gap:8px;}
+  .land-nav-links{display:none;}
+  .land-nav-spacer{flex:1;}
+  .lang-toggle{border-radius:6px;}
+  .lang-btn{padding:5px 9px;font-size:11px;}
+  .lbtn-ghost{padding:7px 12px;font-size:12px;}
+  .lbtn-gold{padding:7px 12px;font-size:12px;}
+
+  /* ── Landing hero ── */
+  .land-hero{bottom:14vh;left:5vw;right:5vw;max-width:100%;}
+  .lt-dnd{-webkit-text-stroke:1.5px var(--gold);letter-spacing:.02em;}
+  .land-sub{font-size:14px;max-width:100%;}
+  .land-btns{flex-direction:column;gap:10px;align-items:flex-start;}
+  .lbtn-lg{padding:13px 28px;font-size:14px;}
+
+  /* ── Landing hints ── */
+  .land-hints{padding:0 16px;}
+  .dice-label{display:none;}
+
+  /* ── Adventurers scene ── */
+  .sc-adventurers-svg{height:34vh;max-height:260px;}
+  .sc-campfire{left:60%;}
+
+  /* ── Features section ── */
+  #section-features{flex-direction:column;padding:0 12px;padding-bottom:80px;align-items:center;justify-content:flex-end;}
+  .feat-left{display:none;}
+  .feat-right{width:100%;gap:10px;}
+  .feat-card{padding:14px 16px;}
+  .feat-card-title{font-size:14px;}
+  .feat-card-desc{font-size:12px;}
+
+  /* ── App nav ── */
+  .app-nav{padding:0 10px;gap:4px;}
+  .anav-logo .llogo-m{display:none;}
+  .anav-logo .llogo-d{font-size:15px;}
+  .anav-links{gap:0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  .anav-links::-webkit-scrollbar{display:none;}
+  .anav-link{padding:5px 9px;font-size:12px;white-space:nowrap;}
+  .anav-spacer,.anav-btn{display:none;}
+
+  /* ── Character creator ── */
+  .creator-wrap{padding:20px 12px;}
+  .creator-header h2{font-size:22px;}
+  .prog-line{width:36px;}
+  .prog-label{font-size:9px;}
+
+  /* ── Mode selection ── */
+  .cs-mode-title{font-size:24px;}
+  .cs-mode-sub{font-size:12px;margin-bottom:24px;}
+  .cs-mode-grid{grid-template-columns:1fr;}
+  .cs-mode-card{padding:22px 18px;}
+  .cs-mode-icon{font-size:30px;margin-bottom:8px;}
+  .cs-mode-name{font-size:15px;}
+  .cs-step-label{font-size:9px;}
+
+  /* ── Carousel ── */
+  .char-select-screen{gap:12px;padding-top:60px;}
+  .race-info-name{font-size:24px;letter-spacing:.06em;}
+  .race-info-tag{font-size:10px;letter-spacing:.16em;}
+  .race-bonus-pill{font-size:11px;padding:3px 10px;}
+  .race-arrow{width:34px;height:34px;font-size:20px;margin:0 4px;}
+  .race-info-section{gap:7px;}
+  .char-confirm-btn{padding:10px 24px;font-size:11px;letter-spacing:.12em;}
+  .char-drawer-back{padding:6px 11px;font-size:11px;}
+  .cs-chips-wrap{padding:2px 8px 6px;gap:4px;}
+  .cs-chip{font-size:9px;padding:3px 9px;letter-spacing:.3px;}
+
+  /* ── Character sheet ── */
+  .char-sheet{padding:16px 12px;margin:0;}
+  .cs-body{grid-template-columns:repeat(3,1fr);gap:7px;}
+  .cs-stat-val{font-size:18px;}
+  .cs-footer{gap:6px;}
+
+  /* ── Char creator drawer ── */
+  .char-drawer-header{padding:14px 16px;gap:10px;}
+  .char-drawer-body{padding:16px 14px;}
+  .stats-grid{max-width:100%;}
+
+  /* ── Dice overlay ── */
+  .dice-overlay-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
+  .dice-overlay-title{font-size:14px;}
+  .dice-total{font-size:17px;}
+
+  /* ── Map tabs ── */
+  .map-tabs{overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;}
+  .map-tab{white-space:nowrap;padding:10px 14px;font-size:12px;}
+
+  /* ── Map layout ── */
+  .map-layout{grid-template-columns:1fr;grid-template-rows:auto 1fr auto;}
+  .map-sidebar-left{display:none;}
+  .map-sidebar-right{border-left:none;border-top:1px solid var(--border);max-height:80px;overflow:auto;display:flex;flex-wrap:wrap;gap:3px;padding:8px;}
+  .map-canvas-wrap{height:60vw;min-height:220px;padding:8px;}
+  .map-panel{height:auto;}
+
+  /* ── Sounds ── */
+  .sound-layout{padding:20px 12px;}
+  .sound-header{flex-direction:column;gap:6px;}
+  .sound-header h2{font-size:20px;}
+  .now-playing{padding:10px 12px;gap:10px;flex-wrap:wrap;}
+  .sounds-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));}
+
+  /* ── Compendium ── */
+  .comp-wrap{padding:20px 12px;}
+  .comp-panel{width:100%;max-width:100%;}
+  .comp-toolbar{flex-direction:column;}
+  .comp-search{min-width:0;}
+  .cp-grid2{grid-template-columns:1fr;}
+
+  /* ── Modal ── */
+  .modal{margin:12px;width:calc(100% - 24px);padding:24px 16px;}
+
+  /* ── Ver footer ── */
+  .ver-footer{padding:8px 12px;}
+}
 </style>
 </head>
 <body>
@@ -557,9 +680,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.2.9</span>
+    <span class="ver-badge">v1.3.0</span>
     <span class="ver-sep">·</span>
-    <span class="ver-date">26 Mar 2026</span>
+    <span class="ver-date">27 Mar 2026</span>
   </div>
   <div class="lang-toggle">
     <button class="lang-btn active" onclick="setLang('es')">ES</button>
@@ -2363,13 +2486,17 @@ function _spriteCardHtml(key,sprite,imgUrl,cardW,cls,onclickFn){
   return`<div class="race-card ${cls}" style="width:${cardW}px;height:${cropH}px;" onclick="${onclickFn}('${key}')"><div class="race-card-inner" style="width:${cardW}px;height:${cellH}px;background-image:url('${imgUrl}');background-size:${cardW*3}px ${cellH*4}px;background-position:${-s.c*cardW}px ${-s.r*cellH}px;"></div></div>`;
 }
 
+function _carouselSlots(){
+  if(window.innerWidth<=700) return [{off:-2,cls:'rc-adj2',w:48},{off:-1,cls:'rc-adj1',w:82},{off:0,cls:'rc-active',w:140},{off:1,cls:'rc-adj1',w:82},{off:2,cls:'rc-adj2',w:48}];
+  return [{off:-2,cls:'rc-adj2',w:100},{off:-1,cls:'rc-adj1',w:155},{off:0,cls:'rc-active',w:240},{off:1,cls:'rc-adj1',w:155},{off:2,cls:'rc-adj2',w:100}];
+}
 const CAROUSEL_SLOTS=[{off:-2,cls:'rc-adj2',w:100},{off:-1,cls:'rc-adj1',w:155},{off:0,cls:'rc-active',w:240},{off:1,cls:'rc-adj1',w:155},{off:2,cls:'rc-adj2',w:100}];
 
 function _renderCarouselTrack(trackId,keys,idx,sprite,imgUrl,onclickFn,dir){
   const track=document.getElementById(trackId);
   if(!track)return;
   const total=keys.length;
-  track.innerHTML=CAROUSEL_SLOTS.map(({off,cls,w})=>{
+  track.innerHTML=_carouselSlots().map(({off,cls,w})=>{
     const i=((idx+off)%total+total)%total;
     return _spriteCardHtml(keys[i],sprite,imgUrl,w,cls,onclickFn);
   }).join('');
