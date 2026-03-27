@@ -1,7 +1,12 @@
 {
-  "version": "1.4.9",
+  "version": "1.5.0",
   "date": "2026-03-27",
   "history": [
+    {
+      "version": "1.5.0",
+      "date": "2026-03-27",
+      "note": "Nueva página Notas de sesión: lista persistente en localStorage, editor con auto-save, accesible desde nav y mobile menu"
+    },
     {
       "version": "1.4.9",
       "date": "2026-03-27",
