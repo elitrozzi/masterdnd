@@ -1,7 +1,12 @@
 {
-  "version": "1.5.0",
+  "version": "1.5.1",
   "date": "2026-03-27",
   "history": [
+    {
+      "version": "1.5.1",
+      "date": "2026-03-27",
+      "note": "Combat Tracker: rastreador de iniciativa con HP en tiempo real, log de combate, importar personajes guardados, persistencia en localStorage"
+    },
     {
       "version": "1.5.0",
       "date": "2026-03-27",

@@ -714,6 +714,96 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   .notes-textarea{padding:14px;}
 }
 
+/* ══════════════════════════════════ COMBAT TRACKER */
+#page-combat.active{display:flex!important;flex-direction:column;height:100vh;padding-top:60px;}
+.combat-layout{display:flex;flex:1;min-height:0;gap:0;}
+.combat-sidebar{width:280px;flex-shrink:0;border-right:1px solid var(--border);display:flex;flex-direction:column;background:rgba(9,7,15,.6);overflow:hidden;}
+.combat-header{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.combat-round-badge{font-family:'Cinzel',serif;font-size:11px;font-weight:700;color:var(--gold);background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.3);border-radius:20px;padding:3px 10px;letter-spacing:.08em;}
+.combat-btn-row{display:flex;gap:6px;}
+.combat-btn{font-size:11px;font-weight:600;padding:5px 10px;border-radius:6px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:var(--text-m);cursor:pointer;transition:background .15s,color .15s;}
+.combat-btn:hover{background:rgba(255,255,255,.13);color:#fff;}
+.combat-btn.btn-next{background:rgba(212,175,55,.18);border-color:rgba(212,175,55,.4);color:var(--gold);}
+.combat-btn.btn-next:hover{background:rgba(212,175,55,.3);}
+.combat-btn.btn-danger{background:rgba(180,40,40,.18);border-color:rgba(180,40,40,.4);color:#f87171;}
+.combat-btn.btn-danger:hover{background:rgba(180,40,40,.3);}
+.combatant-list{flex:1;overflow-y:auto;padding:8px;}
+.combatant-item{border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:8px 10px;margin-bottom:6px;background:rgba(255,255,255,.04);transition:border-color .2s,background .2s;position:relative;}
+.combatant-item.is-active{border-color:var(--gold);background:rgba(212,175,55,.08);}
+.combatant-item.is-dead{opacity:.4;}
+.combatant-item.is-dead .cmb-name{text-decoration:line-through;}
+.combatant-item.is-enemy .cmb-name{color:#f87171;}
+.combatant-item.is-ally .cmb-name{color:#6ee7b7;}
+.cmb-row1{display:flex;align-items:center;gap:6px;margin-bottom:4px;}
+.cmb-ini{font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:var(--gold);min-width:28px;text-align:center;}
+.cmb-name{font-size:13px;font-weight:600;color:#fff;flex:1;}
+.cmb-type-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.cmb-type-dot.enemy{background:#f87171;}
+.cmb-type-dot.ally{background:#6ee7b7;}
+.cmb-type-dot.player{background:#93c5fd;}
+.cmb-hp-bar-wrap{height:5px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden;margin-bottom:4px;}
+.cmb-hp-bar{height:100%;border-radius:3px;transition:width .3s;}
+.cmb-row2{display:flex;align-items:center;gap:6px;}
+.cmb-hp-label{font-size:11px;color:var(--text-m);flex:1;}
+.cmb-ac-label{font-size:10px;color:var(--text-d);background:rgba(255,255,255,.07);border-radius:4px;padding:1px 5px;}
+.cmb-hp-btns{display:flex;gap:3px;}
+.cmb-hp-btn{font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:var(--text-m);cursor:pointer;}
+.cmb-hp-btn:hover{background:rgba(255,255,255,.14);}
+.cmb-hp-btn.dmg{border-color:rgba(248,113,113,.35);color:#f87171;}
+.cmb-hp-btn.dmg:hover{background:rgba(248,113,113,.15);}
+.cmb-hp-btn.heal{border-color:rgba(110,231,183,.35);color:#6ee7b7;}
+.cmb-hp-btn.heal:hover{background:rgba(110,231,183,.15);}
+.cmb-remove-btn{font-size:10px;color:var(--text-d);background:none;border:none;cursor:pointer;padding:0 2px;line-height:1;}
+.cmb-remove-btn:hover{color:#f87171;}
+.cmb-turn-arrow{position:absolute;left:-7px;top:50%;transform:translateY(-50%);color:var(--gold);font-size:14px;font-weight:900;opacity:0;transition:opacity .2s;}
+.combatant-item.is-active .cmb-turn-arrow{opacity:1;}
+.combat-add-panel{padding:10px 14px;border-top:1px solid var(--border);}
+.combat-add-title{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-d);margin-bottom:8px;}
+.combat-add-form{display:flex;flex-direction:column;gap:5px;}
+.combat-add-row{display:flex;gap:5px;}
+.combat-add-input{flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:5px;padding:5px 8px;font-size:12px;color:#fff;outline:none;}
+.combat-add-input::placeholder{color:var(--text-d);}
+.combat-add-input:focus{border-color:rgba(212,175,55,.4);}
+.combat-add-select{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:5px;padding:5px 6px;font-size:12px;color:#fff;outline:none;cursor:pointer;}
+.combat-add-select option{background:#1a1428;}
+.combat-add-submit{padding:5px 12px;border-radius:5px;border:1px solid rgba(212,175,55,.4);background:rgba(212,175,55,.15);color:var(--gold);font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;}
+.combat-add-submit:hover{background:rgba(212,175,55,.28);}
+.combat-chars-chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;}
+.combat-char-chip{font-size:11px;padding:3px 8px;border-radius:12px;border:1px solid rgba(147,197,253,.3);background:rgba(147,197,253,.08);color:#93c5fd;cursor:pointer;}
+.combat-char-chip:hover{background:rgba(147,197,253,.18);}
+/* combat main panel */
+.combat-main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.combat-log{flex:1;overflow-y:auto;padding:16px 20px;}
+.combat-log-header{font-family:'Cinzel',serif;font-size:14px;color:var(--gold);margin-bottom:12px;letter-spacing:.06em;}
+.combat-log-list{display:flex;flex-direction:column;gap:6px;}
+.combat-log-entry{font-size:12px;color:var(--text-m);padding:6px 10px;border-radius:6px;background:rgba(255,255,255,.04);border-left:3px solid rgba(255,255,255,.15);}
+.combat-log-entry.log-turn{border-left-color:var(--gold);}
+.combat-log-entry.log-dmg{border-left-color:#f87171;}
+.combat-log-entry.log-heal{border-left-color:#6ee7b7;}
+.combat-log-entry.log-dead{border-left-color:#888;}
+.combat-log-entry .log-time{font-size:10px;color:var(--text-d);margin-left:6px;}
+.combat-hp-modal{display:none;position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.6);align-items:center;justify-content:center;}
+.combat-hp-modal.open{display:flex;}
+.combat-hp-modal-box{background:#1a1428;border:1px solid rgba(212,175,55,.3);border-radius:12px;padding:20px 24px;min-width:240px;display:flex;flex-direction:column;gap:12px;}
+.combat-hp-modal-title{font-size:13px;font-weight:700;color:#fff;}
+.combat-hp-modal-input{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:7px;padding:8px 12px;font-size:20px;font-weight:700;color:#fff;outline:none;text-align:center;width:100%;}
+.combat-hp-modal-input:focus{border-color:rgba(212,175,55,.5);}
+.combat-hp-modal-btns{display:flex;gap:8px;}
+.combat-hp-modal-btn{flex:1;padding:7px;border-radius:7px;border:none;font-size:13px;font-weight:600;cursor:pointer;}
+.combat-hp-modal-btn.do-dmg{background:rgba(248,113,113,.2);color:#f87171;border:1px solid rgba(248,113,113,.4);}
+.combat-hp-modal-btn.do-dmg:hover{background:rgba(248,113,113,.35);}
+.combat-hp-modal-btn.do-heal{background:rgba(110,231,183,.2);color:#6ee7b7;border:1px solid rgba(110,231,183,.4);}
+.combat-hp-modal-btn.do-heal:hover{background:rgba(110,231,183,.35);}
+.combat-hp-modal-btn.do-cancel{background:rgba(255,255,255,.07);color:var(--text-m);border:1px solid rgba(255,255,255,.12);}
+.combat-hp-modal-btn.do-cancel:hover{background:rgba(255,255,255,.13);}
+.combat-empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;height:100%;color:var(--text-d);font-size:13px;}
+.combat-empty-icon{font-size:36px;}
+@media(max-width:640px){
+  .combat-layout{flex-direction:column;}
+  .combat-sidebar{width:100%;max-height:60vh;border-right:none;border-bottom:1px solid var(--border);}
+  .combat-main{min-height:200px;}
+}
+
 /* ── Hamburger button (hidden on desktop) ── */
 .hamb-btn{display:none;flex-direction:column;justify-content:center;gap:5px;background:none;border:none;padding:6px 4px;cursor:pointer;flex-shrink:0;}
 .hamb-line{display:block;width:22px;height:2px;background:var(--text-m);border-radius:2px;transition:transform .25s,opacity .25s,background .15s;}
@@ -932,6 +1022,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     <div class="mm-link" onclick="goTo('sounds');closeMobileMenu()"><span class="mm-link-icon">🎵</span><span data-es="Sonidos" data-en="Sounds">Sonidos</span></div>
     <div class="mm-link" onclick="goTo('compendium');closeMobileMenu()"><span class="mm-link-icon">📖</span><span data-es="Compendio" data-en="Compendium">Compendio</span></div>
     <div class="mm-link" onclick="goTo('notes');closeMobileMenu()"><span class="mm-link-icon">📝</span><span data-es="Notas" data-en="Notes">Notas</span></div>
+    <div class="mm-link" onclick="goTo('combat');closeMobileMenu()"><span class="mm-link-icon">⚔️</span><span data-es="Combate" data-en="Combat">Combate</span></div>
   </div>
   <div class="mm-footer">
     <div class="mm-footer-label">Idioma</div>
@@ -977,11 +1068,12 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     <a class="anav-link" id="nl-sounds" onclick="goTo('sounds')" data-es="Sonidos" data-en="Sounds">Sonidos</a>
     <a class="anav-link" id="nl-compendium" onclick="goTo('compendium')" data-es="Compendio" data-en="Compendium">Compendio</a>
     <a class="anav-link" id="nl-notes" onclick="goTo('notes')" data-es="Notas" data-en="Notes">Notas</a>
+    <a class="anav-link" id="nl-combat" onclick="goTo('combat')" data-es="Combate" data-en="Combat">Combate</a>
   </div>
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.5.0</span>
+    <span class="ver-badge">v1.5.1</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">27 Mar 2026</span>
   </div>
@@ -1671,6 +1763,70 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         </div>
         <textarea class="notes-textarea" id="notesTextarea" placeholder="Escribí aquí los eventos de tu sesión, NPCs importantes, pistas, decisiones de los jugadores..." oninput="noteInputChanged()"></textarea>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════ PAGE: COMBAT -->
+<div id="page-combat" class="page">
+  <div class="combat-layout">
+    <!-- Sidebar: combatant list + add form -->
+    <div class="combat-sidebar">
+      <div class="combat-header">
+        <span class="combat-round-badge" id="combatRoundBadge">Ronda 1</span>
+        <div class="combat-btn-row">
+          <button class="combat-btn btn-next" onclick="combatNextTurn()">Siguiente ▶</button>
+          <button class="combat-btn btn-danger" onclick="combatReset()">Reset</button>
+        </div>
+      </div>
+      <div class="combatant-list" id="combatantList">
+        <div class="combat-empty-state" id="combatEmptyState">
+          <div class="combat-empty-icon">⚔️</div>
+          <span>Añadí combatientes para empezar</span>
+        </div>
+      </div>
+      <div class="combat-add-panel">
+        <div class="combat-add-title">Añadir combatiente</div>
+        <div class="combat-add-form">
+          <div class="combat-add-row">
+            <input class="combat-add-input" id="cmbAddName" placeholder="Nombre" style="flex:2;">
+            <input class="combat-add-input" id="cmbAddIni" placeholder="INI" type="number" style="flex:1;max-width:56px;">
+          </div>
+          <div class="combat-add-row">
+            <input class="combat-add-input" id="cmbAddHp" placeholder="HP" type="number" style="flex:1;">
+            <input class="combat-add-input" id="cmbAddAc" placeholder="CA" type="number" style="flex:1;">
+            <select class="combat-add-select" id="cmbAddType">
+              <option value="enemy">Enemigo</option>
+              <option value="ally">Aliado</option>
+              <option value="player">Jugador</option>
+            </select>
+            <button class="combat-add-submit" onclick="combatAddFromForm()">+ Añadir</button>
+          </div>
+          <div id="combatCharChips" class="combat-chars-chips"></div>
+        </div>
+      </div>
+    </div>
+    <!-- Main panel: combat log -->
+    <div class="combat-main">
+      <div class="combat-log" id="combatLog">
+        <div class="combat-log-header">⚔️ Registro de combate</div>
+        <div class="combat-log-list" id="combatLogList">
+          <div class="combat-log-entry" style="color:var(--text-d);border-left-color:transparent;">El combate no ha comenzado...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HP modal -->
+<div class="combat-hp-modal" id="combatHpModal">
+  <div class="combat-hp-modal-box">
+    <div class="combat-hp-modal-title" id="combatHpModalTitle">Modificar HP</div>
+    <input class="combat-hp-modal-input" id="combatHpModalInput" type="number" min="0" placeholder="0">
+    <div class="combat-hp-modal-btns">
+      <button class="combat-hp-modal-btn do-dmg" onclick="combatHpModalApply('dmg')">💀 Daño</button>
+      <button class="combat-hp-modal-btn do-heal" onclick="combatHpModalApply('heal')">❤️ Curar</button>
+      <button class="combat-hp-modal-btn do-cancel" onclick="combatHpModalClose()">Cancelar</button>
     </div>
   </div>
 </div>
@@ -2706,8 +2862,8 @@ function closeCompPanel(){
 }
 
 /* ══ NAV ══ */
-const PAGE_URLS={home:'/',characters:'/personajes',maps:'/mapas',sounds:'/efectos-sonidos',compendium:'/compendio',notes:'/notas'};
-const URL_PAGES={'/personajes':'characters','/mapas':'maps','/efectos-sonidos':'sounds','/compendio':'compendium','/notas':'notes'};
+const PAGE_URLS={home:'/',characters:'/personajes',maps:'/mapas',sounds:'/efectos-sonidos',compendium:'/compendio',notes:'/notas',combat:'/combate'};
+const URL_PAGES={'/personajes':'characters','/mapas':'maps','/efectos-sonidos':'sounds','/compendio':'compendium','/notas':'notes','/combate':'combat'};
 function goTo(page,fromPop){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+page).classList.add('active');
@@ -2719,6 +2875,7 @@ function goTo(page,fromPop){
   if(page==='maps'){initMap();_mapsExploreLoaded=false;}
   if(page==='compendium')initCompendium();
   if(page==='notes')initNotes();
+  if(page==='combat')initCombat();
   if(page==='characters')initCharSelect();
   if(!fromPop)history.pushState({page},'',(PAGE_URLS[page]||'/'));
 }
@@ -3751,6 +3908,226 @@ function initNotes(){
     }
   }
 }
+/* ══ COMBAT TRACKER ══ */
+const COMBAT_LS_KEY='masterdnd_combat';
+let _combatants=[];
+let _combatRound=1;
+let _activeTurnId=null;
+let _combatLog=[];
+let _hpModalTargetId=null;
+
+function _saveCombat(){
+  localStorage.setItem(COMBAT_LS_KEY,JSON.stringify({combatants:_combatants,round:_combatRound,activeId:_activeTurnId,log:_combatLog.slice(-50)}));
+}
+function _loadCombatState(){
+  try{
+    const s=JSON.parse(localStorage.getItem(COMBAT_LS_KEY));
+    if(s){
+      _combatants=s.combatants||[];
+      _combatRound=s.round||1;
+      _activeTurnId=s.activeId||null;
+      _combatLog=s.log||[];
+    }
+  }catch(e){}
+}
+function _sortedCombatants(){
+  return [..._combatants].sort((a,b)=>b.initiative-a.initiative||(a.name>b.name?1:-1));
+}
+function _hpBarColor(pct){
+  if(pct>0.6)return '#6ee7b7';
+  if(pct>0.3)return '#fbbf24';
+  return '#f87171';
+}
+function _addLog(msg,type=''){
+  const t=new Date();
+  const time=t.getHours().toString().padStart(2,'0')+':'+t.getMinutes().toString().padStart(2,'0');
+  _combatLog.push({msg,type,time});
+  if(_combatLog.length>100)_combatLog.shift();
+}
+function _rollD20(){return Math.floor(Math.random()*20)+1;}
+
+function combatAddFromForm(){
+  const nameEl=document.getElementById('cmbAddName');
+  const iniEl=document.getElementById('cmbAddIni');
+  const hpEl=document.getElementById('cmbAddHp');
+  const acEl=document.getElementById('cmbAddAc');
+  const typeEl=document.getElementById('cmbAddType');
+  const name=(nameEl.value||'').trim();
+  if(!name)return;
+  const ini=iniEl.value!==''?parseInt(iniEl.value):_rollD20();
+  const hp=parseInt(hpEl.value)||10;
+  const ac=parseInt(acEl.value)||10;
+  const type=typeEl.value||'enemy';
+  combatAddCombatant(name,ini,hp,ac,type);
+  nameEl.value='';iniEl.value='';hpEl.value='';acEl.value='';
+  nameEl.focus();
+}
+function combatAddCombatant(name,ini,hp,ac,type){
+  const id='cmb_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);
+  _combatants.push({id,name,initiative:ini,hp,maxHp:hp,ac,type,isDead:false});
+  _addLog(`${name} entró al combate (INI ${ini})`,type==='enemy'?'log-dmg':type==='ally'?'log-heal':'log-turn');
+  if(_combatants.length===1)_activeTurnId=id;
+  _saveCombat();
+  renderCombat();
+}
+function combatAddFromChar(charId){
+  const chars=_loadSavedChars();
+  const ch=chars.find(c=>c.id===charId);
+  if(!ch)return;
+  const dex=ch.stats&&ch.stats.DEX?Math.floor((ch.stats.DEX-10)/2):0;
+  const ini=_rollD20()+dex;
+  const hp=ch.hp||10;
+  const ac=ch.ac||10;
+  combatAddCombatant(ch.name,ini,hp,ac,'player');
+}
+function combatRemove(id){
+  const c=_combatants.find(x=>x.id===id);
+  if(!c)return;
+  _addLog(`${c.name} fue removido del combate`,'');
+  _combatants=_combatants.filter(x=>x.id!==id);
+  if(_activeTurnId===id){
+    const sorted=_sortedCombatants();
+    _activeTurnId=sorted.length?sorted[0].id:null;
+  }
+  _saveCombat();
+  renderCombat();
+}
+function combatNextTurn(){
+  const sorted=_sortedCombatants().filter(c=>!c.isDead);
+  if(!sorted.length)return;
+  const idx=sorted.findIndex(c=>c.id===_activeTurnId);
+  const next=(idx+1)%sorted.length;
+  if(next===0)_combatRound++;
+  _activeTurnId=sorted[next].id;
+  _addLog(`Turno de ${sorted[next].name} — Ronda ${_combatRound}`,'log-turn');
+  _saveCombat();
+  renderCombat();
+  // scroll active into view
+  requestAnimationFrame(()=>{
+    const el=document.querySelector('.combatant-item.is-active');
+    if(el)el.scrollIntoView({block:'nearest',behavior:'smooth'});
+  });
+}
+function combatReset(){
+  if(_combatants.length>0&&!confirm('¿Reiniciar el combate? Se perderán los datos actuales.'))return;
+  _combatants=[];_combatRound=1;_activeTurnId=null;_combatLog=[];
+  _saveCombat();
+  renderCombat();
+}
+function combatOpenHpModal(id){
+  const c=_combatants.find(x=>x.id===id);
+  if(!c)return;
+  _hpModalTargetId=id;
+  document.getElementById('combatHpModalTitle').textContent=`${c.name} — HP: ${c.hp}/${c.maxHp}`;
+  document.getElementById('combatHpModalInput').value='';
+  const modal=document.getElementById('combatHpModal');
+  modal.classList.add('open');
+  setTimeout(()=>document.getElementById('combatHpModalInput').focus(),80);
+}
+function combatHpModalClose(){
+  document.getElementById('combatHpModal').classList.remove('open');
+  _hpModalTargetId=null;
+}
+function combatHpModalApply(mode){
+  const val=parseInt(document.getElementById('combatHpModalInput').value)||0;
+  if(!val){combatHpModalClose();return;}
+  combatApplyHp(_hpModalTargetId,mode,val);
+  combatHpModalClose();
+}
+function combatApplyHp(id,mode,amount){
+  const c=_combatants.find(x=>x.id===id);
+  if(!c||amount<=0)return;
+  if(mode==='dmg'){
+    c.hp=Math.max(0,c.hp-amount);
+    if(c.hp===0&&!c.isDead){
+      c.isDead=true;
+      _addLog(`☠️ ${c.name} ha caído`,'log-dead');
+    } else {
+      _addLog(`${c.name} recibió ${amount} de daño (HP: ${c.hp}/${c.maxHp})`,'log-dmg');
+    }
+  } else {
+    c.isDead=false;
+    c.hp=Math.min(c.maxHp,c.hp+amount);
+    _addLog(`${c.name} fue curado por ${amount} (HP: ${c.hp}/${c.maxHp})`,'log-heal');
+  }
+  _saveCombat();
+  renderCombat();
+}
+
+function renderCombat(){
+  // round badge
+  document.getElementById('combatRoundBadge').textContent='Ronda '+_combatRound;
+  // combatant list
+  const listEl=document.getElementById('combatantList');
+  const emptyEl=document.getElementById('combatEmptyState');
+  const sorted=_sortedCombatants();
+  if(!sorted.length){
+    if(emptyEl)emptyEl.style.display='flex';
+    listEl.querySelectorAll('.combatant-item').forEach(e=>e.remove());
+  } else {
+    if(emptyEl)emptyEl.style.display='none';
+    // rebuild list
+    const existing=new Set([...listEl.querySelectorAll('.combatant-item')].map(e=>e.dataset.id));
+    const needed=new Set(sorted.map(c=>c.id));
+    existing.forEach(id=>{if(!needed.has(id)){const el=listEl.querySelector(`[data-id="${id}"]`);if(el)el.remove();}});
+    sorted.forEach((c,i)=>{
+      let el=listEl.querySelector(`[data-id="${c.id}"]`);
+      const pct=c.maxHp>0?c.hp/c.maxHp:0;
+      const barColor=_hpBarColor(pct);
+      const typeClass=c.type==='enemy'?'is-enemy':c.type==='ally'?'is-ally':'';
+      const activeClass=c.id===_activeTurnId?'is-active':'';
+      const deadClass=c.isDead?'is-dead':'';
+      const html=`
+        <div class="cmb-turn-arrow">▶</div>
+        <div class="cmb-row1">
+          <div class="cmb-ini">${c.initiative}</div>
+          <div class="cmb-type-dot ${c.type}"></div>
+          <div class="cmb-name">${c.name}</div>
+          <button class="cmb-remove-btn" onclick="combatRemove('${c.id}')" title="Remover">✕</button>
+        </div>
+        <div class="cmb-hp-bar-wrap"><div class="cmb-hp-bar" style="width:${Math.round(pct*100)}%;background:${barColor};"></div></div>
+        <div class="cmb-row2">
+          <div class="cmb-hp-label">❤️ ${c.hp}/${c.maxHp}</div>
+          <div class="cmb-ac-label">CA ${c.ac}</div>
+          <div class="cmb-hp-btns">
+            <button class="cmb-hp-btn dmg" onclick="combatOpenHpModal('${c.id}')">🗡 Daño/Curar</button>
+          </div>
+        </div>`;
+      if(!el){
+        el=document.createElement('div');
+        el.className='combatant-item';
+        el.dataset.id=c.id;
+        listEl.insertBefore(el,emptyEl&&!emptyEl.hidden?emptyEl:listEl.children[i]||null);
+      }
+      el.className=`combatant-item ${typeClass} ${activeClass} ${deadClass}`.trim();
+      el.innerHTML=html;
+      // ensure order
+      const items=[...listEl.querySelectorAll('.combatant-item')];
+      if(items[i]!==el)listEl.insertBefore(el,items[i]||null);
+    });
+  }
+  // char chips
+  const chips=document.getElementById('combatCharChips');
+  if(chips){
+    const chars=_loadSavedChars();
+    chips.innerHTML=chars.length?chars.map(c=>`<span class="combat-char-chip" onclick="combatAddFromChar('${c.id}')" title="Añadir ${c.name} al combate">+${c.name}</span>`).join(''):'';
+  }
+  // log
+  const logList=document.getElementById('combatLogList');
+  if(logList){
+    if(!_combatLog.length){
+      logList.innerHTML='<div class="combat-log-entry" style="color:var(--text-d);border-left-color:transparent;">El combate no ha comenzado...</div>';
+    } else {
+      logList.innerHTML=[..._combatLog].reverse().map(e=>`<div class="combat-log-entry ${e.type}"><span>${e.msg}</span><span class="log-time">${e.time}</span></div>`).join('');
+    }
+  }
+}
+
+function initCombat(){
+  _loadCombatState();
+  renderCombat();
+}
+
 function updateCharsNavDropdown(){
   const n=_loadSavedChars().length;
   const dd=document.getElementById('dd-my-chars');
