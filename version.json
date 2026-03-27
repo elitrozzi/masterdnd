@@ -1,7 +1,12 @@
 {
-  "version": "1.3.8",
+  "version": "1.3.9",
   "date": "2026-03-27",
   "history": [
+    {
+      "version": "1.3.9",
+      "date": "2026-03-27",
+      "note": "Scroll más lento en landing: 250vh→380vh, divisor 1.5→2.2 para que cada sección se vea más tiempo"
+    },
     {
       "version": "1.3.8",
       "date": "2026-03-27",
