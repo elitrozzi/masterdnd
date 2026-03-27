@@ -250,6 +250,22 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .cs-stat-val{font-size:22px;font-weight:600;color:var(--text);}
 .cs-stat-mod{font-size:12px;color:var(--gold);}
 .cs-footer{display:flex;flex-wrap:wrap;gap:8px;padding-top:16px;border-top:1px solid var(--border);}
+.saved-chars-section{position:relative;z-index:10;padding:20px 24px 0;background:rgba(9,7,15,.85);border-bottom:1px solid rgba(255,255,255,.06);}
+.saved-chars-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.saved-chars-title{font:600 11px/1 'Cinzel',serif;letter-spacing:.14em;color:#d4af37;text-transform:uppercase;}
+.saved-chars-grid{display:flex;flex-wrap:wrap;gap:10px;padding-bottom:20px;}
+.saved-char-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:10px;padding:12px;display:flex;gap:10px;align-items:center;flex:1;min-width:200px;max-width:320px;transition:background .2s,border-color .2s;}
+.saved-char-card:hover{background:rgba(255,255,255,.07);border-color:rgba(212,175,55,.35);}
+.saved-char-portrait{width:44px;height:50px;border-radius:6px;overflow:hidden;flex-shrink:0;}
+.saved-char-info{flex:1;min-width:0;}
+.saved-char-name{font:600 13px/1.2 'Cinzel',serif;color:#f0ead0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px;}
+.saved-char-sub{font-size:11px;color:rgba(255,255,255,.45);margin-bottom:6px;}
+.saved-char-tags{display:flex;gap:5px;}
+.saved-char-actions{display:flex;flex-direction:column;gap:5px;flex-shrink:0;}
+.btn-load-char{background:#d4af37;color:#0d0b12;border:none;border-radius:5px;padding:5px 11px;font:700 11px/1 'Cinzel',serif;cursor:pointer;white-space:nowrap;transition:opacity .15s;}
+.btn-load-char:hover{opacity:.85;}
+.btn-del-char{background:transparent;color:rgba(255,255,255,.3);border:1px solid rgba(255,255,255,.1);border-radius:5px;padding:4px 10px;font-size:11px;cursor:pointer;transition:color .15s,border-color .15s;}
+.btn-del-char:hover{color:#e05050;border-color:#e05050;}
 .tag{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;}
 .tag-brand{background:rgba(89,80,130,.15);color:var(--brand-400);}
 .tag-gold{background:rgba(248,198,98,.15);color:var(--gold);}
@@ -650,6 +666,8 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   .cs-body{grid-template-columns:repeat(3,1fr);gap:7px;}
   .cs-stat-val{font-size:18px;}
   .cs-footer{gap:6px;}
+  .saved-chars-section{padding:14px 14px 0;}
+  .saved-char-card{min-width:0;flex:1 1 100%;}
 
   /* ── Char creator drawer ── */
   .char-drawer-header{padding:14px 16px;gap:10px;}
@@ -742,7 +760,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.3.2</span>
+    <span class="ver-badge">v1.3.3</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">27 Mar 2026</span>
   </div>
@@ -1035,6 +1053,13 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 
 <!-- ══════════════════════════ PAGE: CHARACTERS -->
 <div id="page-characters" class="page">
+  <!-- Saved characters -->
+  <div class="saved-chars-section" id="savedCharsSection" style="display:none;">
+    <div class="saved-chars-header">
+      <span class="saved-chars-title" id="savedCharsTitle">Mis personajes</span>
+    </div>
+    <div class="saved-chars-grid" id="savedCharsGrid"></div>
+  </div>
   <!-- LoL-style race select screen -->
   <div class="char-select-screen" id="charSelectScreen">
     <div class="char-atmos-bg" id="charAtmosBg"></div>
@@ -1165,7 +1190,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
                 <div class="cs-stat"><div class="cs-stat-name">WIS</div><div class="cs-stat-val" id="cwis">—</div><div class="cs-stat-mod" id="cmwis"></div></div>
                 <div class="cs-stat"><div class="cs-stat-name">CHA</div><div class="cs-stat-val" id="ccha">—</div><div class="cs-stat-mod" id="cmcha"></div></div>
               </div>
-              <div class="cs-footer"><button class="btn-nav btn-primary" data-es="💾 Guardar" data-en="💾 Save">💾 Guardar</button><button class="btn-nav btn-ghost" data-es="📄 Exportar PDF" data-en="📄 Export PDF">📄 Exportar PDF</button><button class="btn-nav btn-ghost" data-es="🔗 Compartir" data-en="🔗 Share">🔗 Compartir</button></div>
+              <div class="cs-footer"><button class="btn-nav btn-primary" onclick="saveCharacter(this)" data-es="💾 Guardar" data-en="💾 Save">💾 Guardar</button><button class="btn-nav btn-ghost" data-es="📄 Exportar PDF" data-en="📄 Export PDF">📄 Exportar PDF</button><button class="btn-nav btn-ghost" data-es="🔗 Compartir" data-en="🔗 Share">🔗 Compartir</button></div>
             </div>
             <div class="step-nav" style="margin-top:24px;"><button class="btn-nav btn-ghost" onclick="document.getElementById('charCreatorDrawer').classList.remove('open');initCharSelect();" data-es="↺ Nuevo personaje" data-en="↺ New character">↺ Nuevo personaje</button><button class="btn-nav btn-gold" onclick="goTo('home')">Volver al inicio →</button></div>
           </div>
@@ -1920,6 +1945,7 @@ function setLang(l){
     renderCompGrid(tab);
   }
   if(_currentHook) rollHook(false);
+  if(document.getElementById('page-characters')?.classList.contains('active')) renderSavedChars();
 }
 
 /* ══ COMPENDIUM ══ */
@@ -2521,6 +2547,89 @@ function buildSheet(){
   if(bonusEl) bonusEl.innerHTML=(rd.bonus||[]).map(b=>`<div class="race-bonus-pill">${b}</div>`).join('');
   if(traitsEl) traitsEl.innerHTML=(rd.traits||[]).map(t=>`<div class="cs-trait-pill">${t}</div>`).join('');
 }
+/* ══ LOCAL STORAGE CHARACTERS ══ */
+const CHARS_LS_KEY='masterdnd_chars';
+function _loadSavedChars(){try{return JSON.parse(localStorage.getItem(CHARS_LS_KEY))||[];}catch(e){return[];}}
+function saveCharacter(btn){
+  const name=(document.getElementById('csNameInput')?.value||'').trim()||'Sin nombre';
+  const rk=selections.race||'human', ck=selections.class||'fighter';
+  const st=rolledStats||{str:10,dex:10,con:10,int:10,wis:10,cha:10};
+  const dexMod=Math.floor((st.dex-10)/2), conMod=Math.floor((st.con-10)/2);
+  const hpBase={fighter:10,paladin:10,barbarian:12,wizard:6,sorcerer:6,warlock:8,rogue:8,ranger:8,druid:8,bard:8,cleric:8,monk:8}[ck]||8;
+  const chars=_loadSavedChars();
+  chars.unshift({id:Date.now().toString(),name,race:rk,class:ck,stats:st,hp:hpBase+conMod,ca:10+dexMod,savedAt:Date.now()});
+  localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));
+  const orig=btn.innerHTML;
+  btn.innerHTML=currentLang==='es'?'✓ Guardado':'✓ Saved';
+  btn.style.background='#3a7a3a';
+  setTimeout(()=>{btn.innerHTML=orig;btn.style.background='';},1800);
+  renderSavedChars();
+}
+function renderSavedChars(){
+  const chars=_loadSavedChars();
+  const section=document.getElementById('savedCharsSection');
+  const grid=document.getElementById('savedCharsGrid');
+  if(!section||!grid)return;
+  if(chars.length===0){section.style.display='none';return;}
+  section.style.display='block';
+  const titleEl=document.getElementById('savedCharsTitle');
+  if(titleEl)titleEl.textContent=currentLang==='es'?'Mis personajes':'My characters';
+  grid.innerHTML=chars.map(c=>{
+    const rd=RACE_DATA[c.race]||{};const cd=CLASS_DATA[c.class]||{};
+    const rn=currentLang==='es'?(rd.nameEs||c.race):(rd.nameEn||c.race);
+    const cn=currentLang==='es'?(cd.nameEs||c.class):(cd.nameEn||c.class);
+    return `<div class="saved-char-card">
+      <div class="saved-char-portrait" style="${raceBg(c.race)};background-repeat:no-repeat;"></div>
+      <div class="saved-char-info">
+        <div class="saved-char-name">${c.name}</div>
+        <div class="saved-char-sub">${rn} · ${cn}</div>
+        <div class="saved-char-tags">
+          <span class="tag tag-brand" style="font-size:10px;padding:2px 7px;">HP ${c.hp}</span>
+          <span class="tag tag-gold" style="font-size:10px;padding:2px 7px;">CA ${c.ca}</span>
+        </div>
+      </div>
+      <div class="saved-char-actions">
+        <button class="btn-load-char" onclick="loadChar('${c.id}')">${currentLang==='es'?'Cargar':'Load'}</button>
+        <button class="btn-del-char" onclick="deleteChar('${c.id}')">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function loadChar(id){
+  const chars=_loadSavedChars();
+  const c=chars.find(x=>x.id===id);
+  if(!c)return;
+  selections={mode:'manual',race:c.race,class:c.class};
+  rolledStats={...c.stats};
+  _selectedRace=c.race;
+  _carouselIdx=RACE_KEYS.indexOf(c.race);
+  if(_carouselIdx<0)_carouselIdx=0;
+  _classCarouselIdx=CLASS_KEYS.indexOf(c.class);
+  if(_classCarouselIdx<0)_classCarouselIdx=0;
+  const rd=RACE_DATA[_selectedRace]||{},cd=CLASS_DATA[c.class]||{};
+  const iconEl=document.getElementById('charDrawerRaceIcon');
+  iconEl.style.cssText=`width:36px;height:36px;border-radius:6px;overflow:hidden;flex-shrink:0;${raceBg(_selectedRace)};background-repeat:no-repeat;`;
+  iconEl.innerHTML='';
+  document.getElementById('charDrawerRaceName').textContent=`${currentLang==='es'?rd.nameEs:rd.nameEn} · ${currentLang==='es'?cd.nameEs:cd.nameEn}`;
+  // Show stats in step 1
+  ['str','dex','con','int','wis','cha'].forEach(s=>{const v=c.stats[s],m=Math.floor((v-10)/2);document.getElementById('sv-'+s).textContent=v;document.getElementById('sm-'+s).textContent=(m>=0?'+':'')+m;});
+  document.getElementById('btnStep4Next').removeAttribute('disabled');
+  // Jump to sheet step
+  document.querySelectorAll('.creator-step').forEach(s=>s.classList.remove('active'));
+  currentStep=2;
+  document.getElementById('step2').classList.add('active');
+  updateProgress();
+  document.getElementById('charCreatorDrawer').classList.add('open');
+  buildSheet();
+  const nameInput=document.getElementById('csNameInput');
+  if(nameInput)nameInput.value=c.name;
+}
+function deleteChar(id){
+  const chars=_loadSavedChars().filter(c=>c.id!==id);
+  localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));
+  renderSavedChars();
+}
+
 function resetCreator(){
   currentStep=1;selections={};rolledStats=null;
   document.querySelectorAll('.creator-step').forEach(s=>s.classList.remove('active'));
@@ -2723,6 +2832,7 @@ function initCharSelect(){
   document.getElementById('csPanelClass').className='cs-panel cs-right';
   document.getElementById('charCreatorDrawer').classList.remove('open');
   resetCreator();
+  renderSavedChars();
 }
 
 function selectCharRace(race){

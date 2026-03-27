@@ -1,7 +1,12 @@
 {
-  "version": "1.3.2",
+  "version": "1.3.3",
   "date": "2026-03-27",
   "history": [
+    {
+      "version": "1.3.3",
+      "date": "2026-03-27",
+      "note": "Guardar personaje en localStorage: sección \"Mis personajes\" con cards, botón Cargar y Eliminar en la pantalla de personajes"
+    },
     {
       "version": "1.3.2",
       "date": "2026-03-27",
