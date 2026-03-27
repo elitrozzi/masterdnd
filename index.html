@@ -166,7 +166,7 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .feat-section-deco{display:flex;align-items:center;gap:14px;}
 .feat-deco-line{height:1px;width:52px;background:linear-gradient(to right,rgba(212,175,55,.6),transparent);}
 .feat-deco-icon{font-size:15px;opacity:.65;}
-.feat-right{flex:1;display:flex;flex-direction:column;gap:14px;pointer-events:auto;}
+.feat-right{flex:1;display:flex;flex-direction:column;gap:14px;pointer-events:inherit;}
 .feat-card{background:rgba(10,14,24,0.92);border:1px solid var(--border);border-left:3px solid transparent;border-radius:14px;padding:20px 24px;backdrop-filter:blur(18px);opacity:0;transform:translateX(50px);display:flex;gap:16px;align-items:flex-start;transition:border-color .25s,border-left-color .25s,transform .25s,box-shadow .25s;cursor:none;}
 .feat-card:hover{border-color:rgba(212,175,55,.4);border-left-color:var(--gold);box-shadow:0 0 28px rgba(248,198,98,.1),inset 0 0 20px rgba(248,198,98,.03);transform:translateX(0) translateY(-2px) !important;}
 .feat-card-icon{font-size:28px;flex-shrink:0;margin-top:1px;filter:drop-shadow(0 0 6px rgba(248,198,98,.3));}
@@ -176,14 +176,14 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 
 /* ══════════════════════════════════ HOOK GENERATOR SECTION */
 #section-hook{position:fixed;inset:0;z-index:11;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;padding:0 7vw;gap:0;}
-.hook-intro{flex:0 0 44%;padding-right:64px;display:flex;flex-direction:column;justify-content:center;pointer-events:auto;opacity:0;transform:translateX(-50px);}
+.hook-intro{flex:0 0 44%;padding-right:64px;display:flex;flex-direction:column;justify-content:center;pointer-events:inherit;opacity:0;transform:translateX(-50px);}
 .hook-intro-num{font-size:10px;letter-spacing:.38em;color:var(--gold);opacity:.5;margin-bottom:20px;font-weight:700;}
 .hook-intro-title{font-family:'Cinzel',serif;font-size:clamp(36px,4vw,54px);font-weight:700;line-height:.92;color:var(--text);margin-bottom:20px;}
 .hook-intro-em{color:var(--gold);display:block;}
 .hook-intro-desc{font-size:14px;color:var(--text-m);line-height:1.75;max-width:340px;margin-bottom:28px;}
 .hook-intro-cats{display:flex;flex-wrap:wrap;gap:7px;}
 .hook-intro-cat{padding:4px 13px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:.14em;border:1px solid rgba(255,255,255,.18);color:var(--text);text-transform:uppercase;background:rgba(0,0,0,.45);backdrop-filter:blur(6px);}
-.hook-card-wrap{flex:1;display:flex;align-items:center;justify-content:center;pointer-events:auto;}
+.hook-card-wrap{flex:1;display:flex;align-items:center;justify-content:center;pointer-events:inherit;}
 .hook-card{background:rgba(9,7,18,.94);border:1px solid rgba(248,198,98,.22);border-radius:20px;padding:36px 38px;width:100%;max-width:520px;backdrop-filter:blur(20px);box-shadow:0 0 80px rgba(248,198,98,.07),0 24px 64px rgba(0,0,0,.8);text-align:center;position:relative;overflow:hidden;}
 .hook-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(248,198,98,.07) 0%,transparent 65%);pointer-events:none;}
 .hook-cat{display:inline-flex;align-items:center;gap:6px;padding:4px 14px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;border:1px solid;margin-bottom:20px;transition:all .4s;}
@@ -942,7 +942,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.4.8</span>
+    <span class="ver-badge">v1.4.9</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">27 Mar 2026</span>
   </div>
@@ -1152,7 +1152,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <span class="llogo-m">MASTER</span><span class="llogo-d">DND</span>
       </div>
       <div class="land-nav-links">
-        <a onclick="goTo('characters')" data-es="Personajes" data-en="Characters">Personajes</a>
+        <a onclick="goToCharsSmart()" data-es="Personajes" data-en="Characters">Personajes</a>
         <a onclick="goTo('maps')" data-es="Mapas" data-en="Maps">Mapas</a>
         <a onclick="goTo('sounds')" data-es="Sonidos" data-en="Sounds">Sonidos</a>
         <a onclick="goTo('compendium')" data-es="Compendio" data-en="Compendium">Compendio</a>
@@ -1177,7 +1177,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
       </div>
       <p class="land-sub" data-es="Forja héroes legendarios. Teje mundos de fantasía.<br>Narra historias que nadie olvide." data-en="Forge legendary heroes. Weave worlds of fantasy.<br>Tell stories no one will forget.">Forja héroes legendarios. Teje mundos de fantasía.<br>Narra historias que nadie olvide.</p>
       <div class="land-btns">
-        <button class="lbtn-gold lbtn-lg" onclick="goTo('characters')" data-es="Crear personaje" data-en="Create character">Crear personaje</button>
+        <button class="lbtn-gold lbtn-lg" onclick="goToCreateChar()" data-es="Crear personaje" data-en="Create character">Crear personaje</button>
         <button class="lbtn-ghost lbtn-lg" onclick="goTo('maps')" data-es="Diseñar mapa" data-en="Design a map">Diseñar mapa</button>
       </div>
       <div class="land-stats">
@@ -1248,7 +1248,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
       </div>
     </div>
     <div class="feat-right">
-      <div class="feat-card" id="fc1" onclick="goTo('characters')">
+      <div class="feat-card" id="fc1" onclick="goToCharsSmart()">
         <div class="feat-card-icon">⚔️</div>
         <div>
           <div class="feat-card-num">01</div>
@@ -3574,6 +3574,11 @@ function goToCreateChar(){
   _suppressSavedChars=true;
   goTo('characters');
   _suppressSavedChars=false;
+}
+function goToCharsSmart(){
+  const chars=_loadSavedChars();
+  if(chars.length>0) goToMyChars();
+  else goToCreateChar();
 }
 function updateCharsNavDropdown(){
   const n=_loadSavedChars().length;
