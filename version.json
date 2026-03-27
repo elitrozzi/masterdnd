@@ -1,7 +1,12 @@
 {
-  "version": "1.3.4",
+  "version": "1.3.5",
   "date": "2026-03-27",
   "history": [
+    {
+      "version": "1.3.5",
+      "date": "2026-03-27",
+      "note": "Tirador de dados 3D con Three.js: d4, d6, d8, d10, d12, d20 con geometría real, texturas doradas, física de rebote y panel de skills en la ficha del personaje"
+    },
     {
       "version": "1.3.4",
       "date": "2026-03-27",

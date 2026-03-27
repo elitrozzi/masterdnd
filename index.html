@@ -739,7 +739,37 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   /* ── Ver footer ── */
   .ver-footer{padding:8px 12px;}
 }
+
+/* ── Dice Roller 3D ── */
+.dr-overlay{position:fixed;inset:0;z-index:3000;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(4,2,10,.95);backdrop-filter:blur(10px);}
+.dr-canvas{display:block;cursor:pointer;}
+.dr-ui{display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:10px;pointer-events:none;}
+.dr-label{font:600 11px/1 'Cinzel',serif;letter-spacing:.14em;color:rgba(212,175,55,.55);text-transform:uppercase;}
+.dr-result{text-align:center;opacity:0;transform:translateY(14px);transition:opacity .5s,transform .5s;}
+.dr-result.show{opacity:1;transform:translateY(0);}
+.dr-roll-num{font:700 88px/1 'Cinzel',serif;color:#d4af37;text-shadow:0 0 40px rgba(212,175,55,.65),0 0 80px rgba(212,175,55,.25);}
+.dr-roll-num.crit{color:#80ff90;text-shadow:0 0 40px rgba(0,255,80,.7);}
+.dr-roll-num.fumble{color:#ff7060;text-shadow:0 0 40px rgba(255,50,30,.7);}
+.dr-formula{font-size:15px;color:rgba(255,255,255,.4);margin-top:2px;}
+.dr-total{font:700 32px/1 'Cinzel',serif;color:#fff;margin-top:4px;}
+.dr-hint{font-size:11px;color:rgba(255,255,255,.18);margin-top:18px;letter-spacing:.05em;}
+.dr-close-btn{position:absolute;top:18px;right:18px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.45);width:36px;height:36px;border-radius:50%;font-size:15px;cursor:pointer;transition:background .2s;}
+.dr-close-btn:hover{background:rgba(255,255,255,.18);}
+/* Skill panel */
+.dr-sheet-panel{margin-top:18px;padding:14px 16px;background:rgba(0,0,0,.25);border-radius:10px;border:1px solid rgba(255,255,255,.07);}
+.dr-panel-title{font:600 10px/1 'Cinzel',serif;letter-spacing:.14em;color:rgba(212,175,55,.55);text-transform:uppercase;margin-bottom:10px;}
+.dr-panel-grid{display:flex;flex-wrap:wrap;gap:7px;}
+.dr-stat-btn{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:7px 10px;cursor:pointer;transition:background .15s,border-color .15s;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:50px;}
+.dr-stat-btn:hover{background:rgba(212,175,55,.14);border-color:rgba(212,175,55,.38);}
+.dr-stat-name{font:600 9px/1 'Cinzel',serif;letter-spacing:.07em;color:rgba(255,255,255,.45);}
+.dr-stat-mod{font:700 15px/1 'Cinzel',serif;color:#d4af37;}
+.dr-dmg-btn{background:rgba(180,50,50,.1);border-color:rgba(180,50,50,.2);}
+.dr-dmg-btn:hover{background:rgba(180,50,50,.25);border-color:rgba(180,50,50,.5);}
+.dr-atk-btn{background:rgba(50,100,200,.1);border-color:rgba(50,100,200,.2);}
+.dr-atk-btn:hover{background:rgba(50,100,200,.25);border-color:rgba(50,100,200,.5);}
+@media(max-width:700px){.dr-panel-grid{gap:5px;}.dr-stat-btn{min-width:44px;padding:6px 8px;}}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
 
@@ -783,7 +813,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.3.4</span>
+    <span class="ver-badge">v1.3.5</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">27 Mar 2026</span>
   </div>
@@ -1220,6 +1250,11 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
                 <div class="cs-stat"><div class="cs-stat-name">CHA</div><div class="cs-stat-val" id="ccha">—</div><div class="cs-stat-mod" id="cmcha"></div></div>
               </div>
               <div class="cs-footer"><button class="btn-nav btn-primary" onclick="saveCharacter(this)" data-es="💾 Guardar" data-en="💾 Save">💾 Guardar</button><button class="btn-nav btn-ghost" data-es="📄 Exportar PDF" data-en="📄 Export PDF">📄 Exportar PDF</button><button class="btn-nav btn-ghost" data-es="🔗 Compartir" data-en="🔗 Share">🔗 Compartir</button></div>
+              <!-- Dice roller panel -->
+              <div class="dr-sheet-panel" id="drSheetPanel">
+                <div class="dr-panel-title" data-es="🎲 Tirar dados" data-en="🎲 Roll dice">🎲 Tirar dados</div>
+                <div class="dr-panel-grid" id="drPanelGrid"></div>
+              </div>
             </div>
             <div class="step-nav" style="margin-top:24px;"><button class="btn-nav btn-ghost" onclick="document.getElementById('charCreatorDrawer').classList.remove('open');initCharSelect();" data-es="↺ Nuevo personaje" data-en="↺ New character">↺ Nuevo personaje</button><button class="btn-nav btn-gold" onclick="goTo('home')">Volver al inicio →</button></div>
           </div>
@@ -2576,6 +2611,7 @@ function buildSheet(){
   if(flavorEl) flavorEl.textContent=currentLang==='es'?(rd.tagEs||''):(rd.tagEn||'');
   if(bonusEl) bonusEl.innerHTML=(rd.bonus||[]).map(b=>`<div class="race-bonus-pill">${b}</div>`).join('');
   if(traitsEl) traitsEl.innerHTML=(rd.traits||[]).map(t=>`<div class="cs-trait-pill">${t}</div>`).join('');
+  _renderSkillPanel();
 }
 /* ══ LOCAL STORAGE CHARACTERS ══ */
 const CHARS_LS_KEY='masterdnd_chars';
@@ -3694,6 +3730,286 @@ document.addEventListener('DOMContentLoaded',()=>{
   if(initPage){goTo(initPage,true);}
   else{history.replaceState({page:'home'},'','/');}
 });
+
+/* ══════════════════════════════════════════════════════
+   3D DICE ROLLER  (Three.js)
+══════════════════════════════════════════════════════ */
+const _DR_PHI=(1+Math.sqrt(5))/2;
+
+// Die geometry definitions: vertices + triangular face indices + scale
+const _DR_DEFS={
+  d4:{
+    v:[[1,1,1],[-1,-1,1],[-1,1,-1],[1,-1,-1]],
+    f:[[2,1,0],[0,3,2],[1,3,0],[2,3,1]],r:1.9
+  },
+  d8:{
+    v:[[1,0,0],[-1,0,0],[0,1,0],[0,-1,0],[0,0,1],[0,0,-1]],
+    f:[[0,2,4],[2,1,4],[1,3,4],[3,0,4],[2,0,5],[1,2,5],[3,1,5],[0,3,5]],r:1.7
+  },
+  d10:{
+    v:(()=>{const v=[[0,1.3,0],[0,-1.3,0]];for(let i=0;i<5;i++)v.push([Math.cos(i*Math.PI*2/5),0,Math.sin(i*Math.PI*2/5)]);return v;})(),
+    f:[[0,3,2],[0,4,3],[0,5,4],[0,6,5],[0,2,6],[1,2,3],[1,3,4],[1,4,5],[1,5,6],[1,6,2]],r:1.5
+  },
+  d20:{
+    v:[[-1,_DR_PHI,0],[1,_DR_PHI,0],[-1,-_DR_PHI,0],[1,-_DR_PHI,0],[0,-1,_DR_PHI],[0,1,_DR_PHI],[0,-1,-_DR_PHI],[0,1,-_DR_PHI],[_DR_PHI,0,-1],[_DR_PHI,0,1],[-_DR_PHI,0,-1],[-_DR_PHI,0,1]],
+    f:[[0,11,5],[0,5,1],[0,1,7],[0,7,10],[0,10,11],[1,5,9],[5,11,4],[11,10,2],[10,7,6],[7,1,8],[3,9,4],[3,4,2],[3,2,6],[3,6,8],[3,8,9],[4,9,5],[2,4,11],[6,2,10],[8,6,7],[9,8,1]],r:1.1
+  }
+};
+
+let _dr=null;
+
+function _drFaceTex(value,diceType){
+  const S=512,cv=document.createElement('canvas');
+  cv.width=cv.height=S;
+  const ctx=cv.getContext('2d');
+  const g=ctx.createRadialGradient(S/2,S/2,40,S/2,S/2,S/2);
+  g.addColorStop(0,'#1c1628');g.addColorStop(1,'#070510');
+  ctx.fillStyle=g;ctx.fillRect(0,0,S,S);
+  // Border shape
+  ctx.strokeStyle='rgba(212,175,55,0.28)';ctx.lineWidth=11;ctx.beginPath();
+  const isTriangle=['d4','d8','d10','d20'].includes(diceType);
+  if(isTriangle){
+    const cx=S/2,cy=S*.52,r=S*.4;
+    for(let i=0;i<3;i++){const a=-Math.PI/2+(i/3)*Math.PI*2;i?ctx.lineTo(cx+r*Math.cos(a),cy+r*Math.sin(a)):ctx.moveTo(cx+r*Math.cos(a),cy+r*Math.sin(a));}
+    ctx.closePath();
+  } else {ctx.roundRect(22,22,S-44,S-44,38);}
+  ctx.stroke();
+  // Number
+  ctx.shadowColor='#d4af37';ctx.shadowBlur=30;
+  ctx.fillStyle='#f0d060';
+  const fs=value>9?188:224;
+  ctx.font=`700 ${fs}px Cinzel,Georgia,serif`;
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  const yOff=(value===6||value===9)?-12:0;
+  ctx.fillText(value.toString(),S/2,S/2+yOff);
+  if(value===6||value===9){
+    const tw=ctx.measureText(value.toString()).width;
+    ctx.shadowBlur=10;ctx.strokeStyle='#f0d060';ctx.lineWidth=7;
+    ctx.beginPath();ctx.moveTo(S/2-tw/2+10,S/2+84);ctx.lineTo(S/2+tw/2-10,S/2+84);ctx.stroke();
+  }
+  return new THREE.CanvasTexture(cv);
+}
+
+function _drBuildMesh(diceType,targetValue){
+  const sides=parseInt(diceType.slice(1));
+  let geo,faceNormals=[],faceCount;
+
+  if(diceType==='d6'){
+    geo=new THREE.BoxGeometry(1.5,1.5,1.5).toNonIndexed();
+    geo.clearGroups();
+    for(let i=0;i<6;i++)geo.addGroup(i*6,6,i);
+    faceCount=6;
+    faceNormals=[new THREE.Vector3(1,0,0),new THREE.Vector3(-1,0,0),new THREE.Vector3(0,1,0),new THREE.Vector3(0,-1,0),new THREE.Vector3(0,0,1),new THREE.Vector3(0,0,-1)];
+  } else if(diceType==='d12'){
+    geo=new THREE.DodecahedronGeometry(1.25,0).toNonIndexed();
+    geo.clearGroups();
+    faceCount=12;
+    for(let f=0;f<12;f++)geo.addGroup(f*9,9,f);
+    const pos=geo.attributes.position;
+    for(let f=0;f<12;f++){
+      const base=f*9;
+      const a=new THREE.Vector3().fromBufferAttribute(pos,base);
+      const b=new THREE.Vector3().fromBufferAttribute(pos,base+1);
+      const c=new THREE.Vector3().fromBufferAttribute(pos,base+2);
+      faceNormals.push(new THREE.Vector3().crossVectors(new THREE.Vector3().subVectors(b,a),new THREE.Vector3().subVectors(c,a)).normalize());
+    }
+  } else {
+    const def=_DR_DEFS[diceType];if(!def)return null;
+    faceCount=def.f.length;
+    const pos=[],nrm=[],uv=[];
+    def.f.forEach(([ia,ib,ic])=>{
+      const a=new THREE.Vector3(...def.v[ia]).normalize().multiplyScalar(def.r);
+      const b=new THREE.Vector3(...def.v[ib]).normalize().multiplyScalar(def.r);
+      const c=new THREE.Vector3(...def.v[ic]).normalize().multiplyScalar(def.r);
+      const n=new THREE.Vector3().crossVectors(new THREE.Vector3().subVectors(b,a),new THREE.Vector3().subVectors(c,a)).normalize();
+      faceNormals.push(n.clone());
+      pos.push(a.x,a.y,a.z,b.x,b.y,b.z,c.x,c.y,c.z);
+      nrm.push(n.x,n.y,n.z,n.x,n.y,n.z,n.x,n.y,n.z);
+      uv.push(0.5,1,0,0,1,0);
+    });
+    geo=new THREE.BufferGeometry();
+    geo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));
+    geo.setAttribute('normal',new THREE.Float32BufferAttribute(nrm,3));
+    geo.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));
+    for(let i=0;i<faceCount;i++)geo.addGroup(i*3,3,i);
+  }
+
+  // Find top face (most +Y normal in identity rotation)
+  const up=new THREE.Vector3(0,1,0);
+  let topFaceIdx=0,maxDot=-Infinity;
+  faceNormals.forEach((n,i)=>{const d=n.dot(up);if(d>maxDot){maxDot=d;topFaceIdx=i;}});
+
+  // Assign values: top face gets targetValue, rest random
+  const pool=Array.from({length:sides},(_,i)=>i+1).filter(v=>v!==targetValue);
+  for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}
+  let pi=0;
+  const values=Array.from({length:faceCount},(_,i)=>i===topFaceIdx?targetValue:(pool[pi++]||(i+1)));
+
+  const mats=values.map(v=>new THREE.MeshStandardMaterial({map:_drFaceTex(v,diceType),roughness:.28,metalness:.1}));
+  const mesh=new THREE.Mesh(geo,mats);
+  mesh.castShadow=true;
+  mesh.userData={faceNormals,topFaceIdx,topN:faceNormals[topFaceIdx].clone()};
+  return mesh;
+}
+
+function _drInit(){
+  if(_dr)return;
+  const canvas=document.getElementById('drCanvas');
+  const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.shadowMap.enabled=true;
+  renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(48,1,.1,100);
+  camera.position.set(0,5.5,3.5);camera.lookAt(0,.5,0);
+  scene.add(new THREE.AmbientLight(0x2a3355,1.6));
+  const key=new THREE.DirectionalLight(0xffd090,2.4);
+  key.position.set(4,8,3);key.castShadow=true;
+  key.shadow.mapSize.set(1024,1024);scene.add(key);
+  const fill=new THREE.PointLight(0x5577ff,.9,18);fill.position.set(-3,2,-2);scene.add(fill);
+  const rim=new THREE.DirectionalLight(0xff8860,.35);rim.position.set(-4,0,4);scene.add(rim);
+  const floor=new THREE.Mesh(new THREE.PlaneGeometry(20,20),new THREE.ShadowMaterial({opacity:.2}));
+  floor.rotation.x=-Math.PI/2;floor.position.y=-1.5;floor.receiveShadow=true;scene.add(floor);
+  _dr={renderer,scene,camera,mesh:null,animId:null,settled:false};
+}
+
+function openDiceRoller(diceType,result,mod,label){
+  if(typeof THREE==='undefined')return;
+  const ov=document.getElementById('drOverlay');
+  ov.style.display='flex';
+  document.getElementById('drLabel').textContent=label?`${label}  ·  ${diceType}`:diceType;
+  const resEl=document.getElementById('drResult');
+  resEl.classList.remove('show');
+  document.getElementById('drHint').style.display='none';
+
+  _drInit();
+  const canvas=document.getElementById('drCanvas');
+  const sz=Math.round(Math.min(window.innerWidth*.64,window.innerHeight*.6));
+  canvas.style.width=canvas.style.height=sz+'px';
+  _dr.renderer.setSize(sz,sz);
+
+  if(_dr.mesh){_dr.scene.remove(_dr.mesh);_dr.mesh=null;}
+  if(_dr.animId){cancelAnimationFrame(_dr.animId);_dr.animId=null;}
+
+  const mesh=_drBuildMesh(diceType,result);
+  if(!mesh)return;
+  _dr.scene.add(mesh);
+  _dr.mesh=mesh;_dr.result=result;_dr.mod=mod||0;_dr.label=label||diceType;_dr.diceType=diceType;_dr.settled=false;
+
+  // Initial state
+  mesh.position.set((Math.random()-.5)*.4,5.5,0);
+  mesh.quaternion.copy(new THREE.Quaternion(Math.random(),Math.random(),Math.random(),Math.random()).normalize());
+  const wx=(Math.random()-.5)*18,wy=(Math.random()-.5)*18,wz=(Math.random()-.5)*10;
+  let vy=-5,py=5.5,px=mesh.position.x,bounces=0;
+  const FLOOR=-1.3;
+  let phase='fall',settleT=0,settleTargetQ=null;
+
+  function tick(){
+    _dr.animId=requestAnimationFrame(tick);
+    const dt=1/60;
+    if(phase==='fall'){
+      vy-=22*dt;py+=vy*dt;px+=(0-px)*2.5*dt;
+      if(py<=FLOOR){
+        py=FLOOR;bounces++;
+        if(bounces===1)vy=Math.abs(vy)*.42;
+        else if(bounces===2)vy=Math.abs(vy)*.2;
+        else{vy=0;phase='settle';}
+      }
+      mesh.position.set(px,py,0);
+      const sd=Math.max(0,1-bounces*.35);
+      mesh.rotation.x+=wx*dt*sd;mesh.rotation.y+=wy*dt*sd;mesh.rotation.z+=wz*dt*sd;
+    }
+    if(phase==='settle'){
+      settleT+=dt;
+      if(!settleTargetQ){
+        const wn=mesh.userData.topN.clone().applyQuaternion(mesh.quaternion);
+        const dq=new THREE.Quaternion().setFromUnitVectors(wn,new THREE.Vector3(0,1,0));
+        settleTargetQ=new THREE.Quaternion().multiplyQuaternions(dq,mesh.quaternion);
+      }
+      mesh.quaternion.slerp(settleTargetQ,.07);
+      if(settleT>.85&&!_dr.settled){
+        _dr.settled=true;
+        _drShowResult(_dr.result,_dr.mod,_dr.label,_dr.diceType);
+      }
+    }
+    _dr.renderer.render(_dr.scene,_dr.camera);
+  }
+  tick();
+}
+
+function _drShowResult(roll,mod,label,diceType){
+  const numEl=document.getElementById('drRollNum');
+  numEl.textContent=roll;
+  numEl.className='dr-roll-num';
+  if(diceType==='d20'){
+    if(roll===20)numEl.classList.add('crit');
+    else if(roll===1)numEl.classList.add('fumble');
+  }
+  const fEl=document.getElementById('drFormula'),tEl=document.getElementById('drTotal');
+  if(mod!==0){
+    const s=mod>=0?'+':'';
+    fEl.textContent=`${roll} ${s}${mod}`;
+    tEl.textContent=`= ${roll+mod}`;tEl.style.display='block';
+  } else {
+    fEl.textContent=label||'';tEl.style.display='none';
+  }
+  requestAnimationFrame(()=>{
+    document.getElementById('drResult').classList.add('show');
+    document.getElementById('drHint').style.display='block';
+  });
+}
+
+function closeDiceRoller(){
+  document.getElementById('drOverlay').style.display='none';
+  if(_dr?.animId){cancelAnimationFrame(_dr.animId);_dr.animId=null;}
+  if(_dr?.mesh){_dr.scene.remove(_dr.mesh);_dr.mesh=null;}
+}
+
+function rollD20(mod,label){
+  openDiceRoller('d20',Math.floor(Math.random()*20)+1,mod,label);
+}
+function rollDieType(diceType,mod,label){
+  openDiceRoller(diceType,Math.floor(Math.random()*parseInt(diceType.slice(1)))+1,mod,label);
+}
+
+function _renderSkillPanel(){
+  const grid=document.getElementById('drPanelGrid');if(!grid)return;
+  const st=rolledStats||{str:10,dex:10,con:10,int:10,wis:10,cha:10};
+  const ck=selections.class||'fighter';
+  const defs=[
+    {k:'str',es:'FUE',en:'STR'},{k:'dex',es:'DES',en:'DEX'},{k:'con',es:'CON',en:'CON'},
+    {k:'int',es:'INT',en:'INT'},{k:'wis',es:'SAB',en:'WIS'},{k:'cha',es:'CAR',en:'CHA'}
+  ];
+  const dmgMap={fighter:'d10',paladin:'d10',barbarian:'d12',wizard:'d6',sorcerer:'d6',warlock:'d8',rogue:'d8',ranger:'d8',druid:'d8',bard:'d8',cleric:'d8',monk:'d6'};
+  const dmgDie=dmgMap[ck]||'d8';
+  const strMod=Math.floor((st.str-10)/2);
+  const atkLbl=currentLang==='es'?'Ataque':'Attack';
+  const dmgLbl=currentLang==='es'?'Daño':'Damage';
+  const statBtns=defs.map(s=>{
+    const v=st[s.k],m=Math.floor((v-10)/2),sign=m>=0?'+':'';
+    const lbl=currentLang==='es'?s.es:s.en;
+    return `<button class="dr-stat-btn" onclick="rollD20(${m},'${lbl}')"><span class="dr-stat-name">${lbl}</span><span class="dr-stat-mod">${sign}${m}</span></button>`;
+  }).join('');
+  const atkSign=strMod>=0?'+':'';
+  grid.innerHTML=statBtns+
+    `<button class="dr-stat-btn dr-atk-btn" onclick="rollD20(${strMod},'${atkLbl}')"><span class="dr-stat-name">⚔️</span><span class="dr-stat-mod">${atkSign}${strMod}</span></button>`+
+    `<button class="dr-stat-btn dr-dmg-btn" onclick="rollDieType('${dmgDie}',0,'${dmgLbl}')"><span class="dr-stat-name">💥</span><span class="dr-stat-mod">${dmgDie}</span></button>`;
+}
 </script>
+
+<!-- ══ 3D DICE ROLLER OVERLAY ══ -->
+<div id="drOverlay" class="dr-overlay" style="display:none;" onclick="if(event.target===this&&_dr?.settled)closeDiceRoller()">
+  <canvas id="drCanvas" class="dr-canvas" onclick="if(_dr?.settled)closeDiceRoller()"></canvas>
+  <div class="dr-ui">
+    <div id="drLabel" class="dr-label"></div>
+    <div id="drResult" class="dr-result">
+      <div id="drRollNum" class="dr-roll-num"></div>
+      <div id="drFormula" class="dr-formula"></div>
+      <div id="drTotal"   class="dr-total"></div>
+    </div>
+    <div id="drHint" class="dr-hint" style="display:none;">Toca para cerrar</div>
+  </div>
+  <button class="dr-close-btn" onclick="closeDiceRoller()">✕</button>
+</div>
 </body>
 </html>
