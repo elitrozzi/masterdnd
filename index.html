@@ -36,7 +36,7 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .page.active{display:block;}
 
 /* ══════════════════════════════════ LANDING */
-#page-home{position:relative;width:100vw;min-height:240vh;overflow-x:hidden;}
+#page-home{position:relative;width:100vw;min-height:310vh;overflow-x:hidden;}
 /* Scene background */
 .sc-wrap{position:fixed;inset:0;z-index:0;overflow:hidden;opacity:0;animation:scFadeIn 2.5s ease .3s forwards;}
 @keyframes scFadeIn{to{opacity:1;}}
@@ -157,6 +157,23 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .feat-card-icon{font-size:26px;flex-shrink:0;margin-top:2px;}
 .feat-card-title{font-family:'Cinzel',serif;font-size:16px;font-weight:700;color:var(--gold);margin-bottom:8px;}
 .feat-card-desc{font-size:13px;color:var(--text-m);line-height:1.65;}
+
+/* ══════════════════════════════════ HOOK GENERATOR SECTION */
+#section-hook{position:fixed;inset:0;z-index:11;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;padding:0 24px;}
+.hook-card{background:rgba(9,7,18,.92);border:1px solid rgba(248,198,98,.22);border-radius:20px;padding:36px 40px;max-width:640px;width:100%;backdrop-filter:blur(20px);box-shadow:0 0 80px rgba(248,198,98,.06),0 24px 64px rgba(0,0,0,.8);pointer-events:auto;text-align:center;position:relative;overflow:hidden;}
+.hook-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(248,198,98,.06) 0%,transparent 65%);pointer-events:none;}
+.hook-cat{display:inline-flex;align-items:center;gap:6px;padding:4px 14px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;border:1px solid;margin-bottom:20px;transition:all .4s;}
+.hook-icon{font-size:16px;}
+.hook-text{font-family:'Cinzel',serif;font-size:17px;font-weight:400;color:var(--text);line-height:1.75;font-style:italic;margin-bottom:28px;min-height:72px;transition:opacity .3s;}
+.hook-text.fading{opacity:0;}
+.hook-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.hook-roll-btn{display:flex;align-items:center;gap:8px;padding:10px 22px;border-radius:10px;background:rgba(248,198,98,.1);border:1px solid rgba(248,198,98,.3);color:var(--gold);font-size:13px;font-weight:600;cursor:pointer;transition:.2s;letter-spacing:.04em;}
+.hook-roll-btn:hover{background:rgba(248,198,98,.18);border-color:var(--gold);transform:scale(1.03);}
+.hook-roll-icon{font-size:16px;transition:transform .3s;}
+.hook-roll-btn:hover .hook-roll-icon{transform:rotate(120deg);}
+.hook-cta{display:flex;align-items:center;gap:8px;padding:10px 22px;border-radius:10px;background:linear-gradient(135deg,var(--gold),#d4940a);color:#1a1400;font-size:13px;font-weight:700;cursor:pointer;transition:.2s;letter-spacing:.04em;border:none;}
+.hook-cta:hover{filter:brightness(1.1);transform:scale(1.03);}
+.hook-label{font-size:10px;letter-spacing:.25em;color:var(--text-d);text-transform:uppercase;margin-bottom:12px;}
 
 /* ══════════════════════════════════ APP NAV (inner pages) */
 .app-nav{display:none;position:fixed;top:0;left:0;right:0;z-index:200;height:60px;align-items:center;padding:0 32px;gap:20px;background:rgba(19,15,30,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
@@ -672,6 +689,12 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   /* ── Modal ── */
   .modal{margin:12px;width:calc(100% - 24px);padding:24px 16px;}
 
+  /* ── Hook card ── */
+  .hook-card{padding:24px 20px;}
+  .hook-text{font-size:14px;min-height:80px;}
+  .hook-actions{flex-direction:column;gap:8px;}
+  .hook-roll-btn,.hook-cta{width:100%;justify-content:center;}
+
   /* ── Ver footer ── */
   .ver-footer{padding:8px 12px;}
 }
@@ -719,7 +742,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.3.1</span>
+    <span class="ver-badge">v1.3.2</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">27 Mar 2026</span>
   </div>
@@ -964,6 +987,19 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
       <div class="scroll-down">
         <span>SCROLL</span>
         <div class="sd-line"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 3: HOOK GENERATOR ══ -->
+  <div id="section-hook">
+    <div class="hook-card">
+      <div class="hook-label" data-es="HOOK DE AVENTURA" data-en="ADVENTURE HOOK">HOOK DE AVENTURA</div>
+      <div class="hook-cat" id="hookCat"><span class="hook-icon" id="hookIcon">🗡️</span><span id="hookCatName">Mazmorra</span></div>
+      <div class="hook-text" id="hookText"></div>
+      <div class="hook-actions">
+        <button class="hook-roll-btn" onclick="rollHook()"><span class="hook-roll-icon">⚄</span><span data-es="Nueva misión" data-en="New quest">Nueva misión</span></button>
+        <button class="hook-cta" onclick="goTo('characters')"><span>⚔️</span><span data-es="Crear personaje" data-en="Create character">Crear personaje</span></button>
       </div>
     </div>
   </div>
@@ -1883,6 +1919,7 @@ function setLang(l){
     const tab=document.querySelector('.comp-tab.active')?.dataset.tab||'spells';
     renderCompGrid(tab);
   }
+  if(_currentHook) rollHook(false);
 }
 
 /* ══ COMPENDIUM ══ */
@@ -3241,6 +3278,14 @@ function togglePlay(){
       featSec.style.pointerEvents=secOp>.05?'auto':'none';
     }
 
+    // Hook section entrance (after features fade out)
+    const hookSec=document.getElementById('section-hook');
+    if(hookSec){
+      const hi=clamp((scrollProg-.88)/.10);
+      hookSec.style.opacity=eout(hi);
+      hookSec.style.pointerEvents=hi>.05?'auto':'none';
+    }
+
     // Feature cards cascade
     [['fc1',0],['fc2',.07],['fc3',.14]].forEach(([id,delay])=>{
       const el=document.getElementById(id);
@@ -3253,6 +3298,170 @@ function togglePlay(){
   }
   animate();
 })();
+
+/* ══ HOOK GENERATOR ══ */
+const HOOKS=[
+  // Mazmorra
+  {cat:'Mazmorra',catEn:'Dungeon',icon:'🗡️',color:'rgba(180,60,60,.7)',colorEn:'rgba(180,60,60,.7)',
+   es:'Un grupo de mineros abrió un pasadizo sellado hace siglos. Ninguno ha regresado a contar qué encontraron.',
+   en:'A group of miners broke into a passage sealed for centuries. None have returned to tell what they found.'},
+  {cat:'Mazmorra',catEn:'Dungeon',icon:'🗡️',color:'rgba(180,60,60,.7)',
+   es:'Un mapa tatuado en la espalda de un cadáver señala la entrada a una mazmorra que no aparece en ningún registro conocido.',
+   en:'A map tattooed on a corpse\'s back marks the entrance to a dungeon that appears in no known record.'},
+  {cat:'Mazmorra',catEn:'Dungeon',icon:'🗡️',color:'rgba(180,60,60,.7)',
+   es:'Las antorchas de un antiguo fuerte enano se encienden solas cada noche. Los aldeanos juran que hay alguien adentro.',
+   en:'The torches of an ancient dwarven fort light themselves every night. Villagers swear someone is inside.'},
+  {cat:'Mazmorra',catEn:'Dungeon',icon:'🗡️',color:'rgba(180,60,60,.7)',
+   es:'La cripta de un rey olvidado fue profanada, pero el ladrón fue hallado muerto dentro con todas sus monedas encima.',
+   en:'A forgotten king\'s crypt was robbed, but the thief was found dead inside with every coin still on him.'},
+  {cat:'Mazmorra',catEn:'Dungeon',icon:'🗡️',color:'rgba(180,60,60,.7)',
+   es:'Un niño perdido en las cuevas regresó tres días después sin recuerdos, pero con monedas de una era extinta.',
+   en:'A child lost in the caves returned three days later with no memories — but carrying coins from an extinct era.'},
+  {cat:'Mazmorra',catEn:'Dungeon',icon:'🗡️',color:'rgba(180,60,60,.7)',
+   es:'Solo regresó uno del grupo que entró a explorar la torre mágica. Ahora repite una sola frase sin parar.',
+   en:'Only one returned from the group that entered the magic tower. They now repeat a single phrase endlessly.'},
+  // Político
+  {cat:'Político',catEn:'Political',icon:'🏛️',color:'rgba(120,80,180,.7)',
+   es:'El consejero del rey fue encontrado muerto con una carta dirigida al líder enemigo. La firma es del propio rey.',
+   en:'The king\'s advisor was found dead with a letter addressed to the enemy leader. The signature is the king\'s own.'},
+  {cat:'Político',catEn:'Political',icon:'🏛️',color:'rgba(120,80,180,.7)',
+   es:'Dos nobles rivales contrataron al mismo grupo de mercenarios para una misión idéntica, sin saberlo el uno del otro.',
+   en:'Two rival nobles hired the same mercenaries for an identical mission, unbeknownst to each other.'},
+  {cat:'Político',catEn:'Political',icon:'🏛️',color:'rgba(120,80,180,.7)',
+   es:'La hija del duque desapareció la noche antes de su boda. Nadie sospecha del novio... todavía.',
+   en:'The duke\'s daughter vanished the night before her wedding. Nobody suspects the groom yet.'},
+  {cat:'Político',catEn:'Political',icon:'🏛️',color:'rgba(120,80,180,.7)',
+   es:'El tratado de paz fue firmado con sangre real, vinculando mágicamente a ambas naciones. Alguien quiere romperlo.',
+   en:'The peace treaty was signed in royal blood, magically binding both nations. Someone wants to break it.'},
+  {cat:'Político',catEn:'Political',icon:'🏛️',color:'rgba(120,80,180,.7)',
+   es:'Un embajador extranjero trae pruebas de que el alcalde lleva años vendiendo información al enemigo.',
+   en:'A foreign ambassador brings evidence that the mayor has been selling intelligence to the enemy for years.'},
+  {cat:'Político',catEn:'Political',icon:'🏛️',color:'rgba(120,80,180,.7)',
+   es:'El candidato favorito para nuevo archimago no existe. Es una ilusión sostenida por alguien que prefiere permanecer oculto.',
+   en:'The top candidate for archmage doesn\'t exist. They are an illusion maintained by someone who prefers to stay hidden.'},
+  // Misterio
+  {cat:'Misterio',catEn:'Mystery',icon:'🔍',color:'rgba(40,160,160,.7)',
+   es:'En un pueblo costero, todos los gatos desaparecieron en una sola noche. Al amanecer había huellas enormes en la playa.',
+   en:'In a coastal village, every cat vanished in a single night. At dawn, enormous tracks marked the beach.'},
+  {cat:'Misterio',catEn:'Mystery',icon:'🔍',color:'rgba(40,160,160,.7)',
+   es:'Cada vez que llueve en la ciudad, aparece un cadáver nuevo en la fuente central. Siempre muertos hace décadas.',
+   en:'Every time it rains in the city, a new corpse appears in the central fountain — always dead for decades.'},
+  {cat:'Misterio',catEn:'Mystery',icon:'🔍',color:'rgba(40,160,160,.7)',
+   es:'Un alquimista ofrece una fortuna a quien le traiga una lágrima de dragón. No explica para qué la necesita.',
+   en:'An alchemist offers a fortune for a dragon\'s tear. He won\'t explain what he needs it for.'},
+  {cat:'Misterio',catEn:'Mystery',icon:'🔍',color:'rgba(40,160,160,.7)',
+   es:'El espejo de una posada muestra el reflejo de una habitación distinta. La persona que se ve en él pide ayuda.',
+   en:'An inn\'s mirror shows the reflection of a different room. The person visible inside is asking for help.'},
+  {cat:'Misterio',catEn:'Mystery',icon:'🔍',color:'rgba(40,160,160,.7)',
+   es:'Tres personas en distintos pueblos tuvieron exactamente el mismo sueño la misma noche. En él, alguien les da un nombre.',
+   en:'Three people in different villages had the exact same dream on the same night. In it, someone gives them a name.'},
+  {cat:'Misterio',catEn:'Mystery',icon:'🔍',color:'rgba(40,160,160,.7)',
+   es:'Un mercader jura que vendió su sombra por error y ahora necesita recuperarla antes del próximo eclipse.',
+   en:'A merchant swears he accidentally sold his shadow and needs to recover it before the next eclipse.'},
+  // Naturaleza
+  {cat:'Naturaleza',catEn:'Wilderness',icon:'🌲',color:'rgba(50,140,80,.7)',
+   es:'Un druida anciano murió abrazando un árbol. El árbol empezó a sangrar al día siguiente.',
+   en:'An ancient druid died embracing a tree. The tree began to bleed the following day.'},
+  {cat:'Naturaleza',catEn:'Wilderness',icon:'🌲',color:'rgba(50,140,80,.7)',
+   es:'El río que abastece a tres ciudades empezó a fluir hacia arriba hace una semana. Nadie sabe por qué.',
+   en:'The river supplying three cities has been flowing upward for a week. Nobody knows why.'},
+  {cat:'Naturaleza',catEn:'Wilderness',icon:'🌲',color:'rgba(50,140,80,.7)',
+   es:'Una manada de lobos protege a un niño humano en el bosque. Los cazadores que intentaron acercarse no regresaron.',
+   en:'A wolf pack is protecting a human child in the forest. Hunters who approached never came back.'},
+  {cat:'Naturaleza',catEn:'Wilderness',icon:'🌲',color:'rgba(50,140,80,.7)',
+   es:'Las flores del bosque florecen en pleno invierno, pero huelen a podredumbre. Los animales huyen del área.',
+   en:'Forest flowers bloom in the dead of winter but smell of rot. Animals flee the area.'},
+  {cat:'Naturaleza',catEn:'Wilderness',icon:'🌲',color:'rgba(50,140,80,.7)',
+   es:'Una criatura sin nombre marca los árboles con runas. Los exploradores que las estudiaron enloquecieron.',
+   en:'A nameless creature is carving runes into trees. The explorers who studied them went mad.'},
+  {cat:'Naturaleza',catEn:'Wilderness',icon:'🌲',color:'rgba(50,140,80,.7)',
+   es:'Una aldea de centauros busca aliados para recuperar sus tierras sagradas, ahora ocupadas por un ejército imperial.',
+   en:'A centaur village seeks allies to reclaim their sacred lands, now occupied by an imperial army.'},
+  // Ciudad
+  {cat:'Ciudad',catEn:'Urban',icon:'🏙️',color:'rgba(60,100,200,.7)',
+   es:'El gremio de ladrones ofrece recompensa por capturar a alguien que roba a sus propios miembros y los humilla.',
+   en:'The thieves\' guild is offering a reward to catch whoever has been robbing and humiliating their own members.'},
+  {cat:'Ciudad',catEn:'Urban',icon:'🏙️',color:'rgba(60,100,200,.7)',
+   es:'Una taberna sirve un vino que hace que los bebedores solo puedan decir la verdad. El tabernero no vende la receta.',
+   en:'A tavern serves a wine that compels drinkers to tell only the truth. The innkeeper won\'t sell the recipe.'},
+  {cat:'Ciudad',catEn:'Urban',icon:'🏙️',color:'rgba(60,100,200,.7)',
+   es:'El barrio pobre fue acordonado por soldados. No dejan salir a nadie, y nadie sabe qué buscan.',
+   en:'The poor district has been cordoned off by soldiers. No one is allowed out, and nobody knows what they\'re looking for.'},
+  {cat:'Ciudad',catEn:'Urban',icon:'🏙️',color:'rgba(60,100,200,.7)',
+   es:'El maestro del gremio fue asesinado con su propia creación más preciada, una espada forjada solo para sí mismo.',
+   en:'The guildmaster was killed with his most prized creation — a sword he forged for himself alone.'},
+  {cat:'Ciudad',catEn:'Urban',icon:'🏙️',color:'rgba(60,100,200,.7)',
+   es:'Un mendigo en el mercado tiene una moneda de cada ciudad del mundo. Dice que las ganó en apuestas con dioses.',
+   en:'A beggar at the market has a coin from every city in the world. He says he won them gambling with gods.'},
+  {cat:'Ciudad',catEn:'Urban',icon:'🏙️',color:'rgba(60,100,200,.7)',
+   es:'Cada comerciante en el bazar asegura haber vendido el mismo artefacto raro a distintos clientes esta misma semana.',
+   en:'Every merchant in the bazaar claims to have sold the same rare artifact to different buyers this very week.'},
+  // Horror
+  {cat:'Horror',catEn:'Horror',icon:'💀',color:'rgba(100,40,130,.7)',
+   es:'Los muertos del cementerio no muestran señales de descomposición. Están perfectamente conservados, como si durmieran.',
+   en:'The cemetery\'s dead show no signs of decay. They are perfectly preserved, as if sleeping.'},
+  {cat:'Horror',catEn:'Horror',icon:'💀',color:'rgba(100,40,130,.7)',
+   es:'Un culto ofrece inmortalidad a quien complete su ritual. Cien personas entraron al templo. Ninguna salió como persona.',
+   en:'A cult promises immortality to those who complete their ritual. A hundred people entered the temple. None left as people.'},
+  {cat:'Horror',catEn:'Horror',icon:'💀',color:'rgba(100,40,130,.7)',
+   es:'El sacerdote lleva tres días predicando sin dormir. Su sermón describe hechos del futuro con precisión exacta.',
+   en:'The priest has been preaching for three days without sleep. His sermon describes future events with exact precision.'},
+  {cat:'Horror',catEn:'Horror',icon:'💀',color:'rgba(100,40,130,.7)',
+   es:'Una niña dibuja los mismos monstruos todos los días. Cuando los aventureros llegan al pueblo, los reconocen.',
+   en:'A girl draws the same monsters every day. When the adventurers arrive in town, they recognize them.'},
+  {cat:'Horror',catEn:'Horror',icon:'💀',color:'rgba(100,40,130,.7)',
+   es:'Todos en el pueblo olvidaron el nombre de su dios protector en la misma noche. Algo camina entre las casas desde entonces.',
+   en:'Everyone in the village forgot their protective god\'s name on the same night. Something has walked between the houses ever since.'},
+  {cat:'Horror',catEn:'Horror',icon:'💀',color:'rgba(100,40,130,.7)',
+   es:'El posadero colecciona espejos que no reflejan nada. Asegura que los espíritus los rompieron desde adentro.',
+   en:'The innkeeper collects mirrors that reflect nothing. He insists spirits broke them from the inside.'},
+  // Especial
+  {cat:'Dragón',catEn:'Dragon',icon:'🐉',color:'rgba(180,120,20,.7)',
+   es:'Un dragón anciano contrata aventureros para recuperar un huevo robado, sin explicar por qué lo tenía escondido.',
+   en:'An ancient dragon hires adventurers to recover a stolen egg, without explaining why he had it hidden.'},
+  {cat:'Dragón',catEn:'Dragon',icon:'🐉',color:'rgba(180,120,20,.7)',
+   es:'El oráculo de la montaña dejó de dar profecías. En su lugar, solo repite: "Ya está hecho."',
+   en:'The mountain oracle has stopped giving prophecies. It now only repeats: "It is already done."'},
+  {cat:'Dragón',catEn:'Dragon',icon:'🐉',color:'rgba(180,120,20,.7)',
+   es:'Una bruja concede un deseo a cambio de un recuerdo, cualquiera. Los clientes no saben cuál perderán hasta después.',
+   en:'A witch grants a wish in exchange for a memory — any memory. Clients don\'t know which one until after.'},
+  {cat:'Dragón',catEn:'Dragon',icon:'🐉',color:'rgba(180,120,20,.7)',
+   es:'Alguien paga en monedas de un reino que aún no existe. La fecha grabada en ellas es del año próximo.',
+   en:'Someone is paying with coins from a kingdom that doesn\'t exist yet. The engraved date is next year.'},
+  {cat:'Dragón',catEn:'Dragon',icon:'🐉',color:'rgba(180,120,20,.7)',
+   es:'La biblioteca arde por dentro, pero las llamas no consumen los libros: los escriben.',
+   en:'The library burns from within, but the flames don\'t consume the books — they write them.'},
+  {cat:'Dragón',catEn:'Dragon',icon:'🐉',color:'rgba(180,120,20,.7)',
+   es:'Un marinero regresa después de diez años en el mar con cartas escritas por él mismo que no recuerda haber enviado.',
+   en:'A sailor returns after ten years at sea carrying letters written by himself that he doesn\'t remember sending.'}
+];
+
+let _currentHook=null;
+function rollHook(animate=true){
+  let h;
+  do{h=HOOKS[Math.floor(Math.random()*HOOKS.length)];}while(h===_currentHook&&HOOKS.length>1);
+  _currentHook=h;
+  const textEl=document.getElementById('hookText');
+  const catEl=document.getElementById('hookCat');
+  const iconEl=document.getElementById('hookIcon');
+  const catNameEl=document.getElementById('hookCatName');
+  if(!textEl)return;
+  if(animate){
+    textEl.classList.add('fading');
+    setTimeout(()=>{
+      textEl.textContent=currentLang==='es'?h.es:h.en;
+      catNameEl.textContent=currentLang==='es'?h.cat:h.catEn;
+      iconEl.textContent=h.icon;
+      catEl.style.color=h.color;catEl.style.borderColor=h.color;
+      textEl.classList.remove('fading');
+    },300);
+  } else {
+    textEl.textContent=currentLang==='es'?h.es:h.en;
+    catNameEl.textContent=currentLang==='es'?h.cat:h.catEn;
+    iconEl.textContent=h.icon;
+    catEl.style.color=h.color;catEl.style.borderColor=h.color;
+  }
+}
 
 /* ══ MOBILE MENU ══ */
 function openMobileMenu(){
@@ -3274,6 +3483,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   if(landNav){
     window.addEventListener('scroll',()=>landNav.classList.toggle('scrolled',window.scrollY>40),{passive:true});
   }
+  rollHook(false);
   _attachCarouselSwipe('raceCarouselTrack',carouselMove);
   _attachCarouselSwipe('classCarouselTrack',classCarouselMove);
   /* Routing por URL al cargar directamente */

@@ -1,7 +1,12 @@
 {
-  "version": "1.3.1",
+  "version": "1.3.2",
   "date": "2026-03-27",
   "history": [
+    {
+      "version": "1.3.2",
+      "date": "2026-03-27",
+      "note": "Generador de hooks de aventura en la landing: 42 hooks en 6 categorías, aparece al final del scroll con animación y botón para generar nuevo"
+    },
     {
       "version": "1.3.1",
       "date": "2026-03-27",
