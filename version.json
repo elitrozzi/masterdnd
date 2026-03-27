@@ -1,7 +1,12 @@
 {
-  "version": "1.5.3",
+  "version": "1.5.4",
   "date": "2026-03-27",
   "history": [
+    {
+      "version": "1.5.4",
+      "date": "2026-03-27",
+      "note": "Hechizos mejorados: filtro por clase, rastreador de huecos de conjuro persistente, escuela en cards si ya fue vista"
+    },
     {
       "version": "1.5.3",
       "date": "2026-03-27",

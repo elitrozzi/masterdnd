@@ -645,6 +645,20 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .comp-state{grid-column:1/-1;text-align:center;padding:60px;color:var(--text-m);font-size:14px;}
 @keyframes compSpin{to{transform:rotate(360deg)}}
 .comp-spinner{width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:compSpin .8s linear infinite;margin:0 auto 12px;}
+/* Spell slot tracker */
+.slot-tracker-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.slot-tracker-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-d);}
+.slot-tracker-reset{font-size:11px;padding:3px 10px;border-radius:12px;border:1px solid rgba(212,175,55,.3);background:rgba(212,175,55,.08);color:var(--gold);cursor:pointer;}
+.slot-tracker-reset:hover{background:rgba(212,175,55,.2);}
+.slot-tracker-grid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
+.slot-level{display:flex;flex-direction:column;align-items:center;gap:4px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:6px 8px;min-width:52px;}
+.slot-level-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-d);}
+.slot-pips{display:flex;gap:3px;flex-wrap:wrap;justify-content:center;}
+.slot-pip{width:12px;height:12px;border-radius:50%;border:1.5px solid rgba(212,175,55,.5);background:rgba(212,175,55,.15);cursor:pointer;transition:.15s;}
+.slot-pip.used{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);}
+.slot-pip:hover{border-color:var(--gold);}
+/* Spell card school indicator */
+.sc-school-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:4px;flex-shrink:0;}
 /* Filter pills */
 .comp-filter{display:none;}
 .comp-pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px;}
@@ -1075,7 +1089,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.5.3</span>
+    <span class="ver-badge">v1.5.4</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">27 Mar 2026</span>
   </div>
@@ -1730,6 +1744,14 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
       </div>
       <div class="comp-pills" id="compPills"></div>
       <div class="comp-pills" id="compTypePills" style="display:none;"></div>
+      <!-- Spell slot tracker (spells tab only) -->
+      <div id="spellSlotTracker" style="display:none;">
+        <div class="slot-tracker-bar">
+          <span class="slot-tracker-title" data-es="Huecos de conjuro" data-en="Spell Slots">Huecos de conjuro</span>
+          <button class="slot-tracker-reset" onclick="resetSlots()" data-es="Descanso largo" data-en="Long rest">Descanso largo</button>
+        </div>
+        <div class="slot-tracker-grid" id="slotTrackerGrid"></div>
+      </div>
       <div id="compGrid" class="comp-grid">
         <div class="comp-state"><div class="comp-spinner"></div><span data-es="Cargando..." data-en="Loading...">Cargando...</span></div>
       </div>
@@ -2524,6 +2546,10 @@ let cActiveTab='spells';
 let cSearchQ='';
 let cFilterQ='';
 let cTypeFilterQ='';
+let cClassFilterQ='';
+let _classSpellSets={};  // {wizardIndex: Set<spellIndex>}
+const SLOT_LS_KEY='masterdnd_slots';
+let _spellSlots={};  // {level: {total, used}}
 let cCacheLoaded={};
 
 async function initCompendium(){
@@ -2544,7 +2570,7 @@ async function initCompendium(){
 }
 
 function compTab(type,el){
-  cActiveTab=type;cSearchQ='';cFilterQ='';cTypeFilterQ='';
+  cActiveTab=type;cSearchQ='';cFilterQ='';cTypeFilterQ='';cClassFilterQ='';
   const si=document.getElementById('compSearchInput');
   const fi=document.getElementById('compFilterSel');
   if(si)si.value='';if(fi)fi.value='';
@@ -2575,8 +2601,20 @@ function buildCompFilter(){
     for(let i=0;i<=9;i++){
       items.push({v:String(i),l:i===0?(es?'Truco':'Cantrip'):(es?`Niv. ${i}`:`Lv. ${i}`)});
     }
-    if(tpills)tpills.style.display='none';
+    // Class filter row
+    if(tpills){
+      const classes=['bard','cleric','druid','paladin','ranger','sorcerer','warlock','wizard'];
+      const classNames={es:{bard:'Bardo',cleric:'Clérigo',druid:'Druida',paladin:'Paladín',ranger:'Explorador',sorcerer:'Hechicero',warlock:'Brujo',wizard:'Mago'},en:{bard:'Bard',cleric:'Cleric',druid:'Druid',paladin:'Paladin',ranger:'Ranger',sorcerer:'Sorcerer',warlock:'Warlock',wizard:'Wizard'}};
+      const classItems=[{v:'',l:es?'Todas las clases':'All classes'},...classes.map(c=>({v:c,l:es?classNames.es[c]:classNames.en[c]}))];
+      tpills.innerHTML=classItems.map(it=>`<div class="comp-pill${cClassFilterQ===it.v?' active':''}" onclick="compClassFn('${it.v}',this)">${it.l}</div>`).join('');
+      tpills.style.display='flex';
+    }
+    // Show slot tracker
+    const st=document.getElementById('spellSlotTracker');
+    if(st){st.style.display='block';initSlotTracker();}
+
   } else if(cActiveTab==='monsters'){
+    const st2=document.getElementById('spellSlotTracker');if(st2)st2.style.display='none';
     items=[
       {v:'',l:es?'Todos':'All'},
       {v:'low',l:'CR 0–4'},{v:'mid',l:'CR 5–9'},
@@ -2590,6 +2628,7 @@ function buildCompFilter(){
       tpills.style.display='flex';
     }
   } else {
+    const st3=document.getElementById('spellSlotTracker');if(st3)st3.style.display='none';
     items=[{v:'',l:es?'Todos':'All'}];
     if(tpills)tpills.style.display='none';
   }
@@ -2600,6 +2639,55 @@ function compTypeFn(v,el){
   cTypeFilterQ=v;
   if(el){document.querySelectorAll('#compTypePills .comp-pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');}
   renderCompGrid();
+}
+
+async function compClassFn(v,el){
+  cClassFilterQ=v;
+  if(el){document.querySelectorAll('#compTypePills .comp-pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');}
+  if(v&&!_classSpellSets[v]){
+    try{
+      const r=await fetch(`${DND_API}/classes/${v}/spells`);
+      const j=await r.json();
+      _classSpellSets[v]=new Set((j.results||[]).map(s=>s.index));
+    }catch(e){_classSpellSets[v]=new Set();}
+  }
+  renderCompGrid();
+}
+
+/* ══ SPELL SLOT TRACKER ══ */
+// Default slots per level (wizard/sorcerer level 20 max)
+const SLOT_MAX_BY_LEVEL={1:4,2:3,3:3,4:3,5:3,6:2,7:2,8:1,9:1};
+function _loadSlots(){
+  try{const s=JSON.parse(localStorage.getItem(SLOT_LS_KEY));if(s)return s;}catch(e){}
+  // default: full slots
+  const d={};for(let i=1;i<=9;i++)d[i]={total:SLOT_MAX_BY_LEVEL[i],used:0};
+  return d;
+}
+function _saveSlots(){localStorage.setItem(SLOT_LS_KEY,JSON.stringify(_spellSlots));}
+function initSlotTracker(){
+  _spellSlots=_loadSlots();
+  renderSlotTracker();
+}
+function renderSlotTracker(){
+  const grid=document.getElementById('slotTrackerGrid');
+  if(!grid)return;
+  grid.innerHTML=Object.entries(_spellSlots).map(([lv,s])=>{
+    const pips=Array.from({length:s.total},(_,i)=>`<div class="slot-pip${i<s.used?' used':''}" onclick="toggleSlot(${lv},${i})"></div>`).join('');
+    return`<div class="slot-level"><div class="slot-level-label">${currentLang==='es'?`Niv. ${lv}`:`Lv. ${lv}`}</div><div class="slot-pips">${pips}</div></div>`;
+  }).join('');
+}
+function toggleSlot(level,idx){
+  const s=_spellSlots[level];if(!s)return;
+  // clicking used pip → unmark; clicking unused → mark next available
+  if(idx<s.used)s.used=idx;
+  else s.used=Math.min(s.total,idx+1);
+  _saveSlots();
+  renderSlotTracker();
+}
+function resetSlots(){
+  for(const lv in _spellSlots)_spellSlots[lv].used=0;
+  _saveSlots();
+  renderSlotTracker();
 }
 
 function renderCompGrid(){
@@ -2618,6 +2706,9 @@ function renderCompGrid(){
   }
   if(cTypeFilterQ&&cActiveTab==='monsters'){
     list=list.filter(i=>(i.type||'').toLowerCase()===cTypeFilterQ.toLowerCase());
+  }
+  if(cClassFilterQ&&cActiveTab==='spells'&&_classSpellSets[cClassFilterQ]){
+    list=list.filter(i=>_classSpellSets[cClassFilterQ].has(i.index));
   }
   if(!list.length){
     document.getElementById('compGrid').innerHTML=`<div class="comp-state">${currentLang==='es'?'Sin resultados':'No results'}</div>`;
@@ -2640,9 +2731,15 @@ function spellLevelBadge(level){
 }
 
 function renderSpellCard(s){
+  const detail=cDetailCache[`spells/${s.index}`];
+  const school=detail?.school?.name?.toLowerCase();
+  const schoolObj=school?SPELL_SCHOOLS[school]:null;
+  const schoolBadge=schoolObj?`<span class="cc-badge ${schoolObj.badge}" style="font-size:9px;">${schoolObj[currentLang]||school}</span>`:'';
+  const conc=detail?.concentration?`<span class="cc-badge cb-purple" style="font-size:9px;">${currentLang==='es'?'Conc.':'Conc.'}</span>`:'';
+  const ritual=detail?.ritual?`<span class="cc-badge cb-teal" style="font-size:9px;">Ritual</span>`:'';
   return`<div class="comp-card" onclick="openCompDetail('spells','${s.index}')">
-    <div class="cc-row">${spellLevelBadge(s.level||0)}</div>
-    <div class="cc-name" style="margin-top:8px;">${s.name}</div>
+    <div class="cc-row" style="display:flex;gap:4px;flex-wrap:wrap;">${spellLevelBadge(s.level||0)}${schoolBadge}${conc}${ritual}</div>
+    <div class="cc-name" style="margin-top:6px;">${s.name}</div>
   </div>`;
 }
 
