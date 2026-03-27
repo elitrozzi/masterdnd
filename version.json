@@ -1,7 +1,12 @@
 {
-  "version": "1.4.1",
+  "version": "1.4.2",
   "date": "2026-03-27",
   "history": [
+    {
+      "version": "1.4.2",
+      "date": "2026-03-27",
+      "note": "Ficha dashboard sin scroll: 3 paneles horizontales (retrato+acciones / stats+raza+dados / condiciones), sin header del drawer en step2, ocupa toda la pantalla sin márgenes"
+    },
     {
       "version": "1.4.1",
       "date": "2026-03-27",
