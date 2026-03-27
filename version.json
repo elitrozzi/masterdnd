@@ -1,7 +1,12 @@
 {
-  "version": "1.4.5",
+  "version": "1.4.6",
   "date": "2026-03-27",
   "history": [
+    {
+      "version": "1.4.6",
+      "date": "2026-03-27",
+      "note": "Mis personajes: 1 personaje abre la ficha directo, 2+ abre modal picker centrado con cards para elegir"
+    },
     {
       "version": "1.4.5",
       "date": "2026-03-27",
