@@ -266,6 +266,29 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .btn-load-char:hover{opacity:.85;}
 .btn-del-char{background:transparent;color:rgba(255,255,255,.3);border:1px solid rgba(255,255,255,.1);border-radius:5px;padding:4px 10px;font-size:11px;cursor:pointer;transition:color .15s,border-color .15s;}
 .btn-del-char:hover{color:#e05050;border-color:#e05050;}
+.saved-char-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px;}
+.saved-char-top{display:flex;align-items:flex-start;gap:8px;}
+.hp-tracker-row{display:flex;align-items:center;gap:6px;background:rgba(0,0,0,.25);border-radius:7px;padding:6px 8px;}
+.hp-nums{font:700 13px/1 'Cinzel',serif;color:#f0ead0;white-space:nowrap;}
+.hp-nums span.hp-cur{font-size:16px;}
+.hp-nums span.hp-low{color:#e05050;}
+.hp-nums span.hp-sep{color:rgba(255,255,255,.3);font-size:11px;margin:0 2px;}
+.hp-nums span.hp-max{color:rgba(255,255,255,.45);font-size:11px;}
+.hp-delta-input{width:44px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:5px;color:#fff;font-size:13px;text-align:center;padding:4px 2px;outline:none;}
+.hp-delta-input:focus{border-color:rgba(212,175,55,.6);}
+.hp-delta-input::-webkit-inner-spin-button,.hp-delta-input::-webkit-outer-spin-button{-webkit-appearance:none;}
+.btn-dmg{background:rgba(200,60,60,.25);color:#e08080;border:1px solid rgba(200,60,60,.3);border-radius:5px;padding:4px 8px;font-size:11px;cursor:pointer;transition:background .15s;}
+.btn-dmg:hover{background:rgba(200,60,60,.45);color:#fff;}
+.btn-heal{background:rgba(60,160,80,.25);color:#80c890;border:1px solid rgba(60,160,80,.3);border-radius:5px;padding:4px 8px;font-size:11px;cursor:pointer;transition:background .15s;}
+.btn-heal:hover{background:rgba(60,160,80,.45);color:#fff;}
+.sheet-hp-tracker{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:10px;background:rgba(0,0,0,.2);border-radius:8px;padding:10px 14px;}
+.sheet-hp-nums{font:700 18px/1 'Cinzel',serif;color:#f0ead0;}
+.sheet-hp-nums .hp-low{color:#e05050;}
+.sheet-hp-nums .hp-sep2{color:rgba(255,255,255,.3);font-size:13px;margin:0 3px;}
+.sheet-hp-nums .hp-max2{color:rgba(255,255,255,.4);font-size:13px;}
+.sheet-hp-input{width:54px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:6px;color:#fff;font-size:15px;text-align:center;padding:6px 4px;outline:none;}
+.sheet-hp-input:focus{border-color:rgba(212,175,55,.7);}
+.sheet-hp-input::-webkit-inner-spin-button,.sheet-hp-input::-webkit-outer-spin-button{-webkit-appearance:none;}
 .tag{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;}
 .tag-brand{background:rgba(89,80,130,.15);color:var(--brand-400);}
 .tag-gold{background:rgba(248,198,98,.15);color:var(--gold);}
@@ -760,7 +783,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.3.3</span>
+    <span class="ver-badge">v1.3.4</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">27 Mar 2026</span>
   </div>
@@ -1173,6 +1196,12 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
                   <span class="tag tag-brand" id="csCA">CA: —</span>
                   <span class="tag tag-gold" id="csHP">HP: —</span>
                   <span class="tag tag-brand">Prof: +2</span>
+                </div>
+                <div class="sheet-hp-tracker" id="sheetHpTracker" style="display:none;">
+                  <div class="sheet-hp-nums"><span id="sheetHpCur" class="">—</span><span class="hp-sep2">/</span><span class="hp-max2" id="sheetHpMax">—</span></div>
+                  <input type="number" class="sheet-hp-input" id="sheetHpInput" min="0" placeholder="0">
+                  <button class="btn-dmg" onclick="applySheetHp('dmg')">💔 Daño</button>
+                  <button class="btn-heal" onclick="applySheetHp('heal')">💚 Curar</button>
                 </div>
               </div>
               <!-- Race info -->
@@ -2507,6 +2536,7 @@ function rollStats(){
   },done);
 }
 function buildSheet(){
+  _hideSheetHpTracker();_loadedCharId=null;
   if(selections.mode==='random'){
     if(!selections.class)selections.class=CLASS_KEYS[Math.floor(Math.random()*CLASS_KEYS.length)];
     if(!rolledStats){rolledStats={};['str','dex','con','int','wis','cha'].forEach(s=>{const r=[1,2,3,4].map(()=>Math.ceil(Math.random()*6));rolledStats[s]=r.sort((a,b)=>b-a).slice(0,3).reduce((a,b)=>a+b,0);});}
@@ -2557,7 +2587,8 @@ function saveCharacter(btn){
   const dexMod=Math.floor((st.dex-10)/2), conMod=Math.floor((st.con-10)/2);
   const hpBase={fighter:10,paladin:10,barbarian:12,wizard:6,sorcerer:6,warlock:8,rogue:8,ranger:8,druid:8,bard:8,cleric:8,monk:8}[ck]||8;
   const chars=_loadSavedChars();
-  chars.unshift({id:Date.now().toString(),name,race:rk,class:ck,stats:st,hp:hpBase+conMod,ca:10+dexMod,savedAt:Date.now()});
+  const maxHp=hpBase+conMod;
+  chars.unshift({id:Date.now().toString(),name,race:rk,class:ck,stats:st,hp:maxHp,currentHp:maxHp,ca:10+dexMod,savedAt:Date.now()});
   localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));
   const orig=btn.innerHTML;
   btn.innerHTML=currentLang==='es'?'✓ Guardado':'✓ Saved';
@@ -2578,19 +2609,29 @@ function renderSavedChars(){
     const rd=RACE_DATA[c.race]||{};const cd=CLASS_DATA[c.class]||{};
     const rn=currentLang==='es'?(rd.nameEs||c.race):(rd.nameEn||c.race);
     const cn=currentLang==='es'?(cd.nameEs||c.class):(cd.nameEn||c.class);
+    const cur=c.currentHp!=null?c.currentHp:c.hp;
+    const low=cur<=Math.floor(c.hp/2);
+    const dmgLabel=currentLang==='es'?'💔 Daño':'💔 DMG';
+    const healLabel=currentLang==='es'?'💚 Curar':'💚 Heal';
     return `<div class="saved-char-card">
       <div class="saved-char-portrait" style="${raceBg(c.race)};background-repeat:no-repeat;"></div>
-      <div class="saved-char-info">
-        <div class="saved-char-name">${c.name}</div>
-        <div class="saved-char-sub">${rn} · ${cn}</div>
-        <div class="saved-char-tags">
-          <span class="tag tag-brand" style="font-size:10px;padding:2px 7px;">HP ${c.hp}</span>
-          <span class="tag tag-gold" style="font-size:10px;padding:2px 7px;">CA ${c.ca}</span>
+      <div class="saved-char-main">
+        <div class="saved-char-top">
+          <div class="saved-char-info">
+            <div class="saved-char-name">${c.name}</div>
+            <div class="saved-char-sub">${rn} · ${cn} · CA ${c.ca}</div>
+          </div>
+          <div class="saved-char-actions">
+            <button class="btn-load-char" onclick="loadChar('${c.id}')">${currentLang==='es'?'Cargar':'Load'}</button>
+            <button class="btn-del-char" onclick="deleteChar('${c.id}')">✕</button>
+          </div>
         </div>
-      </div>
-      <div class="saved-char-actions">
-        <button class="btn-load-char" onclick="loadChar('${c.id}')">${currentLang==='es'?'Cargar':'Load'}</button>
-        <button class="btn-del-char" onclick="deleteChar('${c.id}')">✕</button>
+        <div class="hp-tracker-row">
+          <div class="hp-nums"><span class="hp-cur${low?' hp-low':''}" id="hpc-${c.id}">${cur}</span><span class="hp-sep">/</span><span class="hp-max">${c.hp}</span></div>
+          <input type="number" class="hp-delta-input" id="hpi-${c.id}" min="0" placeholder="0" onkeydown="if(event.key==='Enter'){}">
+          <button class="btn-dmg" onclick="applyHpCard('${c.id}','dmg')">${dmgLabel}</button>
+          <button class="btn-heal" onclick="applyHpCard('${c.id}','heal')">${healLabel}</button>
+        </div>
       </div>
     </div>`;
   }).join('');
@@ -2623,11 +2664,63 @@ function loadChar(id){
   buildSheet();
   const nameInput=document.getElementById('csNameInput');
   if(nameInput)nameInput.value=c.name;
+  _loadedCharId=id;
+  _renderSheetHpTracker(c);
 }
 function deleteChar(id){
   const chars=_loadSavedChars().filter(c=>c.id!==id);
   localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));
+  if(_loadedCharId===id){_loadedCharId=null;_hideSheetHpTracker();}
   renderSavedChars();
+}
+let _loadedCharId=null;
+function applyHpCard(id,mode){
+  const input=document.getElementById('hpi-'+id);
+  const val=parseInt(input?.value)||0;
+  if(val<=0)return;
+  const chars=_loadSavedChars();
+  const c=chars.find(x=>x.id===id);
+  if(!c)return;
+  if(c.currentHp==null)c.currentHp=c.hp;
+  c.currentHp=mode==='dmg'?Math.max(0,c.currentHp-val):Math.min(c.hp,c.currentHp+val);
+  localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));
+  if(input)input.value='';
+  // Update display without full re-render
+  const curEl=document.getElementById('hpc-'+id);
+  if(curEl){curEl.textContent=c.currentHp;curEl.classList.toggle('hp-low',c.currentHp<=Math.floor(c.hp/2));}
+  // Sync sheet tracker if this char is loaded
+  if(_loadedCharId===id)_renderSheetHpTracker(c);
+}
+function _renderSheetHpTracker(c){
+  const tracker=document.getElementById('sheetHpTracker');
+  if(!tracker)return;
+  tracker.style.display='flex';
+  const cur=c.currentHp!=null?c.currentHp:c.hp;
+  const curEl=document.getElementById('sheetHpCur');
+  const maxEl=document.getElementById('sheetHpMax');
+  if(curEl){curEl.textContent=cur;curEl.className=cur<=Math.floor(c.hp/2)?'hp-low':'';}
+  if(maxEl)maxEl.textContent=c.hp;
+}
+function _hideSheetHpTracker(){
+  const tracker=document.getElementById('sheetHpTracker');
+  if(tracker)tracker.style.display='none';
+}
+function applySheetHp(mode){
+  if(!_loadedCharId)return;
+  const input=document.getElementById('sheetHpInput');
+  const val=parseInt(input?.value)||0;
+  if(val<=0)return;
+  const chars=_loadSavedChars();
+  const c=chars.find(x=>x.id===_loadedCharId);
+  if(!c)return;
+  if(c.currentHp==null)c.currentHp=c.hp;
+  c.currentHp=mode==='dmg'?Math.max(0,c.currentHp-val):Math.min(c.hp,c.currentHp+val);
+  localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));
+  if(input)input.value='';
+  _renderSheetHpTracker(c);
+  // Sync card display
+  const curEl=document.getElementById('hpc-'+_loadedCharId);
+  if(curEl){curEl.textContent=c.currentHp;curEl.classList.toggle('hp-low',c.currentHp<=Math.floor(c.hp/2));}
 }
 
 function resetCreator(){

@@ -1,7 +1,12 @@
 {
-  "version": "1.3.3",
+  "version": "1.3.4",
   "date": "2026-03-27",
   "history": [
+    {
+      "version": "1.3.4",
+      "date": "2026-03-27",
+      "note": "HP tracker en tiempo real: input de daño/curación en los cards de personaje y en la ficha abierta, persiste en localStorage"
+    },
     {
       "version": "1.3.3",
       "date": "2026-03-27",
