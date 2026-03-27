@@ -259,36 +259,84 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 /* ── Drawer: hide header + remove padding on sheet step ── */
 .char-creator-drawer:has(#step2.active) .char-drawer-header{display:none;}
 .char-creator-drawer:has(#step2.active) .char-drawer-body{padding:0;}
-/* ── Character sheet dashboard ── */
+/* ── DnD Beyond-style character sheet ── */
 .char-sheet{background:var(--card);border:1px solid var(--border);border-radius:0;padding:0;width:100%;flex:1;min-height:0;display:flex;flex-direction:column;}
-.cs-dashboard{display:flex;flex:1;min-height:0;}
-.cs-panel-left{flex:0 0 210px;display:flex;flex-direction:column;gap:10px;padding:20px 18px;border-right:1px solid var(--border);}
-.cs-panel-center{flex:0 0 270px;display:flex;flex-direction:column;gap:16px;padding:20px 18px;border-right:1px solid var(--border);overflow-y:auto;}
-.cs-panel-right{flex:1;display:flex;flex-direction:column;gap:12px;padding:20px 18px;overflow-y:auto;}
-.cs-portrait{width:160px;height:148px;border-radius:12px;overflow:hidden;align-self:center;border:2px solid rgba(248,198,98,.25);box-shadow:0 4px 24px rgba(0,0,0,.6);}
-.cs-portrait-inner{width:160px;height:180px;background-repeat:no-repeat;}
-.cs-name-input{font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:var(--gold);background:transparent;border:none;border-bottom:1.5px solid rgba(248,198,98,.3);text-align:left;width:100%;padding:4px 0;outline:none;letter-spacing:.05em;display:block;margin:0 0 4px;}
-.cs-name-input:focus{border-bottom-color:var(--gold);}
-.cs-name-input::placeholder{color:rgba(248,198,98,.28);}
-.cs-meta{font-size:12px;color:var(--text-m);}
-.cs-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;}
-.cs-panel-actions{display:flex;flex-direction:column;gap:6px;margin-top:auto;padding-top:12px;border-top:1px solid var(--border);}
-.cs-action-row{display:flex;gap:6px;}
-.cs-action-row .btn-nav{flex:1;padding:7px 10px;font-size:11px;text-align:center;}
-.cs-nav-links{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;}
-.cs-nav-link{background:transparent;border:none;color:var(--text-d);font-size:11px;cursor:pointer;padding:0;text-decoration:underline;transition:color .15s;}
-.cs-nav-link:hover{color:var(--gold);}
-.cs-race-section{margin-bottom:0;}
-.cs-race-flavor{font-style:italic;color:var(--text-m);font-size:12px;margin-bottom:8px;line-height:1.5;}
-.cs-race-bonuses{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:6px;}
-.cs-race-traits{display:flex;flex-wrap:wrap;gap:5px;}
-.cs-trait-pill{padding:3px 10px;border-radius:20px;font-size:11px;background:rgba(255,255,255,.05);color:var(--text-m);border:1px solid rgba(255,255,255,.09);}
-.cs-body{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
-.cs-stat{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:10px 4px 8px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:1px;}
-.cs-stat-name{font-size:8px;color:var(--text-d);letter-spacing:.12em;font-weight:700;text-transform:uppercase;order:2;margin-top:2px;}
-.cs-stat-val{font-size:11px;font-weight:600;color:var(--text-d);order:3;}
-.cs-stat-mod{font-size:26px;font-weight:700;color:var(--gold);order:1;line-height:1;font-family:'Cinzel',serif;}
+.cs-dbd{display:flex;flex-direction:column;flex:1;min-height:0;overflow-y:auto;padding:14px 18px;gap:12px;}
+/* Header */
+.cs-dbd-header{display:flex;align-items:center;gap:14px;padding-bottom:12px;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.cs-dbd-portrait{width:76px;height:76px;border-radius:50%;overflow:hidden;flex-shrink:0;border:2px solid rgba(248,198,98,.35);box-shadow:0 0 16px rgba(248,198,98,.12);}
+.cs-dbd-portrait-img{width:100%;height:100%;background-repeat:no-repeat;background-size:cover;}
+.cs-dbd-identity{flex:1;min-width:120px;}
+.cs-dbd-name-input{font-family:'Cinzel',serif;font-size:19px;font-weight:700;color:var(--gold);background:transparent;border:none;border-bottom:1.5px solid rgba(248,198,98,.2);width:100%;padding:2px 0;outline:none;}
+.cs-dbd-name-input:focus{border-bottom-color:var(--gold);}
+.cs-dbd-name-input::placeholder{color:rgba(248,198,98,.25);}
+.cs-dbd-meta{font-size:11px;color:var(--text-m);margin-top:4px;}
+/* HP block */
+.cs-dbd-hp-block{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.25);border-radius:10px;padding:8px 12px;flex-shrink:0;}
+.cs-dbd-hp-nums{font:700 18px/1 'Cinzel',serif;color:#f0ead0;white-space:nowrap;min-width:72px;text-align:center;}
+.cs-dbd-hp-nums .hp-low{color:#e05050;}
+.cs-dbd-hp-sep{color:rgba(255,255,255,.3);font-size:13px;margin:0 2px;}
+.cs-dbd-hp-max-val{color:rgba(255,255,255,.4);font-size:13px;}
+.cs-dbd-hp-controls{display:flex;align-items:center;gap:4px;}
+.cs-dbd-hp-input{width:46px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:6px;color:#fff;font-size:13px;text-align:center;padding:5px 3px;outline:none;}
+.cs-dbd-hp-input::-webkit-inner-spin-button,.cs-dbd-hp-input::-webkit-outer-spin-button{-webkit-appearance:none;}
+.cs-dbd-hp-input:focus{border-color:rgba(248,198,98,.5);}
+/* Action buttons */
+.cs-dbd-actions{display:flex;flex-direction:column;gap:5px;flex-shrink:0;}
+.cs-dbd-action-row{display:flex;gap:5px;}
+.cs-dbd-btn{padding:6px 10px;border-radius:7px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid transparent;transition:.15s;font-family:'Roboto',sans-serif;white-space:nowrap;}
+.cs-dbd-btn-save{background:var(--brand-500);color:#fff;border-color:var(--brand-600);}
+.cs-dbd-btn-save:hover{background:var(--brand-600);}
+.cs-dbd-btn-lvl{background:rgba(139,92,246,.18);border-color:rgba(139,92,246,.4);color:#c4b5fd;}
+.cs-dbd-btn-lvl:hover{background:rgba(139,92,246,.32);}
+.cs-dbd-btn-rest{background:rgba(65,200,130,.1);border-color:rgba(65,200,130,.3);color:#6edba0;}
+.cs-dbd-btn-rest:hover{background:rgba(65,200,130,.2);}
+.cs-dbd-btn-lrest{background:rgba(100,140,250,.1);border-color:rgba(100,140,250,.3);color:#a0b8f8;}
+.cs-dbd-btn-lrest:hover{background:rgba(100,140,250,.2);}
+.cs-dbd-btn-pdf{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.12);color:var(--text-m);}
+.cs-dbd-btn-pdf:hover{border-color:var(--gold);color:var(--gold);}
+.cs-dbd-btn-ghost{background:transparent;border-color:transparent;color:var(--text-d);font-size:10px;text-decoration:underline;padding:3px 6px;}
+.cs-dbd-btn-ghost:hover{color:var(--text-m);}
+/* Stats row */
+.cs-dbd-stats-row{display:flex;gap:5px;align-items:stretch;}
+.cs-dbd-stat-box{flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:10px;padding:8px 4px 7px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:1px;min-width:0;}
+.cs-dbd-stat-mod{font-size:22px;font-weight:700;color:var(--gold);font-family:'Cinzel',serif;line-height:1.1;}
+.cs-dbd-stat-abbr{font-size:8px;color:var(--text-d);font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-top:2px;}
+.cs-dbd-stat-val{font-size:11px;color:var(--text-d);font-weight:600;}
+.cs-dbd-combat-sep{width:1px;background:var(--border);border-radius:1px;margin:0 1px;align-self:stretch;}
+.cs-dbd-combat-stat{flex:1;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:8px 4px 7px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:0;}
+.cs-dbd-combat-val{font-size:18px;font-weight:700;color:var(--text);font-family:'Cinzel',serif;line-height:1;}
+.cs-dbd-combat-lbl{font-size:7.5px;color:var(--text-d);letter-spacing:.07em;font-weight:600;text-transform:uppercase;margin-top:2px;}
+/* Content 3 cols */
+.cs-dbd-content{display:flex;flex:1;gap:10px;min-height:200px;}
+.cs-dbd-col-saves{flex:0 0 158px;display:flex;flex-direction:column;gap:10px;overflow-y:auto;}
+.cs-dbd-col-skills{flex:0 0 192px;display:flex;flex-direction:column;overflow-y:auto;}
+.cs-dbd-col-main{flex:1;display:flex;flex-direction:column;gap:10px;overflow-y:auto;min-width:0;}
+.cs-dbd-section-title{font:600 9px/1 'Cinzel',serif;letter-spacing:.18em;color:var(--text-d);text-transform:uppercase;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid rgba(255,255,255,.06);}
+/* Saving throws */
+.cs-dbd-save-list{display:flex;flex-direction:column;gap:2px;}
+.cs-dbd-save-row{display:flex;align-items:center;gap:6px;padding:2px 0;}
+.cs-dbd-dot{width:11px;height:11px;border-radius:50%;border:1.5px solid rgba(255,255,255,.3);background:transparent;cursor:pointer;flex-shrink:0;transition:.15s;}
+.cs-dbd-dot.proficient{background:var(--gold);border-color:var(--gold);}
+.cs-dbd-save-val{font-size:12px;font-weight:700;color:var(--text);font-family:'Cinzel',serif;min-width:22px;text-align:right;flex-shrink:0;}
+.cs-dbd-save-name{font-size:10.5px;color:var(--text-m);}
+/* Skills */
+.cs-dbd-skill-row{display:flex;align-items:center;gap:5px;padding:2px 0;}
+.cs-dbd-skill-stat{font-size:8px;color:var(--text-d);width:20px;flex-shrink:0;font-weight:700;}
+.cs-dbd-skill-val{font-size:11px;font-weight:700;color:var(--text);font-family:'Cinzel',serif;min-width:20px;text-align:right;flex-shrink:0;}
+.cs-dbd-skill-name{font-size:10px;color:var(--text-m);flex:1;min-width:0;}
+/* Passives */
+.cs-dbd-passive-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.05);}
+.cs-dbd-passive-val{font:700 14px 'Cinzel',serif;color:var(--text);}
+.cs-dbd-passive-lbl{font-size:10px;color:var(--text-m);}
+/* Race info */
+.cs-race-flavor{font-style:italic;color:var(--text-m);font-size:11px;margin-bottom:6px;line-height:1.5;}
+.cs-race-bonuses{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:5px;}
+.cs-race-traits{display:flex;flex-wrap:wrap;gap:4px;}
+.cs-trait-pill{padding:3px 9px;border-radius:20px;font-size:10px;background:rgba(255,255,255,.05);color:var(--text-m);border:1px solid rgba(255,255,255,.09);}
 .cs-footer{display:flex;flex-wrap:wrap;gap:8px;}
+/* compat shims — keep sheet-hp-tracker hidden (HP always in header now) */
+.sheet-hp-tracker{display:none!important;}
 .saved-chars-section{position:relative;z-index:10;padding:80px 24px 0;background:rgba(9,7,15,.85);border-bottom:1px solid rgba(255,255,255,.06);}
 /* ── Character picker modal ── */
 .char-picker-overlay{position:fixed;inset:0;z-index:200;background:rgba(5,3,14,.85);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s;}
@@ -840,6 +888,27 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 .mm-footer{padding:20px 24px;border-top:1px solid rgba(255,255,255,.07);flex-shrink:0;}
 .mm-footer-label{font-size:10px;letter-spacing:.2em;color:var(--text-d);text-transform:uppercase;margin-bottom:10px;}
 
+/* ══════════════════════════════════ PRINT / PDF */
+@media print{
+  body *{visibility:hidden;}
+  #charCreatorDrawer,#charCreatorDrawer *{visibility:visible;}
+  #charCreatorDrawer{position:fixed!important;inset:0!important;z-index:9999!important;background:#fff!important;overflow:auto;}
+  .char-drawer-header,.creator-progress,.creator-steps>div:not(#step2),.cs-dbd-actions,.cs-dbd-btn-new,.dr-sheet-panel{display:none!important;}
+  .cs-dbd{background:#fff;color:#111;gap:8px;padding:12px;}
+  .cs-dbd-name-input,.cs-dbd-meta,.cs-dbd-save-name,.cs-dbd-skill-name,.cs-dbd-section-title{color:#111!important;}
+  .cs-dbd-stat-mod,.cs-dbd-save-val,.cs-dbd-skill-val,.cs-dbd-combat-val,.cs-dbd-hp-nums{color:#222!important;}
+  .cs-dbd-stat-abbr,.cs-dbd-stat-val,.cs-dbd-combat-lbl{color:#555!important;}
+  .cs-dbd-stat-box,.cs-dbd-combat-stat{border-color:#ccc;background:#f9f9f9;}
+  .cs-dbd-header{border-bottom:1px solid #ccc;}
+  .cs-dbd-hp-block{background:#f2f2f2;}
+  .cs-dbd-hp-controls{display:none;}
+  .cs-dbd-dot{border-color:#999;}
+  .cs-dbd-dot.proficient{background:#555;border-color:#555;}
+  .cs-cond-pill{border-color:#ccc;background:#f9f9f9;}
+  .cs-cond-name{color:#555;}
+  .cs-cond-pill.active{background:#ffe5e5;border-color:#c44;}
+}
+
 /* ══════════════════════════════════ RESPONSIVE MOBILE */
 @media (max-width:700px){
   /* ── Cursor: hide on touch screens ── */
@@ -925,16 +994,20 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   .cs-chips-wrap{padding:2px 8px 6px;gap:4px;}
   .cs-chip{font-size:9px;padding:3px 9px;letter-spacing:.3px;}
 
-  /* ── Character sheet ── */
-  .cs-dashboard{flex-direction:column;height:auto;}
-  .cs-panel-left{flex:unset;border-right:none;border-bottom:1px solid var(--border);flex-direction:row;flex-wrap:wrap;gap:12px;align-items:flex-start;}
-  .cs-portrait{align-self:auto;}
-  .cs-panel-center{flex:unset;border-right:none;border-bottom:1px solid var(--border);}
-  .cs-panel-right{flex:unset;}
-  .cs-body{grid-template-columns:repeat(3,1fr);gap:6px;}
-  .cs-stat-mod{font-size:22px;}
+  /* ── Character sheet mobile ── */
+  .cs-dbd{padding:10px 12px;gap:10px;}
+  .cs-dbd-header{gap:10px;}
+  .cs-dbd-portrait{width:60px;height:60px;}
+  .cs-dbd-name-input{font-size:15px;}
+  .cs-dbd-hp-block{padding:6px 10px;gap:6px;}
+  .cs-dbd-hp-nums{font-size:15px;min-width:56px;}
+  .cs-dbd-stats-row{flex-wrap:wrap;gap:4px;}
+  .cs-dbd-stat-box,.cs-dbd-combat-stat{min-width:44px;}
+  .cs-dbd-stat-mod{font-size:18px;}
+  .cs-dbd-combat-sep{display:none;}
+  .cs-dbd-content{flex-direction:column;min-height:unset;}
+  .cs-dbd-col-saves,.cs-dbd-col-skills{flex:unset;}
   .cs-cond-grid{grid-template-columns:repeat(auto-fill,minmax(64px,1fr));}
-  .cs-panel-actions{margin-top:0;}
   .saved-chars-section{padding:74px 14px 0;}
   .saved-char-card{min-width:0;flex:1 1 100%;}
 
@@ -1089,7 +1162,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.5.4</span>
+    <span class="ver-badge">v1.5.5</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">27 Mar 2026</span>
   </div>
@@ -1534,68 +1607,94 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
           <!-- Step 2: Sheet -->
           <div class="creator-step" id="step2">
             <div class="char-sheet" id="charSheet">
-              <div class="cs-dashboard">
-                <!-- Panel izquierdo: retrato + identidad + acciones -->
-                <div class="cs-panel-left">
-                  <div class="cs-portrait"><div class="cs-portrait-inner" id="csAvatar"></div></div>
-                  <input class="cs-name-input" id="csNameInput" placeholder="Nombre del personaje..." autocomplete="off" spellcheck="false">
-                  <div class="cs-meta" id="csMeta">Raza · Clase · Nivel 1</div>
-                  <div class="cs-badges">
-                    <span class="tag tag-brand" id="csCA">CA: —</span>
-                    <span class="tag tag-gold" id="csHP">HP: —</span>
-                    <span class="tag tag-brand" id="csProf">Prof: +2</span>
-                    <span class="tag tag-brand" id="csLevel">Nv. 1</span>
+              <div class="cs-dbd" id="csDbd">
+                <!-- Header: retrato circular + identidad + HP + acciones -->
+                <div class="cs-dbd-header">
+                  <div class="cs-dbd-portrait"><div class="cs-dbd-portrait-img" id="csAvatar"></div></div>
+                  <div class="cs-dbd-identity">
+                    <input class="cs-dbd-name-input" id="csNameInput" placeholder="Nombre del personaje..." autocomplete="off" spellcheck="false">
+                    <div class="cs-dbd-meta" id="csMeta">Raza · Clase · Nivel 1</div>
                   </div>
-                  <div class="sheet-hp-tracker" id="sheetHpTracker" style="display:none;">
-                    <div class="sheet-hp-nums"><span id="sheetHpCur" class="">—</span><span class="hp-sep2">/</span><span class="hp-max2" id="sheetHpMax">—</span></div>
-                    <input type="number" class="sheet-hp-input" id="sheetHpInput" min="0" placeholder="0">
-                    <button class="btn-dmg" onclick="applySheetHp('dmg')">💔 Daño</button>
-                    <button class="btn-heal" onclick="applySheetHp('heal')">💚 Curar</button>
+                  <div class="cs-dbd-hp-block">
+                    <div class="cs-dbd-hp-nums"><span id="sheetHpCur">—</span><span class="cs-dbd-hp-sep">/</span><span class="cs-dbd-hp-max-val" id="sheetHpMax">—</span></div>
+                    <div class="cs-dbd-hp-controls">
+                      <input type="number" class="cs-dbd-hp-input" id="sheetHpInput" min="0" placeholder="0">
+                      <button class="btn-dmg" onclick="applySheetHp('dmg')">💔</button>
+                      <button class="btn-heal" onclick="applySheetHp('heal')">💚</button>
+                    </div>
                   </div>
-                  <div class="cs-panel-actions">
-                    <div class="cs-action-row">
-                      <button class="btn-nav btn-primary" onclick="saveCharacter(this)" data-es="💾 Guardar" data-en="💾 Save">💾 Guardar</button>
-                      <button class="btn-nav btn-ghost" data-es="📄 PDF" data-en="📄 PDF">📄 PDF</button>
+                  <div class="cs-dbd-actions">
+                    <div class="cs-dbd-action-row">
+                      <button class="cs-dbd-btn cs-dbd-btn-save" onclick="saveCharacter(this)">💾 Guardar</button>
+                      <button class="cs-dbd-btn cs-dbd-btn-lvl" id="btnLevelUp" onclick="levelUp(this)">⬆ Nivel</button>
+                      <button class="cs-dbd-btn cs-dbd-btn-pdf" onclick="exportPdf()">📄 PDF</button>
                     </div>
-                    <div class="cs-action-row">
-                      <button class="btn-nav btn-levelup" id="btnLevelUp" onclick="levelUp(this)">⬆ Subir nivel</button>
+                    <div class="cs-dbd-action-row">
+                      <button class="cs-dbd-btn cs-dbd-btn-rest" onclick="shortRest()">🌙 Desc. corto</button>
+                      <button class="cs-dbd-btn cs-dbd-btn-lrest" onclick="longRest()">☀️ Desc. largo</button>
                     </div>
-                    <div class="cs-nav-links">
-                      <button class="cs-nav-link" onclick="document.getElementById('charCreatorDrawer').classList.remove('open');initCharSelect();">↺ Nuevo personaje</button>
-                      <button class="cs-nav-link" onclick="goTo('home')">Inicio →</button>
+                    <div class="cs-dbd-action-row">
+                      <button class="cs-dbd-btn cs-dbd-btn-ghost" onclick="document.getElementById('charCreatorDrawer').classList.remove('open');initCharSelect();">↺ Nuevo</button>
+                      <button class="cs-dbd-btn cs-dbd-btn-ghost" onclick="goTo('home')">Inicio →</button>
                     </div>
                   </div>
                 </div>
-                <!-- Panel central: estadísticas + raza -->
-                <div class="cs-panel-center">
-                  <div class="cs-body" id="csBody">
-                    <div class="cs-stat"><div class="cs-stat-name">STR</div><div class="cs-stat-val" id="cstr">—</div><div class="cs-stat-mod" id="cmstr"></div></div>
-                    <div class="cs-stat"><div class="cs-stat-name">DEX</div><div class="cs-stat-val" id="cdex">—</div><div class="cs-stat-mod" id="cmdex"></div></div>
-                    <div class="cs-stat"><div class="cs-stat-name">CON</div><div class="cs-stat-val" id="ccon">—</div><div class="cs-stat-mod" id="cmcon"></div></div>
-                    <div class="cs-stat"><div class="cs-stat-name">INT</div><div class="cs-stat-val" id="cint">—</div><div class="cs-stat-mod" id="cmint"></div></div>
-                    <div class="cs-stat"><div class="cs-stat-name">WIS</div><div class="cs-stat-val" id="cwis">—</div><div class="cs-stat-mod" id="cmwis"></div></div>
-                    <div class="cs-stat"><div class="cs-stat-name">CHA</div><div class="cs-stat-val" id="ccha">—</div><div class="cs-stat-mod" id="cmcha"></div></div>
-                  </div>
-                  <div class="cs-race-section">
-                    <div class="cs-race-flavor" id="csRaceFlavor"></div>
-                    <div class="cs-race-bonuses" id="csRaceBonuses"></div>
-                    <div class="cs-race-traits" id="csRaceTraits"></div>
-                  </div>
-                  <div class="dr-sheet-panel" id="drSheetPanel">
-                    <div class="dr-panel-title" data-es="🎲 Tirar dados" data-en="🎲 Roll dice">🎲 Tirar dados</div>
-                    <div class="dr-panel-grid" id="drPanelGrid"></div>
-                  </div>
+                <!-- Fila de estadísticas -->
+                <div class="cs-dbd-stats-row">
+                  <div class="cs-dbd-stat-box"><div class="cs-dbd-stat-mod" id="cmstr">—</div><div class="cs-dbd-stat-abbr">STR</div><div class="cs-dbd-stat-val" id="cstr">—</div></div>
+                  <div class="cs-dbd-stat-box"><div class="cs-dbd-stat-mod" id="cmdex">—</div><div class="cs-dbd-stat-abbr">DEX</div><div class="cs-dbd-stat-val" id="cdex">—</div></div>
+                  <div class="cs-dbd-stat-box"><div class="cs-dbd-stat-mod" id="cmcon">—</div><div class="cs-dbd-stat-abbr">CON</div><div class="cs-dbd-stat-val" id="ccon">—</div></div>
+                  <div class="cs-dbd-stat-box"><div class="cs-dbd-stat-mod" id="cmint">—</div><div class="cs-dbd-stat-abbr">INT</div><div class="cs-dbd-stat-val" id="cint">—</div></div>
+                  <div class="cs-dbd-stat-box"><div class="cs-dbd-stat-mod" id="cmwis">—</div><div class="cs-dbd-stat-abbr">WIS</div><div class="cs-dbd-stat-val" id="cwis">—</div></div>
+                  <div class="cs-dbd-stat-box"><div class="cs-dbd-stat-mod" id="cmcha">—</div><div class="cs-dbd-stat-abbr">CHA</div><div class="cs-dbd-stat-val" id="ccha">—</div></div>
+                  <div class="cs-dbd-combat-sep"></div>
+                  <div class="cs-dbd-combat-stat"><div class="cs-dbd-combat-val" id="csProf">+2</div><div class="cs-dbd-combat-lbl">Prof</div></div>
+                  <div class="cs-dbd-combat-stat"><div class="cs-dbd-combat-val" id="csCA">—</div><div class="cs-dbd-combat-lbl">CA</div></div>
+                  <div class="cs-dbd-combat-stat"><div class="cs-dbd-combat-val" id="csInitiative">—</div><div class="cs-dbd-combat-lbl">Iniciativa</div></div>
+                  <div class="cs-dbd-combat-stat"><div class="cs-dbd-combat-val" id="csSpeed">30</div><div class="cs-dbd-combat-lbl">Velocidad</div></div>
+                  <div class="cs-dbd-combat-stat"><div class="cs-dbd-combat-val" id="csLevel">1</div><div class="cs-dbd-combat-lbl">Nivel</div></div>
                 </div>
-                <!-- Panel derecho: condiciones de estado -->
-                <div class="cs-panel-right">
-                  <div class="cs-conditions" id="csConditions">
-                    <div class="cs-cond-header">
-                      <span class="cs-cond-label" data-es="Condiciones de Estado" data-en="Status Conditions">Condiciones de Estado</span>
-                      <span class="cs-cond-count" id="csCondCount">ninguna</span>
+                <!-- Contenido 3 columnas -->
+                <div class="cs-dbd-content">
+                  <!-- Col 1: Tiradas de salvación + Pasivas + Raza -->
+                  <div class="cs-dbd-col-saves">
+                    <div>
+                      <div class="cs-dbd-section-title">Tiradas de Salvación</div>
+                      <div class="cs-dbd-save-list" id="csSaveList"></div>
                     </div>
-                    <div class="cs-cond-grid" id="csCondGrid"></div>
+                    <div>
+                      <div class="cs-dbd-section-title">Pasivas</div>
+                      <div id="csPassives"></div>
+                    </div>
+                    <div>
+                      <div class="cs-dbd-section-title">Raza</div>
+                      <div class="cs-race-flavor" id="csRaceFlavor"></div>
+                      <div class="cs-race-bonuses" id="csRaceBonuses"></div>
+                      <div class="cs-race-traits" id="csRaceTraits"></div>
+                    </div>
+                  </div>
+                  <!-- Col 2: Habilidades -->
+                  <div class="cs-dbd-col-skills">
+                    <div class="cs-dbd-section-title">Habilidades</div>
+                    <div id="csSkillList"></div>
+                  </div>
+                  <!-- Col 3: Condiciones + Dados -->
+                  <div class="cs-dbd-col-main">
+                    <div class="cs-conditions" id="csConditions">
+                      <div class="cs-cond-header">
+                        <span class="cs-cond-label" data-es="Condiciones" data-en="Conditions">Condiciones</span>
+                        <span class="cs-cond-count" id="csCondCount">ninguna</span>
+                      </div>
+                      <div class="cs-cond-grid" id="csCondGrid"></div>
+                    </div>
+                    <div class="dr-sheet-panel" id="drSheetPanel">
+                      <div class="dr-panel-title" data-es="🎲 Tirar dados" data-en="🎲 Roll dice">🎲 Tirar dados</div>
+                      <div class="dr-panel-grid" id="drPanelGrid"></div>
+                    </div>
                   </div>
                 </div>
+                <!-- Hidden compat elements -->
+                <div id="sheetHpTracker" style="display:none;"><span id="csHP"></span></div>
               </div>
             </div>
           </div>
@@ -3145,7 +3244,7 @@ function rollStats(){
   },done);
 }
 function buildSheet(){
-  _hideSheetHpTracker();_loadedCharId=null;
+  _loadedCharId=null;_saveProfs=new Set();_skillProfs=new Set();
   if(selections.mode==='random'){
     if(!selections.class)selections.class=CLASS_KEYS[Math.floor(Math.random()*CLASS_KEYS.length)];
     if(!rolledStats){rolledStats={};['str','dex','con','int','wis','cha'].forEach(s=>{const r=[1,2,3,4].map(()=>Math.ceil(Math.random()*6));rolledStats[s]=r.sort((a,b)=>b-a).slice(0,3).reduce((a,b)=>a+b,0);});}
@@ -3157,9 +3256,9 @@ function buildSheet(){
   const rd=RACE_DATA[rk]||{};
   const st=rolledStats||{str:12,dex:14,con:13,int:11,wis:10,cha:15};
 
-  // Portrait
+  // Portrait (circular, 76x76, cover)
   const avatarEl=document.getElementById('csAvatar');
-  if(avatarEl) avatarEl.style.cssText=`width:160px;height:180px;${raceBg(rk)};background-repeat:no-repeat;`;
+  if(avatarEl) avatarEl.style.cssText=`width:76px;height:76px;${raceBg(rk)};background-repeat:no-repeat;background-size:cover;`;
 
   // Name (editable input — pre-fill suggestion)
   const nameInput=document.getElementById('csNameInput');
@@ -3176,10 +3275,21 @@ function buildSheet(){
 
   // CA and HP (calculated from stats + class)
   const dexMod=Math.floor((st.dex-10)/2), conMod=Math.floor((st.con-10)/2);
-  const hpBase={fighter:10,paladin:10,barbarian:12,wizard:6,sorcerer:6,warlock:8,rogue:8,ranger:8,druid:8,bard:8,cleric:8,monk:8}[ck]||8;
-  const caEl=document.getElementById('csCA'), hpEl=document.getElementById('csHP');
-  if(caEl) caEl.textContent='CA: '+(10+dexMod);
-  if(hpEl) hpEl.textContent='HP: '+(hpBase+conMod);
+  const hpBase=HIT_DICE[ck]||8;
+  const maxHp=hpBase+conMod;
+  const caEl=document.getElementById('csCA');
+  if(caEl) caEl.textContent=10+dexMod;
+  // HP always visible in header
+  _updateSheetHp(maxHp,maxHp);
+
+  // Combat stats
+  const initEl=document.getElementById('csInitiative');
+  if(initEl)initEl.textContent=(dexMod>=0?'+':'')+dexMod;
+  const speedEl=document.getElementById('csSpeed');
+  if(speedEl)speedEl.textContent=(RACE_SPEED[rk]||30)+'ft';
+
+  // Set class-based save proficiencies
+  _saveProfs=new Set(CLASS_SAVES[ck]||[]);
 
   // Race info
   const flavorEl=document.getElementById('csRaceFlavor');
@@ -3188,6 +3298,9 @@ function buildSheet(){
   if(flavorEl) flavorEl.textContent=currentLang==='es'?(rd.tagEs||''):(rd.tagEn||'');
   if(bonusEl) bonusEl.innerHTML=(rd.bonus||[]).map(b=>`<div class="race-bonus-pill">${b}</div>`).join('');
   if(traitsEl) traitsEl.innerHTML=(rd.traits||[]).map(t=>`<div class="cs-trait-pill">${t}</div>`).join('');
+  _renderSavingThrows();
+  _renderSkillsList();
+  _renderPassives();
   _renderSkillPanel();
   _activeConditions=new Set();
   _renderConditions();
@@ -3204,7 +3317,7 @@ function saveCharacter(btn){
   const chars=_loadSavedChars();
   const maxHp=hpBase+conMod;
   const existingIdx=_loadedCharId?chars.findIndex(c=>c.id===_loadedCharId):-1;
-  const charObj={id:_loadedCharId||Date.now().toString(),name,race:rk,class:ck,stats:st,hp:maxHp,currentHp:maxHp,ca:10+dexMod,level:_currentLevel||1,conditions:[..._activeConditions],savedAt:Date.now()};
+  const charObj={id:_loadedCharId||Date.now().toString(),name,race:rk,class:ck,stats:st,hp:maxHp,currentHp:maxHp,ca:10+dexMod,level:_currentLevel||1,conditions:[..._activeConditions],skillProfs:[..._skillProfs],saveProfs:[..._saveProfs],savedAt:Date.now()};
   if(existingIdx>=0){charObj.hp=chars[existingIdx].hp;charObj.currentHp=chars[existingIdx].currentHp;chars.splice(existingIdx,1,charObj);}
   else chars.unshift(charObj);
   localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));
@@ -3285,28 +3398,114 @@ function loadChar(id){
   if(nameInput)nameInput.value=c.name;
   _loadedCharId=id;
   _currentLevel=c.level||1;
+  _skillProfs=new Set(c.skillProfs||[]);
+  _saveProfs=new Set(c.saveProfs||(CLASS_SAVES[c.class]||[]));
   _updateLevelBadges();
   document.getElementById('csMeta').textContent=`${RACE_NAMES[currentLang][c.race]||c.race} · ${CLASS_NAMES[currentLang][c.class]||c.class} · ${currentLang==='es'?'Nivel':'Level'} ${_currentLevel}`;
-  _renderSheetHpTracker(c);
+  // Restore HP
+  const cur=c.currentHp!=null?c.currentHp:c.hp;
+  _updateSheetHp(cur,c.hp);
   _activeConditions=new Set(c.conditions||[]);
   _renderConditions();
 }
 function deleteChar(id){
   const chars=_loadSavedChars().filter(c=>c.id!==id);
   localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));
-  if(_loadedCharId===id){_loadedCharId=null;_hideSheetHpTracker();}
+  if(_loadedCharId===id){_loadedCharId=null;}
   renderSavedChars();
 }
 let _loadedCharId=null;
 let _currentLevel=1;
 const HIT_DICE={fighter:10,paladin:10,barbarian:12,wizard:6,sorcerer:6,warlock:8,rogue:8,ranger:8,druid:8,bard:8,cleric:8,monk:8};
+/* ── DnD Beyond sheet extras ── */
+const CLASS_SAVES={fighter:['str','con'],wizard:['int','wis'],rogue:['dex','int'],cleric:['wis','cha'],ranger:['str','dex'],paladin:['wis','cha'],barbarian:['str','con'],bard:['dex','cha'],druid:['int','wis'],monk:['str','dex'],sorcerer:['con','cha'],warlock:['wis','cha']};
+const SKILLS_LIST=[
+  {key:'athletics',stat:'str',es:'Atletismo',en:'Athletics'},
+  {key:'acrobatics',stat:'dex',es:'Acrobacias',en:'Acrobatics'},
+  {key:'sleight',stat:'dex',es:'Juego de manos',en:'Sleight of Hand'},
+  {key:'stealth',stat:'dex',es:'Sigilo',en:'Stealth'},
+  {key:'arcana',stat:'int',es:'Arcanos',en:'Arcana'},
+  {key:'history',stat:'int',es:'Historia',en:'History'},
+  {key:'investigation',stat:'int',es:'Investigación',en:'Investigation'},
+  {key:'nature',stat:'int',es:'Naturaleza',en:'Nature'},
+  {key:'religion',stat:'int',es:'Religión',en:'Religion'},
+  {key:'animal',stat:'wis',es:'Trato con animales',en:'Animal Handling'},
+  {key:'insight',stat:'wis',es:'Perspicacia',en:'Insight'},
+  {key:'medicine',stat:'wis',es:'Medicina',en:'Medicine'},
+  {key:'perception',stat:'wis',es:'Percepción',en:'Perception'},
+  {key:'survival',stat:'wis',es:'Supervivencia',en:'Survival'},
+  {key:'deception',stat:'cha',es:'Engaño',en:'Deception'},
+  {key:'intimidation',stat:'cha',es:'Intimidación',en:'Intimidation'},
+  {key:'performance',stat:'cha',es:'Actuación',en:'Performance'},
+  {key:'persuasion',stat:'cha',es:'Persuasión',en:'Persuasion'},
+];
+const RACE_SPEED={human:30,elf:30,dwarf:25,halfling:25,gnome:25,'half-elf':30,'half-orc':30,tiefling:30,dragonborn:30,aasimar:30,tabaxi:30,firbolg:30,kenku:30};
+let _saveProfs=new Set();
+let _skillProfs=new Set();
+function _renderSavingThrows(){
+  const el=document.getElementById('csSaveList');if(!el)return;
+  const pb=profBonus(_currentLevel);
+  const st=rolledStats||{str:10,dex:10,con:10,int:10,wis:10,cha:10};
+  const labels={str:'Fuerza',dex:'Destreza',con:'Constitución',int:'Inteligencia',wis:'Sabiduría',cha:'Carisma'};
+  el.innerHTML=['str','dex','con','int','wis','cha'].map(s=>{
+    const base=Math.floor((st[s]-10)/2),prof=_saveProfs.has(s),val=base+(prof?pb:0);
+    return `<div class="cs-dbd-save-row"><div class="cs-dbd-dot${prof?' proficient':''}" onclick="toggleSaveProf('${s}')"></div><span class="cs-dbd-save-val">${val>=0?'+':''}${val}</span><span class="cs-dbd-save-name">${labels[s]}</span></div>`;
+  }).join('');
+}
+function toggleSaveProf(stat){_saveProfs.has(stat)?_saveProfs.delete(stat):_saveProfs.add(stat);_renderSavingThrows();}
+function _renderSkillsList(){
+  const el=document.getElementById('csSkillList');if(!el)return;
+  const pb=profBonus(_currentLevel);
+  const st=rolledStats||{str:10,dex:10,con:10,int:10,wis:10,cha:10};
+  el.innerHTML=SKILLS_LIST.map(sk=>{
+    const base=Math.floor((st[sk.stat]-10)/2),prof=_skillProfs.has(sk.key),val=base+(prof?pb:0);
+    const name=currentLang==='es'?sk.es:sk.en;
+    return `<div class="cs-dbd-skill-row"><div class="cs-dbd-dot${prof?' proficient':''}" onclick="toggleSkillProf('${sk.key}')"></div><span class="cs-dbd-skill-stat">${sk.stat.toUpperCase()}</span><span class="cs-dbd-skill-val">${val>=0?'+':''}${val}</span><span class="cs-dbd-skill-name">${name}</span></div>`;
+  }).join('');
+}
+function toggleSkillProf(key){_skillProfs.has(key)?_skillProfs.delete(key):_skillProfs.add(key);_renderSkillsList();}
+function _renderPassives(){
+  const el=document.getElementById('csPassives');if(!el)return;
+  const st=rolledStats||{str:10,dex:10,con:10,int:10,wis:10,cha:10};
+  const pb=profBonus(_currentLevel);
+  const wisBase=Math.floor((st.wis-10)/2),percProf=_skillProfs.has('perception');
+  const passPerc=10+wisBase+(percProf?pb:0);
+  el.innerHTML=`<div class="cs-dbd-passive-row"><span class="cs-dbd-passive-val">${passPerc}</span><span class="cs-dbd-passive-lbl">Percepción pasiva</span></div>`;
+}
+function _updateSheetHp(cur,max){
+  const curEl=document.getElementById('sheetHpCur'),maxEl=document.getElementById('sheetHpMax');
+  if(curEl){curEl.textContent=cur;curEl.className=cur<=Math.floor(max/2)?'hp-low':'';}
+  if(maxEl)maxEl.textContent=max;
+  if(_loadedCharId){const chars=_loadSavedChars();const idx=chars.findIndex(c=>c.id===_loadedCharId);if(idx>=0){chars[idx].currentHp=cur;chars[idx].hp=max;localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));}}
+}
+function shortRest(){
+  const ck=selections.class||'fighter';
+  const st=rolledStats||{con:10};
+  const conMod=Math.floor(((st.con||10)-10)/2);
+  const die=HIT_DICE[ck]||8;
+  const gain=Math.max(1,Math.ceil(Math.random()*die)+conMod);
+  const maxHp=parseInt(document.getElementById('sheetHpMax')?.textContent)||0;
+  const curHp=parseInt(document.getElementById('sheetHpCur')?.textContent)||0;
+  _updateSheetHp(Math.min(maxHp,curHp+gain),maxHp);
+  const btn=document.querySelector('.cs-dbd-btn-rest');
+  if(btn){const orig=btn.innerHTML;btn.innerHTML=`+${gain} HP`;setTimeout(()=>btn.innerHTML=orig,1800);}
+}
+function longRest(){
+  const maxHp=parseInt(document.getElementById('sheetHpMax')?.textContent)||0;
+  _updateSheetHp(maxHp,maxHp);
+  if(typeof resetSlots==='function')resetSlots();
+  const btn=document.querySelector('.cs-dbd-btn-lrest');
+  if(btn){const orig=btn.innerHTML;btn.innerHTML='✓ Descansado';setTimeout(()=>btn.innerHTML=orig,1800);}
+}
+function exportPdf(){window.print();}
 function profBonus(lv){return lv<=4?2:lv<=8?3:lv<=12?4:lv<=16?5:6;}
 function _updateLevelBadges(){
   const pb=profBonus(_currentLevel);
   const lvEl=document.getElementById('csLevel');
   const pbEl=document.getElementById('csProf');
-  if(lvEl)lvEl.textContent='Nv. '+_currentLevel;
-  if(pbEl)pbEl.textContent='Prof: +'+ pb;
+  if(lvEl)lvEl.textContent=_currentLevel;
+  if(pbEl)pbEl.textContent='+'+pb;
+  _renderSavingThrows();_renderSkillsList();_renderPassives();
 }
 function levelUp(btn){
   if(_currentLevel>=20){
@@ -3322,15 +3521,11 @@ function levelUp(btn){
   _currentLevel++;
   _updateLevelBadges();
   // Update HP in UI
-  const hpEl=document.getElementById('csHP');
   const curHpEl=document.getElementById('sheetHpCur');
   const maxHpEl=document.getElementById('sheetHpMax');
-  if(hpEl){
-    const prev=parseInt(hpEl.textContent.replace('HP: ',''))||0;
-    hpEl.textContent='HP: '+(prev+gain);
-  }
-  if(maxHpEl){const prev=parseInt(maxHpEl.textContent)||0;maxHpEl.textContent=prev+gain;}
-  if(curHpEl){const prev=parseInt(curHpEl.textContent)||0;curHpEl.textContent=prev+gain;}
+  const prevMax=parseInt(maxHpEl?.textContent)||0;
+  const prevCur=parseInt(curHpEl?.textContent)||0;
+  _updateSheetHp(prevCur+gain,prevMax+gain);
   // Update meta line
   const rk=selections.race||'human';
   document.getElementById('csMeta').textContent=`${RACE_NAMES[currentLang][rk]||rk} · ${CLASS_NAMES[currentLang][ck]||ck} · ${currentLang==='es'?'Nivel':'Level'} ${_currentLevel}`;
@@ -3360,39 +3555,24 @@ function applyHpCard(id,mode){
   // Update display without full re-render
   const curEl=document.getElementById('hpc-'+id);
   if(curEl){curEl.textContent=c.currentHp;curEl.classList.toggle('hp-low',c.currentHp<=Math.floor(c.hp/2));}
-  // Sync sheet tracker if this char is loaded
-  if(_loadedCharId===id)_renderSheetHpTracker(c);
+  // Sync sheet HP if this char is loaded
+  if(_loadedCharId===id)_updateSheetHp(c.currentHp,c.hp);
 }
-function _renderSheetHpTracker(c){
-  const tracker=document.getElementById('sheetHpTracker');
-  if(!tracker)return;
-  tracker.style.display='flex';
-  const cur=c.currentHp!=null?c.currentHp:c.hp;
-  const curEl=document.getElementById('sheetHpCur');
-  const maxEl=document.getElementById('sheetHpMax');
-  if(curEl){curEl.textContent=cur;curEl.className=cur<=Math.floor(c.hp/2)?'hp-low':'';}
-  if(maxEl)maxEl.textContent=c.hp;
-}
-function _hideSheetHpTracker(){
-  const tracker=document.getElementById('sheetHpTracker');
-  if(tracker)tracker.style.display='none';
+function _renderSheetHpTracker(c){/* HP now always in header */_updateSheetHp(c.currentHp!=null?c.currentHp:c.hp,c.hp);}
+function _hideSheetHpTracker(){/* no-op: HP always visible */
+  void 0;
 }
 function applySheetHp(mode){
-  if(!_loadedCharId)return;
   const input=document.getElementById('sheetHpInput');
   const val=parseInt(input?.value)||0;
   if(val<=0)return;
-  const chars=_loadSavedChars();
-  const c=chars.find(x=>x.id===_loadedCharId);
-  if(!c)return;
-  if(c.currentHp==null)c.currentHp=c.hp;
-  c.currentHp=mode==='dmg'?Math.max(0,c.currentHp-val):Math.min(c.hp,c.currentHp+val);
-  localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));
+  const maxHp=parseInt(document.getElementById('sheetHpMax')?.textContent)||0;
+  const curHp=parseInt(document.getElementById('sheetHpCur')?.textContent)||0;
+  const newHp=mode==='dmg'?Math.max(0,curHp-val):Math.min(maxHp,curHp+val);
   if(input)input.value='';
-  _renderSheetHpTracker(c);
+  _updateSheetHp(newHp,maxHp);
   // Sync card display
-  const curEl=document.getElementById('hpc-'+_loadedCharId);
-  if(curEl){curEl.textContent=c.currentHp;curEl.classList.toggle('hp-low',c.currentHp<=Math.floor(c.hp/2));}
+  if(_loadedCharId){const curEl=document.getElementById('hpc-'+_loadedCharId);if(curEl){curEl.textContent=newHp;curEl.classList.toggle('hp-low',newHp<=Math.floor(maxHp/2));}}
 }
 
 /* ══ STATUS CONDITIONS ══ */

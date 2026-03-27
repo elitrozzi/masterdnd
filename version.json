@@ -1,7 +1,12 @@
 {
-  "version": "1.5.4",
+  "version": "1.5.5",
   "date": "2026-03-27",
   "history": [
+    {
+      "version": "1.5.5",
+      "date": "2026-03-27",
+      "note": "Ficha DnD Beyond-style: retrato circular, stats row, tiradas de salvación, 18 habilidades, descanso corto/largo, exportar PDF"
+    },
     {
       "version": "1.5.4",
       "date": "2026-03-27",
