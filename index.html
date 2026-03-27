@@ -813,7 +813,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.3.5</span>
+    <span class="ver-badge">v1.3.6</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">27 Mar 2026</span>
   </div>
@@ -3772,7 +3772,11 @@ function _drFaceTex(value,diceType){
     const cx=S/2,cy=S*.52,r=S*.4;
     for(let i=0;i<3;i++){const a=-Math.PI/2+(i/3)*Math.PI*2;i?ctx.lineTo(cx+r*Math.cos(a),cy+r*Math.sin(a)):ctx.moveTo(cx+r*Math.cos(a),cy+r*Math.sin(a));}
     ctx.closePath();
-  } else {ctx.roundRect(22,22,S-44,S-44,38);}
+  } else {
+    // roundRect polyfill for older browsers
+    if(ctx.roundRect){ctx.roundRect(22,22,S-44,S-44,38);}
+    else{const r=38,x=22,y=22,w=S-44,h=S-44;ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.arcTo(x+w,y,x+w,y+r,r);ctx.lineTo(x+w,y+h-r);ctx.arcTo(x+w,y+h,x+w-r,y+h,r);ctx.lineTo(x+r,y+h);ctx.arcTo(x,y+h,x,y+h-r,r);ctx.lineTo(x,y+r);ctx.arcTo(x,y,x+r,y,r);ctx.closePath();}
+  }
   ctx.stroke();
   // Number
   ctx.shadowColor='#d4af37';ctx.shadowBlur=30;
@@ -3884,7 +3888,8 @@ function openDiceRoller(diceType,result,mod,label){
 
   _drInit();
   const canvas=document.getElementById('drCanvas');
-  const sz=Math.round(Math.min(window.innerWidth*.64,window.innerHeight*.6));
+  const isMobile=window.innerWidth<=700;
+  const sz=Math.round(Math.min(window.innerWidth*(isMobile?.82:.64),window.innerHeight*(isMobile?.44:.60)));
   canvas.style.width=canvas.style.height=sz+'px';
   _dr.renderer.setSize(sz,sz);
 

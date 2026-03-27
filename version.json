@@ -1,7 +1,12 @@
 {
-  "version": "1.3.5",
+  "version": "1.3.6",
   "date": "2026-03-27",
   "history": [
+    {
+      "version": "1.3.6",
+      "date": "2026-03-27",
+      "note": "Fix dados 3D: polyfill para ctx.roundRect en browsers viejos y tamaño del canvas ajustado en mobile"
+    },
     {
       "version": "1.3.5",
       "date": "2026-03-27",
