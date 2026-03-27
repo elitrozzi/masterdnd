@@ -313,6 +313,23 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .sheet-hp-input{width:54px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:6px;color:#fff;font-size:15px;text-align:center;padding:6px 4px;outline:none;}
 .sheet-hp-input:focus{border-color:rgba(212,175,55,.7);}
 .sheet-hp-input::-webkit-inner-spin-button,.sheet-hp-input::-webkit-outer-spin-button{-webkit-appearance:none;}
+/* ── Status Conditions ── */
+.cs-conditions{margin-top:16px;padding-top:16px;border-top:1px solid var(--border);}
+.cs-cond-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.cs-cond-label{font:600 10px/1 'Cinzel',serif;letter-spacing:.18em;color:var(--text-m);text-transform:uppercase;}
+.cs-cond-count{font-size:10px;font-weight:600;color:var(--text-d);transition:color .2s;}
+.cs-cond-count.has-conds{color:#ff8080;}
+.cs-cond-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;}
+.cs-cond-pill{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 3px 6px;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);cursor:pointer;transition:.18s;position:relative;user-select:none;}
+.cs-cond-pill:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.2);}
+.cs-cond-pill.active{background:rgba(200,50,50,.2);border-color:rgba(220,80,80,.65);box-shadow:0 0 10px rgba(200,50,50,.28);}
+.cs-cond-icon{font-size:16px;line-height:1;}
+.cs-cond-pill.active .cs-cond-icon{animation:condPulse 1.6s ease-in-out infinite;}
+@keyframes condPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.22);}}
+.cs-cond-name{font-size:8.5px;color:var(--text-d);text-align:center;line-height:1.2;font-weight:600;letter-spacing:.03em;}
+.cs-cond-pill.active .cs-cond-name{color:#ff9090;}
+.cs-cond-tip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:156px;background:rgba(8,5,18,.97);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:8px 10px;font-size:11px;color:var(--text-m);line-height:1.55;z-index:300;pointer-events:none;opacity:0;transition:opacity .15s;white-space:normal;text-align:left;}
+.cs-cond-pill:hover .cs-cond-tip{opacity:1;}
 .tag{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;}
 .tag-brand{background:rgba(89,80,130,.15);color:var(--brand-400);}
 .tag-gold{background:rgba(248,198,98,.15);color:var(--gold);}
@@ -850,7 +867,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.3.9</span>
+    <span class="ver-badge">v1.4.0</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">27 Mar 2026</span>
   </div>
@@ -1329,6 +1346,14 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
                 <div class="cs-stat"><div class="cs-stat-name">INT</div><div class="cs-stat-val" id="cint">—</div><div class="cs-stat-mod" id="cmint"></div></div>
                 <div class="cs-stat"><div class="cs-stat-name">WIS</div><div class="cs-stat-val" id="cwis">—</div><div class="cs-stat-mod" id="cmwis"></div></div>
                 <div class="cs-stat"><div class="cs-stat-name">CHA</div><div class="cs-stat-val" id="ccha">—</div><div class="cs-stat-mod" id="cmcha"></div></div>
+              </div>
+              <!-- Status Conditions -->
+              <div class="cs-conditions" id="csConditions">
+                <div class="cs-cond-header">
+                  <span class="cs-cond-label" data-es="Condiciones de Estado" data-en="Status Conditions">Condiciones de Estado</span>
+                  <span class="cs-cond-count" id="csCondCount">ninguna</span>
+                </div>
+                <div class="cs-cond-grid" id="csCondGrid"></div>
               </div>
               <div class="cs-footer"><button class="btn-nav btn-primary" onclick="saveCharacter(this)" data-es="💾 Guardar" data-en="💾 Save">💾 Guardar</button><button class="btn-nav btn-ghost" data-es="📄 Exportar PDF" data-en="📄 Export PDF">📄 Exportar PDF</button><button class="btn-nav btn-ghost" data-es="🔗 Compartir" data-en="🔗 Share">🔗 Compartir</button></div>
               <!-- Dice roller panel -->
@@ -2693,6 +2718,8 @@ function buildSheet(){
   if(bonusEl) bonusEl.innerHTML=(rd.bonus||[]).map(b=>`<div class="race-bonus-pill">${b}</div>`).join('');
   if(traitsEl) traitsEl.innerHTML=(rd.traits||[]).map(t=>`<div class="cs-trait-pill">${t}</div>`).join('');
   _renderSkillPanel();
+  _activeConditions=new Set();
+  _renderConditions();
 }
 /* ══ LOCAL STORAGE CHARACTERS ══ */
 const CHARS_LS_KEY='masterdnd_chars';
@@ -2705,7 +2732,7 @@ function saveCharacter(btn){
   const hpBase={fighter:10,paladin:10,barbarian:12,wizard:6,sorcerer:6,warlock:8,rogue:8,ranger:8,druid:8,bard:8,cleric:8,monk:8}[ck]||8;
   const chars=_loadSavedChars();
   const maxHp=hpBase+conMod;
-  chars.unshift({id:Date.now().toString(),name,race:rk,class:ck,stats:st,hp:maxHp,currentHp:maxHp,ca:10+dexMod,savedAt:Date.now()});
+  chars.unshift({id:Date.now().toString(),name,race:rk,class:ck,stats:st,hp:maxHp,currentHp:maxHp,ca:10+dexMod,conditions:[..._activeConditions],savedAt:Date.now()});
   localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));
   const orig=btn.innerHTML;
   btn.innerHTML=currentLang==='es'?'✓ Guardado':'✓ Saved';
@@ -2783,6 +2810,8 @@ function loadChar(id){
   if(nameInput)nameInput.value=c.name;
   _loadedCharId=id;
   _renderSheetHpTracker(c);
+  _activeConditions=new Set(c.conditions||[]);
+  _renderConditions();
 }
 function deleteChar(id){
   const chars=_loadSavedChars().filter(c=>c.id!==id);
@@ -2838,6 +2867,55 @@ function applySheetHp(mode){
   // Sync card display
   const curEl=document.getElementById('hpc-'+_loadedCharId);
   if(curEl){curEl.textContent=c.currentHp;curEl.classList.toggle('hp-low',c.currentHp<=Math.floor(c.hp/2));}
+}
+
+/* ══ STATUS CONDITIONS ══ */
+const CONDITIONS=[
+  {k:'blinded',icon:'🙈',es:'Cegado',en:'Blinded',esD:'Sin ventaja al atacar. Ataques contra ti tienen ventaja.',enD:'Attacks without advantage. Attacks vs you have advantage.'},
+  {k:'charmed',icon:'💜',es:'Encantado',en:'Charmed',esD:'No puedes atacar al encantador. Tiene ventaja en checks sociales.',enD:'Can\'t attack charmer. They have advantage on social checks.'},
+  {k:'deafened',icon:'🔇',es:'Ensordecido',en:'Deafened',esD:'No puedes oír. Fallas checks que requieran oído.',enD:'Can\'t hear. Fail checks that require hearing.'},
+  {k:'frightened',icon:'😨',es:'Asustado',en:'Frightened',esD:'Desventaja si ves la fuente de miedo. No puedes acercarte.',enD:'Disadvantage if source visible. Can\'t move toward it.'},
+  {k:'grappled',icon:'✊',es:'Apresado',en:'Grappled',esD:'Velocidad 0. Ventaja en ataques melee contra ti.',enD:'Speed 0. Melee attacks against you have advantage.'},
+  {k:'incapacitated',icon:'😵',es:'Incapacitado',en:'Incapacitated',esD:'No puedes realizar acciones ni reacciones.',enD:'Can\'t take actions or reactions.'},
+  {k:'invisible',icon:'👻',es:'Invisible',en:'Invisible',esD:'Ventaja en tus ataques. Desventaja en ataques contra ti.',enD:'Advantage on attacks. Disadvantage on attacks vs you.'},
+  {k:'paralyzed',icon:'⚡',es:'Paralizado',en:'Paralyzed',esD:'Incapacitado. Fallas STR/DEX. Crítico melee automático.',enD:'Incapacitated. Fail STR/DEX saves. Auto crit on melee.'},
+  {k:'petrified',icon:'🪨',es:'Petrificado',en:'Petrified',esD:'Transformado en objeto. Resistencia a todo daño.',enD:'Turned to stone. Resistance to all damage.'},
+  {k:'poisoned',icon:'☠️',es:'Envenenado',en:'Poisoned',esD:'Desventaja en ataques y ability checks.',enD:'Disadvantage on attacks and ability checks.'},
+  {k:'prone',icon:'⬇️',es:'Derribado',en:'Prone',esD:'Solo puedes arrastrarte. Desventaja en tus ataques.',enD:'Can only crawl. Disadvantage on your attacks.'},
+  {k:'restrained',icon:'⛓️',es:'Restringido',en:'Restrained',esD:'Velocidad 0. Desventaja en ataques. Ventaja vs ti.',enD:'Speed 0. Disadvantage on attacks. Advantage vs you.'},
+  {k:'stunned',icon:'💫',es:'Aturdido',en:'Stunned',esD:'Incapacitado. Fallas STR/DEX. Ventaja en ataques vs ti.',enD:'Incapacitated. Fail STR/DEX. Attacks vs you have advantage.'},
+  {k:'unconscious',icon:'💤',es:'Inconsciente',en:'Unconscious',esD:'Incapacitado, cae al suelo. Crítico melee automático.',enD:'Incapacitated, falls prone. Auto crit on melee.'},
+];
+let _activeConditions=new Set();
+function _renderConditions(){
+  const grid=document.getElementById('csCondGrid');
+  if(!grid)return;
+  grid.innerHTML=CONDITIONS.map(({k,icon,es,en,esD,enD})=>
+    `<div class="cs-cond-pill${_activeConditions.has(k)?' active':''}" id="cond-${k}" onclick="toggleCondition('${k}')">
+      <span class="cs-cond-icon">${icon}</span>
+      <span class="cs-cond-name">${currentLang==='es'?es:en}</span>
+      <div class="cs-cond-tip">${currentLang==='es'?esD:enD}</div>
+    </div>`).join('');
+  _updateCondCount();
+}
+function _updateCondCount(){
+  const el=document.getElementById('csCondCount');
+  if(!el)return;
+  const n=_activeConditions.size;
+  el.textContent=n===0?(currentLang==='es'?'ninguna':'none'):n+(currentLang==='es'?' activa'+(n!==1?'s':''):' active');
+  el.classList.toggle('has-conds',n>0);
+}
+function toggleCondition(k){
+  if(_activeConditions.has(k))_activeConditions.delete(k);
+  else _activeConditions.add(k);
+  const pill=document.getElementById('cond-'+k);
+  if(pill)pill.classList.toggle('active',_activeConditions.has(k));
+  _updateCondCount();
+  if(_loadedCharId){
+    const chars=_loadSavedChars();
+    const c=chars.find(x=>x.id===_loadedCharId);
+    if(c){c.conditions=[..._activeConditions];localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));}
+  }
 }
 
 function resetCreator(){

@@ -1,7 +1,12 @@
 {
-  "version": "1.3.9",
+  "version": "1.4.0",
   "date": "2026-03-27",
   "history": [
+    {
+      "version": "1.4.0",
+      "date": "2026-03-27",
+      "note": "Condiciones de estado en la ficha: 14 conditions D&D 5e toggleables con tooltip mecánico y persistencia en localStorage"
+    },
     {
       "version": "1.3.9",
       "date": "2026-03-27",
