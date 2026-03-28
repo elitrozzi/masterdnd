@@ -1,7 +1,12 @@
 {
-  "version": "1.7.4",
+  "version": "1.7.5",
   "date": "2026-03-28",
   "history": [
+    {
+      "version": "1.7.5",
+      "date": "2026-03-28",
+      "note": "Ficha: panel Condiciones dividido al 50% — nuevo panel tabbed con Inventario (peso, equipar, eliminar), Hechizos (slots por clase+nivel, hechizos conocidos) y Notas del personaje, todo persistido en localStorage"
+    },
     {
       "version": "1.7.4",
       "date": "2026-03-28",

@@ -424,8 +424,76 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .sheet-hp-input{width:54px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:6px;color:#fff;font-size:15px;text-align:center;padding:6px 4px;outline:none;}
 .sheet-hp-input:focus{border-color:rgba(212,175,55,.7);}
 .sheet-hp-input::-webkit-inner-spin-button,.sheet-hp-input::-webkit-outer-spin-button{-webkit-appearance:none;}
+/* ── Bottom row: Conditions + Extra panel ── */
+.cs-bottom-row{display:flex;gap:12px;flex:1;min-height:0;}
+.cs-conditions{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden;}
+/* ── Extra tabbed panel ── */
+.cs-extra-panel{flex:1;display:flex;flex-direction:column;min-width:0;}
+.cs-tabs{display:flex;gap:0;border-bottom:1px solid rgba(120,90,40,.35);margin-bottom:10px;flex-shrink:0;}
+.cs-tab{padding:5px 10px;font:700 9px/1 'Cinzel',serif;letter-spacing:.13em;color:var(--lol-gray-dim);cursor:pointer;border-bottom:2px solid transparent;transition:.15s;text-transform:uppercase;white-space:nowrap;}
+.cs-tab.active{color:var(--lol-gold);border-bottom-color:var(--lol-gold);}
+.cs-tab:hover:not(.active){color:rgba(200,170,100,.7);}
+.cs-tab-content{display:none;flex:1;flex-direction:column;overflow-y:auto;min-height:0;}
+.cs-tab-content.active{display:flex;}
+/* Inventory */
+.inv-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-shrink:0;}
+.inv-weight-info{font-size:10px;color:var(--lol-gray-dim);letter-spacing:.05em;}
+.inv-weight-info strong{color:var(--lol-gold);}
+.inv-add-btn{font-size:9px;padding:3px 10px;background:rgba(200,170,100,.1);border:1px solid rgba(200,170,100,.3);color:var(--lol-gold);cursor:pointer;font-family:'Cinzel',serif;letter-spacing:.1em;transition:.15s;text-transform:uppercase;}
+.inv-add-btn:hover{background:rgba(200,170,100,.22);}
+.inv-add-form{background:rgba(0,0,0,.25);border:1px solid rgba(120,90,40,.3);padding:8px;margin-bottom:8px;display:flex;flex-direction:column;gap:5px;flex-shrink:0;}
+.inv-form-row{display:flex;gap:5px;}
+.inv-input{background:rgba(255,255,255,.05);border:1px solid rgba(120,90,40,.35);color:var(--lol-gray);padding:4px 7px;font-size:11px;width:100%;outline:none;}
+.inv-input:focus{border-color:rgba(200,170,100,.5);}
+.inv-input-sm{flex:1;min-width:0;}
+.inv-input::placeholder{color:rgba(150,130,100,.45);}
+.inv-form-actions{display:flex;gap:5px;}
+.inv-btn-confirm{flex:1;padding:4px;background:rgba(200,170,100,.18);border:1px solid rgba(200,170,100,.4);color:var(--lol-gold);cursor:pointer;font-size:10px;font-family:'Cinzel',serif;transition:.15s;}
+.inv-btn-confirm:hover{background:rgba(200,170,100,.32);}
+.inv-btn-cancel{padding:4px 9px;background:transparent;border:1px solid rgba(120,90,40,.3);color:var(--lol-gray-dim);cursor:pointer;font-size:10px;}
+.inv-item-list{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:3px;padding-right:2px;}
+.inv-item{display:flex;align-items:center;gap:6px;padding:5px 7px;background:rgba(255,255,255,.025);border:1px solid rgba(120,90,40,.22);transition:.15s;}
+.inv-item:hover{border-color:rgba(120,90,40,.45);}
+.inv-item.equipped{border-color:rgba(200,170,100,.38);background:rgba(200,170,100,.04);}
+.inv-item-icon{font-size:13px;flex-shrink:0;}
+.inv-item-name{flex:1;font-size:11px;color:var(--lol-gray);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.inv-item.equipped .inv-item-name{color:var(--lol-gold);}
+.inv-item-meta{font-size:9px;color:rgba(150,130,100,.6);flex-shrink:0;white-space:nowrap;}
+.inv-item-equip{width:13px;height:13px;border:1px solid rgba(120,90,40,.45);cursor:pointer;background:transparent;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;color:transparent;transition:.15s;}
+.inv-item-equip.equipped{background:rgba(200,170,100,.2);border-color:var(--lol-gold);color:var(--lol-gold);}
+.inv-item-del{font-size:11px;color:rgba(200,80,80,.4);cursor:pointer;flex-shrink:0;padding:0 1px;transition:.15s;}
+.inv-item-del:hover{color:rgba(200,80,80,.85);}
+.inv-empty{font-size:10px;color:rgba(150,130,100,.45);text-align:center;padding:18px 0;letter-spacing:.08em;}
+/* Sheet spell slots */
+.cs-slot-section{flex-shrink:0;margin-bottom:8px;}
+.cs-slot-header{font:700 9px/1 'Cinzel',serif;letter-spacing:.17em;color:var(--lol-gold);text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;}
+.cs-slot-header-label{display:flex;align-items:center;gap:6px;}
+.cs-slot-header-label::before{content:'';display:block;width:3px;height:10px;background:var(--lol-gold);}
+.cs-slot-reset{font-size:9px;padding:2px 8px;border:1px solid rgba(120,90,40,.35);color:var(--lol-gray-dim);cursor:pointer;background:transparent;}
+.cs-slot-reset:hover{border-color:var(--lol-gold);color:var(--lol-gold);}
+.cs-slot-row{display:flex;flex-wrap:wrap;gap:5px;}
+.cs-slot-lvl{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:30px;}
+.cs-slot-lvl-label{font-size:8px;color:var(--lol-gray-dim);letter-spacing:.05em;}
+.cs-slot-pips{display:flex;gap:2px;flex-wrap:wrap;justify-content:center;}
+.cs-slot-pip{width:7px;height:7px;border-radius:50%;border:1px solid rgba(139,92,246,.55);background:rgba(139,92,246,.28);cursor:pointer;transition:.15s;}
+.cs-slot-pip.used{background:transparent;border-color:rgba(139,92,246,.2);}
+.cs-spells-known-section{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:3px;min-height:0;}
+.cs-spell-add-row{display:flex;gap:4px;flex-shrink:0;margin-bottom:6px;}
+.cs-spell-add-row input,.cs-spell-add-row select{background:rgba(255,255,255,.05);border:1px solid rgba(120,90,40,.35);color:var(--lol-gray);padding:4px 6px;font-size:10px;outline:none;}
+.cs-spell-add-row input{flex:1;min-width:0;}
+.cs-spell-add-row select{background:rgba(0,0,0,.5);width:60px;}
+.cs-spell-add-row button{padding:4px 9px;background:rgba(139,92,246,.18);border:1px solid rgba(139,92,246,.35);color:rgba(180,160,220,.9);cursor:pointer;font-size:11px;font-weight:700;}
+.cs-spell-add-row button:hover{background:rgba(139,92,246,.32);}
+.cs-spell-item{display:flex;align-items:center;gap:6px;padding:4px 7px;background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.18);font-size:11px;color:var(--lol-gray);}
+.cs-spell-lvl-badge{font-size:8px;color:rgba(180,150,255,.8);font-weight:700;flex-shrink:0;width:14px;text-align:center;}
+.cs-spell-name{flex:1;}
+.cs-spell-del{font-size:11px;color:rgba(200,80,80,.4);cursor:pointer;flex-shrink:0;}
+.cs-spell-del:hover{color:rgba(200,80,80,.85);}
+/* Notes */
+.cs-notes-area{flex:1;background:rgba(255,255,255,.03);border:1px solid rgba(120,90,40,.3);color:var(--lol-gray);padding:9px;font-size:11px;line-height:1.65;resize:none;font-family:inherit;min-height:80px;outline:none;}
+.cs-notes-area:focus{border-color:rgba(200,170,100,.4);}
+.cs-notes-area::placeholder{color:rgba(150,130,100,.4);}
 /* ── Status Conditions ── */
-.cs-conditions{flex:1;display:flex;flex-direction:column;}
 .cs-cond-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
 .cs-cond-label{font:700 10px/1 'Cinzel',serif;letter-spacing:.22em;color:var(--lol-gold);text-transform:uppercase;display:flex;align-items:center;gap:8px;}
 .cs-cond-label::before{content:'';display:block;width:3px;height:12px;background:var(--lol-gold);flex-shrink:0;}
@@ -1209,7 +1277,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.7.4</span>
+    <span class="ver-badge">v1.7.5</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">28 Mar 2026</span>
   </div>
@@ -1770,14 +1838,74 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
                       <div id="csSkillList"></div>
                     </div>
                   </div>
-                  <!-- Col 3: Condiciones + Dados -->
+                  <!-- Col 3: Condiciones + Extra panel + Dados -->
                   <div class="cs-dbd-col-main">
-                    <div class="cs-dbd-col-panel cs-conditions" id="csConditions">
-                      <div class="cs-cond-header">
-                        <span class="cs-cond-label" data-es="Condiciones" data-en="Conditions">Condiciones</span>
-                        <span class="cs-cond-count" id="csCondCount">ninguna</span>
+                    <div class="cs-bottom-row">
+                      <div class="cs-dbd-col-panel cs-conditions" id="csConditions">
+                        <div class="cs-cond-header">
+                          <span class="cs-cond-label" data-es="Condiciones" data-en="Conditions">Condiciones</span>
+                          <span class="cs-cond-count" id="csCondCount">ninguna</span>
+                        </div>
+                        <div class="cs-cond-grid" id="csCondGrid"></div>
                       </div>
-                      <div class="cs-cond-grid" id="csCondGrid"></div>
+                      <!-- Extra tabbed panel -->
+                      <div class="cs-dbd-col-panel cs-extra-panel" id="csExtraPanel">
+                        <div class="cs-tabs">
+                          <div class="cs-tab active" onclick="switchCsTab('inv',this)">⚔️ Inventario</div>
+                          <div class="cs-tab" onclick="switchCsTab('spells',this)">🔮 Hechizos</div>
+                          <div class="cs-tab" onclick="switchCsTab('notes',this)">📝 Notas</div>
+                        </div>
+                        <!-- Inventario -->
+                        <div class="cs-tab-content active" id="cstab-inv">
+                          <div class="inv-toolbar">
+                            <div class="inv-weight-info">Peso: <strong id="invTotalWeight">0</strong> lb</div>
+                            <button class="inv-add-btn" onclick="toggleInvForm()">+ Añadir</button>
+                          </div>
+                          <div id="invAddForm" class="inv-add-form" style="display:none;">
+                            <input id="invItemName" class="inv-input" placeholder="Nombre del objeto...">
+                            <div class="inv-form-row">
+                              <input id="invItemQty" type="number" min="1" value="1" class="inv-input inv-input-sm" placeholder="Cant.">
+                              <input id="invItemWeight" type="number" min="0" step="0.5" value="0" class="inv-input inv-input-sm" placeholder="Peso lb">
+                              <select id="invItemType" class="inv-input inv-input-sm">
+                                <option value="weapon">Arma</option>
+                                <option value="armor">Armadura</option>
+                                <option value="consumable">Consumible</option>
+                                <option value="misc">Misc</option>
+                              </select>
+                            </div>
+                            <div class="inv-form-actions">
+                              <button class="inv-btn-confirm" onclick="addInvItem()">Agregar</button>
+                              <button class="inv-btn-cancel" onclick="toggleInvForm()">Cancelar</button>
+                            </div>
+                          </div>
+                          <div id="invItemList" class="inv-item-list"></div>
+                        </div>
+                        <!-- Hechizos -->
+                        <div class="cs-tab-content" id="cstab-spells">
+                          <div class="cs-slot-section">
+                            <div class="cs-slot-header">
+                              <span class="cs-slot-header-label">Huecos de conjuro</span>
+                              <button class="cs-slot-reset" onclick="resetCsSlots()">Descanso largo</button>
+                            </div>
+                            <div id="csSlotRow" class="cs-slot-row"></div>
+                          </div>
+                          <div class="cs-spell-add-row">
+                            <input id="csSpellInput" placeholder="Nombre del hechizo..." onkeydown="if(event.key==='Enter')addCsSpell()">
+                            <select id="csSpellLevel">
+                              <option value="0">Truco</option><option value="1">Niv 1</option><option value="2">Niv 2</option>
+                              <option value="3">Niv 3</option><option value="4">Niv 4</option><option value="5">Niv 5</option>
+                              <option value="6">Niv 6</option><option value="7">Niv 7</option><option value="8">Niv 8</option>
+                              <option value="9">Niv 9</option>
+                            </select>
+                            <button onclick="addCsSpell()">+</button>
+                          </div>
+                          <div id="csSpellsKnown" class="cs-spells-known-section"></div>
+                        </div>
+                        <!-- Notas -->
+                        <div class="cs-tab-content" id="cstab-notes">
+                          <textarea id="csNotesArea" class="cs-notes-area" placeholder="Notas del personaje: aliados, misiones, equipamiento especial..." oninput="saveCharNotes()"></textarea>
+                        </div>
+                      </div>
                     </div>
                     <div class="cs-dbd-col-panel dr-sheet-panel" id="drSheetPanel">
                       <div class="dr-panel-title" data-es="🎲 Tirar dados" data-en="🎲 Roll dice">🎲 Tirar dados</div>
@@ -3604,6 +3732,16 @@ function loadChar(id){
   _updateSheetHp(cur,c.hp);
   _activeConditions=new Set(c.conditions||[]);
   _renderConditions();
+  // Inventory, spells, notes
+  _loadedCharClass=c.class||'';
+  _csSpellSlots=null; // force re-build for new character
+  _charInventory=c.inventory||[];
+  _csKnownSpells=c.knownSpells||[];
+  _charNotes=c.charNotes||'';
+  _renderInventory();
+  // Reset tabs to Inventario
+  document.querySelectorAll('.cs-tab').forEach((t,i)=>t.classList.toggle('active',i===0));
+  document.querySelectorAll('.cs-tab-content').forEach((c,i)=>c.classList.toggle('active',i===0));
 }
 function deleteChar(id){
   const chars=_loadSavedChars().filter(c=>c.id!==id);
@@ -3819,6 +3957,174 @@ function toggleCondition(k){
     const c=chars.find(x=>x.id===_loadedCharId);
     if(c){c.conditions=[..._activeConditions];localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));}
   }
+}
+
+/* ══ INVENTORY + SPELLS + NOTES (character sheet tabs) ══ */
+let _charInventory=[];
+let _csKnownSpells=[];
+let _charNotes='';
+let _loadedCharClass='';
+let _csSpellSlots=null;
+const INV_ICONS={weapon:'⚔️',armor:'🛡️',consumable:'🧪',misc:'🎒'};
+
+// Full caster spell slot table [level-1][slotLevel-1] = count (0 = no slots at that level)
+const FULL_CASTER_SLOTS=[[2],[3,2],[4,3,2],[4,3,3,2],[4,3,3,2,1],[4,3,3,3,1,1],[4,3,3,3,2,1,1],[4,3,3,3,2,2,1,1],[4,3,3,3,2,2,1,1,1],[4,3,3,3,2,2,2,1,1],[4,3,3,3,2,2,2,1,1],[4,3,3,3,2,2,2,1,1],[4,3,3,3,2,2,2,1,1],[4,3,3,3,2,2,2,1,1],[4,3,3,3,2,2,2,1,1],[4,3,3,3,2,2,2,1,1],[4,3,3,3,2,2,2,1,1],[4,3,3,3,3,2,2,1,1],[4,3,3,3,3,2,2,2,1],[4,3,3,3,3,2,2,2,2]];
+const HALF_CASTER_SLOTS=[[],[],[0,2],[0,3,2],[0,4,3,2],[0,4,3,2,1],[0,4,3,3,1,1],[0,4,3,3,2,1,1],[0,4,3,3,2,1,1],[0,4,3,3,2,2,1,1],[0,4,3,3,2,2,1,1],[0,4,3,3,2,2,2,1],[0,4,3,3,2,2,2,1],[0,4,3,3,3,2,2,1],[0,4,3,3,3,2,2,1,1],[0,4,3,3,3,2,2,1,1],[0,4,3,3,3,2,2,2,1],[0,4,3,3,3,2,2,2,1],[0,4,3,3,3,3,2,2,2],[0,4,3,3,3,3,2,2,2]];
+const WARLOCK_SLOTS=[[1],[2],[0,2],[0,2],[0,0,2],[0,0,2],[0,0,0,2],[0,0,0,2],[0,0,0,0,2],[0,0,0,0,2],[0,0,0,0,3],[0,0,0,0,3],[0,0,0,0,3],[0,0,0,0,3],[0,0,0,0,3],[0,0,0,0,3],[0,0,0,0,4],[0,0,0,0,4],[0,0,0,0,4],[0,0,0,0,4]];
+const FULL_CASTERS=new Set(['wizard','sorcerer','cleric','druid','bard']);
+const HALF_CASTERS=new Set(['paladin','ranger']);
+
+function switchCsTab(tab,el){
+  document.querySelectorAll('.cs-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.cs-tab-content').forEach(c=>c.classList.remove('active'));
+  if(el)el.classList.add('active');
+  const content=document.getElementById('cstab-'+tab);
+  if(content)content.classList.add('active');
+  if(tab==='spells')_renderCsSlots();
+  if(tab==='notes'){const ta=document.getElementById('csNotesArea');if(ta)ta.value=_charNotes;}
+}
+
+function toggleInvForm(){
+  const f=document.getElementById('invAddForm');
+  if(f)f.style.display=f.style.display==='none'?'':'none';
+}
+
+function addInvItem(){
+  const name=(document.getElementById('invItemName')?.value||'').trim();
+  if(!name)return;
+  const qty=parseInt(document.getElementById('invItemQty')?.value)||1;
+  const weight=parseFloat(document.getElementById('invItemWeight')?.value)||0;
+  const type=document.getElementById('invItemType')?.value||'misc';
+  _charInventory.push({id:Date.now().toString(),name,qty,weight,type,equipped:false});
+  _saveInventory();_renderInventory();
+  document.getElementById('invItemName').value='';
+  document.getElementById('invItemQty').value='1';
+  document.getElementById('invItemWeight').value='0';
+  toggleInvForm();
+}
+
+function toggleInvEquip(id){
+  const item=_charInventory.find(i=>i.id===id);
+  if(item){item.equipped=!item.equipped;_saveInventory();_renderInventory();}
+}
+
+function removeInvItem(id){
+  _charInventory=_charInventory.filter(i=>i.id!==id);
+  _saveInventory();_renderInventory();
+}
+
+function _renderInventory(){
+  const list=document.getElementById('invItemList');
+  const wEl=document.getElementById('invTotalWeight');
+  if(!list)return;
+  const totalW=_charInventory.reduce((s,i)=>s+(i.weight*i.qty),0);
+  if(wEl)wEl.textContent=totalW%1===0?totalW:totalW.toFixed(1);
+  if(!_charInventory.length){list.innerHTML='<div class="inv-empty">Sin objetos en el inventario</div>';return;}
+  list.innerHTML=_charInventory.map(item=>`
+    <div class="inv-item${item.equipped?' equipped':''}">
+      <span class="inv-item-icon">${INV_ICONS[item.type]||'🎒'}</span>
+      <span class="inv-item-name" title="${item.name}">${item.name}</span>
+      <span class="inv-item-meta">×${item.qty}${item.weight>0?' · '+item.weight+'lb':''}</span>
+      <div class="inv-item-equip${item.equipped?' equipped':''}" onclick="toggleInvEquip('${item.id}')" title="${item.equipped?'Equipado':'Sin equipar'}">✓</div>
+      <span class="inv-item-del" onclick="removeInvItem('${item.id}')">✕</span>
+    </div>`).join('');
+}
+
+function _saveInventory(){
+  if(!_loadedCharId)return;
+  const chars=_loadSavedChars();const c=chars.find(x=>x.id===_loadedCharId);
+  if(c){c.inventory=_charInventory;localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));}
+}
+
+function _buildCsSlots(){
+  const lvl=(_currentLevel||1)-1;
+  let table=null;
+  if(FULL_CASTERS.has(_loadedCharClass))table=FULL_CASTER_SLOTS;
+  else if(HALF_CASTERS.has(_loadedCharClass))table=HALF_CASTER_SLOTS;
+  else if(_loadedCharClass==='warlock')table=WARLOCK_SLOTS;
+  if(!table)return{};
+  const row=table[Math.min(lvl,table.length-1)]||[];
+  const slots={};
+  row.forEach((total,i)=>{if(total>0)slots[i+1]={total,used:0};});
+  return slots;
+}
+
+function _loadCsSlots(){
+  try{const s=JSON.parse(localStorage.getItem('mcs_'+(_loadedCharId||'')));if(s)return s;}catch(e){}
+  return null;
+}
+function _saveCsSlots(){
+  if(_loadedCharId)localStorage.setItem('mcs_'+_loadedCharId,JSON.stringify(_csSpellSlots));
+}
+
+function _renderCsSlots(){
+  if(!_csSpellSlots){
+    const saved=_loadCsSlots();
+    _csSpellSlots=saved||_buildCsSlots();
+  }
+  const row=document.getElementById('csSlotRow');
+  if(!row)return;
+  const entries=Object.entries(_csSpellSlots);
+  if(!entries.length){row.innerHTML='<span style="font-size:10px;color:rgba(150,130,100,.5);">Esta clase no usa huecos de conjuro</span>';_renderCsSpells();return;}
+  row.innerHTML=entries.map(([lv,s])=>`
+    <div class="cs-slot-lvl">
+      <div class="cs-slot-lvl-label">Niv.${lv}</div>
+      <div class="cs-slot-pips">${Array.from({length:s.total},(_,i)=>`<div class="cs-slot-pip${i<s.used?' used':''}" onclick="toggleCsSlot(${lv},${i})"></div>`).join('')}</div>
+    </div>`).join('');
+  _renderCsSpells();
+}
+
+function toggleCsSlot(lv,idx){
+  if(!_csSpellSlots)return;
+  const s=_csSpellSlots[lv];if(!s)return;
+  if(idx<s.used)s.used=idx;else s.used=Math.min(s.total,idx+1);
+  _saveCsSlots();_renderCsSlots();
+}
+
+function resetCsSlots(){
+  if(!_csSpellSlots)return;
+  for(const lv in _csSpellSlots)_csSpellSlots[lv].used=0;
+  _saveCsSlots();_renderCsSlots();
+}
+
+function addCsSpell(){
+  const input=document.getElementById('csSpellInput');
+  const name=(input?.value||'').trim();if(!name)return;
+  const level=parseInt(document.getElementById('csSpellLevel')?.value)||0;
+  _csKnownSpells.push({id:Date.now().toString(),name,level});
+  if(input)input.value='';
+  _saveKnownSpells();_renderCsSpells();
+}
+
+function removeCsSpell(id){
+  _csKnownSpells=_csKnownSpells.filter(s=>s.id!==id);
+  _saveKnownSpells();_renderCsSpells();
+}
+
+function _renderCsSpells(){
+  const list=document.getElementById('csSpellsKnown');if(!list)return;
+  if(!_csKnownSpells.length){list.innerHTML='<div class="inv-empty">Sin hechizos registrados</div>';return;}
+  const sorted=[..._csKnownSpells].sort((a,b)=>a.level-b.level);
+  list.innerHTML=sorted.map(s=>`
+    <div class="cs-spell-item">
+      <span class="cs-spell-lvl-badge">${s.level===0?'T':s.level}</span>
+      <span class="cs-spell-name">${s.name}</span>
+      <span class="cs-spell-del" onclick="removeCsSpell('${s.id}')">✕</span>
+    </div>`).join('');
+}
+
+function _saveKnownSpells(){
+  if(!_loadedCharId)return;
+  const chars=_loadSavedChars();const c=chars.find(x=>x.id===_loadedCharId);
+  if(c){c.knownSpells=_csKnownSpells;localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));}
+}
+
+function saveCharNotes(){
+  const ta=document.getElementById('csNotesArea');if(!ta)return;
+  _charNotes=ta.value;
+  if(!_loadedCharId)return;
+  const chars=_loadSavedChars();const c=chars.find(x=>x.id===_loadedCharId);
+  if(c){c.charNotes=_charNotes;localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));}
 }
 
 function resetCreator(){
