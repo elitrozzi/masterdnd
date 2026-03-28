@@ -1,7 +1,12 @@
 {
-  "version": "1.5.7",
+  "version": "1.5.8",
   "date": "2026-03-27",
   "history": [
+    {
+      "version": "1.5.8",
+      "date": "2026-03-27",
+      "note": "Character sheet — LoL aesthetic: dark navy panels, angular gold frames, teal accents, 80% width centered, larger text and stats"
+    },
     {
       "version": "1.5.7",
       "date": "2026-03-27",
