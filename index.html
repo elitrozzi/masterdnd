@@ -1277,7 +1277,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.7.6</span>
+    <span class="ver-badge">v1.7.7</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">28 Mar 2026</span>
   </div>
@@ -5696,7 +5696,9 @@ function openDiceRoller(diceType,result,mod,label){
       settleT+=dt;
       if(!settleTargetQ){
         const wn=mesh.userData.topN.clone().applyQuaternion(mesh.quaternion);
-        const dq=new THREE.Quaternion().setFromUnitVectors(wn,new THREE.Vector3(0,1,0));
+        // Align result face toward camera so the player sees their result directly
+        const camDir=_dr.camera.position.clone().sub(mesh.position).normalize();
+        const dq=new THREE.Quaternion().setFromUnitVectors(wn,camDir);
         settleTargetQ=new THREE.Quaternion().multiplyQuaternions(dq,mesh.quaternion);
       }
       mesh.quaternion.slerp(settleTargetQ,.07);

@@ -1,7 +1,12 @@
 {
-  "version": "1.7.6",
+  "version": "1.7.7",
   "date": "2026-03-28",
   "history": [
+    {
+      "version": "1.7.7",
+      "date": "2026-03-28",
+      "note": "Fix dados 3D: cara del resultado apunta hacia la cámara al settle — el número visible de frente ahora es siempre el resultado final"
+    },
     {
       "version": "1.7.6",
       "date": "2026-03-28",
