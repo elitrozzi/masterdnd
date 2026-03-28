@@ -1,7 +1,12 @@
 {
-  "version": "1.7.3",
+  "version": "1.7.4",
   "date": "2026-03-28",
   "history": [
+    {
+      "version": "1.7.4",
+      "date": "2026-03-28",
+      "note": "Fix: landing nav fuera del land-ui overlay — ya no desaparece al hacer scroll, acompaña al usuario en toda la landing"
+    },
     {
       "version": "1.7.3",
       "date": "2026-03-28",

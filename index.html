@@ -111,7 +111,7 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .land-ui .nav-dropdown.open .nav-dropdown-menu{pointer-events:auto;}
 
 /* Landing nav */
-.land-nav{position:fixed;top:0;left:0;right:0;height:68px;display:flex;align-items:center;padding:0 48px;gap:32px;z-index:100;transition:background .3s,backdrop-filter .3s,border-bottom .3s;}
+.land-nav{position:fixed;top:0;left:0;right:0;height:68px;display:flex;align-items:center;padding:0 48px;gap:32px;z-index:100;pointer-events:auto;transition:background .3s,backdrop-filter .3s,border-bottom .3s;}
 .land-nav.scrolled{background:rgba(9,7,15,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.06);}
 .land-logo{display:flex;align-items:baseline;gap:0;text-decoration:none;cursor:none;}
 .llogo-m{font-family:'Cinzel',serif;font-size:13px;font-weight:400;letter-spacing:.4em;color:rgba(220,230,245,.6);text-transform:uppercase;}
@@ -1209,7 +1209,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.7.3</span>
+    <span class="ver-badge">v1.7.4</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">28 Mar 2026</span>
   </div>
@@ -1423,8 +1423,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     <!-- Magic particles -->
     <div class="sc-particles" id="scParticles"></div>
   </div>
-  <div class="land-ui">
-    <nav class="land-nav">
+  <nav class="land-nav">
       <div class="land-logo" onclick="goTo('home')" style="cursor:pointer;">
         <span class="llogo-m">MASTER</span><span class="llogo-d">DND</span>
       </div>
@@ -1477,8 +1476,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         </div>
       </div>
       <button class="hamb-btn" onclick="openMobileMenu()" aria-label="Menú"><span class="hamb-line"></span><span class="hamb-line"></span><span class="hamb-line"></span></button>
-    </nav>
+  </nav>
 
+  <div class="land-ui">
     <div class="land-hero">
       <div class="land-eyebrow" data-es="TU PLATAFORMA DE D&D" data-en="YOUR D&D PLATFORM">TU PLATAFORMA DE D&D</div>
       <div class="land-title">
