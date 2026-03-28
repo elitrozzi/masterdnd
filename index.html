@@ -1209,6 +1209,45 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 .dr-atk-btn{background:rgba(11,196,227,.05);border-color:rgba(11,196,227,.2);}
 .dr-atk-btn:hover{background:rgba(11,196,227,.15);border-color:var(--lol-teal);}
 @media(max-width:700px){.dr-panel-grid{gap:5px;}.dr-stat-btn{min-width:44px;padding:6px 8px;}}
+/* ── Level-up modal ── */
+.lu-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9000;display:none;align-items:center;justify-content:center;}
+.lu-overlay.open{display:flex;}
+.lu-box{position:relative;background:var(--lol-panel);border:1px solid rgba(200,170,110,.4);padding:28px 32px;min-width:420px;max-width:540px;width:90vw;max-height:85vh;overflow-y:auto;box-shadow:0 0 40px rgba(200,170,110,.15);}
+.lu-corner{position:absolute;width:14px;height:14px;border-color:var(--lol-gold);border-style:solid;}
+.lu-tl{top:-1px;left:-1px;border-width:2px 0 0 2px;}
+.lu-tr{top:-1px;right:-1px;border-width:2px 2px 0 0;}
+.lu-bl{bottom:-1px;left:-1px;border-width:0 0 2px 2px;}
+.lu-br{bottom:-1px;right:-1px;border-width:0 2px 2px 0;}
+.lu-header{text-align:center;margin-bottom:20px;}
+.lu-title{font:900 28px/1 'Cinzel',serif;color:var(--lol-gold);letter-spacing:.12em;text-shadow:0 0 20px rgba(200,170,110,.5);}
+.lu-sub{font:600 12px/1 'Cinzel',serif;color:var(--lol-gray-dim);letter-spacing:.2em;text-transform:uppercase;margin-top:6px;}
+.lu-section{margin-bottom:18px;}
+.lu-section-label{font:700 9px/1 'Cinzel',serif;letter-spacing:.22em;color:var(--lol-gold);text-transform:uppercase;margin-bottom:10px;padding-bottom:4px;border-bottom:1px solid rgba(200,170,110,.2);}
+.lu-hp-row{display:flex;gap:12px;}
+.lu-hp-option{flex:1;border:1px solid rgba(120,90,40,.4);padding:12px 10px;text-align:center;cursor:pointer;transition:all .15s;background:var(--lol-panel2);}
+.lu-hp-option:hover{border-color:var(--lol-border);background:rgba(200,170,110,.06);}
+.lu-hp-option.active{border-color:var(--lol-gold);background:rgba(200,170,110,.1);box-shadow:0 0 12px rgba(200,170,110,.15);}
+.lu-hp-val{font:900 30px/1 'Cinzel',serif;color:var(--lol-teal);margin-bottom:4px;}
+.lu-hp-lbl{font:600 10px/1 'Cinzel',serif;color:var(--lol-gray-dim);letter-spacing:.1em;}
+.lu-asi-desc{font-size:11px;color:var(--lol-gray-dim);margin-bottom:10px;}
+.lu-asi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px;}
+.lu-asi-row{display:flex;align-items:center;gap:6px;background:var(--lol-panel2);border:1px solid rgba(120,90,40,.3);padding:6px 8px;}
+.lu-asi-name{flex:1;font:600 9px/1 'Cinzel',serif;color:var(--lol-gray-dim);letter-spacing:.08em;text-transform:uppercase;}
+.lu-asi-val{font:700 14px/1 'Cinzel',serif;color:var(--lol-gold);min-width:22px;text-align:center;}
+.lu-asi-btn{background:none;border:1px solid rgba(120,90,40,.4);color:var(--lol-gray-dim);width:20px;height:20px;cursor:pointer;font-size:12px;line-height:1;transition:all .12s;padding:0;}
+.lu-asi-btn:hover{border-color:var(--lol-gold);color:var(--lol-gold);}
+.lu-asi-pts{font:600 11px/1 'Cinzel',serif;color:var(--lol-gray-dim);text-align:right;}
+.lu-asi-pts strong{color:var(--lol-teal);}
+.lu-features{display:flex;flex-direction:column;gap:8px;}
+.lu-feat{background:var(--lol-panel2);border:1px solid rgba(120,90,40,.3);padding:8px 10px;}
+.lu-feat-name{font:700 10px/1 'Cinzel',serif;color:var(--lol-gold);letter-spacing:.08em;margin-bottom:3px;}
+.lu-feat-desc{font-size:11px;color:var(--lol-gray-dim);line-height:1.45;}
+.lu-no-feats{font-size:11px;color:rgba(180,160,120,.4);font-style:italic;text-align:center;padding:8px 0;}
+.lu-actions{display:flex;gap:10px;margin-top:20px;}
+.lu-btn-cancel{flex:1;background:none;border:1px solid rgba(120,90,40,.4);color:var(--lol-gray-dim);padding:9px;font:700 10px/1 'Cinzel',serif;letter-spacing:.1em;cursor:pointer;transition:all .15s;}
+.lu-btn-cancel:hover{border-color:var(--lol-border);color:var(--lol-gold);}
+.lu-btn-confirm{flex:2;background:rgba(200,170,110,.12);border:1px solid var(--lol-gold);color:var(--lol-gold);padding:9px;font:700 11px/1 'Cinzel',serif;letter-spacing:.12em;cursor:pointer;transition:all .15s;}
+.lu-btn-confirm:hover{background:rgba(200,170,110,.2);box-shadow:0 0 12px rgba(200,170,110,.2);}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
@@ -1284,7 +1323,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.7.8</span>
+    <span class="ver-badge">v1.7.9</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">28 Mar 2026</span>
   </div>
@@ -1921,6 +1960,48 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Level Up modal ── -->
+<div class="lu-overlay" id="luOverlay" onclick="if(event.target===this)closeLevelUp()">
+  <div class="lu-box">
+    <div class="lu-corner lu-tl"></div><div class="lu-corner lu-tr"></div>
+    <div class="lu-corner lu-bl"></div><div class="lu-corner lu-br"></div>
+    <div class="lu-header">
+      <div class="lu-title" id="luTitle">¡NIVEL 2!</div>
+      <div class="lu-sub" id="luSub">Guerrero</div>
+    </div>
+    <!-- HP section -->
+    <div class="lu-section">
+      <div class="lu-section-label">Puntos de golpe</div>
+      <div class="lu-hp-row">
+        <div class="lu-hp-option active" id="luOptRoll" onclick="selectLuHp('roll')">
+          <div class="lu-hp-val" id="luRollVal">—</div>
+          <div class="lu-hp-lbl">Dado (<span id="luDieType">d8</span>)</div>
+        </div>
+        <div class="lu-hp-option" id="luOptAvg" onclick="selectLuHp('avg')">
+          <div class="lu-hp-val" id="luAvgVal">—</div>
+          <div class="lu-hp-lbl">Promedio</div>
+        </div>
+      </div>
+    </div>
+    <!-- ASI section (conditional) -->
+    <div class="lu-section" id="luAsiSection" style="display:none;">
+      <div class="lu-section-label">Mejora de puntuación de habilidad</div>
+      <div class="lu-asi-desc">+2 a un atributo, o +1 a dos atributos distintos</div>
+      <div class="lu-asi-grid" id="luAsiGrid"></div>
+      <div class="lu-asi-pts">Puntos restantes: <strong id="luAsiPts">2</strong></div>
+    </div>
+    <!-- Features section -->
+    <div class="lu-section" id="luFeatSection">
+      <div class="lu-section-label">Nuevos rasgos</div>
+      <div class="lu-features" id="luFeatures"></div>
+    </div>
+    <div class="lu-actions">
+      <button class="lu-btn-cancel" onclick="closeLevelUp()">Cancelar</button>
+      <button class="lu-btn-confirm" id="luConfirmBtn" onclick="confirmLevelUp()">✨ Confirmar nivel</button>
     </div>
   </div>
 </div>
@@ -3843,39 +3924,286 @@ function _updateLevelBadges(){
   if(pbEl)pbEl.textContent='+'+pb;
   _renderSavingThrows();_renderSkillsList();_renderPassives();
 }
+// ── Level-up modal data ──
+const _CLASS_FEATURES={
+  fighter:{
+    1:['Combate de estilos — Elige un estilo: Arquería, Defensa, Duelo, Gran Arma, Protección o Armas Dobles.','Segunda Vuelta de Aliento — Recupera 1d10+nivel de PG como acción adicional (1/descanso corto).'],
+    2:['Oleada de Acción — Realiza una acción adicional en tu turno (1/descanso corto).'],
+    3:['Arquetipo Marcial — Elige: Campeón, Maestro de Batalla o Caballero Místico.'],
+    4:[],5:['Ataque Extra — Atacas dos veces cuando usas la acción de Atacar.'],
+    6:[],7:['Inexpugnable (1) — Repite una tirada de salvación fallida (1/descanso largo).'],
+    8:[],9:['Indomable — Usa Inexpugnable una vez adicional al día.'],
+    10:[],11:['Ataque Extra (3) — Atacas tres veces cuando usas la acción de Atacar.'],
+    12:[],13:['Inexpugnable (3) — Usa Inexpugnable hasta tres veces por descanso largo.'],
+    14:[],15:['Tenacidad de Campeón — Ventaja en las tiradas de salvación contra el miedo.'],
+    16:[],17:[],18:[],19:[],20:['Campeón Supremo — Puntuaciones de golpe crítico aumentadas, segunda Oleada de Acción.']
+  },
+  wizard:{
+    1:['Recuperación Arcana — Recupera espacios de conjuro de nivel ≤ mitad de nivel de mago (1/descanso corto).'],
+    2:['Tradición Arcana — Elige escuela: Evocación, Abjuración, Adivinación, Encantamiento, Ilusión, Invocación, Nigromancia o Transmutación.'],
+    3:[],4:[],5:[],6:['Característica de Tradición Arcana nivel 6.'],
+    7:[],8:[],9:[],10:['Característica de Tradición Arcana nivel 10.'],
+    11:[],12:[],13:[],14:['Característica de Tradición Arcana nivel 14.'],
+    15:[],16:[],17:[],18:['Maestría en Conjuros — Puedes lanzar ciertos conjuros de nivel 1 y 2 sin gastar espacios.'],
+    19:[],20:['Prodigios Arcanos — Lanza un conjuro de 8.° y 9.° nivel sin gastar espacio (1 c/u por descanso largo).']
+  },
+  rogue:{
+    1:['Ataque Furtivo 1d6 — Bonus de daño cuando tienes ventaja o un aliado adyacente.','Jerga de Ladrones — Idioma secreto del bajo mundo.'],
+    2:['Acción Astuta — Usar Esconderse, Desengancharse o Correr como acción adicional.'],
+    3:['Arquetipo de Pícaro — Elige: Ladrón, Asesino o Embaucador Arcano.','Especialización — Duplica el bonificador de competencia en 2 habilidades.'],
+    4:[],5:['Ataque Furtivo 3d6','Esquiva Increíble — Reacción para reducir a la mitad el daño de un ataque.'],
+    6:['Especialización (dos nuevas)'],7:['Ataque Furtivo 4d6','Evasión — Sin daño con salvación Destreza exitosa.'],
+    8:[],9:['Ataque Furtivo 5d6'],10:['Ataque Furtivo 6d6'],11:['Talento de Pícaro — Ataca dos veces si el primero falla.'],
+    12:[],13:['Ataque Furtivo 7d6'],14:['Ojo Ciego — No puedes ser sorprendido mientras estés consciente.'],
+    15:['Ataque Furtivo 8d6','Mente Escurridiza — Competencia en tiradas de salvación de Sabiduría.'],
+    16:[],17:['Ataque Furtivo 9d6'],18:['Esquiva Elusive — No se puede tener ventaja al atacarte.'],
+    19:['Ataque Furtivo 10d6'],20:['Golpe de Suerte — Convierte una tirada fallida en éxito (2/descanso largo).']
+  },
+  cleric:{
+    1:['Dominio Divino — Elige un dominio: Vida, Luz, Engaño, Conocimiento, Naturaleza, Tormenta o Guerra.','Canalizar Divinidad (1/descanso) — Usas el poder de tu deidad: Expulsar Muertos Vivientes.'],
+    2:['Canalizar Divinidad'],3:[],4:[],5:['Destruir Muertos Vivientes (CR ½) — Mata muertos vivientes menores directamente.'],
+    6:['Canalizar Divinidad (2/descanso)'],7:[],8:['Golpe Divino — Bonus de daño al atacar (1d8 del tipo del dominio).'],
+    9:[],10:['Intervención Divina — Llama a tu deidad para que actúe en tu favor (10% de probabilidad).'],
+    11:['Destruir Muertos Vivientes (CR 2)'],12:[],13:[],14:['Destruir Muertos Vivientes (CR 3)'],
+    15:[],16:[],17:['Destruir Muertos Vivientes (CR 4)','Golpe Divino (2d8)'],
+    18:['Intervención Divina mejorada — Siempre funciona.'],19:[],20:[]
+  },
+  ranger:{
+    1:['Enemigo Predilecto — Ventaja en rastrear y recordar información de un tipo de enemigo.','Explorador Natural — Dobles competencias en exploración en un tipo de terreno.'],
+    2:['Estilo de Combate — Elige: Arquería, Defensa, Duelo o Armas Dobles.','Conjuros — Empiezas a lanzar conjuros de guardabosques.'],
+    3:['Arquetipo de Guardabosques — Elige: Cazador o Señor de las Bestias.','Conciencia Primitiva — Detecta ciertas criaturas con concentración.'],
+    4:[],5:['Ataque Extra — Atacas dos veces.'],6:['Enemigo Predilecto mejorado'],
+    7:['Arquetipo nivel 7'],8:['Paso en Tierras — No eres ralentizado por terreno difícil.'],
+    9:[],10:['Explorador Natural mejorado'],11:['Arquetipo nivel 11'],12:[],
+    13:[],14:['Desvanecerse — Ocultarse como acción adicional.'],15:['Arquetipo nivel 15'],
+    16:[],17:[],18:['Sentidos de Guardabosques — Detectar criaturas ocultas en 1 milla.'],
+    19:[],20:['Cazador de Élite — Ventaja en tus ataques durante el primer turno del combate.']
+  },
+  paladin:{
+    1:['Sentido Divino — Detecta celestiales, fiendos y no muertos (CAS/descanso largo).','Imponer Manos — Reserva de cura = 5×nivel de paladín.'],
+    2:['Combate de Estilos','Conjuros — Empiezas a lanzar conjuros de paladín.','Golpe Divino — Consume espacio de conjuro para bonus de daño radiante.'],
+    3:['Salud Divina — Inmune a enfermedades.','Juramento Sagrado — Elige: Devoción, Venganza, Ancestros o Rompe-juramentos.'],
+    4:[],5:['Ataque Extra'],6:['Aura de Protección — Bonus a tiradas de salvación igual a tu mod. de CAR (10 pies).'],
+    7:['Juramento nivel 7'],8:[],9:[],10:['Aura de Valentía — Inmunidad al miedo (10 pies).'],
+    11:['Golpe Divino mejorado — Bonus de daño radiante extra al atacar.'],12:[],
+    13:[],14:['Purificación de Toque — Cura una condición con Imponer Manos.'],15:['Juramento nivel 15'],
+    16:[],17:['Aura de Protección y Valentía se extienden a 30 pies.'],18:[],
+    19:[],20:['Forma Sagrada — Transformación de paladín legendaria (1/descanso largo).']
+  },
+  barbarian:{
+    1:['Ira — Bonus de daño y resistencia a daño físico (2/descanso largo inicialmente).','Defensa Sin Armadura — CA = 10 + mod. DES + mod. CON.'],
+    2:['Ataque Descuidado — Ventaja en tus ataques; ataques contra ti con ventaja.','Sentido del Peligro — Ventaja en DEX contra efectos visibles.'],
+    3:['Camino Primario — Elige: Berserker, Guerrero Totem u otro.'],
+    4:[],5:['Ataque Extra','Movimiento Rápido — +10 pies de velocidad sin armadura.'],
+    6:['Camino nivel 6'],7:['Instinto Salvaje — +7 a iniciativa; actúas en sorpresa si estás en ira.'],
+    8:[],9:['Ataque Brutal — Tiradas de daño crítico con un dado extra.'],
+    10:['Camino nivel 10'],11:['Ira Incesante — Si caes a 0 HP en ira, puede reducir el daño a 1 HP (1 vez por ira).'],
+    12:[],13:['Ataque Brutal extra'],14:['Camino nivel 14'],15:['Espíritu Persistente — Si caes incapacitado, puedes terminar la ira voluntariamente.'],
+    16:[],17:['Ataque Brutal doble dado extra'],18:['Poder Indomable — Ventaja en cheques de Fuerza.'],
+    19:[],20:['Campeón Primario — STR y CON suben en 4 (máx. 24).']
+  },
+  bard:{
+    1:['Inspiración Bárdica d6 — Concede dado de bonificación a aliado (CAS/descanso largo).','Conjuros de Bardo'],
+    2:['Canción de Descanso — Cura PG adicionales durante descanso corto.','Polifacético — Competencia de la mitad en cualquier habilidad sin competencia.'],
+    3:['Colegio Bárdico — Elige: Valor, Conocimiento u otro.','Pericia — Duplica bonificador en 2 habilidades.'],
+    4:[],5:['Inspiración Bárdica d8','Fuente de Inspiración — Recupera usos de Inspiración en descanso corto también.'],
+    6:['Contramagia — Reacción para contrarrestar un conjuro.'],7:[],8:[],
+    9:[],10:['Inspiración Bárdica d10','Secretos Mágicos — Aprende 2 conjuros de cualquier clase.','Pericia adicional'],
+    11:[],12:[],13:[],14:['Secretos Mágicos adicionales'],15:['Inspiración Bárdica d12'],
+    16:[],17:[],18:['Secretos Mágicos adicionales'],19:[],20:['Superior Inspiration — si no tienes usos al inicio del turno, recuperas uno.']
+  },
+  druid:{
+    1:['Druídico — Lenguaje secreto de los druidas.','Conjuros de Druida'],
+    2:['Forma Salvaje — Transofrmación en bestia (2/descanso corto, CR límite por nivel).','Círculo Druídico — Elige: Tierra o Luna.'],
+    3:[],4:['Forma Salvaje mejorada (CR 1)'],5:[],6:['Círculo nivel 6'],
+    7:[],8:['Forma Salvaje mejorada (CR 2, vuelo)'],9:[],10:['Círculo nivel 10'],
+    11:[],12:[],13:[],14:['Círculo nivel 14'],15:[],16:[],17:[],
+    18:['Cuerpo Eterno — Envejecimiento 1/10 de lo normal.','Conjuros de Bestia — Concentración en Forma Salvaje.'],
+    19:[],20:['Arquidrúida — Usos ilimitados de Forma Salvaje.']
+  },
+  monk:{
+    1:['Artes Marciales — Dados de daño desarmado; DEX en ataques desarmados.','Defensa Sin Armadura — CA = 10 + DEX + SAB.'],
+    2:['Ki (puntos = nivel) — Gasta ki para Patada Aturdir, Corriente de Golpes, Paso del Viento.','Movimiento sin Armadura — +10 pies sin armadura (escala con nivel).'],
+    3:['Tradición Monástica — Elige: Via del Puño Abierto, Sombra u Elemento.','Desviación de Proyectiles — Reacción para atrapar misiles.'],
+    4:['Caída Lenta — Reduce daño por caída con reacción.'],5:['Ataque Extra','Golpe Aturdidor — Gasta 1 ki para aturdir en golpe crítico.'],
+    6:['Golpes ki considerados mágicos.','Tradición nivel 6'],7:['Evasión','Sosiego del Cuerpo — Inmune a enfermedad y veneno.'],
+    8:[],9:['Movimiento sin Armadura (escalado)'],10:['Pureza del Cuerpo — Inmune a veneno y enfermedad.'],
+    11:['Tradición nivel 11'],12:[],13:['Lengua del Sol y la Luna — Hablar con cualquier criatura.'],
+    14:['Alma de Diamante — Competencia en todas las tiradas de salvación.'],15:['Cuerpo Eterno — Envejece 1/10 normal.'],
+    16:[],17:['Tradición nivel 17'],18:['Cuerpo Vacío — Vuelta etérea 4+ki.'],
+    19:[],20:['Ser Perfecto — Tiradas de salvación = 10 min.']
+  },
+  sorcerer:{
+    1:['Origen de Hechicero — Elige: Linaje Dracónico, Alma Salvaje u otro.','Conjuros de Hechicero','Puntos de Hechicería — Reserva de maná (nivel puntos).'],
+    2:['Metamagia — Elige 2 opciones: Conjuro Cuidadoso, Distante, Potenciado, Extendido, Elevado, Rápido, Sutil, Gemelo.'],
+    3:[],4:[],5:[],6:['Origen nivel 6'],7:[],8:[],9:[],10:[],
+    11:[],12:[],13:[],14:['Origen nivel 14'],15:[],16:[],17:['Metamagia adicional'],
+    18:['Origen nivel 18'],19:[],20:['Restauración Hechicera — Recupera 4 puntos de hechicería en descanso corto.']
+  },
+  warlock:{
+    1:['Patrono Sobrenatural — Elige: El Archidiablo, El Gran Antiguo, La Hada u otro.','Magia del Pacto — Espacios se recuperan en descanso corto.'],
+    2:['Invocaciones Eldritch — Elige 2 invocaciones que mejoran tus poderes.'],
+    3:['Dádiva del Pacto — Elige: Pacto de la Cadena, Hoja o Tomo.'],
+    4:[],5:[],6:['Característica de Patrono nivel 6'],7:[],8:[],9:[],10:['Característica de Patrono nivel 10'],
+    11:['Arcano Misterioso (6.°)'],12:['Invocación adicional'],13:['Arcano Misterioso (7.°)'],
+    14:['Característica de Patrono nivel 14'],15:['Arcano Misterioso (8.°)'],16:['Invocación adicional'],
+    17:['Arcano Misterioso (9.°)'],18:[],19:['Invocación adicional'],
+    20:['Engaño Eldritch — 1/descanso largo tu patrono responde una pregunta o concede un favor.']
+  }
+};
+// ASI levels per class
+const _ASI_LEVELS={
+  fighter:[4,6,8,12,14,16,19],
+  rogue:[4,8,10,12,16,18,20],
+  default:[4,8,12,16,19]
+};
+function _getAsiLevels(cls){return _ASI_LEVELS[cls]||_ASI_LEVELS.default;}
+
+let _luHpChoice='roll';
+let _luRollVal=0;
+let _luAsiSpend={};
+let _luAsiPts=2;
+
 function levelUp(btn){
   if(_currentLevel>=20){
     const orig=btn.innerHTML;btn.innerHTML='Nivel máx. 🎉';
     setTimeout(()=>{btn.innerHTML=orig;},1500);return;
   }
-  const ck=selections.class||'fighter';
-  const st=rolledStats||{con:10};
-  const conMod=Math.floor(((st.con||10)-10)/2);
+  openLevelUpModal();
+}
+
+function openLevelUpModal(){
+  const ck=_loadedCharClass||selections.class||'fighter';
+  const nextLv=_currentLevel+1;
   const die=HIT_DICE[ck]||8;
-  const roll=Math.floor(Math.random()*die)+1;
-  const gain=Math.max(1,roll+conMod);
+  const conMod=Math.floor(((rolledStats?.con||10)-10)/2);
+  _luRollVal=Math.max(1,Math.floor(Math.random()*die)+1+conMod);
+  const avg=Math.max(1,Math.floor(die/2)+1+conMod);
+  _luHpChoice='roll';
+  _luAsiSpend={};
+  _luAsiPts=2;
+
+  document.getElementById('luTitle').textContent=`¡NIVEL ${nextLv}!`;
+  document.getElementById('luSub').textContent=(CLASS_NAMES?.es?.[ck]||ck).toUpperCase();
+  document.getElementById('luDieType').textContent='d'+die;
+  document.getElementById('luRollVal').textContent=_luRollVal;
+  document.getElementById('luAvgVal').textContent=avg;
+  document.getElementById('luOptRoll').classList.add('active');
+  document.getElementById('luOptAvg').classList.remove('active');
+
+  // ASI section
+  const asiLevels=_getAsiLevels(ck);
+  const luAsiSec=document.getElementById('luAsiSection');
+  if(asiLevels.includes(nextLv)){
+    luAsiSec.style.display='';
+    _renderLuAsiGrid(ck);
+  } else {
+    luAsiSec.style.display='none';
+  }
+
+  // Features
+  const feats=(_CLASS_FEATURES[ck]||{})[nextLv]||[];
+  const featEl=document.getElementById('luFeatures');
+  const featSec=document.getElementById('luFeatSection');
+  if(feats.length){
+    featSec.style.display='';
+    featEl.innerHTML=feats.map(f=>{
+      const [name,...rest]=f.split(' — ');
+      return `<div class="lu-feat"><div class="lu-feat-name">${name}</div>${rest.length?`<div class="lu-feat-desc">${rest.join(' — ')}</div>`:''}</div>`;
+    }).join('');
+  } else {
+    featSec.style.display='none';
+  }
+
+  document.getElementById('luOverlay').classList.add('open');
+}
+
+function closeLevelUp(){
+  document.getElementById('luOverlay').classList.remove('open');
+}
+
+function selectLuHp(choice){
+  _luHpChoice=choice;
+  document.getElementById('luOptRoll').classList.toggle('active',choice==='roll');
+  document.getElementById('luOptAvg').classList.toggle('active',choice==='avg');
+}
+
+function _renderLuAsiGrid(ck){
+  const STAT_NAMES={str:'FUE',dex:'DES',con:'CON',int:'INT',wis:'SAB',cha:'CAR'};
+  const stats=rolledStats||{str:10,dex:10,con:10,int:10,wis:10,cha:10};
+  document.getElementById('luAsiPts').textContent=_luAsiPts;
+  const grid=document.getElementById('luAsiGrid');
+  grid.innerHTML=Object.keys(STAT_NAMES).map(s=>{
+    const cur=(stats[s]||10)+(_luAsiSpend[s]||0);
+    return `<div class="lu-asi-row">
+      <div class="lu-asi-name">${STAT_NAMES[s]}</div>
+      <div class="lu-asi-val" id="luAsi_${s}">${cur}</div>
+      <button class="lu-asi-btn" onclick="selectAsi('${s}',-1)">−</button>
+      <button class="lu-asi-btn" onclick="selectAsi('${s}',1)">+</button>
+    </div>`;
+  }).join('');
+}
+
+function selectAsi(stat,delta){
+  const cur=(_luAsiSpend[stat]||0);
+  const base=(rolledStats?.[stat]||10);
+  if(delta>0){
+    if(_luAsiPts<=0)return;
+    if(base+cur>=20)return;
+    _luAsiSpend[stat]=(cur+1);
+    _luAsiPts--;
+  } else {
+    if(cur<=0)return;
+    _luAsiSpend[stat]=(cur-1);
+    _luAsiPts++;
+  }
+  const ck=_loadedCharClass||selections.class||'fighter';
+  _renderLuAsiGrid(ck);
+}
+
+function confirmLevelUp(){
+  const ck=_loadedCharClass||selections.class||'fighter';
+  const die=HIT_DICE[ck]||8;
+  const conMod=Math.floor(((rolledStats?.con||10)-10)/2);
+  const avg=Math.max(1,Math.floor(die/2)+1+conMod);
+  const gain=_luHpChoice==='roll'?_luRollVal:avg;
+
+  // Apply ASI
+  if(Object.keys(_luAsiSpend).length&&rolledStats){
+    Object.entries(_luAsiSpend).forEach(([s,d])=>{if(d>0)rolledStats[s]=(rolledStats[s]||10)+d;});
+    // Re-render stat blocks
+    ['str','dex','con','int','wis','cha'].forEach(s=>{
+      const base=rolledStats[s]||10;
+      const mod=Math.floor((base-10)/2);
+      const modStr=(mod>=0?'+':'')+mod;
+      const el=document.getElementById('cs_'+s);
+      if(el){el.querySelector('.cs-stat-score').textContent=base;el.querySelector('.cs-stat-mod').textContent=modStr;}
+    });
+  }
+
   _currentLevel++;
   _updateLevelBadges();
-  // Update HP in UI
   const curHpEl=document.getElementById('sheetHpCur');
   const maxHpEl=document.getElementById('sheetHpMax');
   const prevMax=parseInt(maxHpEl?.textContent)||0;
   const prevCur=parseInt(curHpEl?.textContent)||0;
   _updateSheetHp(prevCur+gain,prevMax+gain);
-  // Update meta line
+
   const rk=selections.race||'human';
   document.getElementById('csMeta').textContent=`${RACE_NAMES[currentLang][rk]||rk} · ${CLASS_NAMES[currentLang][ck]||ck} · ${currentLang==='es'?'Nivel':'Level'} ${_currentLevel}`;
-  // Persist if char is loaded
+
   if(_loadedCharId){
     const chars=_loadSavedChars();
     const c=chars.find(x=>x.id===_loadedCharId);
-    if(c){c.level=_currentLevel;c.hp=(c.hp||0)+gain;c.currentHp=Math.min((c.currentHp||c.hp),c.hp)+gain;localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));}
+    if(c){
+      c.level=_currentLevel;c.hp=(c.hp||0)+gain;
+      c.currentHp=Math.min((c.currentHp||c.hp),c.hp)+gain;
+      if(rolledStats){c.stats={...rolledStats};}
+      if(_csSpellSlots){c.spellSlots=_csSpellSlots;}
+      localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));
+    }
   }
-  // Button feedback
-  const orig=btn.innerHTML;
-  btn.innerHTML=`✨ ¡Nivel ${_currentLevel}! (+${gain} HP)`;
-  btn.style.background='rgba(139,92,246,.45)';
-  setTimeout(()=>{btn.innerHTML=orig;btn.style.background='';},2200);
+  closeLevelUp();
 }
 function applyHpCard(id,mode){
   const input=document.getElementById('hpi-'+id);

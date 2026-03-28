@@ -1,7 +1,12 @@
 {
-  "version": "1.7.8",
+  "version": "1.7.9",
   "date": "2026-03-28",
   "history": [
+    {
+      "version": "1.7.9",
+      "date": "2026-03-28",
+      "note": "Level-up modal: HP roll/avg, ASI picker en niveles correctos, rasgos por clase, diseño LoL"
+    },
     {
       "version": "1.7.8",
       "date": "2026-03-28",
