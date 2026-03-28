@@ -115,8 +115,8 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .llogo-m{font-family:'Cinzel',serif;font-size:13px;font-weight:400;letter-spacing:.4em;color:rgba(220,230,245,.6);text-transform:uppercase;}
 .llogo-d{font-family:'Cinzel',serif;font-size:20px;font-weight:700;color:var(--gold);letter-spacing:.1em;margin-left:6px;}
 .land-nav-links{display:flex;gap:2px;margin-left:12px;}
-.land-nav-links a{padding:6px 14px;font-size:13px;color:var(--text-m);border-radius:8px;transition:.15s;letter-spacing:.5px;}
-.land-nav-links a:hover{color:var(--text);background:rgba(255,255,255,.05);}
+.land-nav-links a,.land-nav-link{padding:6px 14px;font-size:13px;color:var(--text-m);border-radius:8px;transition:.15s;letter-spacing:.5px;cursor:pointer;}
+.land-nav-links a:hover,.land-nav-link:hover{color:var(--text);background:rgba(255,255,255,.05);}
 .land-nav-spacer{flex:1;}
 .land-nav-right{display:flex;align-items:center;gap:12px;}
 .land-nav-dropdown{position:relative;}
@@ -1202,7 +1202,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.6.2</span>
+    <span class="ver-badge">v1.6.3</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">27 Mar 2026</span>
   </div>
@@ -1418,20 +1418,40 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   </div>
   <div class="land-ui">
     <nav class="land-nav">
-      <div class="land-logo">
+      <div class="land-logo" onclick="goTo('home')" style="cursor:pointer;">
         <span class="llogo-m">MASTER</span><span class="llogo-d">DND</span>
       </div>
       <div class="land-nav-links">
-        <div class="land-nav-dropdown" id="lndd-chars">
-          <a onclick="toggleLandNavDD('lndd-chars',event)" data-es="Personajes" data-en="Characters">Personajes ▾</a>
-          <div class="land-nav-dd-menu">
-            <div class="land-nav-dd-item" id="lndd-my-chars" onclick="closeLandNavDD();goToMyChars()" style="display:none;" data-es="Mis personajes" data-en="My characters">⚔️ Mis personajes</div>
-            <div class="land-nav-dd-item" onclick="closeLandNavDD();goToCreateChar()" data-es="Crear personaje" data-en="Create character">✨ Crear personaje</div>
+        <div class="nav-dropdown" id="lndd-chars">
+          <a class="land-nav-link" onclick="toggleNavDropdown('lndd-chars',event)" data-es="Personajes" data-en="Characters">Personajes</a>
+          <div class="nav-dropdown-menu">
+            <div class="nav-dd-item" id="lndd-my-chars" onclick="closeNavDropdowns();goToMyChars()" style="display:none;">
+              <span class="nav-dd-icon">⚔️</span>
+              <div class="nav-dd-label"><span data-es="Mis personajes" data-en="My characters">Mis personajes</span><span class="nav-dd-sub">Ver personajes guardados</span></div>
+            </div>
+            <div class="nav-dd-item" onclick="closeNavDropdowns();goToCreateChar()">
+              <span class="nav-dd-icon">✨</span>
+              <div class="nav-dd-label"><span data-es="Crear personaje" data-en="Create character">Crear personaje</span><span class="nav-dd-sub">Nuevo aventurero</span></div>
+            </div>
           </div>
         </div>
-        <a onclick="goTo('maps')" data-es="Mapas" data-en="Maps">Mapas</a>
-        <a onclick="goTo('sounds')" data-es="Sonidos" data-en="Sounds">Sonidos</a>
-        <a onclick="goTo('compendium')" data-es="Compendio" data-en="Compendium">Compendio</a>
+        <div class="nav-dropdown" id="lndd-maps">
+          <a class="land-nav-link" onclick="toggleNavDropdown('lndd-maps',event)" data-es="Mapas" data-en="Maps">Mapas</a>
+          <div class="nav-dropdown-menu">
+            <div class="nav-dd-item" onclick="closeNavDropdowns();goToMaps('editor')">
+              <span class="nav-dd-icon">🗺️</span>
+              <div class="nav-dd-label"><span data-es="Crear mapa" data-en="Create map">Crear mapa</span><span class="nav-dd-sub">Editor de terreno</span></div>
+            </div>
+            <div class="nav-dd-item" onclick="closeNavDropdowns();goToMaps('explore')">
+              <span class="nav-dd-icon">🔍</span>
+              <div class="nav-dd-label"><span data-es="Mapas existentes" data-en="Existing maps">Mapas existentes</span><span class="nav-dd-sub">Explorar la comunidad</span></div>
+            </div>
+          </div>
+        </div>
+        <a class="land-nav-link" onclick="goTo('sounds')" data-es="Sonidos" data-en="Sounds">Sonidos</a>
+        <a class="land-nav-link" onclick="goTo('compendium')" data-es="Compendio" data-en="Compendium">Compendio</a>
+        <a class="land-nav-link" onclick="goTo('notes')" data-es="Notas" data-en="Notes">Notas</a>
+        <a class="land-nav-link" onclick="goTo('combat')" data-es="Combate" data-en="Combat">Combate</a>
       </div>
       <div class="land-nav-spacer"></div>
       <div class="land-nav-right">
@@ -1442,7 +1462,11 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="lbtn-ghost" id="lbtnEntrar" onclick="openModal('login')" data-es="Entrar" data-en="Log in">Entrar</button>
         <button class="lbtn-gold" id="lbtnComenzar" onclick="openModal('register')" data-es="Comenzar" data-en="Get started">Comenzar</button>
         <div class="nav-user" id="landNavUser" style="display:none;">
-          <button class="nav-user-btn" onclick="toggleUserMenu()"><span id="landNavGreeting"></span> <span class="nav-user-chevron">▾</span></button>
+          <button class="nav-user-btn" onclick="toggleUserMenu()"><span id="landNavGreeting"></span><span class="nav-user-chevron">▾</span></button>
+          <div class="nav-user-menu" id="landNavUserMenu">
+            <button class="nav-user-menu-item" onclick="goToChars();toggleUserMenu(false)" data-es="Mis personajes" data-en="My characters">Mis personajes</button>
+            <button class="nav-user-menu-item nav-user-menu-signout" onclick="authSignOut()" data-es="Cerrar sesión" data-en="Sign out">Cerrar sesión</button>
+          </div>
         </div>
       </div>
       <button class="hamb-btn" onclick="openMobileMenu()" aria-label="Menú"><span class="hamb-line"></span><span class="hamb-line"></span><span class="hamb-line"></span></button>
@@ -1646,7 +1670,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
           <div class="progress-bar" style="margin-bottom:28px;">
             <div class="prog-step"><div class="prog-dot active" id="pd1">1</div><div class="prog-label">Stats</div></div>
             <div class="prog-line" id="pl1"></div>
-            <div class="prog-step" style="cursor:pointer;" onclick="if(currentStep===1)nextStep()"><div class="prog-dot" id="pd2">2</div><div class="prog-label" data-es="Ficha" data-en="Sheet">Ficha</div></div>
+            <div class="prog-step" style="cursor:pointer;" onclick="nextStep()"><div class="prog-dot" id="pd2">2</div><div class="prog-label" data-es="Ficha" data-en="Sheet">Ficha</div></div>
           </div>
           <!-- Step 1: Stats -->
           <div class="creator-step active" id="step1">
@@ -3220,9 +3244,6 @@ function _updateAuthUI(){
     if(lgreet)lgreet.textContent=greeting;
     if(lbtnE)lbtnE.style.display='none';
     if(lbtnC)lbtnC.style.display='none';
-    // show "Mis personajes" in landing dropdown if there are saved chars
-    const lnddMy=document.getElementById('lndd-my-chars');
-    if(lnddMy)lnddMy.style.display=_loadSavedChars().length>0?'block':'none';
   }else{
     if(navUser)navUser.style.display='none';
     if(btnE)btnE.style.display='';
@@ -3232,19 +3253,19 @@ function _updateAuthUI(){
     if(lbtnC)lbtnC.style.display='';
   }
 }
-function toggleLandNavDD(id,e){if(e)e.stopPropagation();const el=document.getElementById(id);if(el)el.classList.toggle('open');}
-function closeLandNavDD(){document.querySelectorAll('.land-nav-dropdown.open').forEach(d=>d.classList.remove('open'));}
-document.addEventListener('click',()=>closeLandNavDD());
 function toggleUserMenu(force){
   const btn=document.getElementById('navUserBtn');
   const menu=document.getElementById('navUserMenu');
-  if(!btn||!menu)return;
-  const open=force!==undefined?force:!menu.classList.contains('open');
-  menu.classList.toggle('open',open);
-  btn.classList.toggle('open',open);
+  const lmenu=document.getElementById('landNavUserMenu');
+  const lbtn=document.getElementById('landNavUser')?.querySelector('.nav-user-btn');
+  const open=force!==undefined?force:(menu?!menu.classList.contains('open'):(lmenu?!lmenu.classList.contains('open'):false));
+  if(menu)menu.classList.toggle('open',open);
+  if(btn)btn.classList.toggle('open',open);
+  if(lmenu)lmenu.classList.toggle('open',open);
+  if(lbtn)lbtn.classList.toggle('open',open);
 }
 document.addEventListener('click',e=>{
-  if(!document.getElementById('navUser')?.contains(e.target))toggleUserMenu(false);
+  if(!document.getElementById('navUser')?.contains(e.target)&&!document.getElementById('landNavUser')?.contains(e.target))toggleUserMenu(false);
 });
 function goToChars(){
   const chars=_loadSavedChars?_loadSavedChars():[];
