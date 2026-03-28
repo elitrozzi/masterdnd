@@ -1,9 +1,9 @@
 {
-  "version": "1.6.1",
+  "version": "1.6.2",
   "date": "2026-03-27",
   "history": [
     {
-      "version": "1.6.1",
+      "version": "1.6.2",
       "date": "2026-03-27",
       "note": "Fix 3 bugs: savedChars oculto en crear-personaje (flag persistente), landing nav con dropdown Personajes y auth state correcto"
     },

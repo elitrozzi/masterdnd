@@ -265,7 +265,9 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .dice-anim{animation:diceAnim .35s ease;}
 /* ── Drawer: hide header + remove padding on sheet step ── */
 .char-creator-drawer:has(#step2.active) .char-drawer-header{display:none;}
-.char-creator-drawer:has(#step2.active) .char-drawer-body{padding:0;}
+.char-creator-drawer:has(#step2.active) .char-drawer-body{padding:0;flex:1;min-height:0;}
+.char-creator-drawer:has(#step2.active) #creatorWrap{max-width:none!important;width:100%;flex:1;min-height:0;display:flex;flex-direction:column;}
+.char-creator-drawer:has(#step2.active) #step2{flex:1;min-height:0;}
 /* ── Character sheet — League of Legends aesthetic ── */
 :root{--lol-bg:#010a13;--lol-panel:#0a1428;--lol-panel2:#071020;--lol-border:#785a28;--lol-gold:#c8aa6e;--lol-gold-bright:#f0e6d3;--lol-teal:#0bc4e3;--lol-teal-dim:rgba(11,196,227,.25);--lol-gray:#a9b4c2;--lol-gray-dim:rgba(169,180,194,.45);}
 .char-sheet{background:var(--lol-bg);border:none;border-radius:0;padding:0;width:100%;flex:1;min-height:0;display:flex;flex-direction:column;}
@@ -1200,7 +1202,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.6.1</span>
+    <span class="ver-badge">v1.6.2</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">27 Mar 2026</span>
   </div>
@@ -1640,7 +1642,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <span class="char-drawer-race-name" id="charDrawerRaceName" style="font-size:13px;opacity:.7;"></span>
       </div>
       <div class="char-drawer-body">
-        <div class="creator-wrap" style="max-width:820px;padding:0;">
+        <div class="creator-wrap" id="creatorWrap" style="max-width:820px;padding:0;">
           <div class="progress-bar" style="margin-bottom:28px;">
             <div class="prog-step"><div class="prog-dot active" id="pd1">1</div><div class="prog-label">Stats</div></div>
             <div class="prog-line" id="pl1"></div>
