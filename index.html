@@ -6,6 +6,7 @@
 <title>MasterDND</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230e0c1e'/%3E%3Cpolygon points='16,3 29,10.5 29,21.5 16,29 3,21.5 3,10.5' fill='none' stroke='%23d4a843' stroke-width='1.5'/%3E%3Cpolygon points='16,3 29,10.5 16,16' fill='%23d4a843' opacity='.18'/%3E%3Cpolygon points='16,3 3,10.5 16,16' fill='%23d4a843' opacity='.10'/%3E%3Cpolygon points='16,16 29,10.5 29,21.5' fill='%23d4a843' opacity='.13'/%3E%3Cpolygon points='16,16 3,10.5 3,21.5' fill='%23d4a843' opacity='.08'/%3E%3Cpolygon points='16,16 29,21.5 16,29' fill='%23d4a843' opacity='.15'/%3E%3Cpolygon points='16,16 3,21.5 16,29' fill='%23d4a843' opacity='.11'/%3E%3Cline x1='16' y1='3' x2='16' y2='16' stroke='%23d4a843' stroke-width='1' opacity='.5'/%3E%3Cline x1='29' y1='10.5' x2='16' y2='16' stroke='%23d4a843' stroke-width='1' opacity='.5'/%3E%3Cline x1='3' y1='10.5' x2='16' y2='16' stroke='%23d4a843' stroke-width='1' opacity='.5'/%3E%3Cline x1='29' y1='21.5' x2='16' y2='16' stroke='%23d4a843' stroke-width='1' opacity='.5'/%3E%3Cline x1='3' y1='21.5' x2='16' y2='16' stroke='%23d4a843' stroke-width='1' opacity='.5'/%3E%3Cline x1='16' y1='29' x2='16' y2='16' stroke='%23d4a843' stroke-width='1' opacity='.5'/%3E%3C/svg%3E"/>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
 /* ── VARIABLES ── */
 :root {
@@ -644,6 +645,10 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .modal-tab{flex:1;text-align:center;padding:8px;border-radius:8px;font-size:13px;font-weight:600;color:var(--text-m);cursor:none;transition:.15s;}
 .modal-tab.active{background:var(--brand-500);color:#fff;}
 .btn-google{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:10px;padding:11px;font-size:14px;color:var(--text);display:flex;align-items:center;justify-content:center;gap:8px;cursor:none;transition:.15s;margin-bottom:16px;}
+.nav-user{display:none;align-items:center;gap:8px;}
+.nav-user-name{font-size:13px;font-weight:600;color:var(--gold);font-family:'Cinzel',serif;}
+.modal-error{color:#e05050;font-size:12px;text-align:center;margin-top:6px;min-height:18px;}
+.modal-success{color:#6edba0;font-size:12px;text-align:center;margin-top:6px;}
 .btn-google:hover{background:rgba(255,255,255,.08);}
 .divider-or{text-align:center;font-size:12px;color:var(--text-m);margin-bottom:16px;position:relative;}
 .divider-or::before,.divider-or::after{content:'';position:absolute;top:50%;width:38%;height:1px;background:var(--border);}
@@ -1162,7 +1167,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.5.5</span>
+    <span class="ver-badge">v1.5.6</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">27 Mar 2026</span>
   </div>
@@ -1170,8 +1175,12 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     <button class="lang-btn active" onclick="setLang('es')">ES</button>
     <button class="lang-btn" onclick="setLang('en')">EN</button>
   </div>
-  <button class="btn-nav btn-ghost" onclick="openModal('login')" data-es="Entrar" data-en="Log in">Entrar</button>
-  <button class="btn-nav btn-gold" onclick="openModal('register')" data-es="Comenzar" data-en="Get started">Comenzar</button>
+  <div class="nav-user" id="navUser">
+    <span class="nav-user-name" id="navUserName"></span>
+    <button class="btn-nav btn-ghost" onclick="authSignOut()">Salir</button>
+  </div>
+  <button class="btn-nav btn-ghost" id="btnEntrar" onclick="openModal('login')" data-es="Entrar" data-en="Log in">Entrar</button>
+  <button class="btn-nav btn-gold" id="btnComenzar" onclick="openModal('register')" data-es="Comenzar" data-en="Get started">Comenzar</button>
   <button class="hamb-btn" onclick="openMobileMenu()" aria-label="Menú"><span class="hamb-line"></span><span class="hamb-line"></span><span class="hamb-line"></span></button>
 </nav>
 
@@ -1966,12 +1975,13 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     <h2>MasterDND</h2>
     <div class="modal-sub" id="modalSub" data-es="Tu aventura comienza acá." data-en="Your adventure starts here.">Tu aventura comienza acá.</div>
     <div class="modal-tabs"><div class="modal-tab active" id="tabLogin" onclick="switchTab('login')" data-es="Iniciar sesión" data-en="Log in">Iniciar sesión</div><div class="modal-tab" id="tabRegister" onclick="switchTab('register')" data-es="Registrarse" data-en="Sign up">Registrarse</div></div>
-    <button class="btn-google"><span>🔵</span><span data-es="Continuar con Google" data-en="Continue with Google">Continuar con Google</span></button>
+    <button class="btn-google" id="btnGoogle" onclick="authGoogle()"><span>🔵</span><span data-es="Continuar con Google" data-en="Continue with Google">Continuar con Google</span></button>
     <div class="divider-or"><span data-es="o con email" data-en="or with email">o con email</span></div>
-    <div id="registerFields" style="display:none;"><div class="form-group"><label class="form-label" data-es="Nombre de usuario" data-en="Username">Nombre de usuario</label><input class="form-input" type="text" placeholder="aventurero_123"/></div></div>
-    <div class="form-group"><label class="form-label">Email</label><input class="form-input" type="email" placeholder="tu@email.com"/></div>
-    <div class="form-group"><label class="form-label" data-es="Contraseña" data-en="Password">Contraseña</label><input class="form-input" type="password" placeholder="••••••••"/></div>
-    <button class="btn-full btn-primary" id="modalSubmitBtn" style="margin-top:8px;" data-es="Iniciar sesión" data-en="Log in">Iniciar sesión</button>
+    <div id="registerFields" style="display:none;"><div class="form-group"><label class="form-label" data-es="Nombre de usuario" data-en="Username">Nombre de usuario</label><input class="form-input" id="modalUsername" type="text" placeholder="aventurero_123"/></div></div>
+    <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="modalEmail" type="email" placeholder="tu@email.com"/></div>
+    <div class="form-group"><label class="form-label" data-es="Contraseña" data-en="Password">Contraseña</label><input class="form-input" id="modalPassword" type="password" placeholder="••••••••"/></div>
+    <div id="modalMsg"></div>
+    <button class="btn-full btn-primary" id="modalSubmitBtn" style="margin-top:8px;" onclick="authSubmit()">Iniciar sesión</button>
   </div>
 </div>
 
@@ -3127,13 +3137,75 @@ function goTo(page,fromPop){
 window.addEventListener('popstate',e=>{goTo(e.state&&e.state.page?e.state.page:'home',true);});
 
 /* ══ MODAL ══ */
+/* ══ SUPABASE AUTH ══ */
+const _SB=supabase.createClient('https://clgrrrpvhnwxrmxpfosq.supabase.co','sb_publishable_ZKk0_p4H3hNHA0RI1L-xIQ_31Hj_2o-');
+let _currentUser=null;
+let _modalTab='login';
+_SB.auth.onAuthStateChange((event,session)=>{
+  _currentUser=session?.user||null;
+  _updateAuthUI();
+  if(event==='SIGNED_IN')closeModal();
+});
+_SB.auth.getSession().then(({data:{session}})=>{_currentUser=session?.user||null;_updateAuthUI();});
+function _updateAuthUI(){
+  const navUser=document.getElementById('navUser');
+  const btnE=document.getElementById('btnEntrar');
+  const btnC=document.getElementById('btnComenzar');
+  if(_currentUser){
+    if(navUser)navUser.style.display='flex';
+    const name=_currentUser.user_metadata?.username||_currentUser.email?.split('@')[0]||'Aventurero';
+    const el=document.getElementById('navUserName');if(el)el.textContent=name;
+    if(btnE)btnE.style.display='none';
+    if(btnC)btnC.style.display='none';
+  }else{
+    if(navUser)navUser.style.display='none';
+    if(btnE)btnE.style.display='';
+    if(btnC)btnC.style.display='';
+  }
+}
+async function authSubmit(){
+  const email=(document.getElementById('modalEmail')?.value||'').trim();
+  const password=document.getElementById('modalPassword')?.value||'';
+  const msg=document.getElementById('modalMsg');
+  if(!email||!password){if(msg)msg.innerHTML='<div class="modal-error">Completá email y contraseña.</div>';return;}
+  const btn=document.getElementById('modalSubmitBtn');
+  const orig=btn.textContent;btn.textContent='...';btn.disabled=true;if(msg)msg.innerHTML='';
+  let res;
+  if(_modalTab==='login'){
+    res=await _SB.auth.signInWithPassword({email,password});
+  }else{
+    const username=(document.getElementById('modalUsername')?.value||'').trim();
+    res=await _SB.auth.signUp({email,password,options:{data:{username}}});
+  }
+  btn.disabled=false;
+  if(res.error){
+    btn.textContent=orig;
+    if(msg)msg.innerHTML=`<div class="modal-error">${_authErrEs(res.error.message)}</div>`;
+  }else if(_modalTab==='register'&&!res.data?.session){
+    btn.textContent=orig;
+    if(msg)msg.innerHTML='<div class="modal-success">✓ Revisá tu email para confirmar la cuenta.</div>';
+  }
+}
+function _authErrEs(e){
+  if(e.includes('Invalid login'))return'Email o contraseña incorrectos.';
+  if(e.includes('already registered')||e.includes('already been registered'))return'Este email ya está registrado.';
+  if(e.includes('Password should'))return'La contraseña debe tener al menos 6 caracteres.';
+  if(e.includes('valid email'))return'Ingresá un email válido.';
+  return e;
+}
+async function authGoogle(){
+  await _SB.auth.signInWithOAuth({provider:'google',options:{redirectTo:'https://masterdnd.com'}});
+}
+async function authSignOut(){await _SB.auth.signOut();}
 function openModal(t){document.getElementById('modalOverlay').classList.add('open');switchTab(t);}
 function closeModal(){document.getElementById('modalOverlay').classList.remove('open');}
 function closeModalOutside(e){if(e.target===document.getElementById('modalOverlay'))closeModal();}
 function switchTab(t){
+  _modalTab=t;
   document.getElementById('tabLogin').classList.toggle('active',t==='login');
   document.getElementById('tabRegister').classList.toggle('active',t==='register');
   document.getElementById('registerFields').style.display=t==='register'?'block':'none';
+  const msg=document.getElementById('modalMsg');if(msg)msg.innerHTML='';
   document.getElementById('modalSubmitBtn').textContent=t==='login'?(currentLang==='es'?'Iniciar sesión':'Log in'):(currentLang==='es'?'Crear cuenta':'Create account');
 }
 

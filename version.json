@@ -1,7 +1,12 @@
 {
-  "version": "1.5.5",
+  "version": "1.5.6",
   "date": "2026-03-27",
   "history": [
+    {
+      "version": "1.5.6",
+      "date": "2026-03-27",
+      "note": "Supabase auth: login/registro con email+password, Google OAuth, sesión persistente, estado de usuario en el nav"
+    },
     {
       "version": "1.5.5",
       "date": "2026-03-27",
