@@ -1,7 +1,12 @@
 {
-  "version": "1.6.7",
-  "date": "2026-03-27",
+  "version": "1.6.8",
+  "date": "2026-03-28",
   "history": [
+    {
+      "version": "1.6.8",
+      "date": "2026-03-28",
+      "note": "Fix: landing nav - menús cerrados interceptaban clicks al tener pointer-events:auto por .land-ui *"
+    },
     {
       "version": "1.6.7",
       "date": "2026-03-27",

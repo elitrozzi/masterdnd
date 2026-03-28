@@ -107,6 +107,8 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 /* Landing UI overlay */
 .land-ui{position:fixed;inset:0;z-index:10;pointer-events:none;}
 .land-ui *{pointer-events:auto;}
+.land-ui .nav-dropdown-menu{pointer-events:none;}
+.land-ui .nav-dropdown.open .nav-dropdown-menu{pointer-events:auto;}
 
 /* Landing nav */
 .land-nav{position:fixed;top:0;left:0;right:0;height:68px;display:flex;align-items:center;padding:0 48px;gap:32px;z-index:100;transition:background .3s,backdrop-filter .3s,border-bottom .3s;}
@@ -1207,7 +1209,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.6.7</span>
+    <span class="ver-badge">v1.6.8</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">27 Mar 2026</span>
   </div>
