@@ -645,8 +645,17 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .modal-tab{flex:1;text-align:center;padding:8px;border-radius:8px;font-size:13px;font-weight:600;color:var(--text-m);cursor:none;transition:.15s;}
 .modal-tab.active{background:var(--brand-500);color:#fff;}
 .btn-google{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:10px;padding:11px;font-size:14px;color:var(--text);display:flex;align-items:center;justify-content:center;gap:8px;cursor:none;transition:.15s;margin-bottom:16px;}
-.nav-user{display:none;align-items:center;gap:8px;}
-.nav-user-name{font-size:13px;font-weight:600;color:var(--gold);font-family:'Cinzel',serif;}
+.nav-user{display:none;align-items:center;position:relative;}
+.nav-user-btn{background:transparent;border:1px solid rgba(248,198,98,.25);border-radius:8px;padding:5px 12px;color:var(--gold);font-family:'Cinzel',serif;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:.15s;}
+.nav-user-btn:hover{background:rgba(248,198,98,.08);border-color:rgba(248,198,98,.5);}
+.nav-user-chevron{font-size:10px;opacity:.7;transition:transform .2s;}
+.nav-user-btn.open .nav-user-chevron{transform:rotate(180deg);}
+.nav-user-menu{position:absolute;top:calc(100% + 8px);right:0;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:6px;min-width:160px;box-shadow:0 8px 24px rgba(0,0,0,.5);z-index:200;display:none;flex-direction:column;gap:2px;}
+.nav-user-menu.open{display:flex;}
+.nav-user-menu-item{background:transparent;border:none;border-radius:7px;padding:9px 12px;color:var(--text-m);font-size:13px;text-align:left;cursor:pointer;transition:.15s;font-family:'Roboto',sans-serif;}
+.nav-user-menu-item:hover{background:rgba(255,255,255,.07);color:var(--text);}
+.nav-user-menu-signout{color:#e08080;}
+.nav-user-menu-signout:hover{background:rgba(200,60,60,.12);color:#e05050;}
 .modal-error{color:#e05050;font-size:12px;text-align:center;margin-top:6px;min-height:18px;}
 .modal-success{color:#6edba0;font-size:12px;text-align:center;margin-top:6px;}
 .btn-google:hover{background:rgba(255,255,255,.08);}
@@ -1167,7 +1176,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.5.6</span>
+    <span class="ver-badge">v1.5.7</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">27 Mar 2026</span>
   </div>
@@ -1176,8 +1185,14 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     <button class="lang-btn" onclick="setLang('en')">EN</button>
   </div>
   <div class="nav-user" id="navUser">
-    <span class="nav-user-name" id="navUserName"></span>
-    <button class="btn-nav btn-ghost" onclick="authSignOut()">Salir</button>
+    <button class="nav-user-btn" id="navUserBtn" onclick="toggleUserMenu()">
+      <span id="navUserGreeting"></span>
+      <span class="nav-user-chevron">▾</span>
+    </button>
+    <div class="nav-user-menu" id="navUserMenu">
+      <button class="nav-user-menu-item" onclick="goToChars();toggleUserMenu(false)" data-es="Mis personajes" data-en="My characters">Mis personajes</button>
+      <button class="nav-user-menu-item nav-user-menu-signout" onclick="authSignOut()" data-es="Cerrar sesión" data-en="Sign out">Cerrar sesión</button>
+    </div>
   </div>
   <button class="btn-nav btn-ghost" id="btnEntrar" onclick="openModal('login')" data-es="Entrar" data-en="Log in">Entrar</button>
   <button class="btn-nav btn-gold" id="btnComenzar" onclick="openModal('register')" data-es="Comenzar" data-en="Get started">Comenzar</button>
@@ -3154,7 +3169,8 @@ function _updateAuthUI(){
   if(_currentUser){
     if(navUser)navUser.style.display='flex';
     const name=_currentUser.user_metadata?.username||_currentUser.email?.split('@')[0]||'Aventurero';
-    const el=document.getElementById('navUserName');if(el)el.textContent=name;
+    const greet=document.getElementById('navUserGreeting');
+    if(greet)greet.textContent=(currentLang==='es'?'Hola ':'Hi ')+name+'!';
     if(btnE)btnE.style.display='none';
     if(btnC)btnC.style.display='none';
   }else{
@@ -3162,6 +3178,23 @@ function _updateAuthUI(){
     if(btnE)btnE.style.display='';
     if(btnC)btnC.style.display='';
   }
+}
+function toggleUserMenu(force){
+  const btn=document.getElementById('navUserBtn');
+  const menu=document.getElementById('navUserMenu');
+  if(!btn||!menu)return;
+  const open=force!==undefined?force:!menu.classList.contains('open');
+  menu.classList.toggle('open',open);
+  btn.classList.toggle('open',open);
+}
+document.addEventListener('click',e=>{
+  if(!document.getElementById('navUser')?.contains(e.target))toggleUserMenu(false);
+});
+function goToChars(){
+  const chars=_loadSavedChars?_loadSavedChars():[];
+  if(chars.length===1)loadChar(chars[0].id);
+  else if(chars.length>1)openCharPicker();
+  else goToCreateChar();
 }
 async function authSubmit(){
   const email=(document.getElementById('modalEmail')?.value||'').trim();
