@@ -1205,7 +1205,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.6.5</span>
+    <span class="ver-badge">v1.6.6</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">27 Mar 2026</span>
   </div>
@@ -4702,6 +4702,8 @@ function updateCharsNavDropdown(){
   if(dd)dd.style.display=n>0?'flex':'none';
   const mm=document.getElementById('mm-my-chars');
   if(mm)mm.style.display=n>0?'flex':'none';
+  const lndd=document.getElementById('lndd-my-chars');
+  if(lndd)lndd.style.display=n>0?'flex':'none';
 }
 function goToMaps(tab){
   goTo('maps');
