@@ -289,8 +289,10 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .cs-dbd-header::before,.cs-dbd-header::after{content:'';position:absolute;width:12px;height:12px;border-color:var(--lol-gold);border-style:solid;}
 .cs-dbd-header::before{top:-1px;left:-1px;border-width:2px 0 0 2px;}
 .cs-dbd-header::after{bottom:-1px;right:-1px;border-width:0 2px 2px 0;}
-.cs-dbd-portrait{width:90px;height:90px;border-radius:50%;overflow:hidden;flex-shrink:0;border:2px solid var(--lol-border);box-shadow:0 0 0 1px rgba(200,170,110,.15),0 0 20px rgba(11,196,227,.1);}
-.cs-dbd-portrait-img{width:100%;height:100%;background-repeat:no-repeat;background-size:cover;}
+.cs-dbd-portrait{width:90px;height:90px;border-radius:50%;overflow:hidden;flex-shrink:0;border:2px solid var(--lol-border);box-shadow:0 0 0 1px rgba(200,170,110,.15),0 0 20px rgba(11,196,227,.1);position:relative;cursor:pointer;}
+.cs-dbd-portrait-img{width:100%;height:100%;background-repeat:no-repeat;background-size:300% 400%;}
+.cs-portrait-overlay{position:absolute;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;font-size:20px;border-radius:50%;}
+.cs-dbd-portrait:hover .cs-portrait-overlay{display:flex;}
 .cs-dbd-identity{flex:1;min-width:140px;}
 .cs-dbd-name-input{font-family:'Cinzel',serif;font-size:24px;font-weight:700;color:var(--lol-gold-bright);background:transparent;border:none;border-bottom:1px solid rgba(200,170,110,.3);width:100%;padding:3px 0;outline:none;letter-spacing:.05em;}
 .cs-dbd-name-input:focus{border-bottom-color:var(--lol-gold);}
@@ -361,8 +363,25 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 /* Race info */
 .cs-race-flavor{font-style:italic;color:var(--lol-gray-dim);font-size:11px;margin-bottom:8px;line-height:1.6;}
 .cs-race-bonuses{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:6px;}
-.cs-race-traits{display:flex;flex-wrap:wrap;gap:5px;}
-.cs-trait-pill{padding:4px 10px;font-size:10px;background:rgba(11,196,227,.06);color:rgba(11,196,227,.8);border:1px solid rgba(11,196,227,.2);letter-spacing:.04em;}
+.cs-race-traits{display:flex;flex-direction:column;gap:4px;}
+.cs-trait-item{padding:5px 8px;background:rgba(11,196,227,.04);border:1px solid rgba(11,196,227,.15);cursor:pointer;}
+.cs-trait-item:hover{background:rgba(11,196,227,.1);border-color:rgba(11,196,227,.3);}
+.cs-trait-name{font-size:11px;color:rgba(11,196,227,.85);font-weight:700;letter-spacing:.04em;display:flex;align-items:center;gap:5px;}
+.cs-trait-name::before{content:'▶';font-size:7px;color:rgba(11,196,227,.5);transition:transform .15s;}
+.cs-trait-item.open .cs-trait-name::before{transform:rotate(90deg);}
+.cs-trait-desc{font-size:10px;color:var(--lol-gray-dim);line-height:1.5;margin-top:4px;display:none;padding-top:3px;border-top:1px solid rgba(11,196,227,.1);}
+.cs-trait-item.open .cs-trait-desc{display:block;}
+/* Combat actions tab */
+.cs-action-section{margin-bottom:12px;}
+.cs-action-section-label{font:700 10px/1 'Cinzel',serif;letter-spacing:.2em;color:var(--lol-gold);text-transform:uppercase;padding-bottom:4px;border-bottom:1px solid rgba(200,170,110,.2);margin-bottom:6px;}
+.cs-action-item{display:flex;align-items:flex-start;gap:8px;padding:5px 6px;border:1px solid rgba(120,90,40,.2);margin-bottom:4px;background:var(--lol-panel2);cursor:pointer;transition:all .15s;}
+.cs-action-item:hover{border-color:var(--lol-border);background:rgba(200,170,110,.06);}
+.cs-action-icon{font-size:14px;flex-shrink:0;margin-top:1px;}
+.cs-action-body{flex:1;min-width:0;}
+.cs-action-name{font:700 11px/1 'Cinzel',serif;color:var(--lol-gold);margin-bottom:2px;}
+.cs-action-desc{font-size:10px;color:var(--lol-gray-dim);line-height:1.4;}
+.cs-action-roll-btn{background:rgba(200,170,110,.1);border:1px solid rgba(200,170,110,.3);color:var(--lol-gold);font-size:9px;padding:3px 7px;cursor:pointer;font-family:'Cinzel',serif;white-space:nowrap;flex-shrink:0;transition:all .15s;align-self:center;}
+.cs-action-roll-btn:hover{background:rgba(200,170,110,.2);}
 .cs-footer{display:flex;flex-wrap:wrap;gap:8px;}
 /* compat shims — keep sheet-hp-tracker hidden (HP always in header now) */
 .sheet-hp-tracker{display:none!important;}
@@ -1323,7 +1342,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.8.0</span>
+    <span class="ver-badge">v1.8.1</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">28 Mar 2026</span>
   </div>
@@ -1814,7 +1833,11 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
               <div class="cs-dbd" id="csDbd">
                 <!-- Header: retrato circular + identidad + HP + acciones -->
                 <div class="cs-dbd-header">
-                  <div class="cs-dbd-portrait"><div class="cs-dbd-portrait-img" id="csAvatar"></div></div>
+                  <div class="cs-dbd-portrait" onclick="pickPortrait()" title="Cambiar retrato">
+                    <div class="cs-dbd-portrait-img" id="csAvatar"></div>
+                    <div class="cs-portrait-overlay">📷</div>
+                  </div>
+                  <input type="file" id="portraitFileInput" accept="image/*" style="display:none" onchange="onPortraitFile(event)">
                   <div class="cs-dbd-identity">
                     <input class="cs-dbd-name-input" id="csNameInput" placeholder="Nombre del personaje..." autocomplete="off" spellcheck="false">
                     <div class="cs-dbd-meta" id="csMeta">Raza · Clase · Nivel 1</div>
@@ -1893,6 +1916,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
                         <div class="cs-tabs">
                           <div class="cs-tab active" onclick="switchCsTab('inv',this)">⚔️ Inventario</div>
                           <div class="cs-tab" onclick="switchCsTab('spells',this)">🔮 Hechizos</div>
+                          <div class="cs-tab" onclick="switchCsTab('actions',this)">🗡️ Acciones</div>
                           <div class="cs-tab" onclick="switchCsTab('notes',this)">📝 Notas</div>
                         </div>
                         <!-- Inventario -->
@@ -1941,6 +1965,8 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
                           </div>
                           <div id="csSpellsKnown" class="cs-spells-known-section"></div>
                         </div>
+                        <!-- Acciones -->
+                        <div class="cs-tab-content" id="cstab-actions"></div>
                         <!-- Notas -->
                         <div class="cs-tab-content" id="cstab-notes">
                           <textarea id="csNotesArea" class="cs-notes-area" placeholder="Notas del personaje: aliados, misiones, equipamiento especial..." oninput="saveCharNotes()"></textarea>
@@ -3651,9 +3677,10 @@ function buildSheet(){
   const rd=RACE_DATA[rk]||{};
   const st=rolledStats||{str:12,dex:14,con:13,int:11,wis:10,cha:15};
 
-  // Portrait (circular, 76x76, cover)
+  // Portrait — use race sprite tile (no cover override)
   const avatarEl=document.getElementById('csAvatar');
-  if(avatarEl) avatarEl.style.cssText=`width:76px;height:76px;${raceBg(rk)};background-repeat:no-repeat;background-size:cover;`;
+  if(avatarEl) avatarEl.style.cssText=`${raceBg(rk)};background-repeat:no-repeat;`;
+  _pendingPortrait=null;
 
   // Name (editable input — pre-fill suggestion)
   const nameInput=document.getElementById('csNameInput');
@@ -3692,7 +3719,8 @@ function buildSheet(){
   const traitsEl=document.getElementById('csRaceTraits');
   if(flavorEl) flavorEl.textContent=currentLang==='es'?(rd.tagEs||''):(rd.tagEn||'');
   if(bonusEl) bonusEl.innerHTML=(rd.bonus||[]).map(b=>`<div class="race-bonus-pill">${b}</div>`).join('');
-  if(traitsEl) traitsEl.innerHTML=(rd.traits||[]).map(t=>`<div class="cs-trait-pill">${t}</div>`).join('');
+  if(traitsEl) traitsEl.innerHTML=(rd.traits||[]).map(t=>{const desc=RACE_TRAIT_DETAILS[t]||'';return`<div class="cs-trait-item" onclick="this.classList.toggle('open')"><div class="cs-trait-name">${t}</div>${desc?`<div class="cs-trait-desc">${desc}</div>`:''}</div>`;}).join('');
+  _renderCombatActions(ck);
   _renderSavingThrows();
   _renderSkillsList();
   _renderPassives();
@@ -3712,8 +3740,8 @@ function saveCharacter(btn){
   const chars=_loadSavedChars();
   const maxHp=hpBase+conMod;
   const existingIdx=_loadedCharId?chars.findIndex(c=>c.id===_loadedCharId):-1;
-  const charObj={id:_loadedCharId||Date.now().toString(),name,race:rk,class:ck,stats:st,hp:maxHp,currentHp:maxHp,ca:10+dexMod,level:_currentLevel||1,conditions:[..._activeConditions],skillProfs:[..._skillProfs],saveProfs:[..._saveProfs],savedAt:Date.now()};
-  if(existingIdx>=0){charObj.hp=chars[existingIdx].hp;charObj.currentHp=chars[existingIdx].currentHp;chars.splice(existingIdx,1,charObj);}
+  const charObj={id:_loadedCharId||Date.now().toString(),name,race:rk,class:ck,stats:st,hp:maxHp,currentHp:maxHp,ca:10+dexMod,level:_currentLevel||1,conditions:[..._activeConditions],skillProfs:[..._skillProfs],saveProfs:[..._saveProfs],savedAt:Date.now(),portrait:_pendingPortrait||null};
+  if(existingIdx>=0){charObj.hp=chars[existingIdx].hp;charObj.currentHp=chars[existingIdx].currentHp;charObj.portrait=_pendingPortrait||chars[existingIdx].portrait||null;chars.splice(existingIdx,1,charObj);}
   else chars.unshift(charObj);
   localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));
   const orig=btn.innerHTML;
@@ -3811,13 +3839,21 @@ function loadChar(id){
   _updateSheetHp(cur,c.hp);
   _activeConditions=new Set(c.conditions||[]);
   _renderConditions();
-  // Inventory, spells, notes
+  // Inventory, spells, notes, actions
   _loadedCharClass=c.class||'';
-  _csSpellSlots=null; // force re-build for new character
+  _csSpellSlots=null;
   _charInventory=c.inventory||[];
   _csKnownSpells=c.knownSpells||[];
   _charNotes=c.charNotes||'';
   _renderInventory();
+  _renderCombatActions(c.class||'fighter');
+  // Restore portrait
+  const avatarEl2=document.getElementById('csAvatar');
+  if(avatarEl2){
+    if(c.portrait){avatarEl2.style.backgroundImage=`url('${c.portrait}')`;avatarEl2.style.backgroundSize='cover';avatarEl2.style.backgroundPosition='center top';}
+    else{avatarEl2.style.cssText=`${raceBg(c.race)};background-repeat:no-repeat;`;}
+  }
+  _pendingPortrait=null;
   // Reset tabs to Inventario
   document.querySelectorAll('.cs-tab').forEach((t,i)=>t.classList.toggle('active',i===0));
   document.querySelectorAll('.cs-tab-content').forEach((c,i)=>c.classList.toggle('active',i===0));
@@ -4461,6 +4497,160 @@ function saveCharNotes(){
 }
 
 /* ══ AUTOCOMPLETE (Inventory + Spells) ══ */
+// ── Portrait upload ──
+let _pendingPortrait=null;
+function pickPortrait(){document.getElementById('portraitFileInput').click();}
+function onPortraitFile(e){
+  const file=e.target.files[0];if(!file)return;
+  e.target.value='';
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    const url=ev.target.result;
+    const el=document.getElementById('csAvatar');
+    if(el){el.style.backgroundImage=`url('${url}')`;el.style.backgroundSize='cover';el.style.backgroundPosition='center top';}
+    _pendingPortrait=url;
+    // auto-persist if char is already saved
+    if(_loadedCharId){
+      const chars=_loadSavedChars();
+      const c=chars.find(x=>x.id===_loadedCharId);
+      if(c){c.portrait=url;localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));}
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── Race trait mechanical descriptions ──
+const RACE_TRAIT_DETAILS={
+  'Visión en la oscuridad':'Ves en oscuridad hasta 60 pies como si fuera luz tenue, y en luz tenue como si fuera luz brillante. No distingues colores en la oscuridad, solo tonos grises.',
+  'Resistencia al encantamiento':'Tienes ventaja en las tiradas de salvación contra ser encantado.',
+  'Trance élfico':'No necesitas dormir. En cambio, meditas profundamente por 4 horas, obteniendo el mismo beneficio que 8 horas de sueño.',
+  'Percepción aguda':'Tienes competencia en la habilidad Percepción.',
+  'Suerte del mediano':'Cuando sacas un 1 en el d20 de una tirada de ataque, cheque de habilidad o tirada de salvación, puedes volver a lanzar el dado y debes usar el nuevo resultado.',
+  'Valentía innata':'Tienes ventaja en las tiradas de salvación contra el miedo.',
+  'Agilidad mediana':'Puedes moverte a través del espacio de cualquier criatura cuyo tamaño sea mayor al tuyo.',
+  'Discreción natural':'Puedes intentar Esconderte aun cuando solo estés levemente oscurecido por follaje, lluvia, nieve, niebla u otros fenómenos naturales.',
+  'Resistencia al veneno':'Tienes ventaja en las tiradas de salvación contra el veneno y resistencia al daño por veneno.',
+  'Entrenamiento con armas enanas':'Tienes competencia con el hacha de guerra, el hacha de mano, el martillo ligero y el martillo de guerra.',
+  'Conocimiento de piedra':'Cuando hagas una tirada de Inteligencia (Historia) relacionada con el origen de trabajos en piedra, añade doble tu bonificador de competencia en lugar de tu bonificador de competencia normal.',
+  'Resistencia elemental':'Tienes resistencia al tipo de daño asociado con tu ascendencia dracónica.',
+  'Arma de aliento':'Puedes usar tu acción para exhalar energía destructiva. El tipo de daño es determinado por tu ascendencia dracónica (CD 8 + mod. CON + bonif. competencia).',
+  'Ascendencia dracónica':'Tienes ascendencia dracónica de un tipo de dragón. El tipo de daño asociado depende del linaje elegido.',
+  'Presencia imponente':'Tienes competencia en la habilidad Intimidación.',
+  'Resistencia al fuego':'Tienes resistencia al daño de fuego.',
+  'Herencia infernal':'Conoces el truco Prestidigitación. Al nivel 3 puedes lanzar Represalia infernal una vez por descanso largo. Al nivel 5, Oscuridad una vez por descanso largo.',
+  'Legado oscuro':'Usas Carisma como modificador de conjuro para estos hechizos.',
+  'Implacable':'Cuando caes a 0 PG pero no mueres directamente, puedes caer a 1 PG en su lugar (1/descanso largo).',
+  'Amenazante':'Tienes competencia en la habilidad Intimidación.',
+  'Ataques salvajes':'Cuando obtienes un golpe crítico con un ataque con arma melé, puedes lanzar uno de los dados de daño del arma una vez más y sumarlo al daño extra del crítico.',
+  'Astucia gnómica':'Tienes ventaja en las tiradas de salvación de Inteligencia, Sabiduría y Carisma contra magia.',
+  'Resistencia mágica':'Ventaja en tiradas de salvación contra conjuros y otros efectos mágicos.',
+  'Conocimiento arcano':'Tienes competencia en la habilidad Arcanismo.',
+  'Llevar la luz':'Conoces el truco Luz. Carisma es tu modificador de conjuro para este hechizo.',
+  'Transformación celestial':'Como acción, puedes transformarte por 1 minuto revelando tu naturaleza celestial. Emites luz brillante en 10 pies y luz tenue en 10 pies adicionales (1/descanso largo).',
+  'Resistencia radiante':'Tienes resistencia al daño necrótico y radiante.',
+  'Garras felinas':'Tus garras son armas naturales que provocan 1d4 + mod. FUE de daño cortante. Puedes usar DES en lugar de FUE para las tiradas de ataque.',
+  'Caída de gato':'Cuando caes, reduces el daño por caída en una cantidad igual a 5 veces tu nivel de monje... o simplemente aterrizas elegantemente en tus pies.',
+  'Impulso felino':'Una vez por descanso corto o largo puedes doblar tu velocidad de movimiento hasta el final del turno.',
+  'Magia firbolg':'Puedes lanzar Detectar magia y Disfraz excepto el propio una vez c/u por descanso corto. SAB es tu modificador de conjuro.',
+  'Hablar con bestias':'Puedes comunicarte con bestias de forma simplificada. Pueden entender el significado de tus palabras aunque tengas dificultades para entenderlas.',
+  'Paso oculto':'Como acción adicional, puedes volverse invisible hasta el comienzo de tu próximo turno (1/descanso corto).',
+  'Lengua de bestias':'Puedes lanzar Hablar con animales a voluntad sin gastar espacios de conjuro.',
+  'Imitación perfecta':'Puedes duplicar con precisión cualquier sonido que hayas escuchado (voz, música, efectos de sonido). Una tirada de perspicacia vs. tu Engaño puede revelar que es imitación.',
+  'Maestría del experto':'Cuando terminas un entrenamiento corto o largo, puedes cambiar una competencia por otra (habilidades, herramientas, idiomas).',
+  'Experto en sigilo':'Tienes competencia en Sigilo.',
+  'Manos expertas':'Tienes competencia en dos herramientas de artesano a tu elección.',
+  'Lengua extra':'Conoces un idioma adicional a tu elección.',
+  'Habilidad extra':'Ganas competencia en una habilidad a tu elección.',
+  'Dote extra al nivel 1':'Ganas una dote a nivel 1 (si usa la variante de dotes del DM).',
+  'Adaptabilidad innata':'Cuando ganas un nivel y tu clase otorga un bonificador de característica, puedes substituir una mejora de característica por una dote.'
+};
+
+// ── Combat Actions tab ──
+function _renderCombatActions(cls){
+  const el=document.getElementById('cstab-actions');if(!el)return;
+  const st=rolledStats||{str:10,dex:10,con:10,int:10,wis:10,cha:10};
+  const strMod=Math.floor((st.str-10)/2);
+  const dexMod=Math.floor((st.dex-10)/2);
+  const atkMod=Math.max(strMod,dexMod);
+  const atkSign=atkMod>=0?'+':'';
+  const pb=profBonus(_currentLevel||1);
+  const totalAtk=atkMod+pb;
+  const totalSign=totalAtk>=0?'+':'';
+
+  const BONUS_ACTIONS={
+    fighter:'Segunda Vuelta de Aliento (recuperar 1d10+nivel PG), Oleada de Acción (acción adicional completa, 1/desc. corto)',
+    rogue:'Acción Astuta: Esconderse, Desengancharse o Correr gratis',
+    barbarian:'Entrar en Ira (ventaja FUE, resist. daño físico, bonus daño)',
+    monk:'Ráfaga de Golpes (2 ataques desarmados extra gastando 1 Ki)',
+    ranger:'Marca del cazador (1d6 extra vs enemigo marcado, 1/desc. corto)',
+    paladin:'Golpe Divino (gasta espacio de conjuro para bonus de daño)',
+    bard:'Inspiración Bárdica (otorgar dado a aliado)',
+    warlock:'Paso del Portal del Pacto (si tienes el invocación)',
+  };
+  const bonusAction=BONUS_ACTIONS[cls]||'Depende de rasgos de clase y objetos.';
+
+  el.innerHTML=`
+  <div class="cs-action-section">
+    <div class="cs-action-section-label">Acción</div>
+    <div class="cs-action-item" onclick="rollD20(${totalAtk},'Ataque')">
+      <div class="cs-action-icon">⚔️</div>
+      <div class="cs-action-body"><div class="cs-action-name">Atacar</div><div class="cs-action-desc">Realiza un ataque con arma. Bonif. ataque: ${totalSign}${totalAtk} (incluyendo competencia)</div></div>
+      <button class="cs-action-roll-btn">🎲 Tirar</button>
+    </div>
+    <div class="cs-action-item">
+      <div class="cs-action-icon">🔮</div>
+      <div class="cs-action-body"><div class="cs-action-name">Lanzar hechizo</div><div class="cs-action-desc">Lanza un conjuro con tiempo de lanzamiento de 1 acción.</div></div>
+    </div>
+    <div class="cs-action-item">
+      <div class="cs-action-icon">🛡️</div>
+      <div class="cs-action-body"><div class="cs-action-name">Esquivar</div><div class="cs-action-desc">Los ataques contra ti tienen desventaja y tienes ventaja en las tiradas de salvación de DES hasta tu próximo turno.</div></div>
+    </div>
+    <div class="cs-action-item">
+      <div class="cs-action-icon">🤝</div>
+      <div class="cs-action-body"><div class="cs-action-name">Ayudar</div><div class="cs-action-desc">Das ventaja al siguiente chequeo o ataque de un aliado adyacente antes de tu próximo turno.</div></div>
+    </div>
+    <div class="cs-action-item">
+      <div class="cs-action-icon">🏃</div>
+      <div class="cs-action-body"><div class="cs-action-name">Correr</div><div class="cs-action-desc">Tu velocidad de movimiento se duplica este turno.</div></div>
+    </div>
+    <div class="cs-action-item">
+      <div class="cs-action-icon">👁️</div>
+      <div class="cs-action-body"><div class="cs-action-name">Esconderse</div><div class="cs-action-desc">Intenta ocultarte (cheque de DES·Sigilo vs. Percepción Pasiva del enemigo).</div></div>
+    </div>
+    <div class="cs-action-item">
+      <div class="cs-action-icon">💪</div>
+      <div class="cs-action-body"><div class="cs-action-name">Empujar / Derribar</div><div class="cs-action-desc">Reemplaza un ataque: cheque de FUE (Atletismo) vs. FUE o DES del objetivo para moverlo 5 pies o derribarlo.</div></div>
+    </div>
+    <div class="cs-action-item">
+      <div class="cs-action-icon">🎯</div>
+      <div class="cs-action-body"><div class="cs-action-name">Preparar</div><div class="cs-action-desc">Reserva tu acción para reaccionar a un desencadenante específico durante el turno de otro.</div></div>
+    </div>
+  </div>
+  <div class="cs-action-section">
+    <div class="cs-action-section-label">Acción Adicional</div>
+    <div class="cs-action-item">
+      <div class="cs-action-icon">⚡</div>
+      <div class="cs-action-body"><div class="cs-action-name">${CLASS_NAMES?.es?.[cls]||cls}</div><div class="cs-action-desc">${bonusAction}</div></div>
+    </div>
+    <div class="cs-action-item">
+      <div class="cs-action-icon">🗡️</div>
+      <div class="cs-action-body"><div class="cs-action-name">Armas de dos manos / Ataque con arma de mano</div><div class="cs-action-desc">Al atacar con arma de dos manos o arma ligera en mano secundaria, puedes atacar de nuevo con la otra (sin añadir mod. al daño de la segunda).</div></div>
+    </div>
+  </div>
+  <div class="cs-action-section">
+    <div class="cs-action-section-label">Reacción</div>
+    <div class="cs-action-item" onclick="rollD20(${totalAtk},'Ataque de Oportunidad')">
+      <div class="cs-action-icon">⚠️</div>
+      <div class="cs-action-body"><div class="cs-action-name">Ataque de oportunidad</div><div class="cs-action-desc">Cuando un enemigo sale de tu alcance melé, puedes usar tu reacción para realizar un ataque.</div></div>
+      <button class="cs-action-roll-btn">🎲 Tirar</button>
+    </div>
+    <div class="cs-action-item">
+      <div class="cs-action-icon">🛡️</div>
+      <div class="cs-action-body"><div class="cs-action-name">Hechizo Shield / otros</div><div class="cs-action-desc">Algunos hechizos o rasgos de clase se activan como reacción (ej. Escudo +5 CA, Represalia Infernal, Absorber Elementos).</div></div>
+    </div>
+  </div>`;
+}
+
 let _acInvCache=null;
 let _acSpellCache=null;
 let _acDropdown=null;

@@ -1,7 +1,12 @@
 {
-  "version": "1.8.0",
+  "version": "1.8.1",
   "date": "2026-03-28",
   "history": [
+    {
+      "version": "1.8.1",
+      "date": "2026-03-28",
+      "note": "Ficha: retrato clickeable (subir foto, persiste), rasgos de raza expandibles con mecánicas, tab Acciones con acción/adicional/reacción por clase y tirada directa"
+    },
     {
       "version": "1.8.0",
       "date": "2026-03-28",
