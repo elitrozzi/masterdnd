@@ -119,6 +119,12 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .land-nav-links a:hover{color:var(--text);background:rgba(255,255,255,.05);}
 .land-nav-spacer{flex:1;}
 .land-nav-right{display:flex;align-items:center;gap:12px;}
+.land-nav-dropdown{position:relative;}
+.land-nav-dropdown>a{cursor:pointer;}
+.land-nav-dd-menu{position:absolute;top:calc(100% + 10px);left:0;background:rgba(9,7,20,.97);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:6px;min-width:185px;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;z-index:300;backdrop-filter:blur(12px);transform:translateY(-6px);}
+.land-nav-dropdown.open .land-nav-dd-menu{opacity:1;pointer-events:auto;transform:translateY(0);}
+.land-nav-dd-item{padding:9px 14px;border-radius:7px;font-size:13px;color:rgba(220,230,245,.75);cursor:pointer;transition:.15s;white-space:nowrap;}
+.land-nav-dd-item:hover{background:rgba(248,198,98,.1);color:var(--gold);}
 .lbtn-ghost{background:transparent;border:1px solid var(--border);color:var(--text-m);padding:8px 18px;border-radius:8px;font-size:13px;font-weight:600;transition:.15s;letter-spacing:.3px;}
 .lbtn-ghost:hover{border-color:var(--gold);color:var(--gold);}
 .lbtn-gold{background:linear-gradient(135deg,var(--gold) 0%,#e8a820 100%);color:#1a1400;padding:8px 20px;border-radius:8px;font-size:13px;font-weight:600;transition:.15s;}
@@ -1194,7 +1200,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.6.0</span>
+    <span class="ver-badge">v1.6.1</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">27 Mar 2026</span>
   </div>
@@ -1414,7 +1420,13 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <span class="llogo-m">MASTER</span><span class="llogo-d">DND</span>
       </div>
       <div class="land-nav-links">
-        <a onclick="goToCharsSmart()" data-es="Personajes" data-en="Characters">Personajes</a>
+        <div class="land-nav-dropdown" id="lndd-chars">
+          <a onclick="toggleLandNavDD('lndd-chars',event)" data-es="Personajes" data-en="Characters">Personajes ▾</a>
+          <div class="land-nav-dd-menu">
+            <div class="land-nav-dd-item" id="lndd-my-chars" onclick="closeLandNavDD();goToMyChars()" style="display:none;" data-es="Mis personajes" data-en="My characters">⚔️ Mis personajes</div>
+            <div class="land-nav-dd-item" onclick="closeLandNavDD();goToCreateChar()" data-es="Crear personaje" data-en="Create character">✨ Crear personaje</div>
+          </div>
+        </div>
         <a onclick="goTo('maps')" data-es="Mapas" data-en="Maps">Mapas</a>
         <a onclick="goTo('sounds')" data-es="Sonidos" data-en="Sounds">Sonidos</a>
         <a onclick="goTo('compendium')" data-es="Compendio" data-en="Compendium">Compendio</a>
@@ -1425,8 +1437,11 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
           <button class="lang-btn active" onclick="setLang('es')">ES</button>
           <button class="lang-btn" onclick="setLang('en')">EN</button>
         </div>
-        <button class="lbtn-ghost" onclick="openModal('login')" data-es="Entrar" data-en="Log in">Entrar</button>
-        <button class="lbtn-gold" onclick="openModal('register')" data-es="Comenzar" data-en="Get started">Comenzar</button>
+        <button class="lbtn-ghost" id="lbtnEntrar" onclick="openModal('login')" data-es="Entrar" data-en="Log in">Entrar</button>
+        <button class="lbtn-gold" id="lbtnComenzar" onclick="openModal('register')" data-es="Comenzar" data-en="Get started">Comenzar</button>
+        <div class="nav-user" id="landNavUser" style="display:none;">
+          <button class="nav-user-btn" onclick="toggleUserMenu()"><span id="landNavGreeting"></span> <span class="nav-user-chevron">▾</span></button>
+        </div>
       </div>
       <button class="hamb-btn" onclick="openMobileMenu()" aria-label="Menú"><span class="hamb-line"></span><span class="hamb-line"></span><span class="hamb-line"></span></button>
     </nav>
@@ -3186,19 +3201,38 @@ function _updateAuthUI(){
   const navUser=document.getElementById('navUser');
   const btnE=document.getElementById('btnEntrar');
   const btnC=document.getElementById('btnComenzar');
+  const lbtnE=document.getElementById('lbtnEntrar');
+  const lbtnC=document.getElementById('lbtnComenzar');
+  const landUser=document.getElementById('landNavUser');
   if(_currentUser){
-    if(navUser)navUser.style.display='flex';
     const name=_currentUser.user_metadata?.username||_currentUser.email?.split('@')[0]||'Aventurero';
+    const greeting=(currentLang==='es'?'Hola ':'Hi ')+name+'!';
+    if(navUser)navUser.style.display='flex';
     const greet=document.getElementById('navUserGreeting');
-    if(greet)greet.textContent=(currentLang==='es'?'Hola ':'Hi ')+name+'!';
+    if(greet)greet.textContent=greeting;
     if(btnE)btnE.style.display='none';
     if(btnC)btnC.style.display='none';
+    // landing nav
+    if(landUser)landUser.style.display='flex';
+    const lgreet=document.getElementById('landNavGreeting');
+    if(lgreet)lgreet.textContent=greeting;
+    if(lbtnE)lbtnE.style.display='none';
+    if(lbtnC)lbtnC.style.display='none';
+    // show "Mis personajes" in landing dropdown if there are saved chars
+    const lnddMy=document.getElementById('lndd-my-chars');
+    if(lnddMy)lnddMy.style.display=_loadSavedChars().length>0?'block':'none';
   }else{
     if(navUser)navUser.style.display='none';
     if(btnE)btnE.style.display='';
     if(btnC)btnC.style.display='';
+    if(landUser)landUser.style.display='none';
+    if(lbtnE)lbtnE.style.display='';
+    if(lbtnC)lbtnC.style.display='';
   }
 }
+function toggleLandNavDD(id,e){if(e)e.stopPropagation();const el=document.getElementById(id);if(el)el.classList.toggle('open');}
+function closeLandNavDD(){document.querySelectorAll('.land-nav-dropdown.open').forEach(d=>d.classList.remove('open'));}
+document.addEventListener('click',()=>closeLandNavDD());
 function toggleUserMenu(force){
   const btn=document.getElementById('navUserBtn');
   const menu=document.getElementById('navUserMenu');
@@ -3454,6 +3488,9 @@ function saveCharacter(btn){
 function renderSavedChars(){
   updateCharsNavDropdown();
   const chars=_loadSavedChars();
+  // update landing dropdown "Mis personajes" visibility
+  const lnddMy=document.getElementById('lndd-my-chars');
+  if(lnddMy)lnddMy.style.display=chars.length>0?'block':'none';
   const section=document.getElementById('savedCharsSection');
   const grid=document.getElementById('savedCharsGrid');
   if(!section||!grid)return;
@@ -3496,6 +3533,7 @@ function loadChar(id){
   const chars=_loadSavedChars();
   const c=chars.find(x=>x.id===id);
   if(!c)return;
+  _suppressSavedChars=true;
   selections={mode:'manual',race:c.race,class:c.class};
   rolledStats={...c.stats};
   _selectedRace=c.race;
@@ -4265,13 +4303,12 @@ function loadTemplate(type){
 function toggleNavDropdown(id,e){e.stopPropagation();const el=document.getElementById(id);const isOpen=el.classList.contains('open');closeNavDropdowns();if(!isOpen)el.classList.add('open');}
 function closeNavDropdowns(){document.querySelectorAll('.nav-dropdown.open').forEach(d=>d.classList.remove('open'));}
 document.addEventListener('click',closeNavDropdowns);
-let _suppressSavedChars=false;
+let _suppressSavedChars=true;
 function goToMyChars(){
   const chars=_loadSavedChars();
-  if(chars.length===0)return;
-  _suppressSavedChars=true;
-  goTo('characters');
+  if(chars.length===0){goToCreateChar();return;}
   _suppressSavedChars=false;
+  goTo('characters');
   if(chars.length===1){
     requestAnimationFrame(()=>loadChar(chars[0].id));
   } else {
@@ -4306,7 +4343,6 @@ function closeCharPicker(){
 function goToCreateChar(){
   _suppressSavedChars=true;
   goTo('characters');
-  _suppressSavedChars=false;
 }
 function goToCharsSmart(){
   const chars=_loadSavedChars();
