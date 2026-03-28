@@ -493,6 +493,13 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .cs-notes-area{flex:1;background:rgba(255,255,255,.03);border:1px solid rgba(120,90,40,.3);color:var(--lol-gray);padding:9px;font-size:11px;line-height:1.65;resize:none;font-family:inherit;min-height:80px;outline:none;}
 .cs-notes-area:focus{border-color:rgba(200,170,100,.4);}
 .cs-notes-area::placeholder{color:rgba(150,130,100,.4);}
+/* ── Autocomplete dropdown ── */
+.ac-dropdown{position:fixed;background:#080d1a;border:1px solid rgba(200,170,100,.45);z-index:99999;max-height:220px;overflow-y:auto;box-shadow:0 6px 28px rgba(0,0,0,.75);}
+.ac-item{padding:7px 10px;font-size:11px;color:var(--lol-gray);cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;border-bottom:1px solid rgba(255,255,255,.04);transition:.1s;}
+.ac-item:last-child{border-bottom:none;}
+.ac-item:hover,.ac-item.active{background:rgba(200,170,100,.12);color:var(--lol-gold);}
+.ac-item-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ac-item-meta{font-size:9px;color:rgba(150,130,100,.65);flex-shrink:0;white-space:nowrap;}
 /* ── Status Conditions ── */
 .cs-cond-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
 .cs-cond-label{font:700 10px/1 'Cinzel',serif;letter-spacing:.22em;color:var(--lol-gold);text-transform:uppercase;display:flex;align-items:center;gap:8px;}
@@ -1277,7 +1284,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.7.7</span>
+    <span class="ver-badge">v1.7.8</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">28 Mar 2026</span>
   </div>
@@ -1856,7 +1863,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
                             <button class="inv-add-btn" onclick="toggleInvForm()">+ Añadir</button>
                           </div>
                           <div id="invAddForm" class="inv-add-form" style="display:none;">
-                            <input id="invItemName" class="inv-input" placeholder="Nombre del objeto...">
+                            <input id="invItemName" class="inv-input" placeholder="Nombre del objeto..." oninput="onInvNameInput(event)" onblur="_acBlur()" autocomplete="off">
                             <div class="inv-form-row">
                               <input id="invItemQty" type="number" min="1" value="1" class="inv-input inv-input-sm" placeholder="Cant.">
                               <input id="invItemWeight" type="number" min="0" step="0.5" value="0" class="inv-input inv-input-sm" placeholder="Peso lb">
@@ -1884,7 +1891,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
                             <div id="csSlotRow" class="cs-slot-row"></div>
                           </div>
                           <div class="cs-spell-add-row">
-                            <input id="csSpellInput" placeholder="Nombre del hechizo..." onkeydown="if(event.key==='Enter')addCsSpell()">
+                            <input id="csSpellInput" placeholder="Nombre del hechizo..." oninput="onSpellNameInput(event)" onblur="_acBlur()" onkeydown="if(event.key==='Enter'&&!_acDropdown)addCsSpell()" autocomplete="off">
                             <select id="csSpellLevel">
                               <option value="0">Truco</option><option value="1">Niv 1</option><option value="2">Niv 2</option>
                               <option value="3">Niv 3</option><option value="4">Niv 4</option><option value="5">Niv 5</option>
@@ -4119,6 +4126,114 @@ function saveCharNotes(){
   if(!_loadedCharId)return;
   const chars=_loadSavedChars();const c=chars.find(x=>x.id===_loadedCharId);
   if(c){c.charNotes=_charNotes;localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));}
+}
+
+/* ══ AUTOCOMPLETE (Inventory + Spells) ══ */
+let _acInvCache=null;
+let _acSpellCache=null;
+let _acDropdown=null;
+let _acKeyHandler=null;
+let _acInput=null;
+
+const AC_CAT_MAP={
+  weapon:'weapon',ammunition:'weapon',
+  armor:'armor',shield:'armor',
+  potion:'consumable',scroll:'consumable',
+  'adventuring-gear':'misc',tools:'misc','mounts-and-vehicles':'misc',
+  'wondrous-items':'misc',rings:'misc',rods:'misc',staves:'misc',wands:'misc'
+};
+
+async function _loadInvAcData(){
+  if(_acInvCache)return _acInvCache;
+  _acInvCache=[];
+  try{
+    const r=await fetch(`${DND_API}/equipment?limit=500`);
+    const j=await r.json();
+    _acInvCache=(j.results||[]).map(i=>({
+      name:i.name,
+      type:AC_CAT_MAP[i.equipment_category?.index]||'misc',
+      weight:i.weight||0
+    }));
+  }catch(e){}
+  return _acInvCache;
+}
+
+async function _loadSpellAcData(){
+  if(_acSpellCache)return _acSpellCache;
+  // Prefer compendium cache (already loaded with levels)
+  if(cCacheLoaded['spells']&&cCache.spells.length){
+    _acSpellCache=cCache.spells.map(s=>({name:s.name,level:s.level??0}));
+    return _acSpellCache;
+  }
+  _acSpellCache=[];
+  try{
+    const r=await fetch(`${DND_API}/spells?limit=500`);
+    const j=await r.json();
+    _acSpellCache=(j.results||[]).map(s=>({name:s.name,level:s.level??0}));
+  }catch(e){}
+  return _acSpellCache;
+}
+
+function _closeAc(){
+  if(_acDropdown){_acDropdown.remove();_acDropdown=null;}
+  if(_acInput&&_acKeyHandler){_acInput.removeEventListener('keydown',_acKeyHandler);_acKeyHandler=null;}
+}
+
+function _acBlur(){setTimeout(_closeAc,160);}
+
+function _showAc(inputEl,items,query,onSelect){
+  _closeAc();
+  if(!query||query.length<2)return;
+  const q=query.toLowerCase();
+  // Starts-with first, then includes
+  const sw=items.filter(i=>i.name.toLowerCase().startsWith(q));
+  const inc=items.filter(i=>!i.name.toLowerCase().startsWith(q)&&i.name.toLowerCase().includes(q));
+  const matches=[...sw,...inc].slice(0,10);
+  if(!matches.length)return;
+
+  const dd=document.createElement('div');
+  dd.className='ac-dropdown';
+  const rect=inputEl.getBoundingClientRect();
+  dd.style.cssText=`left:${rect.left}px;top:${rect.bottom+2}px;width:${rect.width}px;`;
+  dd.innerHTML=matches.map((item,idx)=>{
+    const meta=item.level!=null
+      ?`<span class="ac-item-meta">${item.level===0?'Truco':'Niv. '+item.level}</span>`
+      :item.weight>0?`<span class="ac-item-meta">${item.weight} lb</span>`:'';
+    return`<div class="ac-item" data-idx="${idx}"><span class="ac-item-name">${item.name}</span>${meta}</div>`;
+  }).join('');
+  document.body.appendChild(dd);
+  _acDropdown=dd;
+  _acInput=inputEl;
+
+  dd.querySelectorAll('.ac-item').forEach((el,idx)=>{
+    el.addEventListener('mousedown',e=>{e.preventDefault();onSelect(matches[idx]);_closeAc();});
+  });
+
+  let activeIdx=-1;
+  _acKeyHandler=e=>{
+    if(e.key==='ArrowDown'){e.preventDefault();activeIdx=Math.min(activeIdx+1,matches.length-1);dd.querySelectorAll('.ac-item').forEach((el,i)=>el.classList.toggle('active',i===activeIdx));}
+    else if(e.key==='ArrowUp'){e.preventDefault();activeIdx=Math.max(activeIdx-1,0);dd.querySelectorAll('.ac-item').forEach((el,i)=>el.classList.toggle('active',i===activeIdx));}
+    else if(e.key==='Enter'&&activeIdx>=0){e.preventDefault();onSelect(matches[activeIdx]);_closeAc();}
+    else if(e.key==='Escape'){_closeAc();}
+  };
+  inputEl.addEventListener('keydown',_acKeyHandler);
+}
+
+async function onInvNameInput(e){
+  const items=await _loadInvAcData();
+  _showAc(e.target,items,e.target.value,item=>{
+    document.getElementById('invItemName').value=item.name;
+    if(item.weight>0)document.getElementById('invItemWeight').value=item.weight;
+    if(item.type)document.getElementById('invItemType').value=item.type;
+  });
+}
+
+async function onSpellNameInput(e){
+  const items=await _loadSpellAcData();
+  _showAc(e.target,items,e.target.value,item=>{
+    document.getElementById('csSpellInput').value=item.name;
+    if(item.level!=null)document.getElementById('csSpellLevel').value=item.level;
+  });
 }
 
 function resetCreator(){
