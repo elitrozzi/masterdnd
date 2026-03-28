@@ -307,8 +307,8 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .cs-dbd-hp-input::-webkit-inner-spin-button,.cs-dbd-hp-input::-webkit-outer-spin-button{-webkit-appearance:none;}
 .cs-dbd-hp-input:focus{border-color:var(--lol-gold);}
 /* Action buttons */
-.cs-dbd-actions{display:flex;flex-direction:column;gap:6px;flex-shrink:0;}
-.cs-dbd-action-row{display:flex;gap:6px;}
+.cs-dbd-actions{display:flex;flex-shrink:0;}
+.cs-dbd-action-row{display:flex;gap:6px;flex-wrap:wrap;}
 .cs-dbd-btn{padding:7px 13px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid transparent;transition:all .15s;font-family:'Cinzel',serif;white-space:nowrap;letter-spacing:.06em;text-transform:uppercase;}
 .cs-dbd-btn-save{background:rgba(200,170,110,.12);border-color:var(--lol-border);color:var(--lol-gold);}
 .cs-dbd-btn-save:hover{background:rgba(200,170,110,.22);box-shadow:0 0 8px rgba(200,170,110,.2);}
@@ -318,7 +318,7 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .cs-dbd-btn-rest:hover{background:rgba(65,200,130,.18);}
 .cs-dbd-btn-lrest{background:rgba(100,140,250,.08);border-color:rgba(100,140,250,.3);color:#a0b8f8;}
 .cs-dbd-btn-lrest:hover{background:rgba(100,140,250,.18);}
-.cs-dbd-btn-pdf{background:transparent;border-color:rgba(169,180,194,.2);color:var(--lol-gray-dim);}
+.cs-dbd-btn-pdf{background:transparent;border-color:rgba(169,180,194,.2);color:var(--lol-gray-dim);padding:7px 10px;}
 .cs-dbd-btn-pdf:hover{border-color:var(--lol-gold);color:var(--lol-gold);}
 .cs-dbd-btn-ghost{background:transparent;border-color:transparent;color:rgba(169,180,194,.4);font-size:10px;text-decoration:none;padding:4px 8px;}
 .cs-dbd-btn-ghost:hover{color:var(--lol-gray);}
@@ -1277,7 +1277,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.7.5</span>
+    <span class="ver-badge">v1.7.6</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">28 Mar 2026</span>
   </div>
@@ -1785,15 +1785,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
                     <div class="cs-dbd-action-row">
                       <button class="cs-dbd-btn cs-dbd-btn-save" onclick="saveCharacter(this)">💾 Guardar</button>
                       <button class="cs-dbd-btn cs-dbd-btn-lvl" id="btnLevelUp" onclick="levelUp(this)">⬆ Nivel</button>
-                      <button class="cs-dbd-btn cs-dbd-btn-pdf" onclick="exportPdf()">📄 PDF</button>
-                    </div>
-                    <div class="cs-dbd-action-row">
-                      <button class="cs-dbd-btn cs-dbd-btn-rest" onclick="shortRest()">🌙 Desc. corto</button>
-                      <button class="cs-dbd-btn cs-dbd-btn-lrest" onclick="longRest()">☀️ Desc. largo</button>
-                    </div>
-                    <div class="cs-dbd-action-row">
-                      <button class="cs-dbd-btn cs-dbd-btn-ghost" onclick="document.getElementById('charCreatorDrawer').classList.remove('open');initCharSelect();">↺ Nuevo</button>
-                      <button class="cs-dbd-btn cs-dbd-btn-ghost" onclick="goTo('home')">Inicio →</button>
+                      <button class="cs-dbd-btn cs-dbd-btn-rest" onclick="shortRest()">🌙 Corto</button>
+                      <button class="cs-dbd-btn cs-dbd-btn-lrest" onclick="longRest()">☀️ Largo</button>
+                      <button class="cs-dbd-btn cs-dbd-btn-pdf" onclick="exportPdf()" title="Exportar PDF">📄</button>
                     </div>
                   </div>
                 </div>
