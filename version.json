@@ -1,7 +1,12 @@
 {
-  "version": "1.6.6",
+  "version": "1.6.7",
   "date": "2026-03-27",
   "history": [
+    {
+      "version": "1.6.7",
+      "date": "2026-03-27",
+      "note": "Fix: oculta header raza y progress dots cuando la ficha está abierta (step2 activo)"
+    },
     {
       "version": "1.6.6",
       "date": "2026-03-27",
