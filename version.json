@@ -1,7 +1,12 @@
 {
-  "version": "1.7.0",
+  "version": "1.7.1",
   "date": "2026-03-28",
   "history": [
+    {
+      "version": "1.7.1",
+      "date": "2026-03-28",
+      "note": "Fix landing nav: dropdown Personajes restaurado con stopPropagation en items para evitar interferencia del overlay land-ui"
+    },
     {
       "version": "1.7.0",
       "date": "2026-03-28",

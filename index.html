@@ -1209,7 +1209,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.7.0</span>
+    <span class="ver-badge">v1.7.1</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">28 Mar 2026</span>
   </div>
@@ -1429,16 +1429,27 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <span class="llogo-m">MASTER</span><span class="llogo-d">DND</span>
       </div>
       <div class="land-nav-links">
-        <a class="land-nav-link" id="lndd-my-chars" onclick="goToMyChars()" data-es="Mis personajes" data-en="My characters" style="display:none;">Mis personajes</a>
-        <a class="land-nav-link" onclick="goToCreateChar()" data-es="Crear personaje" data-en="Create character">Crear personaje</a>
+        <div class="nav-dropdown" id="lndd-chars">
+          <a class="land-nav-link nav-dd-trigger" onclick="toggleNavDropdown('lndd-chars',event)" data-es="Personajes" data-en="Characters">Personajes<span class="nav-chevron">▾</span></a>
+          <div class="nav-dropdown-menu">
+            <div class="nav-dd-item" id="lndd-my-chars" onclick="event.stopPropagation();closeNavDropdowns();goToMyChars()" style="display:none;">
+              <span class="nav-dd-icon">⚔️</span>
+              <div class="nav-dd-label"><span data-es="Mis personajes" data-en="My characters">Mis personajes</span><span class="nav-dd-sub">Ver personajes guardados</span></div>
+            </div>
+            <div class="nav-dd-item" onclick="event.stopPropagation();closeNavDropdowns();goToCreateChar()">
+              <span class="nav-dd-icon">✨</span>
+              <div class="nav-dd-label"><span data-es="Crear personaje" data-en="Create character">Crear personaje</span><span class="nav-dd-sub">Nuevo aventurero</span></div>
+            </div>
+          </div>
+        </div>
         <div class="nav-dropdown" id="lndd-maps">
           <a class="land-nav-link nav-dd-trigger" onclick="toggleNavDropdown('lndd-maps',event)" data-es="Mapas" data-en="Maps">Mapas<span class="nav-chevron">▾</span></a>
           <div class="nav-dropdown-menu">
-            <div class="nav-dd-item" onclick="closeNavDropdowns();goToMaps('editor')">
+            <div class="nav-dd-item" onclick="event.stopPropagation();closeNavDropdowns();goToMaps('editor')">
               <span class="nav-dd-icon">🗺️</span>
               <div class="nav-dd-label"><span data-es="Crear mapa" data-en="Create map">Crear mapa</span><span class="nav-dd-sub">Editor de terreno</span></div>
             </div>
-            <div class="nav-dd-item" onclick="closeNavDropdowns();goToMaps('explore')">
+            <div class="nav-dd-item" onclick="event.stopPropagation();closeNavDropdowns();goToMaps('explore')">
               <span class="nav-dd-icon">🔍</span>
               <div class="nav-dd-label"><span data-es="Mapas existentes" data-en="Existing maps">Mapas existentes</span><span class="nav-dd-sub">Explorar la comunidad</span></div>
             </div>
