@@ -1,7 +1,12 @@
 {
-  "version": "1.7.1",
+  "version": "1.7.2",
   "date": "2026-03-28",
   "history": [
+    {
+      "version": "1.7.2",
+      "date": "2026-03-28",
+      "note": "Fix: stopPropagation en todos los dropdown items del app-nav (Personajes y Mapas) — consistente con landing nav"
+    },
     {
       "version": "1.7.1",
       "date": "2026-03-28",
