@@ -1,7 +1,12 @@
 {
-  "version": "1.6.4",
+  "version": "1.6.5",
   "date": "2026-03-27",
   "history": [
+    {
+      "version": "1.6.5",
+      "date": "2026-03-27",
+      "note": "Fix icono dropdown (block→flex), chevron ▾ en Personajes y Mapas con rotación al abrir"
+    },
     {
       "version": "1.6.4",
       "date": "2026-03-27",

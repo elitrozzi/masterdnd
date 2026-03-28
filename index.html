@@ -548,6 +548,9 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .nav-dropdown-menu{position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%) translateY(-6px);background:rgba(10,7,20,.97);border:1px solid rgba(255,255,255,.1);border-radius:11px;padding:6px;min-width:190px;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;z-index:200;backdrop-filter:blur(12px);}
 .nav-dropdown.open .nav-dropdown-menu{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0);}
 .nav-dropdown .anav-link{cursor:pointer;}
+.nav-dd-trigger{display:inline-flex;align-items:center;gap:3px;}
+.nav-chevron{font-size:9px;opacity:.6;transition:transform .2s;}
+.nav-dropdown.open .nav-chevron{transform:rotate(180deg);}
 .nav-dd-item{display:flex;align-items:center;gap:10px;padding:10px 13px;border-radius:8px;font-size:13px;font-weight:500;color:var(--text-m);cursor:pointer;transition:background .15s,color .15s;white-space:nowrap;}
 .nav-dd-item:hover{background:rgba(248,198,98,.1);color:var(--gold);}
 .nav-dd-icon{font-size:15px;line-height:1;}
@@ -1169,7 +1172,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   </div>
   <div class="anav-links">
     <div class="nav-dropdown" id="navdd-characters">
-      <a class="anav-link" id="nl-characters" onclick="toggleNavDropdown('navdd-characters',event)" data-es="Personajes" data-en="Characters">Personajes</a>
+      <a class="anav-link nav-dd-trigger" id="nl-characters" onclick="toggleNavDropdown('navdd-characters',event)" data-es="Personajes" data-en="Characters">Personajes<span class="nav-chevron">▾</span></a>
       <div class="nav-dropdown-menu">
         <div class="nav-dd-item" id="dd-my-chars" onclick="closeNavDropdowns();goToMyChars()" style="display:none;">
           <span class="nav-dd-icon">⚔️</span>
@@ -1182,7 +1185,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
       </div>
     </div>
     <div class="nav-dropdown" id="navdd-maps">
-      <a class="anav-link" id="nl-maps" onclick="toggleNavDropdown('navdd-maps',event)" data-es="Mapas" data-en="Maps">Mapas</a>
+      <a class="anav-link nav-dd-trigger" id="nl-maps" onclick="toggleNavDropdown('navdd-maps',event)" data-es="Mapas" data-en="Maps">Mapas<span class="nav-chevron">▾</span></a>
       <div class="nav-dropdown-menu">
         <div class="nav-dd-item" onclick="closeNavDropdowns();goToMaps('editor')">
           <span class="nav-dd-icon">🗺️</span>
@@ -1202,7 +1205,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.6.4</span>
+    <span class="ver-badge">v1.6.5</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">27 Mar 2026</span>
   </div>
@@ -1423,7 +1426,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
       </div>
       <div class="land-nav-links">
         <div class="nav-dropdown" id="lndd-chars">
-          <a class="land-nav-link" onclick="toggleNavDropdown('lndd-chars',event)" data-es="Personajes" data-en="Characters">Personajes</a>
+          <a class="land-nav-link nav-dd-trigger" onclick="toggleNavDropdown('lndd-chars',event)" data-es="Personajes" data-en="Characters">Personajes<span class="nav-chevron">▾</span></a>
           <div class="nav-dropdown-menu">
             <div class="nav-dd-item" id="lndd-my-chars" onclick="closeNavDropdowns();goToMyChars()" style="display:none;">
               <span class="nav-dd-icon">⚔️</span>
@@ -1436,7 +1439,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
           </div>
         </div>
         <div class="nav-dropdown" id="lndd-maps">
-          <a class="land-nav-link" onclick="toggleNavDropdown('lndd-maps',event)" data-es="Mapas" data-en="Maps">Mapas</a>
+          <a class="land-nav-link nav-dd-trigger" onclick="toggleNavDropdown('lndd-maps',event)" data-es="Mapas" data-en="Maps">Mapas<span class="nav-chevron">▾</span></a>
           <div class="nav-dropdown-menu">
             <div class="nav-dd-item" onclick="closeNavDropdowns();goToMaps('editor')">
               <span class="nav-dd-icon">🗺️</span>
@@ -3513,7 +3516,7 @@ function renderSavedChars(){
   const chars=_loadSavedChars();
   // update landing dropdown "Mis personajes" visibility
   const lnddMy=document.getElementById('lndd-my-chars');
-  if(lnddMy)lnddMy.style.display=chars.length>0?'block':'none';
+  if(lnddMy)lnddMy.style.display=chars.length>0?'flex':'none';
   const section=document.getElementById('savedCharsSection');
   const grid=document.getElementById('savedCharsGrid');
   if(!section||!grid)return;
