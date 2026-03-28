@@ -1,7 +1,12 @@
 {
-  "version": "1.6.3",
+  "version": "1.6.4",
   "date": "2026-03-27",
   "history": [
+    {
+      "version": "1.6.4",
+      "date": "2026-03-27",
+      "note": "Mis personajes: elimina cards/HP tracker, va directo a la ficha (1 personaje) o al picker (2+)"
+    },
     {
       "version": "1.6.3",
       "date": "2026-03-27",
