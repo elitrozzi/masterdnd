@@ -1209,9 +1209,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.6.8</span>
+    <span class="ver-badge">v1.6.9</span>
     <span class="ver-sep">·</span>
-    <span class="ver-date">27 Mar 2026</span>
+    <span class="ver-date">28 Mar 2026</span>
   </div>
   <div class="lang-toggle">
     <button class="lang-btn active" onclick="setLang('es')">ES</button>
@@ -1668,7 +1668,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <div class="dice-overlay-grid" id="diceOverlayGrid"></div>
       </div>
       <!-- Context header (subtle, not a nav bar) -->
-      <div id="charDrawerCtxHeader" style="display:flex;align-items:center;gap:10px;padding:14px 32px 0;flex-shrink:0;">
+      <div id="charDrawerCtxHeader" style="align-items:center;gap:10px;padding:14px 32px 0;flex-shrink:0;">
         <div id="charDrawerRaceIcon" style="width:28px;height:28px;border-radius:5px;overflow:hidden;flex-shrink:0;"></div>
         <span class="char-drawer-race-name" id="charDrawerRaceName" style="font-size:13px;opacity:.7;"></span>
       </div>
@@ -3584,6 +3584,11 @@ function loadChar(id){
   currentStep=2;
   document.getElementById('step2').classList.add('active');
   updateProgress();
+  // Hide context header and progress bar — not needed when loading directly to sheet
+  const _ctxHdr=document.getElementById('charDrawerCtxHeader');
+  if(_ctxHdr)_ctxHdr.style.display='none';
+  const _progBar=document.querySelector('#charCreatorDrawer .progress-bar');
+  if(_progBar)_progBar.style.display='none';
   document.getElementById('charCreatorDrawer').classList.add('open');
   buildSheet();
   const nameInput=document.getElementById('csNameInput');
