@@ -1194,7 +1194,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.5.8</span>
+    <span class="ver-badge">v1.5.9</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">27 Mar 2026</span>
   </div>
@@ -1629,7 +1629,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
           <div class="progress-bar" style="margin-bottom:28px;">
             <div class="prog-step"><div class="prog-dot active" id="pd1">1</div><div class="prog-label">Stats</div></div>
             <div class="prog-line" id="pl1"></div>
-            <div class="prog-step"><div class="prog-dot" id="pd2">2</div><div class="prog-label" data-es="Ficha" data-en="Sheet">Ficha</div></div>
+            <div class="prog-step" style="cursor:pointer;" onclick="if(currentStep===1)nextStep()"><div class="prog-dot" id="pd2">2</div><div class="prog-label" data-es="Ficha" data-en="Sheet">Ficha</div></div>
           </div>
           <!-- Step 1: Stats -->
           <div class="creator-step active" id="step1">
@@ -1644,7 +1644,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
               <div class="stat-box"><div class="stat-name">CHA</div><div class="stat-value" id="sv-cha">—</div><div class="stat-mod" id="sm-cha"></div></div>
             </div>
             <div style="text-align:center;margin-top:24px;"><button class="btn-nav btn-gold" style="padding:12px 32px;font-size:15px;" onclick="rollStats()" id="rollBtn" data-es="🎲 Tirar dados" data-en="🎲 Roll dice">🎲 Tirar dados</button></div>
-            <div class="step-nav"><button class="btn-nav btn-ghost" onclick="csGoTo('csPanelClass','back');document.getElementById('charCreatorDrawer').classList.remove('open');">← Clase</button><button class="btn-nav btn-primary" id="btnStep4Next" onclick="nextStep()" disabled data-es="Ver ficha →" data-en="View sheet →">Ver ficha →</button></div>
+            <div class="step-nav"><button class="btn-nav btn-ghost" onclick="csGoTo('csPanelClass','back');document.getElementById('charCreatorDrawer').classList.remove('open');">← Clase</button><button class="btn-nav btn-primary" id="btnStep4Next" onclick="nextStep()" data-es="Ver ficha →" data-en="View sheet →">Ver ficha →</button></div>
           </div>
           <!-- Step 2: Sheet -->
           <div class="creator-step" id="step2">
@@ -3287,7 +3287,6 @@ function selectMode(m){
 }
 function selectOption(el,type,val){el.closest('.option-grid').querySelectorAll('.option-card').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');selections[type]=val;}
 function nextStep(){
-  if(currentStep===1&&!rolledStats)return;
   if(currentStep<2){document.getElementById('step'+currentStep).classList.remove('active');currentStep++;document.getElementById('step'+currentStep).classList.add('active');updateProgress();if(currentStep===2)buildSheet();}
 }
 function prevStep(){if(currentStep>1){document.getElementById('step'+currentStep).classList.remove('active');currentStep--;document.getElementById('step'+currentStep).classList.add('active');updateProgress();}}

@@ -1,7 +1,12 @@
 {
-  "version": "1.5.8",
+  "version": "1.5.9",
   "date": "2026-03-27",
   "history": [
+    {
+      "version": "1.5.9",
+      "date": "2026-03-27",
+      "note": "Fix: botón Ver ficha siempre habilitado, círculo 2 clickeable — ya no requiere tirar dados para acceder a la ficha"
+    },
     {
       "version": "1.5.8",
       "date": "2026-03-27",
