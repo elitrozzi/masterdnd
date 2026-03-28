@@ -1,7 +1,12 @@
 {
-  "version": "1.7.2",
+  "version": "1.7.3",
   "date": "2026-03-28",
   "history": [
+    {
+      "version": "1.7.3",
+      "date": "2026-03-28",
+      "note": "Dados 3D: números más chicos (188→148/224→180), spin ~1s más largo (4 rebotes, velocidad y damping ajustados)"
+    },
     {
       "version": "1.7.2",
       "date": "2026-03-28",
