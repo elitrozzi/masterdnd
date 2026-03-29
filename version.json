@@ -1,7 +1,12 @@
 {
-  "version": "1.8.2",
+  "version": "1.8.3",
   "date": "2026-03-29",
   "history": [
+    {
+      "version": "1.8.3",
+      "date": "2026-03-29",
+      "note": "Combate: rediseño como tracker de turno — recursos clickeables (Acción/Adicional/Reacción/Movimiento), cards con dados directos, Nuevo turno reset"
+    },
     {
       "version": "1.8.2",
       "date": "2026-03-29",

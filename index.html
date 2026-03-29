@@ -372,16 +372,32 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .cs-trait-desc{font-size:16px;color:var(--lol-gray-dim);line-height:1.5;margin-top:4px;display:none;padding-top:3px;border-top:1px solid rgba(11,196,227,.1);}
 .cs-trait-item.open .cs-trait-desc{display:block;}
 /* Combat actions tab */
-.cs-action-section{margin-bottom:12px;}
-.cs-action-section-label{font:700 18px/1 'Cinzel',serif;letter-spacing:.12em;color:var(--lol-gold);text-transform:uppercase;padding-bottom:4px;border-bottom:1px solid rgba(200,170,110,.2);margin-bottom:6px;}
-.cs-action-item{display:flex;align-items:flex-start;gap:8px;padding:5px 6px;border:1px solid rgba(120,90,40,.2);margin-bottom:4px;background:var(--lol-panel2);cursor:pointer;transition:all .15s;}
-.cs-action-item:hover{border-color:var(--lol-border);background:rgba(200,170,110,.06);}
-.cs-action-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
-.cs-action-body{flex:1;min-width:0;}
-.cs-action-name{font:700 16px/1.2 'Cinzel',serif;color:var(--lol-gold);margin-bottom:3px;}
-.cs-action-desc{font-size:16px;color:var(--lol-gray-dim);line-height:1.4;}
-.cs-action-roll-btn{background:rgba(200,170,110,.1);border:1px solid rgba(200,170,110,.3);color:var(--lol-gold);font-size:13px;padding:5px 10px;cursor:pointer;font-family:'Cinzel',serif;white-space:nowrap;flex-shrink:0;transition:all .15s;align-self:center;}
-.cs-action-roll-btn:hover{background:rgba(200,170,110,.2);}
+/* ── Combat turn tracker ── */
+.ct-turn-bar{display:flex;align-items:center;gap:6px;padding:8px 10px;background:rgba(0,0,0,.25);border-bottom:1px solid rgba(200,170,110,.15);flex-wrap:wrap;}
+.ct-resource{display:flex;align-items:center;gap:5px;padding:6px 10px;border:1px solid rgba(200,170,110,.4);background:rgba(200,170,110,.08);cursor:pointer;transition:all .18s;user-select:none;}
+.ct-resource.used{opacity:.35;border-color:rgba(120,90,40,.3);background:transparent;text-decoration:line-through;}
+.ct-resource-icon{font-size:15px;}
+.ct-resource-label{font:700 13px/1 'Cinzel',serif;color:var(--lol-gold);letter-spacing:.06em;text-transform:uppercase;}
+.ct-move-val{font:700 14px/1 'Cinzel',serif;color:var(--lol-teal);}
+.ct-move-btns{display:flex;gap:2px;margin-left:2px;}
+.ct-move-btn{background:none;border:1px solid rgba(11,196,227,.3);color:rgba(11,196,227,.7);font-size:10px;width:18px;height:18px;cursor:pointer;line-height:1;padding:0;}
+.ct-next-btn{margin-left:auto;padding:6px 14px;background:rgba(200,170,110,.12);border:1px solid var(--lol-gold);color:var(--lol-gold);font:700 12px/1 'Cinzel',serif;letter-spacing:.08em;cursor:pointer;text-transform:uppercase;transition:all .15s;white-space:nowrap;}
+.ct-next-btn:hover{background:rgba(200,170,110,.22);}
+/* Action cards */
+.ct-section-lbl{font:700 13px/1 'Cinzel',serif;letter-spacing:.2em;color:rgba(200,170,110,.5);text-transform:uppercase;padding:10px 10px 4px;border-bottom:1px solid rgba(200,170,110,.12);margin-bottom:2px;}
+.ct-card{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;transition:all .15s;}
+.ct-card:hover{background:rgba(200,170,110,.06);}
+.ct-card.used-action{opacity:.4;pointer-events:none;}
+.ct-card-icon{font-size:22px;flex-shrink:0;width:28px;text-align:center;}
+.ct-card-body{flex:1;min-width:0;}
+.ct-card-name{font:700 16px/1 'Cinzel',serif;color:var(--lol-gold);}
+.ct-card-sub{font-size:14px;color:var(--lol-gray-dim);margin-top:2px;}
+.ct-card-badge{font:700 13px/1 'Cinzel',serif;color:var(--lol-teal);background:rgba(11,196,227,.08);border:1px solid rgba(11,196,227,.25);padding:4px 8px;flex-shrink:0;white-space:nowrap;}
+.ct-roll-btn{background:rgba(200,170,110,.15);border:1px solid rgba(200,170,110,.45);color:var(--lol-gold);font:700 14px/1 'Cinzel',serif;padding:8px 14px;cursor:pointer;flex-shrink:0;transition:all .15s;white-space:nowrap;}
+.ct-roll-btn:hover{background:rgba(200,170,110,.3);box-shadow:0 0 10px rgba(200,170,110,.2);}
+.ct-class-card{margin:6px 10px;padding:10px 12px;background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.25);}
+.ct-class-card-name{font:700 15px/1 'Cinzel',serif;color:rgba(180,150,255,.9);margin-bottom:3px;}
+.ct-class-card-desc{font-size:14px;color:var(--lol-gray-dim);line-height:1.45;}
 .cs-footer{display:flex;flex-wrap:wrap;gap:8px;}
 /* compat shims — keep sheet-hp-tracker hidden (HP always in header now) */
 .sheet-hp-tracker{display:none!important;}
@@ -1342,7 +1358,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.8.2</span>
+    <span class="ver-badge">v1.8.3</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">29 Mar 2026</span>
   </div>
@@ -4566,89 +4582,161 @@ const RACE_TRAIT_DETAILS={
 };
 
 // ── Combat Actions tab ──
+// ── Combat turn state ──
+let _turnState={action:false,bonus:false,reaction:false,movUsed:0};
+let _turnCls='fighter';
+let _turnSpeed=30;
+
 function _renderCombatActions(cls){
   const el=document.getElementById('cstab-actions');if(!el)return;
+  _turnCls=cls;
   const st=rolledStats||{str:10,dex:10,con:10,int:10,wis:10,cha:10};
   const strMod=Math.floor((st.str-10)/2);
   const dexMod=Math.floor((st.dex-10)/2);
-  const atkMod=Math.max(strMod,dexMod);
-  const atkSign=atkMod>=0?'+':'';
   const pb=profBonus(_currentLevel||1);
-  const totalAtk=atkMod+pb;
-  const totalSign=totalAtk>=0?'+':'';
+  const totalAtk=Math.max(strMod,dexMod)+pb;
+  const s=t=>t>=0?'+'+t:''+t;
+  // Speed from race
+  const rk=selections?.race||'human';
+  _turnSpeed=(RACE_SPEED?.[rk]||30);
 
-  const BONUS_ACTIONS={
-    fighter:'Segunda Vuelta de Aliento (recuperar 1d10+nivel PG), Oleada de Acción (acción adicional completa, 1/desc. corto)',
-    rogue:'Acción Astuta: Esconderse, Desengancharse o Correr gratis',
-    barbarian:'Entrar en Ira (ventaja FUE, resist. daño físico, bonus daño)',
-    monk:'Ráfaga de Golpes (2 ataques desarmados extra gastando 1 Ki)',
-    ranger:'Marca del cazador (1d6 extra vs enemigo marcado, 1/desc. corto)',
-    paladin:'Golpe Divino (gasta espacio de conjuro para bonus de daño)',
-    bard:'Inspiración Bárdica (otorgar dado a aliado)',
-    warlock:'Paso del Portal del Pacto (si tienes el invocación)',
+  const BONUS={
+    fighter:{name:'Segunda Vuelta / Oleada de Acción',desc:'Vuelta de Aliento: recupera 1d10+nivel PG. Oleada de Acción: acción extra completa (1/desc. corto).'},
+    rogue:{name:'Acción Astuta',desc:'Esconderse, Desengancharse o Correr sin gastar tu Acción principal.'},
+    barbarian:{name:'Entrar en Ira',desc:'Ventaja en chequeos y tiradas de FUE, resistencia a daño físico y +2 al daño melé. Dura 1 minuto.'},
+    monk:{name:'Ráfaga de Golpes',desc:'Gasta 1 Ki para hacer 2 ataques desarmados extra como acción adicional.'},
+    ranger:{name:'Marca del Cazador',desc:'Marca un objetivo: +1d6 de daño cada vez que lo golpeas (1/desc. corto).'},
+    paladin:{name:'Golpe Divino',desc:'Gasta un espacio de conjuro al golpear para añadir 2d8 (niv 1) de daño radiante extra.'},
+    bard:{name:'Inspiración Bárdica',desc:'Otorga un dado de inspiración (d6→d12) a un aliado que pueda oírte.'},
+    warlock:{name:'Maldición Hex',desc:'Gasta un espacio de conjuro para marcar a un objetivo: ventaja en chequeos de una característica y +1d6 de daño necrótico.'},
+    cleric:{name:'Canalizar Divinidad',desc:'Expulsar no-muertos u otro efecto del dominio (1/desc. corto).'},
+    druid:{name:'Forma Salvaje',desc:'Transofrmarte en una bestia conocida (2/desc. corto).'},
+    sorcerer:{name:'Metamagia',desc:'Aplica un efecto de metamagia a tu siguiente conjuro (Rápido, Sutil, Gemelo, etc.)'},
+    wizard:{name:'Recuperación Arcana',desc:'Recupera espacios de conjuro de nivel ≤ mitad de tu nivel de mago (1/descanso largo).'},
   };
-  const bonusAction=BONUS_ACTIONS[cls]||'Depende de rasgos de clase y objetos.';
+  const bonus=BONUS[cls]||{name:'Ver rasgos de clase',desc:'Consultá los rasgos de tu clase para acciones adicionales disponibles.'};
 
   el.innerHTML=`
-  <div class="cs-action-section">
-    <div class="cs-action-section-label">Acción</div>
-    <div class="cs-action-item" onclick="rollD20(${totalAtk},'Ataque')">
-      <div class="cs-action-icon">⚔️</div>
-      <div class="cs-action-body"><div class="cs-action-name">Atacar</div><div class="cs-action-desc">Realiza un ataque con arma. Bonif. ataque: ${totalSign}${totalAtk} (incluyendo competencia)</div></div>
-      <button class="cs-action-roll-btn">🎲 Tirar</button>
+  <div class="ct-turn-bar">
+    <div class="ct-resource${_turnState.action?' used':''}" onclick="toggleTurnRes('action')" title="Click para marcar como usada">
+      <span class="ct-resource-icon">⚔️</span>
+      <span class="ct-resource-label">Acción</span>
     </div>
-    <div class="cs-action-item">
-      <div class="cs-action-icon">🔮</div>
-      <div class="cs-action-body"><div class="cs-action-name">Lanzar hechizo</div><div class="cs-action-desc">Lanza un conjuro con tiempo de lanzamiento de 1 acción.</div></div>
+    <div class="ct-resource${_turnState.bonus?' used':''}" onclick="toggleTurnRes('bonus')" title="Click para marcar como usada">
+      <span class="ct-resource-icon">⚡</span>
+      <span class="ct-resource-label">Adicional</span>
     </div>
-    <div class="cs-action-item">
-      <div class="cs-action-icon">🛡️</div>
-      <div class="cs-action-body"><div class="cs-action-name">Esquivar</div><div class="cs-action-desc">Los ataques contra ti tienen desventaja y tienes ventaja en las tiradas de salvación de DES hasta tu próximo turno.</div></div>
+    <div class="ct-resource${_turnState.reaction?' used':''}" onclick="toggleTurnRes('reaction')" title="Click para marcar como usada">
+      <span class="ct-resource-icon">⚠️</span>
+      <span class="ct-resource-label">Reacción</span>
     </div>
-    <div class="cs-action-item">
-      <div class="cs-action-icon">🤝</div>
-      <div class="cs-action-body"><div class="cs-action-name">Ayudar</div><div class="cs-action-desc">Das ventaja al siguiente chequeo o ataque de un aliado adyacente antes de tu próximo turno.</div></div>
+    <div class="ct-resource" style="cursor:default;">
+      <span class="ct-resource-icon">🏃</span>
+      <span class="ct-move-val" id="ctMoveVal">${_turnSpeed-_turnState.movUsed}</span>
+      <span class="ct-resource-label" style="margin-left:2px;">ft</span>
+      <div class="ct-move-btns">
+        <button class="ct-move-btn" onclick="event.stopPropagation();spendMove(5)">−5</button>
+        <button class="ct-move-btn" onclick="event.stopPropagation();spendMove(-5)">+5</button>
+      </div>
     </div>
-    <div class="cs-action-item">
-      <div class="cs-action-icon">🏃</div>
-      <div class="cs-action-body"><div class="cs-action-name">Correr</div><div class="cs-action-desc">Tu velocidad de movimiento se duplica este turno.</div></div>
+    <button class="ct-next-btn" onclick="nextTurn()">↻ Nuevo turno</button>
+  </div>
+
+  <div class="ct-section-lbl">Acción</div>
+
+  <div class="ct-card${_turnState.action?' used-action':''}" onclick="ctUseAction(()=>rollD20(${totalAtk},'Ataque'))">
+    <div class="ct-card-icon">⚔️</div>
+    <div class="ct-card-body">
+      <div class="ct-card-name">Atacar</div>
+      <div class="ct-card-sub">Golpe con arma melé o a distancia</div>
     </div>
-    <div class="cs-action-item">
-      <div class="cs-action-icon">👁️</div>
-      <div class="cs-action-body"><div class="cs-action-name">Esconderse</div><div class="cs-action-desc">Intenta ocultarte (cheque de DES·Sigilo vs. Percepción Pasiva del enemigo).</div></div>
-    </div>
-    <div class="cs-action-item">
-      <div class="cs-action-icon">💪</div>
-      <div class="cs-action-body"><div class="cs-action-name">Empujar / Derribar</div><div class="cs-action-desc">Reemplaza un ataque: cheque de FUE (Atletismo) vs. FUE o DES del objetivo para moverlo 5 pies o derribarlo.</div></div>
-    </div>
-    <div class="cs-action-item">
-      <div class="cs-action-icon">🎯</div>
-      <div class="cs-action-body"><div class="cs-action-name">Preparar</div><div class="cs-action-desc">Reserva tu acción para reaccionar a un desencadenante específico durante el turno de otro.</div></div>
+    <span class="ct-card-badge">${s(totalAtk)}</span>
+    <button class="ct-roll-btn" onclick="event.stopPropagation();ctUseAction(()=>rollD20(${totalAtk},'Ataque'))">🎲 Tirar</button>
+  </div>
+
+  <div class="ct-card${_turnState.action?' used-action':''}" onclick="ctUseAction(null)">
+    <div class="ct-card-icon">🔮</div>
+    <div class="ct-card-body">
+      <div class="ct-card-name">Lanzar hechizo</div>
+      <div class="ct-card-sub">Usá la pestaña Hechizos para ver tus slots</div>
     </div>
   </div>
-  <div class="cs-action-section">
-    <div class="cs-action-section-label">Acción Adicional</div>
-    <div class="cs-action-item">
-      <div class="cs-action-icon">⚡</div>
-      <div class="cs-action-body"><div class="cs-action-name">${CLASS_NAMES?.es?.[cls]||cls}</div><div class="cs-action-desc">${bonusAction}</div></div>
-    </div>
-    <div class="cs-action-item">
-      <div class="cs-action-icon">🗡️</div>
-      <div class="cs-action-body"><div class="cs-action-name">Armas de dos manos / Ataque con arma de mano</div><div class="cs-action-desc">Al atacar con arma de dos manos o arma ligera en mano secundaria, puedes atacar de nuevo con la otra (sin añadir mod. al daño de la segunda).</div></div>
+
+  <div class="ct-card${_turnState.action?' used-action':''}" onclick="ctUseAction(null)">
+    <div class="ct-card-icon">🛡️</div>
+    <div class="ct-card-body">
+      <div class="ct-card-name">Esquivar</div>
+      <div class="ct-card-sub">Ataques entrantes con desventaja hasta tu próximo turno</div>
     </div>
   </div>
-  <div class="cs-action-section">
-    <div class="cs-action-section-label">Reacción</div>
-    <div class="cs-action-item" onclick="rollD20(${totalAtk},'Ataque de Oportunidad')">
-      <div class="cs-action-icon">⚠️</div>
-      <div class="cs-action-body"><div class="cs-action-name">Ataque de oportunidad</div><div class="cs-action-desc">Cuando un enemigo sale de tu alcance melé, puedes usar tu reacción para realizar un ataque.</div></div>
-      <button class="cs-action-roll-btn">🎲 Tirar</button>
+
+  <div class="ct-card${_turnState.action?' used-action':''}" onclick="ctUseAction(null)">
+    <div class="ct-card-icon">🤝</div>
+    <div class="ct-card-body">
+      <div class="ct-card-name">Ayudar</div>
+      <div class="ct-card-sub">Un aliado adyacente gana ventaja en su próximo ataque o cheque</div>
     </div>
-    <div class="cs-action-item">
-      <div class="cs-action-icon">🛡️</div>
-      <div class="cs-action-body"><div class="cs-action-name">Hechizo Shield / otros</div><div class="cs-action-desc">Algunos hechizos o rasgos de clase se activan como reacción (ej. Escudo +5 CA, Represalia Infernal, Absorber Elementos).</div></div>
+  </div>
+
+  <div class="ct-card${_turnState.action?' used-action':''}" onclick="ctUseAction(()=>{spendMove(-_turnSpeed);})">
+    <div class="ct-card-icon">🏃</div>
+    <div class="ct-card-body">
+      <div class="ct-card-name">Correr</div>
+      <div class="ct-card-sub">Movimiento doble este turno (+${_turnSpeed}ft)</div>
+    </div>
+    <span class="ct-card-badge">+${_turnSpeed}ft</span>
+  </div>
+
+  <div class="ct-section-lbl">Acción adicional — ${CLASS_NAMES?.es?.[cls]||cls}</div>
+  <div class="ct-class-card${_turnState.bonus?' used-action':''}">
+    <div class="ct-card-name ct-class-card-name" style="cursor:pointer;" onclick="toggleTurnRes('bonus')">${bonus.name}</div>
+    <div class="ct-class-card-desc">${bonus.desc}</div>
+  </div>
+
+  <div class="ct-section-lbl">Reacción</div>
+  <div class="ct-card${_turnState.reaction?' used-action':''}" onclick="ctUseReaction(()=>rollD20(${totalAtk},'Ataque de Oportunidad'))">
+    <div class="ct-card-icon">⚠️</div>
+    <div class="ct-card-body">
+      <div class="ct-card-name">Ataque de Oportunidad</div>
+      <div class="ct-card-sub">Un enemigo abandona tu alcance melé</div>
+    </div>
+    <span class="ct-card-badge">${s(totalAtk)}</span>
+    <button class="ct-roll-btn" onclick="event.stopPropagation();ctUseReaction(()=>rollD20(${totalAtk},'Ataque de Oportunidad'))">🎲 Tirar</button>
+  </div>
+  <div class="ct-card${_turnState.reaction?' used-action':''}" onclick="ctUseReaction(null)">
+    <div class="ct-card-icon">✨</div>
+    <div class="ct-card-body">
+      <div class="ct-card-name">Hechizo de reacción</div>
+      <div class="ct-card-sub">Shield (+5 CA), Represalia Infernal, Absorber Elementos…</div>
     </div>
   </div>`;
+}
+
+function toggleTurnRes(res){
+  _turnState[res]=!_turnState[res];
+  _renderCombatActions(_turnCls);
+}
+function ctUseAction(fn){
+  if(_turnState.action)return;
+  _turnState.action=true;
+  _renderCombatActions(_turnCls);
+  if(fn)setTimeout(fn,60);
+}
+function ctUseReaction(fn){
+  if(_turnState.reaction)return;
+  _turnState.reaction=true;
+  _renderCombatActions(_turnCls);
+  if(fn)setTimeout(fn,60);
+}
+function spendMove(ft){
+  _turnState.movUsed=Math.max(0,Math.min(_turnSpeed,_turnState.movUsed-ft));
+  const el=document.getElementById('ctMoveVal');
+  if(el)el.textContent=_turnSpeed-_turnState.movUsed;
+}
+function nextTurn(){
+  _turnState={action:false,bonus:false,reaction:false,movUsed:0};
+  _renderCombatActions(_turnCls);
+}
 }
 
 let _acInvCache=null;
