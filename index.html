@@ -1091,10 +1091,23 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 .ct-session-name-inp{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;padding:5px 8px;font-size:13px;flex:1;outline:none;}
 .ct-session-name-inp:focus{border-color:rgba(147,197,253,.5);}
 .ct-session-join-btn{font:700 11px/1 'Cinzel',serif;padding:5px 12px;border:1px solid rgba(147,197,253,.4);background:rgba(147,197,253,.1);color:#93c5fd;cursor:pointer;white-space:nowrap;}
-.ct-session-connected{display:flex;align-items:center;gap:8px;padding:7px 10px;background:rgba(74,222,128,.05);border-bottom:1px solid rgba(74,222,128,.15);}
+.ct-session-connected{padding:8px 10px;background:rgba(74,222,128,.05);border-bottom:1px solid rgba(74,222,128,.2);}
 .ct-session-connected-code{font:700 14px/1 'Cinzel',serif;color:#4ade80;letter-spacing:.15em;}
-.ct-session-leave{margin-left:auto;font-size:11px;color:rgba(248,113,113,.6);background:none;border:none;cursor:pointer;padding:2px 6px;}
+.ct-session-leave{font-size:11px;color:rgba(248,113,113,.6);background:none;border:none;cursor:pointer;padding:2px 6px;}
 .ct-session-leave:hover{color:#f87171;}
+/* Initiative list (player view in actions tab) */
+.ct-ini-list{display:flex;flex-direction:column;gap:2px;margin-top:4px;}
+.ct-ini-row{display:flex;align-items:center;gap:6px;padding:4px 6px;border-radius:3px;font-size:12px;background:rgba(255,255,255,.03);}
+.ct-ini-active{background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.25);}
+.ct-ini-arrow{width:10px;font-size:10px;color:var(--lol-gold);}
+.ct-ini-num{width:22px;font:700 12px/1 'Cinzel',serif;color:var(--lol-gold);text-align:right;}
+.ct-ini-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.ct-ini-name{flex:1;color:var(--text-p);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ct-ini-hp{font-size:11px;white-space:nowrap;}
+/* DM player chips */
+.cmb-session-active{display:flex;flex-direction:column;gap:8px;}
+.cmb-players-list{display:flex;flex-wrap:wrap;gap:4px;}
+.cmb-player-chip{font-size:11px;padding:2px 8px;background:rgba(147,197,253,.1);border:1px solid rgba(147,197,253,.2);color:#93c5fd;border-radius:10px;}
 /* My turn toast */
 .my-turn-toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:9999;background:var(--lol-gold);color:#0a0618;padding:14px 32px;font:900 18px/1 'Cinzel',serif;letter-spacing:.1em;box-shadow:0 4px 30px rgba(212,175,55,.5);animation:toastIn .3s ease;pointer-events:none;}
 @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-16px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
@@ -1442,7 +1455,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.9.0</span>
+    <span class="ver-badge">v1.9.1</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">29 Mar 2026</span>
   </div>
@@ -4732,14 +4745,43 @@ function _renderCombatActions(cls){
   const aUsed=_turnState.action, bUsed=_turnState.bonus, rUsed=_turnState.reaction;
 
   const charName=document.getElementById('csName')?.value||_liveSession?.playerName||'';
-  const sessionUI=_liveSession&&_liveSession.role==='player'
-    ?`<div class="ct-session-connected">
-        <span>📡</span>
-        <span class="ct-session-connected-code">${_liveSession.code}</span>
-        <span style="font-size:12px;color:rgba(74,222,128,.6);">· ${_liveSession.playerName} · Tus tiradas llegan al DM</span>
-        <button class="ct-session-leave" onclick="leaveLiveSession()">✕ Desconectar</button>
-      </div>`
-    :`<div class="ct-session-join">
+  let sessionUI='';
+  if(_liveSession&&_liveSession.role==='player'){
+    const sorted=_sortedCombatants();
+    const active=sorted.find(c=>c.id===_activeTurnId);
+    const myName=(_liveSession.playerName||'').toLowerCase();
+    const isMyTurn=active&&active.name.toLowerCase()===myName;
+    const initiativeRows=sorted.length
+      ?sorted.map(c=>{
+          const isActive=c.id===_activeTurnId;
+          const isSelf=c.name.toLowerCase()===myName;
+          const pct=c.maxHp>0?c.hp/c.maxHp:0;
+          const barColor=_hpBarColor(pct);
+          const hpTxt=isSelf?`${c.hp}/${c.maxHp}`:_hpDesc(pct);
+          return`<div class="ct-ini-row${isActive?' ct-ini-active':''}">
+            <span class="ct-ini-arrow">${isActive?'▶':''}</span>
+            <span class="ct-ini-num">${c.initiative}</span>
+            <span class="ct-ini-dot" style="background:${c.type==='enemy'?'#f87171':c.type==='ally'?'#6ee7b7':'#93c5fd'}"></span>
+            <span class="ct-ini-name">${c.name}${isSelf?' (tú)':''}</span>
+            <span class="ct-ini-hp" style="color:${barColor}">${hpTxt}</span>
+          </div>`;
+        }).join('')
+      :'<div style="font-size:12px;color:var(--text-d);padding:6px 0;">El DM aún no inició el combate</div>';
+    sessionUI=`<div class="ct-session-connected">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="color:#4ade80;font-size:13px;">📡</span>
+          <span class="ct-session-connected-code">${_liveSession.code}</span>
+          <span style="font-size:12px;color:rgba(74,222,128,.6);">${_liveSession.playerName}</span>
+        </div>
+        <button class="ct-session-leave" onclick="leaveLiveSession()">✕</button>
+      </div>
+      ${isMyTurn?`<div style="background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.3);border-radius:4px;padding:6px 10px;margin-bottom:6px;font-size:13px;font-weight:700;color:var(--lol-gold);">⚔️ ¡Es tu turno! Elegí tu acción abajo.</div>`:''}
+      ${active&&!isMyTurn?`<div style="font-size:12px;color:var(--text-d);margin-bottom:4px;">Turno de: <strong style="color:var(--text-p)">${active.name}</strong></div>`:''}
+      <div class="ct-ini-list">${initiativeRows}</div>
+    </div>`;
+  } else {
+    sessionUI=`<div class="ct-session-join">
         <div class="ct-session-join-hint">📡 Conectate a la sesión del DM para compartir tus tiradas en tiempo real</div>
         <div class="ct-session-join-row">
           <input class="ct-session-code-inp" id="ctSessionCode" placeholder="CÓDIGO" maxlength="6">
@@ -4747,6 +4789,7 @@ function _renderCombatActions(cls){
           <button class="ct-session-join-btn" onclick="joinLiveSession(document.getElementById('ctSessionCode').value,document.getElementById('ctSessionName').value)">Unirse</button>
         </div>
       </div>`;
+  }
 
   el.innerHTML=`
   <div class="ct-wrap">
@@ -5721,6 +5764,14 @@ function _hpBarColor(pct){
   if(pct>0.3)return '#fbbf24';
   return '#f87171';
 }
+function _hpDesc(pct){
+  if(pct>=1)return'Sin heridas';
+  if(pct>=0.75)return'Levemente herido';
+  if(pct>=0.5)return'Herido';
+  if(pct>=0.25)return'Muy herido';
+  if(pct>0)return'En estado crítico ⚠️';
+  return'Inconsciente 💀';
+}
 function _addLog(msg,type=''){
   const t=new Date();
   const time=t.getHours().toString().padStart(2,'0')+':'+t.getMinutes().toString().padStart(2,'0');
@@ -5853,19 +5904,26 @@ function createLiveSession(){
     renderCombat();
   });
   ch.on('broadcast',{event:'join'},({payload})=>{
-    if(_liveSession)_liveSession.playerCount=(_liveSession.playerCount||0)+1;
+    if(_liveSession){
+      _liveSession.playerCount=(_liveSession.playerCount||0)+1;
+      if(!_liveSession.players)_liveSession.players=[];
+      if(!_liveSession.players.includes(payload.name))_liveSession.players.push(payload.name);
+    }
     _addLog(`👤 ${payload.name} se unió a la sesión`,'log-heal');
     renderCombat();renderSessionBar();
     setTimeout(()=>_broadcastDmUpdate(),300);
   });
   ch.on('broadcast',{event:'leave'},({payload})=>{
-    if(_liveSession)_liveSession.playerCount=Math.max(0,(_liveSession.playerCount||1)-1);
+    if(_liveSession){
+      _liveSession.playerCount=Math.max(0,(_liveSession.playerCount||1)-1);
+      if(_liveSession.players)_liveSession.players=_liveSession.players.filter(n=>n!==payload.name);
+    }
     _addLog(`👤 ${payload.name} dejó la sesión`,'');
     renderCombat();renderSessionBar();
   });
   ch.subscribe(status=>{
     if(status==='SUBSCRIBED'){
-      _liveSession={code,role:'dm',channel:ch,playerCount:0};
+      _liveSession={code,role:'dm',channel:ch,playerCount:0,players:[]};
       _addLog('📡 Sesión iniciada · Código: '+code,'log-heal');
       renderCombat();renderSessionBar();
     }
@@ -5886,6 +5944,8 @@ function joinLiveSession(code,playerName){
     const active=_combatants.find(c=>c.id===_activeTurnId);
     if(active&&active.name.toLowerCase()===playerName.toLowerCase())_showMyTurnToast();
     renderCombat();
+    const ck2=_loadedCharClass||selections?.class||'fighter';
+    _renderCombatActions(ck2);
   });
   ch.subscribe(status=>{
     if(status==='SUBSCRIBED'){
@@ -5938,10 +5998,17 @@ function renderSessionBar(){
     </div>`;
   } else {
     const pc=_liveSession.playerCount||0;
+    const players=_liveSession.players||[];
+    const playerChips=players.length
+      ?players.map(n=>`<span class="cmb-player-chip">👤 ${n}</span>`).join('')
+      :`<span style="font-size:11px;color:var(--text-d);font-style:italic;">Ningún jugador aún</span>`;
     bar.innerHTML=`<div class="cmb-session-active">
-      <div><div class="cmb-session-lbl">Código de sesión</div><div class="cmb-session-code">${_liveSession.code}</div></div>
-      <span class="cmb-session-pill ${pc>0?'online':'waiting'}">${pc>0?`● ${pc} jugador${pc>1?'es':''} conectado${pc>1?'s':''}`:'Esperando jugadores…'}</span>
-      <button class="cmb-session-btn end" onclick="leaveLiveSession()">✕ Terminar</button>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <div><div class="cmb-session-lbl">Código de sesión</div><div class="cmb-session-code">${_liveSession.code}</div></div>
+        <span class="cmb-session-pill ${pc>0?'online':'waiting'}">${pc>0?`● ${pc} online`:'Esperando…'}</span>
+      </div>
+      <div class="cmb-players-list">${playerChips}</div>
+      <button class="cmb-session-btn end" onclick="leaveLiveSession()">✕ Terminar sesión</button>
     </div>`;
   }
 }
@@ -5969,21 +6036,23 @@ function renderCombat(){
       const typeClass=c.type==='enemy'?'is-enemy':c.type==='ally'?'is-ally':'';
       const activeClass=c.id===_activeTurnId?'is-active':'';
       const deadClass=c.isDead?'is-dead':'';
+      const isPlayerRole=_liveSession?.role==='player';
+      const isSelf=isPlayerRole&&c.name.toLowerCase()===(_liveSession?.playerName||'').toLowerCase();
+      const showExactHp=!isPlayerRole||isSelf;
+      const hpDisplay=showExactHp?`❤️ ${c.hp}/${c.maxHp}`:`❤️ ${_hpDesc(pct)}`;
       const html=`
         <div class="cmb-turn-arrow">▶</div>
         <div class="cmb-row1">
           <div class="cmb-ini">${c.initiative}</div>
           <div class="cmb-type-dot ${c.type}"></div>
-          <div class="cmb-name">${c.name}</div>
-          <button class="cmb-remove-btn" onclick="combatRemove('${c.id}')" title="Remover">✕</button>
+          <div class="cmb-name">${c.name}${isSelf?' <span style="font-size:10px;color:var(--lol-teal);">(tú)</span>':''}</div>
+          ${!isPlayerRole?`<button class="cmb-remove-btn" onclick="combatRemove('${c.id}')" title="Remover">✕</button>`:''}
         </div>
         <div class="cmb-hp-bar-wrap"><div class="cmb-hp-bar" style="width:${Math.round(pct*100)}%;background:${barColor};"></div></div>
         <div class="cmb-row2">
-          <div class="cmb-hp-label">❤️ ${c.hp}/${c.maxHp}</div>
+          <div class="cmb-hp-label">${hpDisplay}</div>
           <div class="cmb-ac-label">CA ${c.ac}</div>
-          <div class="cmb-hp-btns">
-            <button class="cmb-hp-btn dmg" onclick="combatOpenHpModal('${c.id}')">🗡 Daño/Curar</button>
-          </div>
+          ${!isPlayerRole?`<div class="cmb-hp-btns"><button class="cmb-hp-btn dmg" onclick="combatOpenHpModal('${c.id}')">🗡 Daño/Curar</button></div>`:''}
         </div>`;
       if(!el){
         el=document.createElement('div');
@@ -6020,21 +6089,27 @@ function renderCombat(){
     const pct=active.maxHp>0?active.hp/active.maxHp:0;
     const barColor=_hpBarColor(pct);
     const typeLabel=active.type==='enemy'?'🔴 Enemigo':active.type==='ally'?'🟢 Aliado':'🔵 Jugador';
+    const isPlayerRole=_liveSession?.role==='player';
+    const isSelf=isPlayerRole&&active.name.toLowerCase()===(_liveSession?.playerName||'').toLowerCase();
+    const showExactHp=!isPlayerRole||isSelf;
+    const hpDisplay=showExactHp?`❤️ ${active.hp}/${active.maxHp}`:`❤️ ${_hpDesc(pct)}`;
+    const isMyTurn=isSelf;
     activeCard.innerHTML=`
       <div class="combat-active-info">
-        <div class="combat-active-name">${active.name}</div>
+        <div class="combat-active-name">${active.name}${isMyTurn?' ⚔️':''}</div>
+        ${isMyTurn?`<div style="font-size:13px;color:var(--lol-gold);font-weight:700;margin-bottom:4px;">¡Es tu turno!</div>`:''}
         <div class="combat-active-stats">
-          <span class="combat-active-hp" style="color:${barColor}">❤️ ${active.hp}/${active.maxHp}</span>
+          <span class="combat-active-hp" style="color:${barColor}">${hpDisplay}</span>
           <span class="combat-active-ac">CA ${active.ac}</span>
           <span style="font-size:12px;color:var(--text-d);">${typeLabel}</span>
           <span style="font-size:12px;color:rgba(212,175,55,.6);">INI ${active.initiative}</span>
         </div>
         <div class="combat-active-hp-bar"><div class="combat-active-hp-fill" style="width:${Math.round(pct*100)}%;background:${barColor};"></div></div>
       </div>
-      <div class="combat-active-btns">
+      ${!isPlayerRole?`<div class="combat-active-btns">
         <button class="combat-active-btn btn-hp" onclick="combatOpenHpModal('${active.id}')">🗡 Daño / Curar</button>
         <button class="combat-active-btn btn-next" onclick="combatNextTurn()">Siguiente ▶</button>
-      </div>`;
+      </div>`:`<div style="padding:6px 0;font-size:12px;color:var(--text-d);">Solo el DM controla el tracker</div>`}`;
   }
 
   // log
