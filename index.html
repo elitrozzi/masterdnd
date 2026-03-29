@@ -1022,6 +1022,31 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 .combat-char-chip:hover{background:rgba(147,197,253,.18);}
 /* combat main panel */
 .combat-main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+/* Onboarding guide */
+.combat-guide{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:40px 32px;gap:28px;}
+.combat-guide-title{font:900 22px/1 'Cinzel',serif;color:var(--gold);letter-spacing:.1em;text-align:center;}
+.combat-guide-steps{display:flex;flex-direction:column;gap:14px;max-width:480px;width:100%;}
+.combat-guide-step{display:flex;align-items:flex-start;gap:14px;padding:14px 16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;}
+.combat-guide-num{font:900 20px/1 'Cinzel',serif;color:var(--gold);opacity:.6;min-width:24px;}
+.combat-guide-text strong{display:block;font-size:14px;font-weight:700;color:#fff;margin-bottom:3px;}
+.combat-guide-text span{font-size:12px;color:var(--text-d);line-height:1.4;}
+/* Active turn card */
+.combat-active-panel{padding:16px 20px;border-bottom:1px solid rgba(212,175,55,.2);background:rgba(212,175,55,.04);}
+.combat-active-label{font:700 11px/1 'Cinzel',serif;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,175,55,.5);margin-bottom:10px;}
+.combat-active-card{display:flex;align-items:center;gap:14px;padding:14px 16px;background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.35);border-radius:8px;}
+.combat-active-info{flex:1;min-width:0;}
+.combat-active-name{font:700 20px/1 'Cinzel',serif;color:#fff;margin-bottom:6px;}
+.combat-active-stats{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.combat-active-hp{font:700 16px/1 'Cinzel',serif;}
+.combat-active-ac{font-size:13px;color:var(--text-d);background:rgba(255,255,255,.07);border-radius:4px;padding:2px 7px;}
+.combat-active-hp-bar{height:6px;border-radius:3px;overflow:hidden;background:rgba(255,255,255,.1);margin-top:6px;}
+.combat-active-hp-fill{height:100%;border-radius:3px;transition:width .3s;}
+.combat-active-btns{display:flex;flex-direction:column;gap:6px;flex-shrink:0;}
+.combat-active-btn{padding:8px 18px;border-radius:6px;border:1px solid;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .15s;}
+.combat-active-btn.btn-hp{border-color:rgba(248,113,113,.4);background:rgba(248,113,113,.12);color:#f87171;}
+.combat-active-btn.btn-hp:hover{background:rgba(248,113,113,.25);}
+.combat-active-btn.btn-next{border-color:rgba(212,175,55,.4);background:rgba(212,175,55,.15);color:var(--gold);}
+.combat-active-btn.btn-next:hover{background:rgba(212,175,55,.28);}
 .combat-log{flex:1;overflow-y:auto;padding:16px 20px;}
 .combat-log-header{font-family:'Cinzel',serif;font-size:14px;color:var(--gold);margin-bottom:12px;letter-spacing:.06em;}
 .combat-log-list{display:flex;flex-direction:column;gap:6px;}
@@ -1387,7 +1412,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.8.7</span>
+    <span class="ver-badge">v1.8.8</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">29 Mar 2026</span>
   </div>
@@ -2304,13 +2329,36 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         </div>
       </div>
     </div>
-    <!-- Main panel: combat log -->
+    <!-- Main panel: active turn + log -->
     <div class="combat-main">
-      <div class="combat-log" id="combatLog">
-        <div class="combat-log-header">⚔️ Registro de combate</div>
-        <div class="combat-log-list" id="combatLogList">
-          <div class="combat-log-entry" style="color:var(--text-d);border-left-color:transparent;">El combate no ha comenzado...</div>
+      <div id="combatGuide" class="combat-guide">
+        <div class="combat-guide-title">⚔️ Cómo usar el Combat Tracker</div>
+        <div class="combat-guide-steps">
+          <div class="combat-guide-step">
+            <div class="combat-guide-num">1</div>
+            <div class="combat-guide-text"><strong>Añadí combatientes</strong><span>En el panel izquierdo, escribí el nombre, HP y CA de cada jugador y enemigo. Dejá INI vacío para tirar automático.</span></div>
+          </div>
+          <div class="combat-guide-step">
+            <div class="combat-guide-num">2</div>
+            <div class="combat-guide-text"><strong>Avanzá los turnos</strong><span>Hacé click en "Siguiente ▶" para pasar al siguiente combatiente en orden de iniciativa. La ronda avanza automáticamente.</span></div>
+          </div>
+          <div class="combat-guide-step">
+            <div class="combat-guide-num">3</div>
+            <div class="combat-guide-text"><strong>Rastreá el HP</strong><span>Cuando alguien reciba daño o se cure, hacé click en "🗡 Daño/Curar" en su tarjeta para actualizar sus PV.</span></div>
+          </div>
+          <div class="combat-guide-step">
+            <div class="combat-guide-num">4</div>
+            <div class="combat-guide-text"><strong>Tus personajes guardados</strong><span>Los chips azules debajo del formulario añaden directamente tus personajes con su HP y CA actuales.</span></div>
+          </div>
         </div>
+      </div>
+      <div id="combatActivePanel" class="combat-active-panel" style="display:none;">
+        <div class="combat-active-label">Turno actual</div>
+        <div class="combat-active-card" id="combatActiveCard"></div>
+      </div>
+      <div class="combat-log" id="combatLog" style="display:none;">
+        <div class="combat-log-header">📜 Registro</div>
+        <div class="combat-log-list" id="combatLogList"></div>
       </div>
     </div>
   </div>
@@ -5798,6 +5846,39 @@ function renderCombat(){
     const chars=_loadSavedChars();
     chips.innerHTML=chars.length?chars.map(c=>`<span class="combat-char-chip" onclick="combatAddFromChar('${c.id}')" title="Añadir ${c.name} al combate">+${c.name}</span>`).join(''):'';
   }
+  // guide / active panel visibility
+  const guide=document.getElementById('combatGuide');
+  const activePanel=document.getElementById('combatActivePanel');
+  const logEl=document.getElementById('combatLog');
+  const hasAny=sorted.length>0;
+  if(guide)guide.style.display=hasAny?'none':'flex';
+  if(activePanel)activePanel.style.display=hasAny?'block':'none';
+  if(logEl)logEl.style.display=hasAny?'flex':'none';
+
+  // active turn card
+  const activeCard=document.getElementById('combatActiveCard');
+  if(activeCard&&hasAny){
+    const active=sorted.find(c=>c.id===_activeTurnId)||sorted[0];
+    const pct=active.maxHp>0?active.hp/active.maxHp:0;
+    const barColor=_hpBarColor(pct);
+    const typeLabel=active.type==='enemy'?'🔴 Enemigo':active.type==='ally'?'🟢 Aliado':'🔵 Jugador';
+    activeCard.innerHTML=`
+      <div class="combat-active-info">
+        <div class="combat-active-name">${active.name}</div>
+        <div class="combat-active-stats">
+          <span class="combat-active-hp" style="color:${barColor}">❤️ ${active.hp}/${active.maxHp}</span>
+          <span class="combat-active-ac">CA ${active.ac}</span>
+          <span style="font-size:12px;color:var(--text-d);">${typeLabel}</span>
+          <span style="font-size:12px;color:rgba(212,175,55,.6);">INI ${active.initiative}</span>
+        </div>
+        <div class="combat-active-hp-bar"><div class="combat-active-hp-fill" style="width:${Math.round(pct*100)}%;background:${barColor};"></div></div>
+      </div>
+      <div class="combat-active-btns">
+        <button class="combat-active-btn btn-hp" onclick="combatOpenHpModal('${active.id}')">🗡 Daño / Curar</button>
+        <button class="combat-active-btn btn-next" onclick="combatNextTurn()">Siguiente ▶</button>
+      </div>`;
+  }
+
   // log
   const logList=document.getElementById('combatLogList');
   if(logList){

@@ -1,7 +1,12 @@
 {
-  "version": "1.8.7",
+  "version": "1.8.8",
   "date": "2026-03-29",
   "history": [
+    {
+      "version": "1.8.8",
+      "date": "2026-03-29",
+      "note": "Combat Tracker: guía de inicio con 4 pasos cuando está vacío, card de turno activo con HP/CA/tipo y botones Daño+Siguiente en panel principal"
+    },
     {
       "version": "1.8.7",
       "date": "2026-03-29",
