@@ -1,7 +1,12 @@
 {
-  "version": "1.8.1",
-  "date": "2026-03-28",
+  "version": "1.8.2",
+  "date": "2026-03-29",
   "history": [
+    {
+      "version": "1.8.2",
+      "date": "2026-03-29",
+      "note": "Ficha: sistema de fuentes unificado — 20px nombre/stats, 18px subtítulos, 16px resto de la UI"
+    },
     {
       "version": "1.8.1",
       "date": "2026-03-28",
