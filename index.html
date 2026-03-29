@@ -1412,7 +1412,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.8.8</span>
+    <span class="ver-badge">v1.8.9</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">29 Mar 2026</span>
   </div>
@@ -5853,7 +5853,7 @@ function renderCombat(){
   const hasAny=sorted.length>0;
   if(guide)guide.style.display=hasAny?'none':'flex';
   if(activePanel)activePanel.style.display=hasAny?'block':'none';
-  if(logEl)logEl.style.display=hasAny?'flex':'none';
+  if(logEl)logEl.style.display=hasAny?'block':'none';
 
   // active turn card
   const activeCard=document.getElementById('combatActiveCard');
