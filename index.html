@@ -966,7 +966,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 /* ══════════════════════════════════ COMBAT TRACKER */
 #page-combat.active{display:flex!important;flex-direction:column;height:100vh;padding-top:60px;}
 .combat-layout{display:flex;flex:1;min-height:0;gap:0;}
-.combat-sidebar{width:280px;flex-shrink:0;border-right:1px solid var(--border);display:flex;flex-direction:column;background:rgba(9,7,15,.6);overflow:hidden;}
+.combat-sidebar{width:25%;min-width:280px;flex-shrink:0;border-right:1px solid var(--border);display:flex;flex-direction:column;background:rgba(9,7,15,.6);overflow:visible;}
 .combat-header{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px;}
 .combat-round-badge{font-family:'Cinzel',serif;font-size:11px;font-weight:700;color:var(--gold);background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.3);border-radius:20px;padding:3px 10px;letter-spacing:.08em;}
 .combat-btn-row{display:flex;gap:6px;}
@@ -1387,7 +1387,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.8.6</span>
+    <span class="ver-badge">v1.8.7</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">29 Mar 2026</span>
   </div>
@@ -2298,8 +2298,8 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
               <option value="ally">Aliado</option>
               <option value="player">Jugador</option>
             </select>
-            <button class="combat-add-submit" onclick="combatAddFromForm()">+ Añadir</button>
           </div>
+          <button class="combat-add-submit" style="width:100%;padding:7px;" onclick="combatAddFromForm()">+ Añadir</button>
           <div id="combatCharChips" class="combat-chars-chips"></div>
         </div>
       </div>
