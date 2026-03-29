@@ -1068,6 +1068,36 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 .combat-hp-modal-btn.do-dmg:hover{background:rgba(248,113,113,.35);}
 .combat-hp-modal-btn.do-heal{background:rgba(110,231,183,.2);color:#6ee7b7;border:1px solid rgba(110,231,183,.4);}
 .combat-hp-modal-btn.do-heal:hover{background:rgba(110,231,183,.35);}
+/* ── Live Session ── */
+.cmb-session{padding:8px 14px;background:rgba(0,0,0,.25);border-bottom:1px solid rgba(255,255,255,.06);}
+.cmb-session-setup{display:flex;align-items:center;gap:8px;}
+.cmb-session-active{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.cmb-session-code{font:900 22px/1 'Cinzel',serif;color:#4ade80;letter-spacing:.25em;}
+.cmb-session-lbl{font-size:10px;color:rgba(74,222,128,.5);text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px;}
+.cmb-session-pill{font-size:10px;font-weight:700;padding:3px 9px;border-radius:10px;}
+.cmb-session-pill.online{background:rgba(74,222,128,.15);color:#4ade80;border:1px solid rgba(74,222,128,.3);}
+.cmb-session-pill.waiting{background:rgba(255,255,255,.06);color:var(--text-d);border:1px solid rgba(255,255,255,.1);}
+.cmb-session-btn{font:700 11px/1 'Cinzel',serif;padding:5px 12px;cursor:pointer;border:1px solid;transition:all .15s;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;}
+.cmb-session-btn.create{border-color:rgba(74,222,128,.4);background:rgba(74,222,128,.1);color:#4ade80;}
+.cmb-session-btn.create:hover{background:rgba(74,222,128,.2);}
+.cmb-session-btn.end{border-color:rgba(248,113,113,.3);background:rgba(248,113,113,.08);color:#f87171;margin-left:auto;}
+.cmb-session-btn.end:hover{background:rgba(248,113,113,.18);}
+/* Player join (actions tab) */
+.ct-session-join{padding:8px 10px;background:rgba(147,197,253,.04);border-bottom:1px solid rgba(147,197,253,.12);}
+.ct-session-join-hint{font-size:11px;color:var(--text-d);margin-bottom:5px;}
+.ct-session-join-row{display:flex;gap:5px;}
+.ct-session-code-inp{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;padding:5px 8px;font:700 13px/1 'Cinzel',serif;letter-spacing:.18em;text-transform:uppercase;width:88px;outline:none;}
+.ct-session-code-inp:focus{border-color:rgba(147,197,253,.5);}
+.ct-session-name-inp{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;padding:5px 8px;font-size:13px;flex:1;outline:none;}
+.ct-session-name-inp:focus{border-color:rgba(147,197,253,.5);}
+.ct-session-join-btn{font:700 11px/1 'Cinzel',serif;padding:5px 12px;border:1px solid rgba(147,197,253,.4);background:rgba(147,197,253,.1);color:#93c5fd;cursor:pointer;white-space:nowrap;}
+.ct-session-connected{display:flex;align-items:center;gap:8px;padding:7px 10px;background:rgba(74,222,128,.05);border-bottom:1px solid rgba(74,222,128,.15);}
+.ct-session-connected-code{font:700 14px/1 'Cinzel',serif;color:#4ade80;letter-spacing:.15em;}
+.ct-session-leave{margin-left:auto;font-size:11px;color:rgba(248,113,113,.6);background:none;border:none;cursor:pointer;padding:2px 6px;}
+.ct-session-leave:hover{color:#f87171;}
+/* My turn toast */
+.my-turn-toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:9999;background:var(--lol-gold);color:#0a0618;padding:14px 32px;font:900 18px/1 'Cinzel',serif;letter-spacing:.1em;box-shadow:0 4px 30px rgba(212,175,55,.5);animation:toastIn .3s ease;pointer-events:none;}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-16px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 .combat-hp-modal-btn.do-cancel{background:rgba(255,255,255,.07);color:var(--text-m);border:1px solid rgba(255,255,255,.12);}
 .combat-hp-modal-btn.do-cancel:hover{background:rgba(255,255,255,.13);}
 .combat-empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;height:100%;color:var(--text-d);font-size:13px;}
@@ -1412,7 +1442,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.8.9</span>
+    <span class="ver-badge">v1.9.0</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">29 Mar 2026</span>
   </div>
@@ -2302,6 +2332,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
           <button class="combat-btn btn-danger" onclick="combatReset()">Reset</button>
         </div>
       </div>
+      <div id="combatSessionBar" class="cmb-session"></div>
       <div class="combatant-list" id="combatantList">
         <div class="combat-empty-state" id="combatEmptyState">
           <div class="combat-empty-icon">⚔️</div>
@@ -4700,8 +4731,26 @@ function _renderCombatActions(cls){
 
   const aUsed=_turnState.action, bUsed=_turnState.bonus, rUsed=_turnState.reaction;
 
+  const charName=document.getElementById('csName')?.value||_liveSession?.playerName||'';
+  const sessionUI=_liveSession&&_liveSession.role==='player'
+    ?`<div class="ct-session-connected">
+        <span>📡</span>
+        <span class="ct-session-connected-code">${_liveSession.code}</span>
+        <span style="font-size:12px;color:rgba(74,222,128,.6);">· ${_liveSession.playerName} · Tus tiradas llegan al DM</span>
+        <button class="ct-session-leave" onclick="leaveLiveSession()">✕ Desconectar</button>
+      </div>`
+    :`<div class="ct-session-join">
+        <div class="ct-session-join-hint">📡 Conectate a la sesión del DM para compartir tus tiradas en tiempo real</div>
+        <div class="ct-session-join-row">
+          <input class="ct-session-code-inp" id="ctSessionCode" placeholder="CÓDIGO" maxlength="6">
+          <input class="ct-session-name-inp" id="ctSessionName" placeholder="Tu nombre" value="${charName}">
+          <button class="ct-session-join-btn" onclick="joinLiveSession(document.getElementById('ctSessionCode').value,document.getElementById('ctSessionName').value)">Unirse</button>
+        </div>
+      </div>`;
+
   el.innerHTML=`
   <div class="ct-wrap">
+    ${sessionUI}
     <!-- Header -->
     <div class="ct-header">
       <div class="ct-header-title">⚔️ Tu turno</div>
@@ -5703,6 +5752,7 @@ function combatAddCombatant(name,ini,hp,ac,type){
   if(_combatants.length===1)_activeTurnId=id;
   _saveCombat();
   renderCombat();
+  _broadcastDmUpdate();
 }
 function combatAddFromChar(charId){
   const chars=_loadSavedChars();
@@ -5725,6 +5775,7 @@ function combatRemove(id){
   }
   _saveCombat();
   renderCombat();
+  _broadcastDmUpdate();
 }
 function combatNextTurn(){
   const sorted=_sortedCombatants().filter(c=>!c.isDead);
@@ -5736,6 +5787,7 @@ function combatNextTurn(){
   _addLog(`Turno de ${sorted[next].name} — Ronda ${_combatRound}`,'log-turn');
   _saveCombat();
   renderCombat();
+  _broadcastDmUpdate();
   // scroll active into view
   requestAnimationFrame(()=>{
     const el=document.querySelector('.combatant-item.is-active');
@@ -5786,6 +5838,112 @@ function combatApplyHp(id,mode,amount){
   }
   _saveCombat();
   renderCombat();
+  _broadcastDmUpdate();
+}
+
+/* ══ LIVE SESSION ══ */
+let _liveSession=null;
+
+function createLiveSession(){
+  if(_liveSession)leaveLiveSession();
+  const code=Math.random().toString(36).substr(2,6).toUpperCase();
+  const ch=_SB.channel('mdn-combat-'+code,{config:{broadcast:{self:false}}});
+  ch.on('broadcast',{event:'roll'},({payload})=>{
+    _addLog(`🎲 ${payload.name}: ${payload.label} → ${payload.total}`,'log-turn');
+    renderCombat();
+  });
+  ch.on('broadcast',{event:'join'},({payload})=>{
+    if(_liveSession)_liveSession.playerCount=(_liveSession.playerCount||0)+1;
+    _addLog(`👤 ${payload.name} se unió a la sesión`,'log-heal');
+    renderCombat();renderSessionBar();
+    setTimeout(()=>_broadcastDmUpdate(),300);
+  });
+  ch.on('broadcast',{event:'leave'},({payload})=>{
+    if(_liveSession)_liveSession.playerCount=Math.max(0,(_liveSession.playerCount||1)-1);
+    _addLog(`👤 ${payload.name} dejó la sesión`,'');
+    renderCombat();renderSessionBar();
+  });
+  ch.subscribe(status=>{
+    if(status==='SUBSCRIBED'){
+      _liveSession={code,role:'dm',channel:ch,playerCount:0};
+      _addLog('📡 Sesión iniciada · Código: '+code,'log-heal');
+      renderCombat();renderSessionBar();
+    }
+  });
+}
+
+function joinLiveSession(code,playerName){
+  code=(code||'').trim().toUpperCase();
+  playerName=(playerName||'').trim();
+  if(!code||!playerName)return;
+  if(_liveSession)leaveLiveSession();
+  const ch=_SB.channel('mdn-combat-'+code,{config:{broadcast:{self:false}}});
+  ch.on('broadcast',{event:'update'},({payload})=>{
+    _combatants=payload.combatants||[];
+    _combatRound=payload.round||1;
+    _activeTurnId=payload.activeId||null;
+    if(payload.log)_combatLog=payload.log;
+    const active=_combatants.find(c=>c.id===_activeTurnId);
+    if(active&&active.name.toLowerCase()===playerName.toLowerCase())_showMyTurnToast();
+    renderCombat();
+  });
+  ch.subscribe(status=>{
+    if(status==='SUBSCRIBED'){
+      _liveSession={code,role:'player',channel:ch,playerName};
+      ch.send({type:'broadcast',event:'join',payload:{name:playerName}});
+      const ck=_loadedCharClass||selections?.class||'fighter';
+      _renderCombatActions(ck);
+    }
+  });
+}
+
+function leaveLiveSession(){
+  if(!_liveSession)return;
+  if(_liveSession.role==='player')
+    _liveSession.channel.send({type:'broadcast',event:'leave',payload:{name:_liveSession.playerName}});
+  try{_liveSession.channel.unsubscribe();}catch(e){}
+  _liveSession=null;
+  renderSessionBar();
+  const ck=_loadedCharClass||selections?.class||'fighter';
+  _renderCombatActions(ck);
+}
+
+function _broadcastDmUpdate(){
+  if(!_liveSession||_liveSession.role!=='dm')return;
+  _liveSession.channel.send({type:'broadcast',event:'update',
+    payload:{combatants:_combatants,round:_combatRound,activeId:_activeTurnId,log:_combatLog.slice(-40)}});
+}
+
+function _broadcastRoll(label,total){
+  if(!_liveSession||_liveSession.role!=='player')return;
+  _liveSession.channel.send({type:'broadcast',event:'roll',payload:{name:_liveSession.playerName,label,total}});
+}
+
+function _showMyTurnToast(){
+  document.querySelectorAll('.my-turn-toast').forEach(e=>e.remove());
+  const el=document.createElement('div');
+  el.className='my-turn-toast';
+  el.textContent='⚔️ ¡Es tu turno!';
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),4000);
+}
+
+function renderSessionBar(){
+  const bar=document.getElementById('combatSessionBar');
+  if(!bar)return;
+  if(!_liveSession||_liveSession.role!=='dm'){
+    bar.innerHTML=`<div class="cmb-session-setup">
+      <span style="font-size:11px;color:var(--text-d);">Sin conexión en vivo</span>
+      <button class="cmb-session-btn create" onclick="createLiveSession()">📡 Crear sesión en vivo</button>
+    </div>`;
+  } else {
+    const pc=_liveSession.playerCount||0;
+    bar.innerHTML=`<div class="cmb-session-active">
+      <div><div class="cmb-session-lbl">Código de sesión</div><div class="cmb-session-code">${_liveSession.code}</div></div>
+      <span class="cmb-session-pill ${pc>0?'online':'waiting'}">${pc>0?`● ${pc} jugador${pc>1?'es':''} conectado${pc>1?'s':''}`:'Esperando jugadores…'}</span>
+      <button class="cmb-session-btn end" onclick="leaveLiveSession()">✕ Terminar</button>
+    </div>`;
+  }
 }
 
 function renderCombat(){
@@ -5893,6 +6051,7 @@ function renderCombat(){
 function initCombat(){
   _loadCombatState();
   renderCombat();
+  renderSessionBar();
 }
 
 function updateCharsNavDropdown(){
@@ -6622,6 +6781,8 @@ function _drShowResult(roll,mod,label,diceType){
     document.getElementById('drResult').classList.add('show');
     document.getElementById('drHint').style.display='block';
   });
+  const total=mod!==0?result+mod:result;
+  _broadcastRoll(label||diceType,total);
 }
 
 function closeDiceRoller(){
