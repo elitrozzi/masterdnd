@@ -419,6 +419,9 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .ct-card-badge{font:700 12px/1 'Cinzel',serif;color:var(--lol-teal);background:rgba(11,196,227,.08);border:1px solid rgba(11,196,227,.25);padding:4px 8px;flex-shrink:0;}
 .ct-roll-btn{background:rgba(200,170,110,.18);border:1px solid rgba(200,170,110,.5);color:var(--lol-gold);font:700 13px/1 'Cinzel',serif;padding:8px 13px;cursor:pointer;flex-shrink:0;transition:all .15s;}
 .ct-roll-btn:hover{background:rgba(200,170,110,.32);}
+.ct-dmg-btn{background:rgba(220,60,60,.15);border:1px solid rgba(220,60,60,.45);color:#f87171;font:700 13px/1 'Cinzel',serif;padding:8px 13px;cursor:pointer;flex-shrink:0;transition:all .15s;}
+.ct-dmg-btn:hover{background:rgba(220,60,60,.3);}
+.ct-atk-btns{display:flex;flex-direction:column;gap:4px;flex-shrink:0;}
 /* Bonus action card */
 .ct-bonus-card{margin:4px 0;padding:10px 12px;background:rgba(139,92,246,.07);border:1px solid rgba(139,92,246,.22);transition:all .2s;}
 .ct-bonus-card.ct-used{opacity:.35;pointer-events:none;}
@@ -1384,7 +1387,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.8.5</span>
+    <span class="ver-badge">v1.8.6</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">29 Mar 2026</span>
   </div>
@@ -4626,6 +4629,10 @@ function _renderCombatActions(cls){
   _turnSpeed=(RACE_SPEED?.[rk]||30);
   const movLeft=_turnSpeed-_turnState.movUsed;
   const movPct=Math.round((movLeft/_turnSpeed)*100);
+  const dmgMap={fighter:'d10',paladin:'d10',barbarian:'d12',wizard:'d6',sorcerer:'d6',warlock:'d8',rogue:'d6',ranger:'d8',druid:'d8',bard:'d8',cleric:'d8',monk:'d6'};
+  const dmgDie=dmgMap[cls]||'d8';
+  const lv=_currentLevel||1;
+  const snkDice=cls==='rogue'?Math.ceil(lv/2):0;
 
   const BONUS={
     fighter:{name:'Vuelta de Aliento / Oleada de Acción',desc:'Vuelta de Aliento: recupera 1d10+nivel PG. Oleada de Acción: una acción adicional completa (1 vez/descanso corto).'},
@@ -4699,10 +4706,23 @@ function _renderCombatActions(cls){
         <div class="ct-card-icon">⚔️</div>
         <div class="ct-card-body">
           <div class="ct-card-name">Atacar</div>
-          <div class="ct-card-sub">Golpe melé o a distancia · Bono al ataque: ${s(totalAtk)}</div>
+          <div class="ct-card-sub">Golpe melé o a distancia · Bono al ataque: ${s(totalAtk)} · Daño: ${dmgDie}${strMod!==0?s(strMod):''}</div>
         </div>
-        <button class="ct-roll-btn" onclick="event.stopPropagation();ctUseAction(()=>rollD20(${totalAtk},'Ataque'))">🎲 Tirar</button>
+        <div class="ct-atk-btns">
+          <button class="ct-roll-btn" onclick="event.stopPropagation();ctUseAction(()=>rollD20(${totalAtk},'Ataque'))">🎲 Ataque</button>
+          <button class="ct-dmg-btn" onclick="event.stopPropagation();rollDieType('${dmgDie}',${strMod},'Daño')">💥 Daño</button>
+        </div>
       </div>
+      ${snkDice>0?`
+      <div class="ct-card${aUsed?' ct-used':''}">
+        <div class="ct-card-icon">🗡️</div>
+        <div class="ct-card-body">
+          <div class="ct-card-name">Ataque Furtivo</div>
+          <div class="ct-card-sub">${snkDice}d6 daño extra · Necesitás ventaja o un aliado adyacente al objetivo</div>
+        </div>
+        <button class="ct-dmg-btn" onclick="event.stopPropagation();_rollSneak(${snkDice})">💥 ${snkDice}d6</button>
+      </div>`:''}
+
       <div class="ct-card${aUsed?' ct-used':''}" onclick="ctUseAction(null)">
         <div class="ct-card-icon">🔮</div>
         <div class="ct-card-body">
@@ -4796,6 +4816,11 @@ function spendMove(ft){
 function nextTurn(){
   _turnState={action:false,bonus:false,reaction:false,movUsed:0};
   _renderCombatActions(_turnCls);
+}
+function _rollSneak(numDice){
+  let total=0;
+  for(let i=0;i<numDice;i++)total+=Math.floor(Math.random()*6)+1;
+  openDiceRoller('d6',total,0,`Ataque Furtivo ${numDice}d6`);
 }
 
 let _acInvCache=null;
