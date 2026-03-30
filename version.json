@@ -1,7 +1,12 @@
 {
-  "version": "2.0.0",
+  "version": "2.0.1",
   "date": "2026-03-30",
   "history": [
+    {
+      "version": "2.0.1",
+      "date": "2026-03-30",
+      "note": "Campaña: bitácora de sesiones con timeline, condiciones D&D y death saves en combate, ficha read-only de compañeros clickeable desde la party"
+    },
     {
       "version": "2.0.0",
       "date": "2026-03-30",

@@ -1455,7 +1455,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.0.0</span>
+    <span class="ver-badge">v2.0.1</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">30 Mar 2026</span>
   </div>
@@ -2338,6 +2338,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
       <div class="camp-tabs">
         <button class="camp-tab active" data-tab="party" onclick="switchCampTab('party')">👥 Party</button>
         <button class="camp-tab" data-tab="dm" onclick="switchCampTab('dm')">🎲 DM</button>
+        <button class="camp-tab" data-tab="bitacora" onclick="switchCampTab('bitacora')">📖 Bitácora</button>
         <button class="camp-tab" data-tab="inventory" onclick="switchCampTab('inventory')">🎒 Inventario</button>
         <button class="camp-tab" data-tab="combat" onclick="switchCampTab('combat')">⚔️ Combate</button>
       </div>
@@ -5828,6 +5829,67 @@ function goToCharsSmart(){
 .camp-modal-submit{width:100%;font:700 13px/1 'Cinzel',serif;padding:12px;background:rgba(212,175,55,.15);border:1px solid rgba(212,175,55,.4);color:var(--lol-gold);cursor:pointer;letter-spacing:.08em;margin-top:4px;transition:all .15s;}
 .camp-modal-submit:hover{background:rgba(212,175,55,.25);}
 .camp-modal-err{font-size:13px;color:#f87171;margin-top:10px;text-align:center;}
+/* ══ CONDITIONS + DEATH SAVES (combat) ══ */
+.cmb-conditions{display:flex;flex-wrap:wrap;gap:3px;padding:4px 0 2px;}
+.cmb-cond-badge{font-size:10px;padding:1px 6px;border-radius:8px;cursor:pointer;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:var(--text-d);transition:all .15s;user-select:none;}
+.cmb-cond-badge.active{background:rgba(251,191,36,.2);border-color:rgba(251,191,36,.5);color:#fbbf24;}
+.cmb-cond-add{font-size:10px;padding:1px 6px;border-radius:8px;cursor:pointer;border:1px dashed rgba(255,255,255,.2);background:none;color:var(--text-d);}
+.cmb-cond-add:hover{border-color:rgba(212,175,55,.4);color:var(--lol-gold);}
+.cmb-death-saves{display:flex;align-items:center;gap:10px;padding:5px 0;font-size:11px;}
+.cmb-ds-label{color:var(--text-d);min-width:60px;}
+.cmb-ds-circles{display:flex;gap:4px;}
+.cmb-ds-circle{width:14px;height:14px;border-radius:50%;border:1px solid;cursor:pointer;transition:all .15s;}
+.cmb-ds-circle.success{border-color:rgba(110,231,183,.4);background:rgba(110,231,183,.06);}
+.cmb-ds-circle.success.filled{background:#6ee7b7;border-color:#6ee7b7;}
+.cmb-ds-circle.failure{border-color:rgba(248,113,113,.4);background:rgba(248,113,113,.06);}
+.cmb-ds-circle.failure.filled{background:#f87171;border-color:#f87171;}
+.cmb-ds-roll{font-size:10px;padding:2px 7px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);color:var(--text-d);cursor:pointer;border-radius:3px;}
+.cmb-ds-roll:hover{border-color:rgba(212,175,55,.3);color:var(--lol-gold);}
+/* Condition picker dropdown */
+.cmb-cond-picker{position:absolute;z-index:200;background:#1a1330;border:1px solid rgba(212,175,55,.3);padding:8px;display:flex;flex-wrap:wrap;gap:4px;width:220px;box-shadow:0 4px 20px rgba(0,0,0,.5);}
+.cmb-cond-picker-badge{font-size:11px;padding:3px 8px;border-radius:8px;cursor:pointer;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:var(--text-m);transition:all .12s;}
+.cmb-cond-picker-badge:hover{border-color:rgba(251,191,36,.5);color:#fbbf24;}
+/* ══ SESSION TIMELINE ══ */
+.camp-timeline{display:flex;flex-direction:column;gap:0;}
+.camp-session-card{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.06);cursor:pointer;transition:background .15s;}
+.camp-session-card:hover{background:rgba(212,175,55,.04);}
+.camp-session-card:last-child{border-bottom:none;}
+.camp-session-num{font:700 28px/1 'Cinzel',serif;color:rgba(212,175,55,.25);min-width:40px;text-align:right;}
+.camp-session-body{flex:1;}
+.camp-session-title{font:700 15px/1 'Cinzel',serif;color:var(--lol-gold);margin-bottom:4px;}
+.camp-session-date{font-size:11px;color:var(--text-d);margin-bottom:6px;}
+.camp-session-notes{font-size:13px;color:var(--text-m);line-height:1.5;white-space:pre-wrap;}
+.camp-session-notes.collapsed{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.camp-new-session-btn{font:700 12px/1 'Cinzel',serif;padding:8px 20px;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.3);color:#4ade80;cursor:pointer;margin-bottom:20px;}
+.camp-new-session-btn:hover{background:rgba(74,222,128,.2);}
+.camp-session-empty{color:var(--text-d);font-size:14px;font-style:italic;padding:20px 0;}
+/* ══ READ-ONLY CHARACTER SHEET MODAL ══ */
+.ro-sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:900;display:flex;align-items:center;justify-content:center;padding:20px;}
+.ro-sheet{background:#0f0b1e;border:1px solid rgba(212,175,55,.3);width:100%;max-width:680px;max-height:90vh;overflow-y:auto;position:relative;}
+.ro-sheet-header{display:flex;align-items:center;gap:16px;padding:20px 24px;border-bottom:1px solid rgba(255,255,255,.08);position:sticky;top:0;background:#0f0b1e;z-index:1;}
+.ro-sheet-avatar{width:56px;height:56px;border-radius:50%;border:2px solid rgba(212,175,55,.35);background:rgba(255,255,255,.06);font-size:24px;display:flex;align-items:center;justify-content:center;overflow:hidden;background-size:cover;background-position:center top;flex-shrink:0;}
+.ro-sheet-name{font:700 20px/1 'Cinzel',serif;color:var(--lol-gold);}
+.ro-sheet-meta{font-size:12px;color:var(--text-d);margin-top:3px;text-transform:capitalize;}
+.ro-sheet-close{margin-left:auto;background:none;border:none;color:var(--text-d);font-size:20px;cursor:pointer;padding:4px 8px;}
+.ro-sheet-body{padding:20px 24px;display:flex;flex-direction:column;gap:18px;}
+.ro-section-title{font:700 11px/1 'Cinzel',serif;color:rgba(212,175,55,.5);text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px;}
+.ro-stats-row{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;}
+.ro-stat{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);padding:8px 4px;text-align:center;}
+.ro-stat-name{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-d);}
+.ro-stat-mod{font:700 20px/1 'Cinzel',serif;color:var(--lol-gold);}
+.ro-stat-val{font-size:11px;color:var(--text-d);}
+.ro-hp-ac{display:flex;gap:16px;}
+.ro-hp-box,.ro-ac-box{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);padding:10px 18px;text-align:center;flex:1;}
+.ro-box-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-d);}
+.ro-box-val{font:700 24px/1 'Cinzel',serif;color:var(--lol-gold);}
+.ro-skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px;}
+.ro-skill-row{display:flex;align-items:center;gap:6px;font-size:12px;padding:2px 0;}
+.ro-skill-dot{width:8px;height:8px;border-radius:50%;border:1px solid rgba(255,255,255,.2);flex-shrink:0;}
+.ro-skill-dot.prof{background:var(--lol-gold);border-color:var(--lol-gold);}
+.ro-skill-name{color:var(--text-m);flex:1;}
+.ro-skill-mod{color:var(--lol-gold);font-weight:700;min-width:28px;text-align:right;}
+.ro-inv-list{display:flex;flex-direction:column;gap:4px;}
+.ro-inv-item{font-size:13px;color:var(--text-m);padding:4px 8px;background:rgba(255,255,255,.03);border-left:2px solid rgba(212,175,55,.2);}
 /* ══ NOTES ══ */
 const NOTES_LS_KEY='masterdnd_notes';
 let _activeNoteId=null;
@@ -5993,7 +6055,7 @@ function combatAddFromForm(){
 }
 function combatAddCombatant(name,ini,hp,ac,type){
   const id='cmb_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);
-  _combatants.push({id,name,initiative:ini,hp,maxHp:hp,ac,type,isDead:false});
+  _combatants.push({id,name,initiative:ini,hp,maxHp:hp,ac,type,isDead:false,conditions:[],deathSaves:{s:0,f:0}});
   _addLog(`${name} entró al combate (INI ${ini})`,type==='enemy'?'log-dmg':type==='ally'?'log-heal':'log-turn');
   if(_combatants.length===1)_activeTurnId=id;
   _saveCombat();
@@ -6235,6 +6297,17 @@ function renderCombat(){
       const isSelf=isPlayerRole&&c.name.toLowerCase()===(_liveSession?.playerName||'').toLowerCase();
       const showExactHp=!isPlayerRole||isSelf;
       const hpDisplay=showExactHp?`❤️ ${c.hp}/${c.maxHp}`:`❤️ ${_hpDesc(pct)}`;
+      const conds=c.conditions||[];
+      const COND_ICONS={'Envenenado':'🤢','Aturdido':'😵','Asustado':'😨','Derribado':'🤸','Aferrado':'🔒','Restringido':'⛓️','Incapacitado':'💤','Cegado':'👁️','Paralizado':'❄️','Invisible':'✨'};
+      const condBadges=conds.map(cd=>`<span class="cmb-cond-badge active" onclick="toggleCombatCondition('${c.id}','${cd}')" title="Quitar ${cd}">${COND_ICONS[cd]||'●'} ${cd}</span>`).join('');
+      const condAdd=!isPlayerRole?`<button class="cmb-cond-add" onclick="openCondPicker(event,'${c.id}')">+ cond.</button>`:'';
+      const ds=c.deathSaves||{s:0,f:0};
+      const deathRow=c.hp<=0&&!isPlayerRole?`<div class="cmb-death-saves">
+        <span class="cmb-ds-label">💀 Muerte</span>
+        <div class="cmb-ds-circles">${[0,1,2].map(i=>`<div class="cmb-ds-circle success${i<ds.s?' filled':''}" onclick="toggleDeathSave('${c.id}','s',${i})"></div>`).join('')}</div>
+        <div class="cmb-ds-circles">${[0,1,2].map(i=>`<div class="cmb-ds-circle failure${i<ds.f?' filled':''}" onclick="toggleDeathSave('${c.id}','f',${i})"></div>`).join('')}</div>
+        <button class="cmb-ds-roll" onclick="rollDeathSave('${c.id}')">🎲 Tirar</button>
+      </div>`:'';
       const html=`
         <div class="cmb-turn-arrow">▶</div>
         <div class="cmb-row1">
@@ -6248,7 +6321,9 @@ function renderCombat(){
           <div class="cmb-hp-label">${hpDisplay}</div>
           <div class="cmb-ac-label">CA ${c.ac}</div>
           ${!isPlayerRole?`<div class="cmb-hp-btns"><button class="cmb-hp-btn dmg" onclick="combatOpenHpModal('${c.id}')">🗡 Daño/Curar</button></div>`:''}
-        </div>`;
+        </div>
+        ${conds.length||!isPlayerRole?`<div class="cmb-conditions">${condBadges}${condAdd}</div>`:''}
+        ${deathRow}`;
       if(!el){
         el=document.createElement('div');
         el.className='combatant-item';
@@ -6393,8 +6468,8 @@ async function openCampaignDetail(campaignId){
   document.getElementById('campDetailMeta').textContent=sessText;
   // Show +Session btn only for DM
   document.getElementById('campSessionBtn').style.display=myRole==='dm'?'block':'none';
-  // Load chars for members
-  await _enrichMembersWithChars();
+  // Load chars for members and sessions
+  await Promise.all([_enrichMembersWithChars(), loadCampaignSessions(camp.id)]);
   switchCampTab('party');
 }
 
@@ -6416,13 +6491,14 @@ function switchCampTab(tab){
   const content=document.getElementById('campTabContent');
   if(tab==='party')content.innerHTML=_buildPartyTab();
   else if(tab==='dm')content.innerHTML=_buildDmTab();
+  else if(tab==='bitacora')content.innerHTML=_buildBitacoraTab();
   else if(tab==='inventory')content.innerHTML=_buildInventoryTab();
   else if(tab==='combat'){content.innerHTML=`<div id="campCombatMount" style="display:flex;flex-direction:column;flex:1;"></div>`;_mountCombatInCampaign();}
 }
 
 function _buildPartyTab(){
   if(!_currentCampaignMembers.length)return`<div style="color:var(--text-d);padding:20px;font-size:14px;">Sin miembros aún.</div>`;
-  const cards=_currentCampaignMembers.map(m=>{
+  const cards=_currentCampaignMembers.map((m,idx)=>{
     const cd=m.charData;
     const pct=cd&&cd.hp>0?(cd.currentHp!=null?cd.currentHp:cd.hp)/cd.hp:1;
     const hpColor=pct>0.6?'#6ee7b7':pct>0.3?'#fbbf24':'#f87171';
@@ -6430,7 +6506,8 @@ function _buildPartyTab(){
     const avatarStyle=cd?.portrait?`background-image:url('${cd.portrait}');background-size:cover;background-position:center top;`:'';
     const avatarContent=cd?.portrait?'':'🧙';
     const displayName=m.display_name||m.charData?.name||'Aventurero';
-    return`<div class="camp-member-card">
+    const clickable=cd?`onclick="openMemberSheet(${idx})" style="cursor:pointer;" title="Ver ficha de ${displayName}"`:'';
+    return`<div class="camp-member-card" ${clickable}>
       <div class="camp-member-avatar" style="${avatarStyle}">${avatarContent}</div>
       <span class="camp-member-role-badge ${m.role}">${m.role==='dm'?'DM':'Jugador'}</span>
       <div class="camp-member-name">${displayName}</div>
@@ -6715,6 +6792,153 @@ async function linkCharToCampaign(){
     .eq('campaign_id',_currentCampaign.id).eq('user_id',_currentUser.id);
   closeCampaignModal();
   await openCampaignDetail(_currentCampaign.id);
+}
+
+/* ══ CONDITIONS ══ */
+const _ALL_CONDITIONS=['Envenenado','Aturdido','Asustado','Derribado','Aferrado','Restringido','Incapacitado','Cegado','Paralizado','Invisible'];
+function toggleCombatCondition(id,cond){
+  const c=_combatants.find(x=>x.id===id);if(!c)return;
+  if(!c.conditions)c.conditions=[];
+  const idx=c.conditions.indexOf(cond);
+  if(idx>=0)c.conditions.splice(idx,1);else c.conditions.push(cond);
+  _saveCombat();renderCombat();_broadcastDmUpdate();
+}
+function openCondPicker(e,id){
+  document.querySelectorAll('.cmb-cond-picker').forEach(p=>p.remove());
+  const c=_combatants.find(x=>x.id===id);if(!c)return;
+  const picker=document.createElement('div');
+  picker.className='cmb-cond-picker';
+  const ICONS={'Envenenado':'🤢','Aturdido':'😵','Asustado':'😨','Derribado':'🤸','Aferrado':'🔒','Restringido':'⛓️','Incapacitado':'💤','Cegado':'👁️','Paralizado':'❄️','Invisible':'✨'};
+  picker.innerHTML=_ALL_CONDITIONS.map(cd=>`<span class="cmb-cond-picker-badge${(c.conditions||[]).includes(cd)?' active':''}" onclick="toggleCombatCondition('${id}','${cd}');document.querySelectorAll('.cmb-cond-picker').forEach(p=>p.remove())">${ICONS[cd]} ${cd}</span>`).join('');
+  e.target.closest('.combatant-item').appendChild(picker);
+  setTimeout(()=>document.addEventListener('click',function h(){picker.remove();document.removeEventListener('click',h);},{once:true}),10);
+}
+function toggleDeathSave(id,type,slot){
+  const c=_combatants.find(x=>x.id===id);if(!c)return;
+  if(!c.deathSaves)c.deathSaves={s:0,f:0};
+  const cur=c.deathSaves[type];
+  c.deathSaves[type]=cur>slot?slot:slot+1;
+  if(c.deathSaves.f>=3){c.isDead=true;_addLog(`💀 ${c.name} murió (3 fallos en salvación de muerte)`,'log-dmg');}
+  if(c.deathSaves.s>=3){_addLog(`✨ ${c.name} se estabilizó (3 éxitos en salvación de muerte)`,'log-heal');}
+  _saveCombat();renderCombat();_broadcastDmUpdate();
+}
+function rollDeathSave(id){
+  const c=_combatants.find(x=>x.id===id);if(!c)return;
+  if(!c.deathSaves)c.deathSaves={s:0,f:0};
+  const roll=Math.floor(Math.random()*20)+1;
+  const success=roll>=10;
+  if(roll===20){c.hp=1;c.deathSaves={s:0,f:0};_addLog(`🌟 ${c.name} tiró 20 en salvación de muerte — ¡recuperó 1 HP!`,'log-heal');}
+  else if(roll===1){c.deathSaves.f=Math.min(3,c.deathSaves.f+2);_addLog(`💀 ${c.name} tiró 1 — 2 fallos en salvación de muerte`,'log-dmg');}
+  else if(success){c.deathSaves.s=Math.min(3,c.deathSaves.s+1);_addLog(`✅ ${c.name} tiró ${roll} — éxito en salvación de muerte (${c.deathSaves.s}/3)`,'log-heal');}
+  else{c.deathSaves.f=Math.min(3,c.deathSaves.f+1);_addLog(`❌ ${c.name} tiró ${roll} — fallo en salvación de muerte (${c.deathSaves.f}/3)`,'log-dmg');}
+  if(c.deathSaves.f>=3){c.isDead=true;_addLog(`💀 ${c.name} murió`,'log-dmg');}
+  if(c.deathSaves.s>=3){_addLog(`✨ ${c.name} se estabilizó`,'log-heal');}
+  _saveCombat();renderCombat();_broadcastDmUpdate();
+}
+
+/* ══ SESSION TIMELINE ══ */
+let _campaignSessions=[];
+async function loadCampaignSessions(campaignId){
+  const {data}=await _SB.from('campaign_sessions').select('*').eq('campaign_id',campaignId).order('session_number',{ascending:false});
+  _campaignSessions=data||[];
+}
+function _buildBitacoraTab(){
+  const isDm=_currentCampaign?.dm_user_id===_currentUser?.id;
+  const addBtn=isDm?`<button class="camp-new-session-btn" onclick="openNewSessionModal()">+ Registrar sesión</button>`:'';
+  if(!_campaignSessions.length)return`${addBtn}<div class="camp-session-empty">Todavía no hay sesiones registradas.</div>`;
+  const rows=_campaignSessions.map(s=>`
+    <div class="camp-session-card" onclick="this.querySelector('.camp-session-notes').classList.toggle('collapsed')">
+      <div class="camp-session-num">${s.session_number}</div>
+      <div class="camp-session-body">
+        <div class="camp-session-title">${s.title}</div>
+        <div class="camp-session-date">${s.played_at}</div>
+        ${s.notes?`<div class="camp-session-notes collapsed">${s.notes}</div>`:''}
+      </div>
+    </div>`).join('');
+  return`${addBtn}<div class="camp-timeline">${rows}</div>`;
+}
+function openNewSessionModal(){
+  const n=(_currentCampaign.session_count||0);
+  document.getElementById('campModal').style.display='flex';
+  document.getElementById('campModalContent').innerHTML=`
+    <div class="camp-modal-title">📖 Nueva sesión — #${n+1}</div>
+    <label class="camp-modal-label">Título de la sesión</label>
+    <input class="camp-modal-input" id="sessTitle" placeholder="ej. La noche en el castillo...">
+    <label class="camp-modal-label">Fecha jugada</label>
+    <input class="camp-modal-input" id="sessDate" type="date" value="${new Date().toISOString().split('T')[0]}">
+    <label class="camp-modal-label">Notas / resumen (opcional)</label>
+    <textarea class="camp-modal-input" id="sessNotes" rows="5" placeholder="Qué pasó en esta sesión..." style="resize:vertical;font-family:inherit;"></textarea>
+    <button class="camp-modal-submit" onclick="saveSessionEntry()">Guardar sesión</button>
+    <div class="camp-modal-err" id="campModalErr"></div>`;
+}
+async function saveSessionEntry(){
+  const title=(document.getElementById('sessTitle')?.value||'').trim();
+  const date=document.getElementById('sessDate')?.value||new Date().toISOString().split('T')[0];
+  const notes=document.getElementById('sessNotes')?.value||'';
+  const errEl=document.getElementById('campModalErr');
+  if(!title){errEl.textContent='Ingresá un título para la sesión.';return;}
+  const newCount=(_currentCampaign.session_count||0)+1;
+  await _SB.from('campaign_sessions').insert({
+    campaign_id:_currentCampaign.id,session_number:newCount,title,notes,played_at:date
+  });
+  await _SB.from('campaigns').update({session_count:newCount}).eq('id',_currentCampaign.id);
+  _currentCampaign.session_count=newCount;
+  closeCampaignModal();
+  await loadCampaignSessions(_currentCampaign.id);
+  switchCampTab('bitacora');
+  document.getElementById('campDetailMeta').textContent=`${newCount} sesión${newCount!==1?'es':''} · ${_currentCampaignMembers.find(m=>m.user_id===_currentUser.id)?.role==='dm'?'🎲 Dungeon Master':'⚔️ Jugador'}`;
+}
+
+/* ══ READ-ONLY CHARACTER SHEET ══ */
+function openMemberSheet(idx){
+  const m=_currentCampaignMembers[idx];
+  if(!m?.charData)return;
+  const cd=m.charData;
+  document.body.insertAdjacentHTML('beforeend',`<div class="ro-sheet-overlay" id="roSheetOverlay" onclick="if(event.target===this)closeRoSheet()">
+    <div class="ro-sheet">${_buildReadOnlySheet(cd,m)}</div>
+  </div>`);
+}
+function closeRoSheet(){document.getElementById('roSheetOverlay')?.remove();}
+function _buildReadOnlySheet(cd,m){
+  const STAT_NAMES={str:'FUE',dex:'DES',con:'CON',int:'INT',wis:'SAB',cha:'CAR'};
+  const stats=cd.stats||{str:10,dex:10,con:10,int:10,wis:10,cha:10};
+  const statsHtml=Object.entries(STAT_NAMES).map(([k,label])=>{
+    const val=stats[k]||stats[k.toUpperCase()]||10;
+    const mod=Math.floor((val-10)/2);
+    return`<div class="ro-stat"><div class="ro-stat-name">${label}</div><div class="ro-stat-mod">${mod>=0?'+':''}${mod}</div><div class="ro-stat-val">${val}</div></div>`;
+  }).join('');
+  const SKILLS=[['Acrobacia','dex'],['Arcanos','int'],['Athletics','str'],['Engaño','cha'],['Historia','int'],['Insight','wis'],['Intimidación','cha'],['Investigación','int'],['Medicina','wis'],['Naturaleza','int'],['Percepción','wis'],['Persuasión','cha'],['Prestidigitación','dex'],['Religión','int'],['Sigilo','dex'],['Supervivencia','wis'],['Trato animales','wis']];
+  const profs=new Set(cd.skillProfs||[]);
+  const profBonus=Math.ceil((cd.level||1)/4)+1;
+  const skillsHtml=SKILLS.map(([name,attr])=>{
+    const base=Math.floor(((stats[attr]||stats[attr?.toUpperCase()]||10)-10)/2);
+    const isProficient=profs.has(name.toLowerCase())||profs.has(name);
+    const mod=base+(isProficient?profBonus:0);
+    return`<div class="ro-skill-row"><div class="ro-skill-dot${isProficient?' prof':''}"></div><span class="ro-skill-name">${name}</span><span class="ro-skill-mod">${mod>=0?'+':''}${mod}</span></div>`;
+  }).join('');
+  const inv=cd.inventory||[];
+  const invHtml=inv.length?inv.map(it=>`<div class="ro-inv-item">${it.name||it}${it.qty&&it.qty>1?` ×${it.qty}`:''}</div>`).join(''):`<div style="color:var(--text-d);font-size:13px;font-style:italic;">Sin objetos</div>`;
+  const avatarStyle=cd.portrait?`background-image:url('${cd.portrait}');background-size:cover;background-position:center top;`:'';
+  const cur=cd.currentHp!=null?cd.currentHp:cd.hp;
+  return`
+    <div class="ro-sheet-header">
+      <div class="ro-sheet-avatar" style="${avatarStyle}">${cd.portrait?'':'🧙'}</div>
+      <div>
+        <div class="ro-sheet-name">${cd.name||m.display_name||'Aventurero'}</div>
+        <div class="ro-sheet-meta">${cd.race||''} · ${cd.class||''} · Nivel ${cd.level||1}</div>
+      </div>
+      <button class="ro-sheet-close" onclick="closeRoSheet()">✕</button>
+    </div>
+    <div class="ro-sheet-body">
+      <div class="ro-hp-ac">
+        <div class="ro-hp-box"><div class="ro-box-label">HP</div><div class="ro-box-val">${cur}/${cd.hp}</div></div>
+        <div class="ro-ac-box"><div class="ro-box-label">CA</div><div class="ro-box-val">${cd.ca||cd.ac||10}</div></div>
+        <div class="ro-ac-box"><div class="ro-box-label">Nivel</div><div class="ro-box-val">${cd.level||1}</div></div>
+      </div>
+      <div><div class="ro-section-title">Estadísticas</div><div class="ro-stats-row">${statsHtml}</div></div>
+      <div><div class="ro-section-title">Habilidades</div><div class="ro-skills-grid">${skillsHtml}</div></div>
+      <div><div class="ro-section-title">Inventario</div><div class="ro-inv-list">${invHtml}</div></div>
+    </div>`;
 }
 
 function initCombat(){
