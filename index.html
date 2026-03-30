@@ -37,7 +37,7 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .page.active{display:block;}
 
 /* ══════════════════════════════════ LANDING */
-#page-home{position:relative;width:100vw;min-height:380vh;overflow-x:hidden;}
+#page-home{position:relative;width:100vw;overflow-x:hidden;}
 /* Scene background */
 .sc-wrap{position:fixed;inset:0;z-index:0;overflow:hidden;opacity:0;animation:scFadeIn 2.5s ease .3s forwards;}
 @keyframes scFadeIn{to{opacity:1;}}
@@ -165,34 +165,15 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .lstat-l{font-size:9px;letter-spacing:.24em;color:var(--text-d);text-transform:uppercase;}
 .land-stat-sep{width:1px;height:26px;background:linear-gradient(to bottom,transparent,rgba(248,198,98,.3),transparent);align-self:center;}
 
-/* ══════════════════════════════════ FEATURES SECTION */
-#section-features{position:fixed;top:0;left:0;right:0;height:100vh;display:flex;align-items:center;z-index:11;pointer-events:none;padding:0 7vw;gap:72px;opacity:0;}
-.feat-left{flex:0 0 42%;display:flex;flex-direction:column;justify-content:center;opacity:0;transform:translateX(-50px);}
-.feat-section-num{font-size:10px;letter-spacing:.38em;color:var(--gold);opacity:.5;margin-bottom:20px;font-weight:700;}
-.feat-section-title{font-family:'Cinzel',serif;font-size:clamp(38px,4.2vw,58px);font-weight:700;line-height:.92;color:var(--text);margin-bottom:20px;}
-.feat-title-em{color:var(--gold);display:block;}
-.feat-section-desc{font-size:14px;color:var(--text-m);line-height:1.75;max-width:300px;margin-bottom:30px;}
-.feat-section-deco{display:flex;align-items:center;gap:14px;}
-.feat-deco-line{height:1px;width:52px;background:linear-gradient(to right,rgba(212,175,55,.6),transparent);}
-.feat-deco-icon{font-size:15px;opacity:.65;}
-.feat-right{flex:1;display:flex;flex-direction:column;gap:14px;pointer-events:inherit;}
-.feat-card{background:rgba(10,14,24,0.92);border:1px solid var(--border);border-left:3px solid transparent;border-radius:14px;padding:20px 24px;backdrop-filter:blur(18px);opacity:0;transform:translateX(50px);display:flex;gap:16px;align-items:flex-start;transition:border-color .25s,border-left-color .25s,transform .25s,box-shadow .25s;cursor:none;}
-.feat-card:hover{border-color:rgba(212,175,55,.4);border-left-color:var(--gold);box-shadow:0 0 28px rgba(248,198,98,.1),inset 0 0 20px rgba(248,198,98,.03);transform:translateX(0) translateY(-2px) !important;}
-.feat-card-icon{font-size:28px;flex-shrink:0;margin-top:1px;filter:drop-shadow(0 0 6px rgba(248,198,98,.3));}
+/* ══════════════════════════════════ FEATURES SECTION (legacy, hidden) */
+#section-features,#section-hook{display:none;}
+/* reused card styles */
+.feat-card-icon{font-size:28px;flex-shrink:0;margin-top:1px;}
 .feat-card-num{font-size:9px;letter-spacing:.25em;color:var(--text-d);font-weight:700;margin-bottom:3px;}
 .feat-card-title{font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--gold);margin-bottom:7px;}
 .feat-card-desc{font-size:13px;color:var(--text-m);line-height:1.65;}
-
-/* ══════════════════════════════════ HOOK GENERATOR SECTION */
-#section-hook{position:fixed;inset:0;z-index:11;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;padding:0 7vw;gap:0;}
-.hook-intro{flex:0 0 44%;padding-right:64px;display:flex;flex-direction:column;justify-content:center;pointer-events:inherit;opacity:0;transform:translateX(-50px);}
-.hook-intro-num{font-size:10px;letter-spacing:.38em;color:var(--gold);opacity:.5;margin-bottom:20px;font-weight:700;}
-.hook-intro-title{font-family:'Cinzel',serif;font-size:clamp(36px,4vw,54px);font-weight:700;line-height:.92;color:var(--text);margin-bottom:20px;}
-.hook-intro-em{color:var(--gold);display:block;}
-.hook-intro-desc{font-size:14px;color:var(--text-m);line-height:1.75;max-width:340px;margin-bottom:28px;}
 .hook-intro-cats{display:flex;flex-wrap:wrap;gap:7px;}
 .hook-intro-cat{padding:4px 13px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:.14em;border:1px solid rgba(255,255,255,.18);color:var(--text);text-transform:uppercase;background:rgba(0,0,0,.45);backdrop-filter:blur(6px);}
-.hook-card-wrap{flex:1;display:flex;align-items:center;justify-content:center;pointer-events:inherit;}
 .hook-card{background:rgba(9,7,18,.94);border:1px solid rgba(248,198,98,.22);border-radius:20px;padding:36px 38px;width:100%;max-width:520px;backdrop-filter:blur(20px);box-shadow:0 0 80px rgba(248,198,98,.07),0 24px 64px rgba(0,0,0,.8);text-align:center;position:relative;overflow:hidden;}
 .hook-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(248,198,98,.07) 0%,transparent 65%);pointer-events:none;}
 .hook-cat{display:inline-flex;align-items:center;gap:6px;padding:4px 14px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;border:1px solid;margin-bottom:20px;transition:all .4s;}
@@ -204,9 +185,62 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .hook-roll-btn:hover{background:rgba(248,198,98,.18);border-color:var(--gold);transform:scale(1.03);}
 .hook-roll-icon{font-size:16px;transition:transform .3s;}
 .hook-roll-btn:hover .hook-roll-icon{transform:rotate(120deg);}
-.hook-cta{display:flex;align-items:center;gap:8px;padding:10px 22px;border-radius:10px;background:linear-gradient(135deg,var(--gold),#d4940a);color:#1a1400;font-size:13px;font-weight:700;cursor:pointer;transition:.2s;letter-spacing:.04em;border:none;}
-.hook-cta:hover{filter:brightness(1.1);transform:scale(1.03);}
 .hook-label{font-size:10px;letter-spacing:.25em;color:var(--text-d);text-transform:uppercase;margin-bottom:12px;}
+
+/* ══════════════════════════════════ LANDING STATIC SECTIONS */
+.land-section{position:relative;z-index:12;padding:96px 7vw;}
+.land-section-hero-spacer{height:100vh;pointer-events:none;}
+/* Scroll fade-in animation */
+.fiu{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease;}
+.fiu.vis{opacity:1;transform:none;}
+.fiu-d1{transition-delay:.08s;}.fiu-d2{transition-delay:.17s;}.fiu-d3{transition-delay:.26s;}.fiu-d4{transition-delay:.35s;}.fiu-d5{transition-delay:.44s;}
+/* Section header */
+.ls-eyebrow{font-size:10px;letter-spacing:.38em;color:var(--gold);font-weight:700;text-transform:uppercase;margin-bottom:12px;}
+.ls-title{font-family:'Cinzel',serif;font-size:clamp(28px,3.5vw,50px);font-weight:700;color:var(--text);line-height:.95;margin-bottom:16px;}
+.ls-title-em{color:var(--gold);}
+.ls-sub{font-size:15px;color:var(--text-m);line-height:1.7;max-width:540px;}
+/* Features section */
+.ls-features{background:linear-gradient(180deg,rgba(6,3,14,.0) 0%,rgba(6,3,10,.98) 4%,rgba(6,3,10,.98) 96%,rgba(6,3,14,.0) 100%);}
+.ls-feat-header{text-align:center;margin-bottom:56px;}
+.ls-feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+.ls-feat-card{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:28px 24px;cursor:pointer;transition:border-color .25s,background .25s,transform .25s;position:relative;overflow:hidden;}
+.ls-feat-card::after{content:'';position:absolute;top:-1px;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(248,198,98,.3),transparent);opacity:0;transition:opacity .3s;}
+.ls-feat-card:hover::after{opacity:1;}
+.ls-feat-card:hover{border-color:rgba(248,198,98,.3);background:rgba(248,198,98,.04);transform:translateY(-3px);}
+.ls-feat-icon{font-size:30px;margin-bottom:14px;}
+.ls-feat-title{font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--gold);margin-bottom:8px;}
+.ls-feat-desc{font-size:13px;color:var(--text-m);line-height:1.65;}
+/* Campaign section */
+.ls-campaign{background:linear-gradient(180deg,rgba(6,3,10,.98) 0%,rgba(4,2,12,.98) 50%,rgba(6,3,10,.98) 100%);}
+.ls-camp-inner{display:flex;gap:72px;align-items:center;}
+.ls-camp-left{flex:0 0 42%;}
+.ls-camp-badge{display:inline-flex;align-items:center;gap:8px;padding:5px 14px;border-radius:20px;background:rgba(11,196,227,.08);border:1px solid rgba(11,196,227,.25);color:#0bc4e3;font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin-bottom:22px;}
+.ls-camp-title{font-family:'Cinzel',serif;font-size:clamp(30px,3.8vw,50px);font-weight:700;color:var(--text);line-height:.92;margin-bottom:18px;}
+.ls-camp-em{color:var(--gold);display:block;}
+.ls-camp-desc{font-size:15px;color:var(--text-m);line-height:1.75;max-width:360px;margin-bottom:30px;}
+.ls-camp-cta{display:inline-flex;align-items:center;gap:10px;padding:13px 28px;background:linear-gradient(135deg,var(--gold),#d4940a);color:#1a1400;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:.2s;border:none;font-family:'Roboto',sans-serif;}
+.ls-camp-cta:hover{filter:brightness(1.1);transform:translateY(-2px);}
+.ls-camp-right{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.ls-camp-feat{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:18px 20px;position:relative;overflow:hidden;}
+.ls-camp-feat::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(200,170,110,.04) 0%,transparent 60%);pointer-events:none;}
+.ls-camp-feat-icon{font-size:20px;margin-bottom:8px;}
+.ls-camp-feat-title{font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:var(--lol-gold);margin-bottom:4px;}
+.ls-camp-feat-desc{font-size:12px;color:var(--text-d);line-height:1.55;}
+/* Hook section (static) */
+.ls-hook{background:linear-gradient(180deg,rgba(4,2,12,.98) 0%,rgba(4,2,10,.98) 100%);}
+.ls-hook-inner{display:flex;gap:72px;align-items:center;}
+.ls-hook-left{flex:0 0 42%;}
+.ls-hook-right{flex:1;max-width:520px;}
+/* CTA section */
+.ls-cta{background:linear-gradient(180deg,rgba(4,2,10,.98) 0%,rgba(6,3,14,.98) 100%);text-align:center;}
+.ls-cta-title{font-family:'Cinzel',serif;font-size:clamp(30px,4.5vw,62px);font-weight:700;color:var(--text);line-height:.95;margin-bottom:18px;}
+.ls-cta-em{color:var(--gold);}
+.ls-cta-sub{font-size:16px;color:var(--text-m);line-height:1.7;max-width:480px;margin:0 auto 40px;}
+.ls-cta-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:72px;}
+.ls-cta-btn-gold{padding:15px 36px;border-radius:10px;font-size:15px;font-weight:700;background:linear-gradient(135deg,var(--gold),#d4940a);color:#1a1400;cursor:pointer;border:none;transition:.2s;font-family:'Roboto',sans-serif;}
+.ls-cta-btn-gold:hover{filter:brightness(1.1);transform:translateY(-2px);}
+.ls-cta-btn-ghost{padding:15px 36px;border-radius:10px;font-size:15px;font-weight:700;background:transparent;border:1px solid rgba(255,255,255,.15);color:var(--text-m);cursor:pointer;transition:.2s;font-family:'Roboto',sans-serif;}
+.ls-cta-btn-ghost:hover{border-color:var(--gold);color:var(--gold);}
 
 /* ══════════════════════════════════ APP NAV (inner pages) */
 .app-nav{display:none;position:fixed;top:0;left:0;right:0;z-index:200;height:60px;align-items:center;padding:0 32px;gap:20px;background:rgba(19,15,30,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
@@ -1198,21 +1232,17 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   .land-stat{padding:0 12px;}
   .lstat-n{font-size:16px;}
 
-  /* ── Features section ── */
-  #section-features{flex-direction:column;padding:0 12px;padding-bottom:80px;align-items:center;justify-content:flex-end;gap:12px;}
-  .feat-left{display:none;}
-  .feat-right{width:100%;gap:10px;}
-  .feat-card{padding:14px 16px;border-left-width:2px;}
-  .feat-card-title{font-size:14px;}
-  .feat-card-desc{font-size:12px;}
-
-  /* ── Hook section ── */
-  #section-hook{flex-direction:column;padding:16px 14px;justify-content:center;gap:20px;}
-  .hook-intro{flex:none;padding-right:0;padding-bottom:0;}
-  .hook-intro-title{font-size:clamp(26px,7vw,34px);}
-  .hook-intro-desc{font-size:13px;max-width:100%;}
-  .hook-card-wrap{flex:none;width:100%;}
-  .hook-card{max-width:100%;padding:24px 20px;}
+  /* ── Static landing sections ── */
+  .land-section{padding:64px 16px;}
+  .ls-feat-grid{grid-template-columns:1fr 1fr;}
+  .ls-feat-card{padding:20px 18px;}
+  .ls-camp-inner{flex-direction:column;gap:40px;}
+  .ls-camp-left{flex:none;}
+  .ls-camp-right{grid-template-columns:1fr 1fr;}
+  .ls-hook-inner{flex-direction:column;gap:32px;}
+  .ls-hook-left,.ls-hook-right{flex:none;width:100%;max-width:100%;}
+  .hook-card{padding:24px 20px;max-width:100%;}
+  .ls-cta{padding:80px 16px 60px;}
 
   /* ── App nav ── */
   .app-nav{padding:0 14px;gap:4px;}
@@ -1702,7 +1732,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.0.7</span>
+    <span class="ver-badge">v2.0.8</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">30 Mar 2026</span>
   </div>
@@ -2003,80 +2033,138 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     </div>
   </div>
 
-  <!-- ══ SECTION 3: HOOK GENERATOR ══ -->
-  <div id="section-hook">
-    <div class="hook-intro" id="hookIntro">
-      <div class="hook-intro-num" data-es="02 — INSPIRACIÓN" data-en="02 — INSPIRATION">02 — INSPIRACIÓN</div>
-      <div class="hook-intro-title">
-        <span data-es="GENERA TU" data-en="GENERATE YOUR">GENERA TU</span>
-        <span data-es="PRÓXIMA" data-en="NEXT">PRÓXIMA</span>
-        <span class="hook-intro-em" data-es="AVENTURA" data-en="ADVENTURE">AVENTURA</span>
-      </div>
-      <p class="hook-intro-desc" data-es="42 hooks únicos en 6 categorías distintas — desde mazmorras oscuras hasta intrigas políticas. Cada sesión empieza con una historia." data-en="42 unique hooks across 6 categories — from dark dungeons to political intrigue. Every session starts with a story.">42 hooks únicos en 6 categorías distintas — desde mazmorras oscuras hasta intrigas políticas. Cada sesión empieza con una historia.</p>
-      <div class="hook-intro-cats">
-        <span class="hook-intro-cat">🗡️ Mazmorra</span>
-        <span class="hook-intro-cat">🌲 Naturaleza</span>
-        <span class="hook-intro-cat">🏰 Ciudad</span>
-        <span class="hook-intro-cat">🐉 Dragón</span>
-        <span class="hook-intro-cat">🔮 Magia</span>
-        <span class="hook-intro-cat">⚔️ Intriga</span>
-      </div>
-    </div>
-    <div class="hook-card-wrap">
-      <div class="hook-card">
-        <div class="hook-label" data-es="HOOK DE AVENTURA" data-en="ADVENTURE HOOK">HOOK DE AVENTURA</div>
-        <div class="hook-cat" id="hookCat"><span class="hook-icon" id="hookIcon">🗡️</span><span id="hookCatName">Mazmorra</span></div>
-        <div class="hook-text" id="hookText"></div>
-        <div class="hook-actions">
-          <button class="hook-roll-btn" onclick="rollHook()"><span class="hook-roll-icon">⚄</span><span data-es="Nueva inspiración" data-en="New inspiration">Nueva inspiración</span></button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <!-- ══ SPACER: pushes static sections below hero viewport ══ -->
+  <div class="land-section-hero-spacer"></div>
 
-  <!-- ══ SECTION 2: FEATURES ══ -->
-  <div id="section-features">
-    <div class="feat-left" id="featLeft">
-      <div class="feat-section-num" data-es="01 — LAS HERRAMIENTAS" data-en="01 — THE TOOLS">01 — LAS HERRAMIENTAS</div>
-      <div class="feat-section-title">
-        <span data-es="TODO LO QUE" data-en="EVERYTHING">TODO LO QUE</span>
-        <span data-es="NECESITA" data-en="A DUNGEON">NECESITA</span>
-        <span class="feat-title-em" data-es="UN MASTER" data-en="MASTER NEEDS">UN MASTER</span>
+  <!-- ══ SECTION 1: FEATURES ══ -->
+  <section class="land-section ls-features">
+    <div class="ls-feat-header">
+      <div class="ls-eyebrow fiu">01 — HERRAMIENTAS</div>
+      <div class="ls-title fiu fiu-d1">Todo en <span class="ls-title-em">una sola</span> pantalla</div>
+      <p class="ls-sub fiu fiu-d2" style="margin:0 auto;">Sin hojas de cálculo. Sin múltiples apps. Fichas, combate, mapas y más — listo para tu próxima sesión.</p>
+    </div>
+    <div class="ls-feat-grid">
+      <div class="ls-feat-card fiu fiu-d1" onclick="goToCharsSmart()">
+        <div class="ls-feat-icon">⚔️</div>
+        <div class="ls-feat-title">Ficha de Personaje</div>
+        <div class="ls-feat-desc">Aventureros completos con stats, habilidades, retrato, inventario, hechizos y subida de nivel. Dados integrados directamente en la ficha.</div>
       </div>
-      <p class="feat-section-desc" data-es="Sin hojas de cálculo. Sin múltiples apps. Todo en una sola pantalla, listo para tu próxima sesión." data-en="No spreadsheets. No switching apps. Everything in one screen, ready for your next session.">Sin hojas de cálculo. Sin múltiples apps. Todo en una sola pantalla, listo para tu próxima sesión.</p>
-      <div class="feat-section-deco">
-        <div class="feat-deco-line"></div>
-        <span class="feat-deco-icon">⚔️</span>
-        <div class="feat-deco-line"></div>
+      <div class="ls-feat-card fiu fiu-d2" onclick="goTo('combat')">
+        <div class="ls-feat-icon">⚡</div>
+        <div class="ls-feat-title">Combate en Tiempo Real</div>
+        <div class="ls-feat-desc">Tracker de iniciativa con HP dinámico, log de eventos, tiradas de daño y estado de cada combatiente a un vistazo.</div>
+      </div>
+      <div class="ls-feat-card fiu fiu-d3" onclick="goTo('compendium')">
+        <div class="ls-feat-icon">🐉</div>
+        <div class="ls-feat-title">Compendio Completo</div>
+        <div class="ls-feat-desc">600+ monstruos con sprites ilustrados, hechizos por clase y escuela, equipamiento del SRD D&D 5e con filtros avanzados.</div>
+      </div>
+      <div class="ls-feat-card fiu fiu-d1" onclick="goTo('maps')">
+        <div class="ls-feat-icon">🗺️</div>
+        <div class="ls-feat-title">Editor de Mapas</div>
+        <div class="ls-feat-desc">Diseñá dungeons, ciudades y tabernas con 20+ tipos de terreno, tokens de personajes, niebla de guerra y exportar imagen.</div>
+      </div>
+      <div class="ls-feat-card fiu fiu-d2" onclick="goTo('sounds')">
+        <div class="ls-feat-icon">🎵</div>
+        <div class="ls-feat-title">Ambientación Sonora</div>
+        <div class="ls-feat-desc">Música épica, efectos de combate y ambientes inmersivos: bosque, taberna, mazmorra, tormenta. Todo sincronizado para tu sesión.</div>
+      </div>
+      <div class="ls-feat-card fiu fiu-d3" style="cursor:default;">
+        <div class="ls-feat-icon">🎲</div>
+        <div class="ls-feat-title">Dados 3D Físicos</div>
+        <div class="ls-feat-desc">Animación física real con todos los poliedros: d4, d6, d8, d10, d12, d20. Cada tirada desde la ficha actualiza automáticamente.</div>
       </div>
     </div>
-    <div class="feat-right">
-      <div class="feat-card" id="fc1" onclick="goToCharsSmart()">
-        <div class="feat-card-icon">⚔️</div>
-        <div>
-          <div class="feat-card-num">01</div>
-          <div class="feat-card-title" data-es="Crea tu Personaje" data-en="Build your Character">Crea tu Personaje</div>
-          <div class="feat-card-desc" data-es="Aventureros únicos con raza, clase y estadísticas. Modo manual o tirada automática." data-en="Unique adventurers with race, class and stats. Manual or automatic roll.">Aventureros únicos con raza, clase y estadísticas. Modo manual o tirada automática.</div>
-        </div>
+  </section>
+
+  <!-- ══ SECTION 2: CAMPAÑA ══ -->
+  <section class="land-section ls-campaign">
+    <div class="ls-camp-inner">
+      <div class="ls-camp-left">
+        <div class="ls-camp-badge fiu">✨ NUEVO — MODO CAMPAÑA</div>
+        <div class="ls-camp-title fiu fiu-d1">Jugá con<br>tu grupo.<br><span class="ls-camp-em">Real.</span></div>
+        <p class="ls-camp-desc fiu fiu-d2">Creá o unite a una campaña con un código único. El DM tiene control total — los jugadores ven su ficha, el mapa y las notas compartidas en tiempo real.</p>
+        <button class="ls-camp-cta fiu fiu-d3" onclick="goTo('campaign')">⚔️ Explorar Modo Campaña</button>
       </div>
-      <div class="feat-card" id="fc2" onclick="goTo('maps')">
-        <div class="feat-card-icon">🗺️</div>
-        <div>
-          <div class="feat-card-num">02</div>
-          <div class="feat-card-title" data-es="Diseñá tus Mapas" data-en="Design your Maps">Diseñá tus Mapas</div>
-          <div class="feat-card-desc" data-es="Editor por celdas con terrenos, tokens y niebla de guerra. Dungeons, tabernas y ciudades listas para jugar." data-en="Cell editor with terrain, tokens and fog of war. Dungeons, taverns and cities ready to play.">Editor por celdas con terrenos, tokens y niebla de guerra. Dungeons, tabernas y ciudades listas para jugar.</div>
+      <div class="ls-camp-right">
+        <div class="ls-camp-feat fiu fiu-d1">
+          <div class="ls-camp-feat-icon">👥</div>
+          <div class="ls-camp-feat-title">Party completa</div>
+          <div class="ls-camp-feat-desc">Perfiles de todos los miembros. El DM ve las fichas completas; los jugadores ven la party en tiempo real.</div>
         </div>
-      </div>
-      <div class="feat-card" id="fc3" onclick="goTo('sounds')">
-        <div class="feat-card-icon">🎵</div>
-        <div>
-          <div class="feat-card-num">03</div>
-          <div class="feat-card-title" data-es="Ambientá la Partida" data-en="Set the Mood">Ambientá la Partida</div>
-          <div class="feat-card-desc" data-es="Música épica, efectos de combate y ambientes inmersivos. Todo sincronizado para tu sesión." data-en="Epic music, combat effects and immersive ambients. All synced for your session.">Música épica, efectos de combate y ambientes inmersivos. Todo sincronizado para tu sesión.</div>
+        <div class="ls-camp-feat fiu fiu-d2">
+          <div class="ls-camp-feat-icon">🗺️</div>
+          <div class="ls-camp-feat-title">Mapa interactivo</div>
+          <div class="ls-camp-feat-desc">Pan/zoom, fondo personalizable, 9 tipos de marcador y pins secretos solo visibles para el DM.</div>
+        </div>
+        <div class="ls-camp-feat fiu fiu-d3">
+          <div class="ls-camp-feat-icon">📝</div>
+          <div class="ls-camp-feat-title">Notas compartidas</div>
+          <div class="ls-camp-feat-desc">Categorías, markdown y pins fijados. El DM decide qué notas comparte con los jugadores.</div>
+        </div>
+        <div class="ls-camp-feat fiu fiu-d4">
+          <div class="ls-camp-feat-icon">📖</div>
+          <div class="ls-camp-feat-title">Bitácora de sesiones</div>
+          <div class="ls-camp-feat-desc">Timeline de sesiones, condiciones D&D, death saves e historial completo de la campaña.</div>
+        </div>
+        <div class="ls-camp-feat fiu fiu-d5">
+          <div class="ls-camp-feat-icon">🎒</div>
+          <div class="ls-camp-feat-title">Inventario compartido</div>
+          <div class="ls-camp-feat-desc">El DM administra los ítems del grupo. Todos ven el inventario y el tesoro de la campaña.</div>
+        </div>
+        <div class="ls-camp-feat fiu fiu-d1">
+          <div class="ls-camp-feat-icon">⚔️</div>
+          <div class="ls-camp-feat-title">Combate integrado</div>
+          <div class="ls-camp-feat-desc">Los jugadores controlan su turno en combate — HP, acciones y estado sincronizados con el DM.</div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
+
+  <!-- ══ SECTION 3: HOOK GENERATOR ══ -->
+  <section class="land-section ls-hook">
+    <div class="ls-hook-inner">
+      <div class="ls-hook-left">
+        <div class="ls-eyebrow fiu">02 — INSPIRACIÓN</div>
+        <div class="ls-camp-title fiu fiu-d1" style="font-size:clamp(26px,3.5vw,44px);">Genera tu<br><span class="ls-camp-em">próxima aventura</span></div>
+        <p class="ls-camp-desc fiu fiu-d2">42 hooks únicos en 6 categorías — desde mazmorras oscuras hasta intrigas políticas. Cada sesión empieza con una historia.</p>
+        <div class="hook-intro-cats fiu fiu-d3">
+          <span class="hook-intro-cat">🗡️ Mazmorra</span>
+          <span class="hook-intro-cat">🌲 Naturaleza</span>
+          <span class="hook-intro-cat">🏰 Ciudad</span>
+          <span class="hook-intro-cat">🐉 Dragón</span>
+          <span class="hook-intro-cat">🔮 Magia</span>
+          <span class="hook-intro-cat">⚔️ Intriga</span>
+        </div>
+      </div>
+      <div class="ls-hook-right fiu fiu-d2">
+        <div class="hook-card">
+          <div class="hook-label">HOOK DE AVENTURA</div>
+          <div class="hook-cat" id="hookCat"><span class="hook-icon" id="hookIcon">🗡️</span><span id="hookCatName">Mazmorra</span></div>
+          <div class="hook-text" id="hookText"></div>
+          <div class="hook-actions">
+            <button class="hook-roll-btn" onclick="rollHook()"><span class="hook-roll-icon">⚄</span><span>Nueva inspiración</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SECTION 4: CTA ══ -->
+  <section class="land-section ls-cta" style="padding:120px 7vw 80px;">
+    <div class="ls-cta-title fiu">¿Listo para<br><span class="ls-cta-em">tu próxima aventura?</span></div>
+    <p class="ls-cta-sub fiu fiu-d1">Crea tu personaje en menos de 3 minutos o únete a la campaña de tu grupo con un código.</p>
+    <div class="ls-cta-btns fiu fiu-d2">
+      <button class="ls-cta-btn-gold" onclick="goToCreateChar()">⚔️ Crear Personaje</button>
+      <button class="ls-cta-btn-ghost" onclick="goTo('campaign')">🏰 Modo Campaña</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;justify-content:center;font-size:10px;color:var(--text-d);font-family:monospace;">
+      <span style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;display:inline-block;"></span>
+      <span class="ver-badge">v2.0.8</span>
+      <span>·</span>
+      <span class="ver-date">30 Mar 2026</span>
+    </div>
+  </section>
 </div>
 
 <!-- ══════════════════════════ PAGE: CHARACTERS -->
@@ -7705,58 +7793,26 @@ function togglePlay(){
     // Landing UI fade on scroll
     const landUi=document.querySelector('.land-ui');
     if(landUi){
-      const op=scrollProg<.15?1:scrollProg<.36?1-(scrollProg-.15)/.21:0;
+      const op=scrollProg<.15?1:scrollProg<.38?1-(scrollProg-.15)/.23:0;
       landUi.style.opacity=op;
       landUi.style.pointerEvents=op>.05?'auto':'none';
     }
 
-    // Features section entrance/exit
-    const featSec=document.getElementById('section-features');
-    if(featSec){
-      const fi=clamp((scrollProg-.26)/.12);
-      const fo=clamp((scrollProg-.72)/.12);
-      const secOp=eout(fi)*(1-eout(fo));
-      featSec.style.opacity=secOp;
-      featSec.style.pointerEvents=secOp>.05?'auto':'none';
+    // Background scene fades as user enters static sections
+    const scWrap=document.getElementById('sceneBg');
+    if(scWrap && scrollProg>0.55){
+      scWrap.style.opacity=scrollProg<0.82?1-(scrollProg-0.55)/0.27:0;
     }
-
-    // Feat-left slide in from left
-    const featLeft=document.getElementById('featLeft');
-    if(featLeft){
-      const cp=clamp((scrollProg-.26)/.14);
-      const eo=eout(cp);
-      featLeft.style.opacity=eo;
-      featLeft.style.transform='translateX('+((1-eo)*-50)+'px)';
-    }
-
-    // Hook section entrance (after features fade out)
-    const hookSec=document.getElementById('section-hook');
-    if(hookSec){
-      const hi=clamp((scrollProg-.76)/.10);
-      hookSec.style.opacity=eout(hi);
-      hookSec.style.pointerEvents=hi>.05?'auto':'none';
-    }
-
-    // Hook intro slide in from left
-    const hookIntro=document.getElementById('hookIntro');
-    if(hookIntro){
-      const hi=clamp((scrollProg-.76)/.14);
-      const eo=eout(hi);
-      hookIntro.style.opacity=eo;
-      hookIntro.style.transform='translateX('+((1-eo)*-50)+'px)';
-    }
-
-    // Feature cards cascade
-    [['fc1',0],['fc2',.07],['fc3',.14]].forEach(([id,delay])=>{
-      const el=document.getElementById(id);
-      if(!el)return;
-      const cp=clamp((scrollProg-.30-delay)/.15);
-      const eo=eout(cp);
-      el.style.opacity=eo;
-      el.style.transform='translateX('+((1-eo)*50)+'px)';
-    });
   }
   animate();
+
+  // Intersection observer for scroll fade-in animations
+  (function(){
+    const io=new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});
+    },{threshold:0.12});
+    document.querySelectorAll('.fiu').forEach(el=>io.observe(el));
+  })();
 })();
 
 /* ══ HOOK GENERATOR ══ */

@@ -1,7 +1,12 @@
 {
-  "version": "2.0.7",
+  "version": "2.0.8",
   "date": "2026-03-30",
   "history": [
+    {
+      "version": "2.0.8",
+      "date": "2026-03-30",
+      "note": "Landing rediseñada: hero cinematográfico + 4 secciones estáticas de marketing (Herramientas, Modo Campaña, Hook Generator, CTA) con fade-in por scroll"
+    },
     {
       "version": "2.0.7",
       "date": "2026-03-30",
