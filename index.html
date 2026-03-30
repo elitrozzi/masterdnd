@@ -1455,7 +1455,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.0.1</span>
+    <span class="ver-badge">v2.0.2</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">30 Mar 2026</span>
   </div>
@@ -2341,6 +2341,8 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="camp-tab" data-tab="bitacora" onclick="switchCampTab('bitacora')">📖 Bitácora</button>
         <button class="camp-tab" data-tab="inventory" onclick="switchCampTab('inventory')">🎒 Inventario</button>
         <button class="camp-tab" data-tab="combat" onclick="switchCampTab('combat')">⚔️ Combate</button>
+        <button class="camp-tab" data-tab="notes" onclick="switchCampTab('notes')">📝 Notas</button>
+        <button class="camp-tab" data-tab="campmap" onclick="switchCampTab('campmap')">🗺️ Mapa</button>
       </div>
       <div id="campTabContent" class="camp-tab-content"></div>
     </div>
@@ -5890,6 +5892,47 @@ function goToCharsSmart(){
 .ro-skill-mod{color:var(--lol-gold);font-weight:700;min-width:28px;text-align:right;}
 .ro-inv-list{display:flex;flex-direction:column;gap:4px;}
 .ro-inv-item{font-size:13px;color:var(--text-m);padding:4px 8px;background:rgba(255,255,255,.03);border-left:2px solid rgba(212,175,55,.2);}
+/* ══ CAMPAIGN NOTES ══ */
+.cnotes-compose{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;padding:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);}
+.cnotes-textarea{width:100%;min-height:80px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#fff;padding:10px 12px;font-size:14px;resize:vertical;outline:none;font-family:inherit;line-height:1.5;box-sizing:border-box;}
+.cnotes-textarea:focus{border-color:rgba(212,175,55,.4);}
+.cnotes-compose-footer{display:flex;align-items:center;justify-content:space-between;}
+.cnotes-submit{font:700 11px/1 'Cinzel',serif;padding:7px 18px;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.35);color:var(--lol-gold);cursor:pointer;}
+.cnotes-submit:hover{background:rgba(212,175,55,.22);}
+.cnotes-feed{display:flex;flex-direction:column;gap:10px;}
+.cnote-card{padding:12px 14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-left:3px solid rgba(255,255,255,.12);}
+.cnote-card.dm{border-left-color:var(--lol-gold);background:rgba(212,175,55,.04);}
+.cnote-header{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.cnote-author{font:700 12px/1 'Cinzel',serif;color:var(--lol-gold);}
+.cnote-role-badge{font-size:9px;text-transform:uppercase;letter-spacing:.1em;padding:1px 6px;border-radius:8px;background:rgba(212,175,55,.15);color:var(--lol-gold);}
+.cnote-role-badge.player{background:rgba(147,197,253,.1);color:#93c5fd;}
+.cnote-time{font-size:11px;color:var(--text-d);margin-left:auto;}
+.cnote-content{font-size:14px;color:var(--text-m);line-height:1.6;white-space:pre-wrap;}
+.cnote-del{margin-left:8px;background:none;border:none;color:rgba(248,113,113,.4);cursor:pointer;font-size:13px;padding:0 2px;}
+.cnote-del:hover{color:#f87171;}
+.cnotes-empty{font-size:14px;color:var(--text-d);font-style:italic;padding:20px 0;}
+/* ══ CAMPAIGN MAP ══ */
+.cmap-wrap{display:flex;flex-direction:column;gap:14px;}
+.cmap-canvas-wrap{position:relative;width:100%;aspect-ratio:16/9;background:#0a0818;border:1px solid rgba(212,175,55,.15);overflow:hidden;cursor:crosshair;}
+.cmap-canvas{width:100%;height:100%;display:block;}
+.cmap-pin{position:absolute;transform:translate(-50%,-100%);cursor:pointer;display:flex;flex-direction:column;align-items:center;pointer-events:auto;}
+.cmap-pin-icon{font-size:22px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.8));transition:transform .15s;}
+.cmap-pin:hover .cmap-pin-icon{transform:scale(1.2);}
+.cmap-pin-label{font:700 10px/1 'Cinzel',serif;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.9);white-space:nowrap;max-width:100px;overflow:hidden;text-overflow:ellipsis;margin-top:2px;}
+.cmap-pin-tooltip{position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:#1a1330;border:1px solid rgba(212,175,55,.4);padding:8px 10px;min-width:150px;max-width:220px;z-index:10;pointer-events:none;display:none;}
+.cmap-pin:hover .cmap-pin-tooltip{display:block;}
+.cmap-pin-tt-label{font:700 12px/1 'Cinzel',serif;color:var(--lol-gold);margin-bottom:4px;}
+.cmap-pin-tt-notes{font-size:11px;color:var(--text-m);line-height:1.4;white-space:pre-wrap;}
+.cmap-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.cmap-hint{font-size:12px;color:var(--text-d);font-style:italic;}
+.cmap-legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;}
+.cmap-legend-pin{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--text-m);cursor:pointer;padding:4px 8px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);transition:border-color .15s;}
+.cmap-legend-pin:hover{border-color:rgba(212,175,55,.3);}
+.cmap-legend-del{background:none;border:none;color:rgba(248,113,113,.4);cursor:pointer;font-size:12px;padding:0 2px;}
+.cmap-legend-del:hover{color:#f87171;}
+.cmap-add-modal{background:#1a1330;border:1px solid rgba(212,175,55,.3);padding:20px;max-width:340px;width:90%;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:900;}
+.cmap-add-modal h3{font:700 16px/1 'Cinzel',serif;color:var(--lol-gold);margin:0 0 14px;}
+.cmap-add-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:899;}
 /* ══ NOTES ══ */
 const NOTES_LS_KEY='masterdnd_notes';
 let _activeNoteId=null;
@@ -6494,6 +6537,8 @@ function switchCampTab(tab){
   else if(tab==='bitacora')content.innerHTML=_buildBitacoraTab();
   else if(tab==='inventory')content.innerHTML=_buildInventoryTab();
   else if(tab==='combat'){content.innerHTML=`<div id="campCombatMount" style="display:flex;flex-direction:column;flex:1;"></div>`;_mountCombatInCampaign();}
+  else if(tab==='notes')_buildNotesTab();
+  else if(tab==='campmap')_buildCampMapTab();
 }
 
 function _buildPartyTab(){
@@ -6887,6 +6932,157 @@ async function saveSessionEntry(){
   await loadCampaignSessions(_currentCampaign.id);
   switchCampTab('bitacora');
   document.getElementById('campDetailMeta').textContent=`${newCount} sesión${newCount!==1?'es':''} · ${_currentCampaignMembers.find(m=>m.user_id===_currentUser.id)?.role==='dm'?'🎲 Dungeon Master':'⚔️ Jugador'}`;
+}
+
+/* ══ CAMPAIGN NOTES ══ */
+let _campaignNotes=[];
+async function loadCampaignNotes(campId){
+  const {data}=await _SB.from('campaign_notes').select('*').eq('campaign_id',campId).order('created_at',{ascending:true});
+  _campaignNotes=data||[];
+}
+async function _buildNotesTab(){
+  const content=document.getElementById('campTabContent');
+  await loadCampaignNotes(_currentCampaign.id);
+  const myMember=_currentCampaignMembers.find(m=>m.user_id===_currentUser?.id);
+  const myRole=myMember?.role||'player';
+  const myName=myMember?.display_name||_currentUser?.email?.split('@')[0]||'Aventurero';
+  const notesHtml=_campaignNotes.length
+    ? _campaignNotes.map(n=>{
+        const isDmNote=n.role==='dm';
+        const isOwn=n.user_id===_currentUser?.id;
+        const dt=new Date(n.created_at);
+        const timeStr=dt.toLocaleDateString('es-ES',{day:'2-digit',month:'short'})+' '+dt.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
+        const delBtn=isOwn?`<button class="cnote-del" onclick="deleteCampNote('${n.id}')" title="Eliminar">✕</button>`:'';
+        return`<div class="cnote-card${isDmNote?' dm':''}" id="cnote-${n.id}">
+          <div class="cnote-header">
+            <span class="cnote-author">${n.display_name||'Aventurero'}</span>
+            <span class="cnote-role-badge${isDmNote?'':' player'}">${isDmNote?'DM':'Jugador'}</span>
+            <span class="cnote-time">${timeStr}</span>
+            ${delBtn}
+          </div>
+          <div class="cnote-content">${n.content.replace(/</g,'&lt;')}</div>
+        </div>`;
+      }).join('')
+    : `<div class="cnotes-empty">Aún no hay notas. ¡Sé el primero en escribir!</div>`;
+  content.innerHTML=`
+    <div class="cnotes-compose">
+      <textarea class="cnotes-textarea" id="cnoteInput" placeholder="${myRole==='dm'?'Escribe worldbuilding, lore, secretos...':'Anota tus teorías, pistas, observaciones...'}"></textarea>
+      <div class="cnotes-compose-footer">
+        <span style="font-size:11px;color:var(--text-d);">Como <b style="color:var(--lol-gold)">${myName}</b> (${myRole==='dm'?'DM':'Jugador'})</span>
+        <button class="cnotes-submit" onclick="submitCampNote()">Publicar nota</button>
+      </div>
+    </div>
+    <div class="cnotes-feed" id="cnotesFeed">${notesHtml}</div>`;
+}
+async function submitCampNote(){
+  const input=document.getElementById('cnoteInput');
+  const content=(input?.value||'').trim();
+  if(!content)return;
+  const myMember=_currentCampaignMembers.find(m=>m.user_id===_currentUser?.id);
+  const myRole=myMember?.role||'player';
+  const myName=myMember?.display_name||_currentUser?.email?.split('@')[0]||'Aventurero';
+  const {error}=await _SB.from('campaign_notes').insert({
+    campaign_id:_currentCampaign.id,
+    user_id:_currentUser.id,
+    display_name:myName,
+    role:myRole,
+    content
+  });
+  if(error){console.error(error);return;}
+  input.value='';
+  await _buildNotesTab();
+}
+async function deleteCampNote(noteId){
+  await _SB.from('campaign_notes').delete().eq('id',noteId);
+  document.getElementById('cnote-'+noteId)?.remove();
+}
+
+/* ══ CAMPAIGN MAP ══ */
+let _campaignPins=[];
+let _cmapPendingXY=null;
+async function loadCampaignPins(campId){
+  const {data}=await _SB.from('campaign_map_pins').select('*').eq('campaign_id',campId).order('created_at',{ascending:true});
+  _campaignPins=data||[];
+}
+async function _buildCampMapTab(){
+  const content=document.getElementById('campTabContent');
+  await loadCampaignPins(_currentCampaign.id);
+  const isDm=_currentCampaign.dm_user_id===_currentUser?.id;
+  const dmHint=isDm?`<span class="cmap-hint">Haz clic en el mapa para añadir un marcador.</span>`:`<span class="cmap-hint">Solo el DM puede añadir marcadores.</span>`;
+  const pinsHtml=_campaignPins.map(p=>`
+    <div class="cmap-pin" id="cmap-pin-${p.id}" style="left:${p.x}%;top:${p.y}%" onclick="event.stopPropagation()">
+      <div class="cmap-pin-icon" style="color:${p.color||'#d4af37'}">📍</div>
+      <div class="cmap-pin-label">${p.label}</div>
+      <div class="cmap-pin-tooltip">
+        <div class="cmap-pin-tt-label">${p.label}</div>
+        ${p.notes?`<div class="cmap-pin-tt-notes">${p.notes.replace(/</g,'&lt;')}</div>`:''}
+        ${isDm?`<button onclick="deleteCampPin('${p.id}')" style="margin-top:6px;font-size:10px;padding:2px 8px;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);color:#f87171;cursor:pointer;font-family:inherit;">Eliminar</button>`:''}
+      </div>
+    </div>`).join('');
+  const legendHtml=_campaignPins.length?`<div class="cmap-legend">${_campaignPins.map(p=>`<div class="cmap-legend-pin" onclick="scrollToCampPin('${p.id}')">📍 ${p.label}${isDm?`<button class="cmap-legend-del" onclick="event.stopPropagation();deleteCampPin('${p.id}')">✕</button>`:''}</div>`).join('')}</div>`:'';
+  content.innerHTML=`
+    <div class="cmap-wrap">
+      <div class="cmap-canvas-wrap" id="cmapCanvas" ${isDm?"onclick=\"cmapHandleClick(event)\"":''}>${pinsHtml}
+        <svg width="100%" height="100%" style="position:absolute;inset:0;pointer-events:none;opacity:.15;">
+          <defs><pattern id="cmapGrid" width="5%" height="5%" patternUnits="userSpaceOnUse"><path d="M 0 0 L 0 100 M 0 0 L 100 0" stroke="#d4af37" stroke-width=".3" fill="none"/></pattern></defs>
+          <rect width="100%" height="100%" fill="url(#cmapGrid)"/>
+        </svg>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;">
+          <span style="font-size:80px;opacity:.04;user-select:none;">🗺️</span>
+        </div>
+      </div>
+      <div class="cmap-controls">${dmHint}</div>
+      ${legendHtml}
+    </div>`;
+}
+function cmapHandleClick(e){
+  const wrap=document.getElementById('cmapCanvas');
+  if(!wrap)return;
+  const rect=wrap.getBoundingClientRect();
+  const xPct=((e.clientX-rect.left)/rect.width*100).toFixed(2);
+  const yPct=((e.clientY-rect.top)/rect.height*100).toFixed(2);
+  _cmapPendingXY={x:xPct,y:yPct};
+  document.body.insertAdjacentHTML('beforeend',`
+    <div class="cmap-add-overlay" id="cmapOverlay" onclick="closeCmapModal()"></div>
+    <div class="cmap-add-modal" id="cmapModal">
+      <h3>📍 Nuevo marcador</h3>
+      <label class="camp-modal-label">Nombre del lugar</label>
+      <input class="camp-modal-input" id="cmapLabel" placeholder="ej. Aldea de Phandalin" style="margin-bottom:10px;">
+      <label class="camp-modal-label">Notas del DM (opcionales)</label>
+      <textarea class="camp-modal-input" id="cmapNotes" rows="3" placeholder="ej. Aquí vive el dragón..." style="resize:vertical;font-family:inherit;"></textarea>
+      <div style="display:flex;gap:8px;margin-top:4px;">
+        <button class="camp-modal-submit" onclick="saveCampPin()" style="flex:1;">Guardar</button>
+        <button onclick="closeCmapModal()" style="padding:10px 16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--text-d);cursor:pointer;font-family:inherit;">Cancelar</button>
+      </div>
+    </div>`);
+  document.getElementById('cmapLabel').focus();
+}
+function closeCmapModal(){
+  document.getElementById('cmapModal')?.remove();
+  document.getElementById('cmapOverlay')?.remove();
+  _cmapPendingXY=null;
+}
+async function saveCampPin(){
+  const label=(document.getElementById('cmapLabel')?.value||'').trim();
+  if(!label)return;
+  const notes=document.getElementById('cmapNotes')?.value||'';
+  const {x,y}=_cmapPendingXY||{x:50,y:50};
+  closeCmapModal();
+  const {error}=await _SB.from('campaign_map_pins').insert({
+    campaign_id:_currentCampaign.id,
+    created_by:_currentUser.id,
+    label,notes,x,y,color:'#d4af37'
+  });
+  if(error){console.error(error);return;}
+  await _buildCampMapTab();
+}
+async function deleteCampPin(pinId){
+  await _SB.from('campaign_map_pins').delete().eq('id',pinId);
+  await _buildCampMapTab();
+}
+function scrollToCampPin(pinId){
+  const el=document.getElementById('cmap-pin-'+pinId);
+  if(el){el.scrollIntoView({behavior:'smooth',block:'nearest'});el.querySelector('.cmap-pin-icon').style.transform='scale(1.4)';setTimeout(()=>el.querySelector('.cmap-pin-icon').style.transform='',800);}
 }
 
 /* ══ READ-ONLY CHARACTER SHEET ══ */
