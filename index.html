@@ -1455,9 +1455,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.9.1</span>
+    <span class="ver-badge">v1.9.2</span>
     <span class="ver-sep">·</span>
-    <span class="ver-date">29 Mar 2026</span>
+    <span class="ver-date">30 Mar 2026</span>
   </div>
   <div class="lang-toggle">
     <button class="lang-btn active" onclick="setLang('es')">ES</button>
@@ -3597,7 +3597,7 @@ let _modalTab='login';
 _SB.auth.onAuthStateChange((event,session)=>{
   _currentUser=session?.user||null;
   _updateAuthUI();
-  if(event==='SIGNED_IN')closeModal();
+  if(event==='SIGNED_IN'){closeModal();_loadCharsFromCloud();}
 });
 _SB.auth.getSession().then(({data:{session}})=>{_currentUser=session?.user||null;_updateAuthUI();});
 function _updateAuthUI(){
@@ -3868,6 +3868,46 @@ function buildSheet(){
 /* ══ LOCAL STORAGE CHARACTERS ══ */
 const CHARS_LS_KEY='masterdnd_chars';
 function _loadSavedChars(){try{return JSON.parse(localStorage.getItem(CHARS_LS_KEY))||[];}catch(e){return[];}}
+
+/* ══ CLOUD SYNC ══ */
+async function _cloudSyncChar(charId){
+  if(!_currentUser||!charId)return;
+  const chars=_loadSavedChars();
+  const c=chars.find(x=>x.id===charId);
+  if(!c)return;
+  const {portrait,...charData}=c; // portrait stays local (too large for DB)
+  await _SB.from('characters').upsert({
+    id:charData.id,user_id:_currentUser.id,char_data:charData,
+    name:charData.name||'',class:charData.class||'',race:charData.race||'',
+    level:charData.level||1,updated_at:new Date().toISOString()
+  },{onConflict:'id'});
+}
+async function _cloudDeleteChar(charId){
+  if(!_currentUser||!charId)return;
+  await _SB.from('characters').delete().eq('id',charId).eq('user_id',_currentUser.id);
+}
+async function _loadCharsFromCloud(){
+  if(!_currentUser)return;
+  const {data,error}=await _SB.from('characters').select('char_data').eq('user_id',_currentUser.id);
+  if(error||!data||!data.length)return;
+  const local=_loadSavedChars();
+  const localMap=new Map(local.map(c=>[c.id,c]));
+  let changed=false;
+  for(const row of data){
+    const cloud=row.char_data;
+    if(!cloud||!cloud.id)continue;
+    const loc=localMap.get(cloud.id);
+    if(!loc||(cloud.savedAt||0)>(loc.savedAt||0)){
+      if(loc?.portrait&&!cloud.portrait)cloud.portrait=loc.portrait;
+      localMap.set(cloud.id,cloud);
+      changed=true;
+    }
+  }
+  if(changed){
+    localStorage.setItem(CHARS_LS_KEY,JSON.stringify([...localMap.values()]));
+    renderSavedChars();
+  }
+}
 function saveCharacter(btn){
   const name=(document.getElementById('csNameInput')?.value||'').trim()||'Sin nombre';
   const rk=selections.race||'human', ck=selections.class||'fighter';
@@ -3881,6 +3921,7 @@ function saveCharacter(btn){
   if(existingIdx>=0){charObj.hp=chars[existingIdx].hp;charObj.currentHp=chars[existingIdx].currentHp;charObj.portrait=_pendingPortrait||chars[existingIdx].portrait||null;chars.splice(existingIdx,1,charObj);}
   else chars.unshift(charObj);
   localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));
+  _cloudSyncChar(charObj.id);
   const orig=btn.innerHTML;
   btn.innerHTML=currentLang==='es'?'✓ Guardado':'✓ Saved';
   btn.style.background='#3a7a3a';
@@ -3998,6 +4039,7 @@ function loadChar(id){
 function deleteChar(id){
   const chars=_loadSavedChars().filter(c=>c.id!==id);
   localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));
+  _cloudDeleteChar(id);
   if(_loadedCharId===id){_loadedCharId=null;}
   renderSavedChars();
 }
@@ -4070,7 +4112,7 @@ function _updateSheetHp(cur,max){
   const curEl=document.getElementById('sheetHpCur'),maxEl=document.getElementById('sheetHpMax');
   if(curEl){curEl.textContent=cur;curEl.className=cur<=Math.floor(max/2)?'hp-low':'';}
   if(maxEl)maxEl.textContent=max;
-  if(_loadedCharId){const chars=_loadSavedChars();const idx=chars.findIndex(c=>c.id===_loadedCharId);if(idx>=0){chars[idx].currentHp=cur;chars[idx].hp=max;localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));}}
+  if(_loadedCharId){const chars=_loadSavedChars();const idx=chars.findIndex(c=>c.id===_loadedCharId);if(idx>=0){chars[idx].currentHp=cur;chars[idx].hp=max;localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));_cloudSyncChar(_loadedCharId);}}
 }
 function shortRest(){
   const ck=selections.class||'fighter';
@@ -4378,6 +4420,7 @@ function confirmLevelUp(){
       if(rolledStats){c.stats={...rolledStats};}
       if(_csSpellSlots){c.spellSlots=_csSpellSlots;}
       localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));
+      _cloudSyncChar(_loadedCharId);
     }
   }
   closeLevelUp();
@@ -4392,6 +4435,7 @@ function applyHpCard(id,mode){
   if(c.currentHp==null)c.currentHp=c.hp;
   c.currentHp=mode==='dmg'?Math.max(0,c.currentHp-val):Math.min(c.hp,c.currentHp+val);
   localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));
+  _cloudSyncChar(id);
   if(input)input.value='';
   // Update display without full re-render
   const curEl=document.getElementById('hpc-'+id);
@@ -4461,7 +4505,7 @@ function toggleCondition(k){
   if(_loadedCharId){
     const chars=_loadSavedChars();
     const c=chars.find(x=>x.id===_loadedCharId);
-    if(c){c.conditions=[..._activeConditions];localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));}
+    if(c){c.conditions=[..._activeConditions];localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));_cloudSyncChar(_loadedCharId);}
   }
 }
 
@@ -4539,7 +4583,7 @@ function _renderInventory(){
 function _saveInventory(){
   if(!_loadedCharId)return;
   const chars=_loadSavedChars();const c=chars.find(x=>x.id===_loadedCharId);
-  if(c){c.inventory=_charInventory;localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));}
+  if(c){c.inventory=_charInventory;localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));_cloudSyncChar(_loadedCharId);}
 }
 
 function _buildCsSlots(){
@@ -4622,7 +4666,7 @@ function _renderCsSpells(){
 function _saveKnownSpells(){
   if(!_loadedCharId)return;
   const chars=_loadSavedChars();const c=chars.find(x=>x.id===_loadedCharId);
-  if(c){c.knownSpells=_csKnownSpells;localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));}
+  if(c){c.knownSpells=_csKnownSpells;localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));_cloudSyncChar(_loadedCharId);}
 }
 
 function saveCharNotes(){
@@ -4630,7 +4674,7 @@ function saveCharNotes(){
   _charNotes=ta.value;
   if(!_loadedCharId)return;
   const chars=_loadSavedChars();const c=chars.find(x=>x.id===_loadedCharId);
-  if(c){c.charNotes=_charNotes;localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));}
+  if(c){c.charNotes=_charNotes;localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));_cloudSyncChar(_loadedCharId);}
 }
 
 /* ══ AUTOCOMPLETE (Inventory + Spells) ══ */
@@ -4650,7 +4694,7 @@ function onPortraitFile(e){
     if(_loadedCharId){
       const chars=_loadSavedChars();
       const c=chars.find(x=>x.id===_loadedCharId);
-      if(c){c.portrait=url;localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));}
+      if(c){c.portrait=url;localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));} // portrait stays local only
     }
   };
   reader.readAsDataURL(file);
