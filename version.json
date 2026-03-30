@@ -1,7 +1,12 @@
 {
-  "version": "2.0.5",
+  "version": "2.0.6",
   "date": "2026-03-30",
   "history": [
+    {
+      "version": "2.0.6",
+      "date": "2026-03-30",
+      "note": "Fix definitivo: todo el CSS de campaña movido al bloque style — el JS del script era inválido desde v2.0.0, ahora pasa validación de sintaxis"
+    },
     {
       "version": "2.0.5",
       "date": "2026-03-30",
