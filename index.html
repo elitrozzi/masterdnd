@@ -1404,7 +1404,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     <div class="mm-link" onclick="goTo('sounds');closeMobileMenu()"><span class="mm-link-icon">🎵</span><span data-es="Sonidos" data-en="Sounds">Sonidos</span></div>
     <div class="mm-link" onclick="goTo('compendium');closeMobileMenu()"><span class="mm-link-icon">📖</span><span data-es="Compendio" data-en="Compendium">Compendio</span></div>
     <div class="mm-link" onclick="goTo('notes');closeMobileMenu()"><span class="mm-link-icon">📝</span><span data-es="Notas" data-en="Notes">Notas</span></div>
-    <div class="mm-link" onclick="goTo('combat');closeMobileMenu()"><span class="mm-link-icon">⚔️</span><span data-es="Combate" data-en="Combat">Combate</span></div>
+    <div class="mm-link" onclick="goToCampaign();closeMobileMenu()"><span class="mm-link-icon">🏰</span><span data-es="Campaña" data-en="Campaign">Campaña</span></div>
   </div>
   <div class="mm-footer">
     <div class="mm-footer-label">Idioma</div>
@@ -1450,12 +1450,12 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     <a class="anav-link" id="nl-sounds" onclick="goTo('sounds')" data-es="Sonidos" data-en="Sounds">Sonidos</a>
     <a class="anav-link" id="nl-compendium" onclick="goTo('compendium')" data-es="Compendio" data-en="Compendium">Compendio</a>
     <a class="anav-link" id="nl-notes" onclick="goTo('notes')" data-es="Notas" data-en="Notes">Notas</a>
-    <a class="anav-link" id="nl-combat" onclick="goTo('combat')" data-es="Combate" data-en="Combat">Combate</a>
+    <a class="anav-link" id="nl-campaign" onclick="goToCampaign()" data-es="Campaña" data-en="Campaign">Campaña</a>
   </div>
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v1.9.2</span>
+    <span class="ver-badge">v2.0.0</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">30 Mar 2026</span>
   </div>
@@ -2304,6 +2304,54 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div id="compPanelContent"></div>
 </div>
 
+<!-- ══════════════════════════ PAGE: CAMPAIGN -->
+<div id="page-campaign" class="page">
+  <div class="camp-layout">
+    <!-- Login gate -->
+    <div id="campLoginGate" class="camp-login-gate" style="display:none;">
+      <div class="camp-gate-icon">🏰</div>
+      <div class="camp-gate-title">Modo Campaña</div>
+      <div class="camp-gate-sub">Iniciá sesión para crear o unirte a una campaña con tu grupo.</div>
+      <button class="camp-gate-btn" onclick="openModal()">Iniciar sesión</button>
+    </div>
+    <!-- Campaign list view -->
+    <div id="campListView" style="display:none;">
+      <div class="camp-list-header">
+        <h2 class="camp-list-title">🏰 Mis Campañas</h2>
+        <div class="camp-list-actions">
+          <button class="camp-action-btn camp-create-btn" onclick="openCampaignModal('create')">+ Crear campaña</button>
+          <button class="camp-action-btn camp-join-btn" onclick="openCampaignModal('join')">🔑 Unirse</button>
+        </div>
+      </div>
+      <div id="campCards" class="camp-cards"></div>
+    </div>
+    <!-- Campaign detail view -->
+    <div id="campDetailView" style="display:none;">
+      <div class="camp-detail-header">
+        <button class="camp-back-btn" onclick="showCampaignList()">← Mis campañas</button>
+        <div class="camp-detail-title-wrap">
+          <div class="camp-detail-name" id="campDetailName"></div>
+          <div class="camp-detail-meta" id="campDetailMeta"></div>
+        </div>
+        <button class="camp-session-inc-btn" id="campSessionBtn" onclick="incrementSessionCount()" style="display:none;" title="Registrar sesión jugada">+1 Sesión</button>
+      </div>
+      <div class="camp-tabs">
+        <button class="camp-tab active" data-tab="party" onclick="switchCampTab('party')">👥 Party</button>
+        <button class="camp-tab" data-tab="dm" onclick="switchCampTab('dm')">🎲 DM</button>
+        <button class="camp-tab" data-tab="inventory" onclick="switchCampTab('inventory')">🎒 Inventario</button>
+        <button class="camp-tab" data-tab="combat" onclick="switchCampTab('combat')">⚔️ Combate</button>
+      </div>
+      <div id="campTabContent" class="camp-tab-content"></div>
+    </div>
+  </div>
+  <!-- Create/Join modal -->
+  <div id="campModal" class="camp-modal-overlay" style="display:none;" onclick="if(event.target===this)closeCampaignModal()">
+    <div class="camp-modal">
+      <button class="camp-modal-close" onclick="closeCampaignModal()">✕</button>
+      <div id="campModalContent"></div>
+    </div>
+  </div>
+</div>
 <!-- ══════════════════════════ PAGE: NOTES -->
 <div id="page-notes" class="page">
   <div class="notes-layout">
@@ -3570,7 +3618,7 @@ function closeCompPanel(){
 }
 
 /* ══ NAV ══ */
-const PAGE_URLS={home:'/',characters:'/personajes',maps:'/mapas',sounds:'/efectos-sonidos',compendium:'/compendio',notes:'/notas',combat:'/combate'};
+const PAGE_URLS={home:'/',characters:'/personajes',maps:'/mapas',sounds:'/efectos-sonidos',compendium:'/compendio',notes:'/notas',combat:'/combate',campaign:'/campana'};
 const URL_PAGES={'/personajes':'characters','/mapas':'maps','/efectos-sonidos':'sounds','/compendio':'compendium','/notas':'notes','/combate':'combat'};
 function goTo(page,fromPop){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -3584,6 +3632,7 @@ function goTo(page,fromPop){
   if(page==='compendium')initCompendium();
   if(page==='notes')initNotes();
   if(page==='combat')initCombat();
+  if(page==='campaign')initCampaignPage();
   if(page==='characters')initCharSelect();
   if(!fromPop)history.pushState({page},'',(PAGE_URLS[page]||'/'));
 }
@@ -3597,7 +3646,7 @@ let _modalTab='login';
 _SB.auth.onAuthStateChange((event,session)=>{
   _currentUser=session?.user||null;
   _updateAuthUI();
-  if(event==='SIGNED_IN'){closeModal();_loadCharsFromCloud();}
+  if(event==='SIGNED_IN'){closeModal();_loadCharsFromCloud();if(document.getElementById('page-campaign')?.classList.contains('active'))initCampaignPage();}
 });
 _SB.auth.getSession().then(({data:{session}})=>{_currentUser=session?.user||null;_updateAuthUI();});
 function _updateAuthUI(){
@@ -5677,6 +5726,108 @@ function goToCharsSmart(){
   else goToCreateChar();
 }
 
+/* ══ CAMPAIGN ══ */
+.camp-layout{display:flex;flex-direction:column;flex:1;min-height:0;padding:24px 32px;max-width:1100px;margin:0 auto;width:100%;}
+.camp-login-gate{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:16px;text-align:center;}
+.camp-gate-icon{font-size:64px;opacity:.4;}
+.camp-gate-title{font:700 28px/1 'Cinzel',serif;color:var(--lol-gold);}
+.camp-gate-sub{font-size:15px;color:var(--text-d);max-width:380px;}
+.camp-gate-btn{font:700 14px/1 'Cinzel',serif;padding:12px 32px;background:rgba(212,175,55,.15);border:1px solid rgba(212,175,55,.4);color:var(--lol-gold);cursor:pointer;letter-spacing:.08em;transition:all .15s;}
+.camp-gate-btn:hover{background:rgba(212,175,55,.25);}
+/* List */
+.camp-list-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;}
+.camp-list-title{font:700 22px/1 'Cinzel',serif;color:var(--lol-gold);margin:0;}
+.camp-list-actions{display:flex;gap:8px;}
+.camp-action-btn{font:700 12px/1 'Cinzel',serif;padding:8px 18px;cursor:pointer;border:1px solid;transition:all .15s;letter-spacing:.06em;}
+.camp-create-btn{background:rgba(212,175,55,.12);border-color:rgba(212,175,55,.4);color:var(--lol-gold);}
+.camp-create-btn:hover{background:rgba(212,175,55,.22);}
+.camp-join-btn{background:rgba(147,197,253,.08);border-color:rgba(147,197,253,.3);color:#93c5fd;}
+.camp-join-btn:hover{background:rgba(147,197,253,.16);}
+.camp-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;}
+.camp-card{background:var(--lol-panel);border:1px solid rgba(212,175,55,.2);padding:20px;cursor:pointer;transition:all .2s;position:relative;}
+.camp-card:hover{border-color:rgba(212,175,55,.5);background:rgba(212,175,55,.05);}
+.camp-card-name{font:700 18px/1 'Cinzel',serif;color:var(--lol-gold);margin-bottom:6px;}
+.camp-card-role{font-size:11px;text-transform:uppercase;letter-spacing:.12em;padding:2px 8px;border-radius:10px;display:inline-block;margin-bottom:10px;}
+.camp-card-role.dm{background:rgba(212,175,55,.15);color:var(--lol-gold);border:1px solid rgba(212,175,55,.3);}
+.camp-card-role.player{background:rgba(147,197,253,.1);color:#93c5fd;border:1px solid rgba(147,197,253,.25);}
+.camp-card-meta{font-size:12px;color:var(--text-d);}
+.camp-card-members{font-size:12px;color:var(--text-m);margin-top:8px;}
+/* Detail */
+.camp-detail-header{display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap;}
+.camp-back-btn{font:700 12px/1 'Cinzel',serif;padding:7px 14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--text-m);cursor:pointer;transition:all .15s;white-space:nowrap;}
+.camp-back-btn:hover{background:rgba(255,255,255,.12);}
+.camp-detail-name{font:700 22px/1 'Cinzel',serif;color:var(--lol-gold);}
+.camp-detail-meta{font-size:12px;color:var(--text-d);margin-top:3px;}
+.camp-session-inc-btn{margin-left:auto;font:700 11px/1 'Cinzel',serif;padding:7px 14px;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.3);color:#4ade80;cursor:pointer;white-space:nowrap;}
+.camp-session-inc-btn:hover{background:rgba(74,222,128,.2);}
+/* Tabs */
+.camp-tabs{display:flex;gap:4px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:20px;}
+.camp-tab{font:600 13px/1 'Cinzel',serif;padding:10px 18px;background:none;border:none;color:var(--text-d);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;letter-spacing:.05em;}
+.camp-tab:hover{color:var(--text-m);}
+.camp-tab.active{color:var(--lol-gold);border-bottom-color:var(--lol-gold);}
+.camp-tab-content{flex:1;overflow-y:auto;}
+/* Party tab */
+.camp-party-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;}
+.camp-member-card{background:var(--lol-panel);border:1px solid rgba(255,255,255,.08);padding:16px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;transition:border-color .2s;}
+.camp-member-card:hover{border-color:rgba(212,175,55,.3);}
+.camp-member-avatar{width:64px;height:64px;border-radius:50%;border:2px solid rgba(212,175,55,.3);background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-size:28px;overflow:hidden;background-size:cover;background-position:center top;}
+.camp-member-name{font:700 14px/1 'Cinzel',serif;color:var(--lol-gold);}
+.camp-member-class{font-size:12px;color:var(--text-d);text-transform:capitalize;}
+.camp-member-level{font-size:11px;color:rgba(212,175,55,.6);font-weight:700;}
+.camp-member-hp{font-size:12px;font-weight:700;margin-top:2px;}
+.camp-member-role-badge{font-size:10px;text-transform:uppercase;letter-spacing:.1em;padding:2px 7px;border-radius:8px;}
+.camp-member-role-badge.dm{background:rgba(212,175,55,.15);color:var(--lol-gold);}
+.camp-member-role-badge.player{background:rgba(147,197,253,.1);color:#93c5fd;}
+/* DM Profile tab */
+.camp-dm-profile{display:flex;gap:28px;flex-wrap:wrap;}
+.camp-dm-avatar-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;}
+.camp-dm-avatar{width:100px;height:100px;border-radius:50%;border:3px solid rgba(212,175,55,.4);background:rgba(255,255,255,.06);font-size:48px;display:flex;align-items:center;justify-content:center;overflow:hidden;background-size:cover;background-position:center;}
+.camp-dm-avatar-edit{font-size:11px;color:var(--text-d);cursor:pointer;text-decoration:underline;}
+.camp-dm-info{flex:1;min-width:220px;}
+.camp-dm-name{font:700 22px/1 'Cinzel',serif;color:var(--lol-gold);margin-bottom:6px;}
+.camp-dm-sessions{font-size:13px;color:var(--text-d);margin-bottom:16px;}
+.camp-dm-desc{font-size:14px;color:var(--text-m);line-height:1.6;white-space:pre-wrap;}
+.camp-dm-desc-edit{width:100%;min-height:120px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);color:var(--text-p);padding:10px;font-size:14px;resize:vertical;outline:none;font-family:inherit;line-height:1.6;}
+.camp-dm-desc-edit:focus{border-color:rgba(212,175,55,.4);}
+.camp-dm-edit-btn{margin-top:10px;font:700 11px/1 'Cinzel',serif;padding:6px 16px;background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.3);color:var(--lol-gold);cursor:pointer;}
+/* Inventory tab */
+.camp-inv-header{display:flex;gap:8px;margin-bottom:16px;}
+.camp-inv-input{flex:1;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);color:#fff;padding:8px 12px;font-size:14px;outline:none;}
+.camp-inv-input:focus{border-color:rgba(212,175,55,.4);}
+.camp-inv-qty{width:60px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);color:#fff;padding:8px 8px;font-size:14px;outline:none;text-align:center;}
+.camp-inv-add-btn{font:700 12px/1 'Cinzel',serif;padding:8px 18px;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.35);color:var(--lol-gold);cursor:pointer;white-space:nowrap;}
+.camp-inv-add-btn:hover{background:rgba(212,175,55,.22);}
+.camp-inv-list{display:flex;flex-direction:column;gap:6px;}
+.camp-inv-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);}
+.camp-inv-item-name{flex:1;font-size:14px;color:var(--text-p);}
+.camp-inv-item-qty{font-size:13px;color:var(--text-d);min-width:32px;text-align:center;}
+.camp-inv-del{background:none;border:none;color:rgba(248,113,113,.5);cursor:pointer;font-size:16px;padding:0 4px;}
+.camp-inv-del:hover{color:#f87171;}
+.camp-inv-empty{font-size:14px;color:var(--text-d);font-style:italic;padding:20px 0;}
+/* Codes section */
+.camp-codes{display:flex;flex-direction:column;gap:8px;margin-top:16px;padding:14px;background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.07);}
+.camp-code-row{display:flex;align-items:center;gap:10px;font-size:13px;}
+.camp-code-label{color:var(--text-d);min-width:80px;}
+.camp-code-val{font:700 15px/1 'Cinzel',serif;letter-spacing:.2em;color:var(--lol-gold);}
+.camp-code-val.dm-code{color:#93c5fd;}
+.camp-copy-btn{font-size:11px;padding:3px 8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--text-d);cursor:pointer;}
+/* Modal */
+.camp-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:800;display:flex;align-items:center;justify-content:center;padding:20px;}
+.camp-modal{background:var(--lol-panel);border:1px solid rgba(212,175,55,.25);padding:32px;max-width:480px;width:100%;position:relative;max-height:90vh;overflow-y:auto;}
+.camp-modal-close{position:absolute;top:14px;right:16px;background:none;border:none;color:var(--text-d);font-size:18px;cursor:pointer;}
+.camp-modal-title{font:700 20px/1 'Cinzel',serif;color:var(--lol-gold);margin-bottom:20px;}
+.camp-modal-label{font-size:12px;color:var(--text-d);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;display:block;}
+.camp-modal-input{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);color:#fff;padding:10px 12px;font-size:14px;outline:none;margin-bottom:14px;box-sizing:border-box;}
+.camp-modal-input:focus{border-color:rgba(212,175,55,.4);}
+.camp-role-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;}
+.camp-role-btn{padding:16px;border:2px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);cursor:pointer;transition:all .15s;text-align:center;}
+.camp-role-btn.selected{border-color:var(--lol-gold);background:rgba(212,175,55,.1);}
+.camp-role-btn-icon{font-size:28px;display:block;margin-bottom:6px;}
+.camp-role-btn-label{font:700 13px/1 'Cinzel',serif;color:var(--text-p);}
+.camp-role-btn-sub{font-size:11px;color:var(--text-d);margin-top:3px;}
+.camp-modal-submit{width:100%;font:700 13px/1 'Cinzel',serif;padding:12px;background:rgba(212,175,55,.15);border:1px solid rgba(212,175,55,.4);color:var(--lol-gold);cursor:pointer;letter-spacing:.08em;margin-top:4px;transition:all .15s;}
+.camp-modal-submit:hover{background:rgba(212,175,55,.25);}
+.camp-modal-err{font-size:13px;color:#f87171;margin-top:10px;text-align:center;}
 /* ══ NOTES ══ */
 const NOTES_LS_KEY='masterdnd_notes';
 let _activeNoteId=null;
@@ -6165,6 +6316,405 @@ function renderCombat(){
       logList.innerHTML=[..._combatLog].reverse().map(e=>`<div class="combat-log-entry ${e.type}"><span>${e.msg}</span><span class="log-time">${e.time}</span></div>`).join('');
     }
   }
+}
+
+/* ══════════════════════════════════════════
+   CAMPAIGN SYSTEM
+══════════════════════════════════════════ */
+let _currentCampaign=null;
+let _currentCampaignMembers=[];
+let _currentCampaignInventory=[];
+let _campCreateRole='dm';
+
+function goToCampaign(){
+  if(!_currentUser){openModal();return;}
+  goTo('campaign');
+}
+
+async function initCampaignPage(){
+  document.getElementById('campLoginGate').style.display='none';
+  document.getElementById('campListView').style.display='none';
+  document.getElementById('campDetailView').style.display='none';
+  if(!_currentUser){
+    document.getElementById('campLoginGate').style.display='flex';
+    return;
+  }
+  await loadMyCampaigns();
+}
+
+async function loadMyCampaigns(){
+  // Get campaigns where I'm a member
+  const {data:memberships}=await _SB.from('campaign_members').select('campaign_id,role').eq('user_id',_currentUser.id);
+  if(!memberships||!memberships.length){
+    _renderCampaignList([]);return;
+  }
+  const ids=memberships.map(m=>m.campaign_id);
+  const roleMap=Object.fromEntries(memberships.map(m=>[m.campaign_id,m.role]));
+  const {data:campaigns}=await _SB.from('campaigns').select('*').in('id',ids);
+  // Get member counts
+  const {data:allMembers}=await _SB.from('campaign_members').select('campaign_id').in('campaign_id',ids);
+  const countMap={};
+  (allMembers||[]).forEach(m=>{countMap[m.campaign_id]=(countMap[m.campaign_id]||0)+1;});
+  const enriched=(campaigns||[]).map(c=>({...c,myRole:roleMap[c.id]||'player',memberCount:countMap[c.id]||1}));
+  _renderCampaignList(enriched);
+}
+
+function _renderCampaignList(campaigns){
+  document.getElementById('campListView').style.display='block';
+  document.getElementById('campDetailView').style.display='none';
+  const grid=document.getElementById('campCards');
+  if(!campaigns.length){
+    grid.innerHTML=`<div style="color:var(--text-d);font-size:14px;grid-column:1/-1;padding:20px 0;">No tenés campañas todavía. ¡Creá una o unite con un código!</div>`;
+    return;
+  }
+  grid.innerHTML=campaigns.map(c=>`
+    <div class="camp-card" onclick="openCampaignDetail('${c.id}')">
+      <div class="camp-card-name">${c.name}</div>
+      <span class="camp-card-role ${c.myRole}">${c.myRole==='dm'?'🎲 Dungeon Master':'⚔️ Jugador'}</span>
+      <div class="camp-card-members">${c.memberCount} miembro${c.memberCount!==1?'s':''}</div>
+      <div class="camp-card-meta" style="margin-top:6px;">${c.session_count||0} sesión${c.session_count!==1?'es':''} jugada${c.session_count!==1?'s':''}</div>
+    </div>`).join('');
+}
+
+async function openCampaignDetail(campaignId){
+  const {data:camp}=await _SB.from('campaigns').select('*').eq('id',campaignId).single();
+  if(!camp)return;
+  const {data:members}=await _SB.from('campaign_members').select('*').eq('campaign_id',campaignId);
+  const {data:inv}=await _SB.from('campaign_inventory').select('*').eq('campaign_id',campaignId).single();
+  _currentCampaign=camp;
+  _currentCampaignMembers=members||[];
+  _currentCampaignInventory=inv?.items||[];
+
+  document.getElementById('campListView').style.display='none';
+  document.getElementById('campDetailView').style.display='block';
+  document.getElementById('campDetailName').textContent=camp.name;
+  const myRole=_currentCampaignMembers.find(m=>m.user_id===_currentUser.id)?.role||'player';
+  const sessText=`${camp.session_count||0} sesión${camp.session_count!==1?'es':''} · ${myRole==='dm'?'🎲 Dungeon Master':'⚔️ Jugador'}`;
+  document.getElementById('campDetailMeta').textContent=sessText;
+  // Show +Session btn only for DM
+  document.getElementById('campSessionBtn').style.display=myRole==='dm'?'block':'none';
+  // Load chars for members
+  await _enrichMembersWithChars();
+  switchCampTab('party');
+}
+
+async function _enrichMembersWithChars(){
+  const charIds=_currentCampaignMembers.filter(m=>m.char_id).map(m=>m.char_id);
+  if(!charIds.length)return;
+  const {data:chars}=await _SB.from('characters').select('id,char_data').in('id',charIds);
+  const charMap=Object.fromEntries((chars||[]).map(c=>[c.id,c.char_data]));
+  _currentCampaignMembers=_currentCampaignMembers.map(m=>({...m,charData:m.char_id?charMap[m.char_id]:null}));
+}
+
+function showCampaignList(){
+  _currentCampaign=null;
+  loadMyCampaigns();
+}
+
+function switchCampTab(tab){
+  document.querySelectorAll('.camp-tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===tab));
+  const content=document.getElementById('campTabContent');
+  if(tab==='party')content.innerHTML=_buildPartyTab();
+  else if(tab==='dm')content.innerHTML=_buildDmTab();
+  else if(tab==='inventory')content.innerHTML=_buildInventoryTab();
+  else if(tab==='combat'){content.innerHTML=`<div id="campCombatMount" style="display:flex;flex-direction:column;flex:1;"></div>`;_mountCombatInCampaign();}
+}
+
+function _buildPartyTab(){
+  if(!_currentCampaignMembers.length)return`<div style="color:var(--text-d);padding:20px;font-size:14px;">Sin miembros aún.</div>`;
+  const cards=_currentCampaignMembers.map(m=>{
+    const cd=m.charData;
+    const pct=cd&&cd.hp>0?(cd.currentHp!=null?cd.currentHp:cd.hp)/cd.hp:1;
+    const hpColor=pct>0.6?'#6ee7b7':pct>0.3?'#fbbf24':'#f87171';
+    const hpText=cd?(cd.currentHp!=null?cd.currentHp:cd.hp)+'/'+cd.hp:'—';
+    const avatarStyle=cd?.portrait?`background-image:url('${cd.portrait}');background-size:cover;background-position:center top;`:'';
+    const avatarContent=cd?.portrait?'':'🧙';
+    const displayName=m.display_name||m.charData?.name||'Aventurero';
+    return`<div class="camp-member-card">
+      <div class="camp-member-avatar" style="${avatarStyle}">${avatarContent}</div>
+      <span class="camp-member-role-badge ${m.role}">${m.role==='dm'?'DM':'Jugador'}</span>
+      <div class="camp-member-name">${displayName}</div>
+      ${cd?`<div class="camp-member-class">${cd.race||''} · ${cd.class||''}</div>
+      <div class="camp-member-level">Nivel ${cd.level||1}</div>
+      <div class="camp-member-hp" style="color:${hpColor}">❤️ ${hpText}</div>`:'<div class="camp-member-class" style="color:var(--text-d);font-style:italic;">Sin personaje vinculado</div>'}
+    </div>`;
+  }).join('');
+  // Codes section (visible to all members)
+  const myRole=_currentCampaignMembers.find(m=>m.user_id===_currentUser.id)?.role;
+  const codesHtml=`<div class="camp-codes" style="margin-top:24px;">
+    <div style="font-size:11px;color:var(--text-d);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">Códigos de invitación</div>
+    <div class="camp-code-row"><span class="camp-code-label">Jugadores:</span><span class="camp-code-val">${_currentCampaign.invite_code_player}</span><button class="camp-copy-btn" onclick="navigator.clipboard.writeText('${_currentCampaign.invite_code_player}')">Copiar</button></div>
+    <div class="camp-code-row"><span class="camp-code-label">DM:</span><span class="camp-code-val dm-code">${_currentCampaign.invite_code_dm}</span><button class="camp-copy-btn" onclick="navigator.clipboard.writeText('${_currentCampaign.invite_code_dm}')">Copiar</button></div>
+  </div>`;
+  // Link char button for self if no char linked
+  const me=_currentCampaignMembers.find(m=>m.user_id===_currentUser.id);
+  const linkBtn=!me?.char_id?`<button class="camp-action-btn camp-create-btn" style="margin-top:16px;" onclick="openLinkCharModal()">🔗 Vincular mi personaje</button>`:'';
+  return`<div class="camp-party-grid">${cards}</div>${linkBtn}${codesHtml}`;
+}
+
+function _buildDmTab(){
+  const dmMember=_currentCampaignMembers.find(m=>m.role==='dm');
+  const isDm=_currentCampaign.dm_user_id===_currentUser.id;
+  if(!dmMember&&!_currentCampaign.dm_user_id){
+    return`<div style="color:var(--text-d);padding:20px;font-size:14px;">Esta campaña aún no tiene DM asignado. Unite con el código de DM para tomar el rol.</div>`;
+  }
+  const name=dmMember?.display_name||'Dungeon Master';
+  const desc=_currentCampaign.description||'';
+  const sessions=_currentCampaign.session_count||0;
+  const avatarUrl=_currentCampaign.avatar_url;
+  const avatarStyle=avatarUrl?`background-image:url('${avatarUrl}');background-size:cover;background-position:center;`:'';
+  const avatarContent=avatarUrl?'':'🎲';
+  const editSection=isDm?`
+    <div style="margin-top:20px;">
+      <label class="camp-modal-label">Descripción / lore de la campaña</label>
+      <textarea class="camp-dm-desc-edit" id="campDmDescEdit" placeholder="Escribí aquí la historia, el mundo, lo que tus jugadores deben saber...">${desc}</textarea>
+      <div style="display:flex;gap:8px;margin-top:8px;">
+        <button class="camp-dm-edit-btn" onclick="saveDmDescription()">Guardar descripción</button>
+        <label class="camp-dm-edit-btn" style="cursor:pointer;">Cambiar avatar<input type="file" accept="image/*" style="display:none;" onchange="uploadDmAvatar(event)"></label>
+      </div>
+    </div>`:'';
+  return`<div class="camp-dm-profile">
+    <div class="camp-dm-avatar-wrap">
+      <div class="camp-dm-avatar" style="${avatarStyle}">${avatarContent}</div>
+    </div>
+    <div class="camp-dm-info">
+      <div class="camp-dm-name">${name}</div>
+      <div class="camp-dm-sessions">🎲 ${sessions} sesión${sessions!==1?'es':''} dirigida${sessions!==1?'s':''}</div>
+      ${desc?`<div class="camp-dm-desc">${desc}</div>`:'<div class="camp-dm-desc" style="color:var(--text-d);font-style:italic;">Sin descripción todavía.</div>'}
+      ${editSection}
+    </div>
+  </div>`;
+}
+
+function _buildInventoryTab(){
+  const items=_currentCampaignInventory;
+  const listHtml=items.length
+    ?items.map((it,i)=>`<div class="camp-inv-item">
+        <span class="camp-inv-item-name">${it.name}</span>
+        <span class="camp-inv-item-qty">×${it.qty||1}</span>
+        <button class="camp-inv-del" onclick="removeCampaignItem(${i})" title="Eliminar">✕</button>
+      </div>`).join('')
+    :`<div class="camp-inv-empty">El inventario del grupo está vacío.</div>`;
+  return`<div>
+    <div class="camp-inv-header">
+      <input class="camp-inv-input" id="campInvName" placeholder="Nombre del objeto..." onkeydown="if(event.key==='Enter')addCampaignItem()">
+      <input class="camp-inv-qty" id="campInvQty" type="number" value="1" min="1" placeholder="×">
+      <button class="camp-inv-add-btn" onclick="addCampaignItem()">+ Añadir</button>
+    </div>
+    <div class="camp-inv-list">${listHtml}</div>
+  </div>`;
+}
+
+function _mountCombatInCampaign(){
+  // Reuse the existing combat HTML by cloning it into the campaign tab
+  const combatPage=document.getElementById('page-combat');
+  const mount=document.getElementById('campCombatMount');
+  if(!mount)return;
+  mount.innerHTML='';
+  const clone=combatPage.querySelector('.combat-layout').cloneNode(true);
+  // Fix IDs to avoid conflicts — prepend cc-
+  clone.querySelectorAll('[id]').forEach(el=>{
+    const orig=el.id;
+    el.id='cc-'+orig;
+    clone.querySelectorAll(`[onclick*="${orig}"]`).forEach(btn=>{
+      btn.setAttribute('onclick',btn.getAttribute('onclick').replaceAll(orig,'cc-'+orig));
+    });
+  });
+  mount.appendChild(clone);
+  initCombat(); // runs on the original page-combat (state is shared)
+}
+
+async function addCampaignItem(){
+  const nameEl=document.getElementById('campInvName');
+  const qtyEl=document.getElementById('campInvQty');
+  const name=(nameEl?.value||'').trim();
+  if(!name||!_currentCampaign)return;
+  const qty=parseInt(qtyEl?.value)||1;
+  _currentCampaignInventory.push({name,qty});
+  await _saveCampaignInventory();
+  nameEl.value='';if(qtyEl)qtyEl.value='1';
+  switchCampTab('inventory');
+}
+
+async function removeCampaignItem(index){
+  _currentCampaignInventory.splice(index,1);
+  await _saveCampaignInventory();
+  switchCampTab('inventory');
+}
+
+async function _saveCampaignInventory(){
+  if(!_currentCampaign)return;
+  await _SB.from('campaign_inventory').upsert({
+    campaign_id:_currentCampaign.id,
+    items:_currentCampaignInventory,
+    updated_at:new Date().toISOString()
+  },{onConflict:'campaign_id'});
+}
+
+async function saveDmDescription(){
+  const desc=document.getElementById('campDmDescEdit')?.value||'';
+  await _SB.from('campaigns').update({description:desc}).eq('id',_currentCampaign.id);
+  _currentCampaign.description=desc;
+  const btn=event.target;btn.textContent='✓ Guardado';setTimeout(()=>btn.textContent='Guardar descripción',1800);
+}
+
+async function uploadDmAvatar(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=async ev=>{
+    const url=ev.target.result;
+    await _SB.from('campaigns').update({avatar_url:url}).eq('id',_currentCampaign.id);
+    _currentCampaign.avatar_url=url;
+    switchCampTab('dm');
+  };
+  reader.readAsDataURL(file);
+}
+
+async function incrementSessionCount(){
+  if(!_currentCampaign)return;
+  const newCount=(_currentCampaign.session_count||0)+1;
+  await _SB.from('campaigns').update({session_count:newCount}).eq('id',_currentCampaign.id);
+  _currentCampaign.session_count=newCount;
+  document.getElementById('campDetailMeta').textContent=`${newCount} sesión${newCount!==1?'es':''} · 🎲 Dungeon Master`;
+  const btn=document.getElementById('campSessionBtn');
+  btn.textContent='✓ Registrada';setTimeout(()=>btn.textContent='+1 Sesión',1800);
+}
+
+/* Create / Join modals */
+function openCampaignModal(mode){
+  document.getElementById('campModal').style.display='flex';
+  const content=document.getElementById('campModalContent');
+  if(mode==='create'){
+    _campCreateRole='dm';
+    content.innerHTML=`
+      <div class="camp-modal-title">Nueva Campaña</div>
+      <div class="camp-modal-label">¿Cuál es tu rol?</div>
+      <div class="camp-role-btns">
+        <div class="camp-role-btn selected" id="campRoleDm" onclick="selectCampRole('dm')">
+          <span class="camp-role-btn-icon">🎲</span>
+          <div class="camp-role-btn-label">Dungeon Master</div>
+          <div class="camp-role-btn-sub">Dirigís la campaña</div>
+        </div>
+        <div class="camp-role-btn" id="campRolePlayer" onclick="selectCampRole('player')">
+          <span class="camp-role-btn-icon">⚔️</span>
+          <div class="camp-role-btn-label">Jugador</div>
+          <div class="camp-role-btn-sub">Tu DM se unirá después</div>
+        </div>
+      </div>
+      <label class="camp-modal-label">Nombre de la campaña</label>
+      <input class="camp-modal-input" id="campNameInput" placeholder="ej. La Maldición de Strahd..." maxlength="60">
+      <label class="camp-modal-label">Tu nombre en la campaña</label>
+      <input class="camp-modal-input" id="campDisplayName" placeholder="ej. El DM, Gandalf..." maxlength="40">
+      <button class="camp-modal-submit" onclick="createCampaign()">Crear campaña</button>
+      <div class="camp-modal-err" id="campModalErr"></div>`;
+  } else {
+    content.innerHTML=`
+      <div class="camp-modal-title">Unirse a una Campaña</div>
+      <label class="camp-modal-label">Código de invitación</label>
+      <input class="camp-modal-input" id="campJoinCode" placeholder="Ej. ABC123" maxlength="8" style="text-transform:uppercase;letter-spacing:.2em;font-size:18px;font-family:'Cinzel',serif;">
+      <label class="camp-modal-label">Tu nombre en la campaña</label>
+      <input class="camp-modal-input" id="campJoinName" placeholder="ej. Gimli el Enano..." maxlength="40">
+      <label class="camp-modal-label">Vincular personaje (opcional)</label>
+      <select class="camp-modal-input" id="campJoinChar">
+        <option value="">— Sin personaje —</option>
+        ${_loadSavedChars().map(c=>`<option value="${c.id}">${c.name} (${c.class} Nv.${c.level||1})</option>`).join('')}
+      </select>
+      <button class="camp-modal-submit" onclick="joinCampaign()">Unirse</button>
+      <div class="camp-modal-err" id="campModalErr"></div>`;
+  }
+}
+
+function selectCampRole(role){
+  _campCreateRole=role;
+  document.getElementById('campRoleDm').classList.toggle('selected',role==='dm');
+  document.getElementById('campRolePlayer').classList.toggle('selected',role==='player');
+}
+
+function closeCampaignModal(){
+  document.getElementById('campModal').style.display='none';
+}
+
+function _genCode(len=6){return Math.random().toString(36).substr(2,len).toUpperCase();}
+
+async function createCampaign(){
+  const name=(document.getElementById('campNameInput')?.value||'').trim();
+  const displayName=(document.getElementById('campDisplayName')?.value||'').trim();
+  const errEl=document.getElementById('campModalErr');
+  if(!name){errEl.textContent='Ingresá un nombre para la campaña.';return;}
+  if(!displayName){errEl.textContent='Ingresá tu nombre en la campaña.';return;}
+  const codePlayer=_genCode(6);
+  const codeDm=_genCode(6)+'D'; // DM codes end in D
+  const campId=_genCode(12);
+  const {error}=await _SB.from('campaigns').insert({
+    id:campId,name,
+    dm_user_id:_campCreateRole==='dm'?_currentUser.id:null,
+    invite_code_player:codePlayer,
+    invite_code_dm:codeDm,
+    session_count:0
+  });
+  if(error){errEl.textContent='Error al crear la campaña. Intentá de nuevo.';return;}
+  await _SB.from('campaign_members').insert({
+    campaign_id:campId,user_id:_currentUser.id,
+    role:_campCreateRole,display_name:displayName,
+    char_id:null
+  });
+  closeCampaignModal();
+  await openCampaignDetail(campId);
+}
+
+async function joinCampaign(){
+  const code=(document.getElementById('campJoinCode')?.value||'').trim().toUpperCase();
+  const displayName=(document.getElementById('campJoinName')?.value||'').trim();
+  const charId=document.getElementById('campJoinChar')?.value||null;
+  const errEl=document.getElementById('campModalErr');
+  if(!code){errEl.textContent='Ingresá el código de invitación.';return;}
+  if(!displayName){errEl.textContent='Ingresá tu nombre.';return;}
+  // Find campaign by player or dm code
+  let {data:camp}=await _SB.from('campaigns').select('*').eq('invite_code_player',code).single();
+  let role='player';
+  if(!camp){
+    const r=await _SB.from('campaigns').select('*').eq('invite_code_dm',code).single();
+    camp=r.data;role='dm';
+  }
+  if(!camp){errEl.textContent='Código inválido. Verificá e intentá de nuevo.';return;}
+  // Check if already member
+  const {data:existing}=await _SB.from('campaign_members').select('id').eq('campaign_id',camp.id).eq('user_id',_currentUser.id).single();
+  if(existing){errEl.textContent='Ya sos miembro de esta campaña.';closeCampaignModal();openCampaignDetail(camp.id);return;}
+  // If DM role, claim it
+  if(role==='dm'){
+    await _SB.from('campaigns').update({dm_user_id:_currentUser.id}).eq('id',camp.id);
+  }
+  await _SB.from('campaign_members').insert({
+    campaign_id:camp.id,user_id:_currentUser.id,
+    role,display_name:displayName,char_id:charId||null
+  });
+  closeCampaignModal();
+  await openCampaignDetail(camp.id);
+}
+
+async function openLinkCharModal(){
+  const chars=_loadSavedChars();
+  if(!chars.length){alert('No tenés personajes guardados. Creá uno primero.');return;}
+  const sel=document.createElement('select');
+  sel.style.cssText='background:var(--lol-panel);border:1px solid rgba(212,175,55,.3);color:#fff;padding:10px;font-size:14px;width:100%;margin:10px 0;';
+  sel.innerHTML=chars.map(c=>`<option value="${c.id}">${c.name} (${c.class} Nv.${c.level||1})</option>`).join('');
+  document.getElementById('campModal').style.display='flex';
+  document.getElementById('campModalContent').innerHTML=`
+    <div class="camp-modal-title">Vincular personaje</div>
+    <div style="font-size:13px;color:var(--text-d);margin-bottom:12px;">Elegí el personaje que usás en esta campaña:</div>
+    <div id="campLinkSelWrap"></div>
+    <button class="camp-modal-submit" onclick="linkCharToCampaign()">Vincular</button>`;
+  document.getElementById('campLinkSelWrap').appendChild(sel);
+  sel.id='campLinkCharSel';
+}
+
+async function linkCharToCampaign(){
+  const charId=document.getElementById('campLinkCharSel')?.value;
+  if(!charId||!_currentCampaign)return;
+  await _SB.from('campaign_members').update({char_id:charId})
+    .eq('campaign_id',_currentCampaign.id).eq('user_id',_currentUser.id);
+  closeCampaignModal();
+  await openCampaignDetail(_currentCampaign.id);
 }
 
 function initCombat(){

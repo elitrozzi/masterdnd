@@ -1,7 +1,12 @@
 {
-  "version": "1.9.2",
+  "version": "2.0.0",
   "date": "2026-03-30",
   "history": [
+    {
+      "version": "2.0.0",
+      "date": "2026-03-30",
+      "note": "Modo Campaña: crear/unirse con código, party con perfiles de miembros, perfil del DM con lore, inventario compartido, combate integrado — requiere login"
+    },
     {
       "version": "1.9.2",
       "date": "2026-03-30",
