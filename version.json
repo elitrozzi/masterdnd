@@ -1,7 +1,12 @@
 {
-  "version": "2.0.6",
+  "version": "2.0.7",
   "date": "2026-03-30",
   "history": [
+    {
+      "version": "2.0.7",
+      "date": "2026-03-30",
+      "note": "Campaña: estado vacío rediseñado con botones prominentes Crear y Unirse con código"
+    },
     {
       "version": "2.0.6",
       "date": "2026-03-30",

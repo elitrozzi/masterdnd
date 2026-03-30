@@ -1702,7 +1702,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.0.6</span>
+    <span class="ver-badge">v2.0.7</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">30 Mar 2026</span>
   </div>
@@ -6525,7 +6525,17 @@ function _renderCampaignList(campaigns){
   document.getElementById('campDetailView').style.display='none';
   const grid=document.getElementById('campCards');
   if(!campaigns.length){
-    grid.innerHTML=`<div style="color:var(--text-d);font-size:14px;grid-column:1/-1;padding:20px 0;">No tenés campañas todavía. ¡Creá una o unite con un código!</div>`;
+    grid.innerHTML=`<div style="grid-column:1/-1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;gap:32px;">
+      <div style="font-size:72px;opacity:.25;line-height:1;">🏰</div>
+      <div style="text-align:center;">
+        <div style="font:700 26px/1 'Cinzel',serif;color:var(--lol-gold);margin-bottom:12px;">Sin campañas todavía</div>
+        <div style="font-size:15px;color:var(--text-d);max-width:360px;line-height:1.6;">Creá tu primera campaña como DM o unitete a una existente con el código que te dé tu Dungeon Master.</div>
+      </div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;">
+        <button onclick="openCampaignModal('create')" style="font:700 14px/1 'Cinzel',serif;padding:16px 36px;background:rgba(212,175,55,.15);border:2px solid rgba(212,175,55,.5);color:var(--lol-gold);cursor:pointer;letter-spacing:.08em;transition:all .2s;" onmouseover="this.style.background='rgba(212,175,55,.28)'" onmouseout="this.style.background='rgba(212,175,55,.15)'">⚔️ CREAR CAMPAÑA</button>
+        <button onclick="openCampaignModal('join')" style="font:700 14px/1 'Cinzel',serif;padding:16px 36px;background:rgba(147,197,253,.08);border:2px solid rgba(147,197,253,.35);color:#93c5fd;cursor:pointer;letter-spacing:.08em;transition:all .2s;" onmouseover="this.style.background='rgba(147,197,253,.18)'" onmouseout="this.style.background='rgba(147,197,253,.08)'">🔑 UNIRSE CON CÓDIGO</button>
+      </div>
+    </div>`;
     return;
   }
   grid.innerHTML=campaigns.map(c=>`
