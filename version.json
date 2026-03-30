@@ -1,7 +1,12 @@
 {
-  "version": "2.0.8",
+  "version": "2.0.9",
   "date": "2026-03-30",
   "history": [
+    {
+      "version": "2.0.9",
+      "date": "2026-03-30",
+      "note": "URL routing por personaje: /personajes/{slug}, /personajes/mis-personajes, /personajes/crear-personaje — navegación con pushState/popstate e hydration inicial desde URL"
+    },
     {
       "version": "2.0.8",
       "date": "2026-03-30",

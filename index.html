@@ -1732,7 +1732,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.0.8</span>
+    <span class="ver-badge">v2.0.9</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">30 Mar 2026</span>
   </div>
@@ -2160,7 +2160,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     </div>
     <div style="display:flex;align-items:center;gap:6px;justify-content:center;font-size:10px;color:var(--text-d);font-family:monospace;">
       <span style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;display:inline-block;"></span>
-      <span class="ver-badge">v2.0.8</span>
+      <span class="ver-badge">v2.0.9</span>
       <span>·</span>
       <span class="ver-date">30 Mar 2026</span>
     </div>
@@ -3974,7 +3974,43 @@ function goTo(page,fromPop){
   if(page==='characters')initCharSelect();
   if(!fromPop)history.pushState({page},'',(PAGE_URLS[page]||'/'));
 }
-window.addEventListener('popstate',e=>{goTo(e.state&&e.state.page?e.state.page:'home',true);});
+window.addEventListener('popstate',e=>{
+  const s=e.state||{};
+  if(!s.page){goTo('home',true);return;}
+  if(s.page==='characters'){
+    goTo('characters',true);
+    if(s.sub==='mis-personajes')requestAnimationFrame(()=>_showCharPicker&&_showCharPicker());
+    else if(s.sub==='crear-personaje'){_suppressSavedChars=true;}
+    else if(s.charId)requestAnimationFrame(()=>loadChar(s.charId,true));
+  }else{goTo(s.page,true);}
+});
+
+// Initial URL routing on page load
+(function _routeInitialUrl(){
+  const path=window.location.pathname;
+  const pageMap={'/mapas':'maps','/efectos-sonidos':'sounds','/compendio':'compendium','/notas':'notes','/combate':'combat','/campana':'campaign'};
+  if(pageMap[path]){goTo(pageMap[path],true);return;}
+  if(path==='/personajes'){goTo('characters',true);return;}
+  if(path==='/personajes/crear-personaje'){_suppressSavedChars=true;goTo('characters',true);return;}
+  if(path==='/personajes/mis-personajes'){
+    goTo('characters',true);
+    const tryPicker=()=>{if(typeof _showCharPicker==='function')_showCharPicker();else setTimeout(tryPicker,50);};
+    requestAnimationFrame(tryPicker);
+    return;
+  }
+  const m=path.match(/^\/personajes\/(.+)$/);
+  if(m){
+    const slug=m[1];
+    goTo('characters',true);
+    const tryLoad=()=>{
+      const c=_findCharBySlug(slug);
+      if(c){loadChar(c.id,true);return;}
+      // chars may not be loaded yet (cloud sync pending); stash for later
+      _pendingCharLoad=slug;
+    };
+    requestAnimationFrame(tryLoad);
+  }
+})();
 
 /* ══ MODAL ══ */
 /* ══ SUPABASE AUTH ══ */
@@ -4255,6 +4291,9 @@ function buildSheet(){
 /* ══ LOCAL STORAGE CHARACTERS ══ */
 const CHARS_LS_KEY='masterdnd_chars';
 function _loadSavedChars(){try{return JSON.parse(localStorage.getItem(CHARS_LS_KEY))||[];}catch(e){return[];}}
+function _charSlug(c){const s=(c.name||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');return s||c.id;}
+function _findCharBySlug(slug){return _loadSavedChars().find(c=>_charSlug(c)===slug||c.id===slug)||null;}
+let _pendingCharLoad=null;
 
 /* ══ CLOUD SYNC ══ */
 async function _cloudSyncChar(charId){
@@ -4293,6 +4332,11 @@ async function _loadCharsFromCloud(){
   if(changed){
     localStorage.setItem(CHARS_LS_KEY,JSON.stringify([...localMap.values()]));
     renderSavedChars();
+  }
+  // Resolve any pending char load from initial URL routing
+  if(_pendingCharLoad){
+    const c=_findCharBySlug(_pendingCharLoad);
+    if(c){_pendingCharLoad=null;loadChar(c.id,true);}
   }
 }
 function saveCharacter(btn){
@@ -4359,7 +4403,7 @@ function renderSavedChars(){
     </div>`;
   }).join('');
 }
-function loadChar(id){
+function loadChar(id,fromPop){
   const chars=_loadSavedChars();
   const c=chars.find(x=>x.id===id);
   if(!c)return;
@@ -4422,6 +4466,8 @@ function loadChar(id){
   // Reset tabs to Inventario
   document.querySelectorAll('.cs-tab').forEach((t,i)=>t.classList.toggle('active',i===0));
   document.querySelectorAll('.cs-tab-content').forEach((c,i)=>c.classList.toggle('active',i===0));
+  // Update URL
+  if(!fromPop)history.pushState({page:'characters',charId:id},'','/personajes/'+_charSlug(c));
 }
 function deleteChar(id){
   const chars=_loadSavedChars().filter(c=>c.id!==id);
@@ -6024,8 +6070,11 @@ function goToMyChars(){
   if(chars.length===0){goToCreateChar();return;}
   goTo('characters');
   if(chars.length===1){
-    requestAnimationFrame(()=>loadChar(chars[0].id));
+    // Replace /personajes with the char URL so back goes to previous page
+    history.replaceState({page:'characters',charId:chars[0].id},'','/personajes/'+_charSlug(chars[0]));
+    requestAnimationFrame(()=>loadChar(chars[0].id,true));
   } else {
+    history.replaceState({page:'characters',sub:'mis-personajes'},'','/personajes/mis-personajes');
     requestAnimationFrame(()=>_showCharPicker());
   }
 }
@@ -6057,6 +6106,7 @@ function closeCharPicker(){
 function goToCreateChar(){
   _suppressSavedChars=true;
   goTo('characters');
+  history.replaceState({page:'characters',sub:'crear-personaje'},'','/personajes/crear-personaje');
 }
 function goToCharsSmart(){
   const chars=_loadSavedChars();
