@@ -1,7 +1,12 @@
 {
-  "version": "2.1.1",
+  "version": "2.1.2",
   "date": "2026-03-30",
   "history": [
+    {
+      "version": "2.1.2",
+      "date": "2026-03-30",
+      "note": "Fix campaña: padding-top:60px en page-campaign para no quedar tapado por el header fijo"
+    },
     {
       "version": "2.1.1",
       "date": "2026-03-30",
