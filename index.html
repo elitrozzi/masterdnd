@@ -1732,7 +1732,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.0.9</span>
+    <span class="ver-badge">v2.1.0</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">30 Mar 2026</span>
   </div>
@@ -2160,7 +2160,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     </div>
     <div style="display:flex;align-items:center;gap:6px;justify-content:center;font-size:10px;color:var(--text-d);font-family:monospace;">
       <span style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;display:inline-block;"></span>
-      <span class="ver-badge">v2.0.9</span>
+      <span class="ver-badge">v2.1.0</span>
       <span>·</span>
       <span class="ver-date">30 Mar 2026</span>
     </div>
@@ -3986,29 +3986,33 @@ window.addEventListener('popstate',e=>{
 });
 
 // Initial URL routing on page load
+// Deferred via setTimeout so all let declarations are initialized first
 (function _routeInitialUrl(){
   const path=window.location.pathname;
+  if(path==='/'||path==='')return;
   const pageMap={'/mapas':'maps','/efectos-sonidos':'sounds','/compendio':'compendium','/notas':'notes','/combate':'combat','/campana':'campaign'};
-  if(pageMap[path]){goTo(pageMap[path],true);return;}
-  if(path==='/personajes'){goTo('characters',true);return;}
-  if(path==='/personajes/crear-personaje'){_suppressSavedChars=true;goTo('characters',true);return;}
+  if(pageMap[path]){setTimeout(()=>goTo(pageMap[path],true),0);return;}
+  if(path==='/personajes'){setTimeout(()=>goTo('characters',true),0);return;}
+  if(path==='/personajes/crear-personaje'){
+    setTimeout(()=>{_suppressSavedChars=true;goTo('characters',true);},0);
+    return;
+  }
   if(path==='/personajes/mis-personajes'){
-    goTo('characters',true);
-    const tryPicker=()=>{if(typeof _showCharPicker==='function')_showCharPicker();else setTimeout(tryPicker,50);};
-    requestAnimationFrame(tryPicker);
+    setTimeout(()=>{
+      goTo('characters',true);
+      requestAnimationFrame(()=>_showCharPicker&&_showCharPicker());
+    },0);
     return;
   }
   const m=path.match(/^\/personajes\/(.+)$/);
   if(m){
     const slug=m[1];
-    goTo('characters',true);
-    const tryLoad=()=>{
+    setTimeout(()=>{
+      goTo('characters',true);
       const c=_findCharBySlug(slug);
-      if(c){loadChar(c.id,true);return;}
-      // chars may not be loaded yet (cloud sync pending); stash for later
-      _pendingCharLoad=slug;
-    };
-    requestAnimationFrame(tryLoad);
+      if(c){loadChar(c.id,true);}
+      else{_pendingCharLoad=slug;} // wait for cloud sync
+    },0);
   }
 })();
 

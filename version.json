@@ -1,7 +1,12 @@
 {
-  "version": "2.0.9",
+  "version": "2.1.0",
   "date": "2026-03-30",
   "history": [
+    {
+      "version": "2.1.0",
+      "date": "2026-03-30",
+      "note": "Fix TDZ bug en URL routing inicial: setTimeout para diferir navegación hasta que los let declarations estén inicializados"
+    },
     {
       "version": "2.0.9",
       "date": "2026-03-30",
