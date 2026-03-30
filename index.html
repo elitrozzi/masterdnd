@@ -1732,7 +1732,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.1.0</span>
+    <span class="ver-badge">v2.1.1</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">30 Mar 2026</span>
   </div>
@@ -1767,49 +1767,80 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     <div class="sc-moon"></div>
     <!-- Dragon -->
     <div class="sc-dragon-wrap" id="scDragon">
-      <svg width="160" height="66" viewBox="0 0 260 108" xmlns="http://www.w3.org/2000/svg" fill="#09071e">
-        <!-- Body -->
-        <ellipse cx="130" cy="64" rx="52" ry="17"/>
-        <!-- Neck + head -->
-        <path d="M 80,59 Q 60,51 44,46 Q 32,43 23,48 Q 14,53 17,62 Q 21,70 36,70 Q 54,68 70,62 Z"/>
-        <!-- Head -->
-        <ellipse cx="20" cy="60" rx="17" ry="11"/>
-        <!-- Snout -->
-        <path d="M 6,56 Q -1,61 1,67 Q 6,72 15,70 Z"/>
-        <!-- Horn -->
-        <polygon points="18,50 11,28 25,46"/>
-        <!-- Brow crest -->
-        <polygon points="30,46 27,34 36,44"/>
-        <!-- Back spines -->
-        <polygon points="82,50 85,40 88,50"/>
-        <polygon points="96,47 100,37 104,47"/>
-        <polygon points="114,45 118,35 122,45"/>
-        <!-- Upper wing (sweeps up, animated) -->
+      <svg width="200" height="76" viewBox="-5 0 345 130" xmlns="http://www.w3.org/2000/svg" fill="#09071e">
+        <!-- TAIL: sinuous S-curve with arrowhead barb -->
+        <path d="M 250,69 C 267,62 282,55 296,47 C 306,41 313,37 314,42 C 317,36 321,36 321,43 C 317,51 301,60 281,69 C 269,74 255,75 250,73 Z"/>
+        <polygon points="314,41 327,27 330,44"/>
+        <!-- BODY: organic, muscular, tapered -->
+        <path d="M 106,63 C 130,54 155,50 180,51 C 205,52 228,59 242,69 C 238,80 216,87 186,88 C 158,89 130,83 108,77 C 95,73 93,70 106,63 Z"/>
+        <!-- DORSAL SPINES: irregular heights for realism -->
+        <polygon points="116,58 110,41 123,57"/>
+        <polygon points="142,52 137,34 149,51"/>
+        <polygon points="168,50 163,32 176,49"/>
+        <polygon points="192,50 188,33 201,49"/>
+        <!-- NECK: flowing S-curve from shoulder to skull -->
+        <path d="M 106,65 C 93,61 79,55 65,51 C 53,48 40,49 30,55 C 39,65 58,66 73,62 C 83,58 91,64 104,74 C 104,71 105,68 106,65 Z"/>
+        <!-- HEAD: elongated fearsome skull -->
+        <path d="M 33,53 C 23,50 12,53 6,59 C 0,63 -1,69 4,74 C 10,78 23,76 33,72 C 42,68 48,62 50,56 C 47,53 40,51 33,53 Z"/>
+        <!-- UPPER SNOUT: jaw extends further, raptor-like -->
+        <path d="M 9,55 C 2,52 -3,56 -1,63 C 1,68 10,68 18,65 Z"/>
+        <!-- LOWER JAW: open mouth — gap creates the terror -->
+        <path d="M 4,71 C -2,75 -4,82 0,86 C 4,88 15,83 23,77 Z"/>
+        <!-- TEETH hints on upper jaw -->
+        <polygon points="7,57 3,64 12,60"/>
+        <polygon points="14,55 11,62 18,58"/>
+        <!-- HORNS: 3 swept-back curved horns -->
+        <path d="M 27,51 C 23,40 25,25 31,16 C 36,22 35,37 29,51 Z"/>
+        <path d="M 37,49 C 34,39 36,26 42,18 C 46,24 45,38 39,49 Z"/>
+        <path d="M 17,53 C 14,44 17,36 23,31 C 27,37 25,45 19,53 Z"/>
+        <!-- NECK SPINES -->
+        <polygon points="45,57 40,44 53,55"/>
+        <polygon points="61,52 57,40 70,51"/>
+        <!-- UPPER WING: bat-wing membrane with 3 finger spars + elbow spike -->
         <g>
           <animateTransform attributeName="transform" type="rotate"
-            values="0 104 56; -26 104 56; 10 104 56; 0 104 56"
-            keyTimes="0; 0.42; 0.72; 1"
-            dur="4.2s" repeatCount="indefinite"/>
-          <path d="M 104,56 L 74,6 L 102,22 L 116,4 L 122,22 L 138,8 L 138,27 L 156,14 L 150,32 L 170,24 L 162,44 Z"/>
+            values="0 164 65; -28 164 65; 10 164 65; 0 164 65"
+            keyTimes="0; 0.38; 0.70; 1"
+            dur="3.8s" repeatCount="indefinite"/>
+          <!-- Shoulder → arm up to wrist → dramatic elbow claw → 3 scalloped membrane fingers → trailing edge back -->
+          <path d="M 164,65
+            C 161,52 159,38 157,25
+            C 155,16 150,8 144,4
+            L 136,0
+            L 144,4
+            C 151,2 158,3 163,8
+            C 159,20 159,31 163,39
+            C 169,25 177,15 186,10
+            C 183,22 181,34 183,44
+            C 190,30 198,20 207,16
+            C 204,28 201,40 203,51
+            C 207,42 211,36 213,39
+            C 211,49 204,59 195,65
+            C 186,68 175,68 164,65 Z"/>
         </g>
-        <!-- Lower wing (sweeps down, animated) -->
+        <!-- LOWER WING: organic underside membrane, scalloped bottom -->
         <g>
           <animateTransform attributeName="transform" type="rotate"
-            values="0 104 70; 20 104 70; -7 104 70; 0 104 70"
-            keyTimes="0; 0.42; 0.72; 1"
-            dur="4.2s" repeatCount="indefinite"/>
-          <path d="M 104,70 L 80,102 L 98,87 L 74,100 L 90,78 Z"/>
+            values="0 164 78; 23 164 78; -7 164 78; 0 164 78"
+            keyTimes="0; 0.38; 0.70; 1"
+            dur="3.8s" repeatCount="indefinite"/>
+          <path d="M 164,78
+            C 161,89 155,103 149,114
+            C 143,109 143,101 148,93
+            C 141,101 133,110 125,114
+            C 125,105 130,96 138,90
+            C 131,96 124,101 117,102
+            C 119,93 127,85 138,81
+            C 130,84 125,83 123,80
+            C 127,74 141,73 154,74
+            C 159,74 163,76 164,78 Z"/>
         </g>
-        <!-- Tail -->
-        <path d="M 180,64 Q 208,57 232,50 Q 248,43 252,37 Q 246,31 238,35 Q 248,31 253,38 Q 252,48 235,54 Q 210,61 182,67 Z"/>
-        <!-- Tail spike -->
-        <polygon points="248,35 260,22 262,37"/>
-        <!-- Front legs (tucked) -->
-        <path d="M 104,77 Q 98,91 94,97 Q 90,89 98,77 Z"/>
-        <path d="M 118,81 Q 114,93 110,98 Q 106,90 112,79 Z"/>
-        <!-- Hind legs (tucked) -->
-        <path d="M 156,77 Q 152,89 148,95 Q 144,87 151,75 Z"/>
-        <path d="M 170,75 Q 168,86 164,91 Q 160,84 166,73 Z"/>
+        <!-- FRONT LEGS: tapered with claw tips -->
+        <path d="M 110,78 Q 103,92 97,106 Q 93,102 99,87 Z"/>
+        <path d="M 122,82 Q 116,95 111,109 Q 107,105 112,91 Z"/>
+        <!-- HIND LEGS: angled back, clawed -->
+        <path d="M 200,81 Q 204,95 200,110 Q 196,107 196,92 Z"/>
+        <path d="M 212,79 Q 218,92 215,106 Q 211,103 209,89 Z"/>
       </svg>
     </div>
     <!-- Far mountains -->
@@ -2160,7 +2191,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     </div>
     <div style="display:flex;align-items:center;gap:6px;justify-content:center;font-size:10px;color:var(--text-d);font-family:monospace;">
       <span style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;display:inline-block;"></span>
-      <span class="ver-badge">v2.1.0</span>
+      <span class="ver-badge">v2.1.1</span>
       <span>·</span>
       <span class="ver-date">30 Mar 2026</span>
     </div>

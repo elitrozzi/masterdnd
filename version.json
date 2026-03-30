@@ -1,7 +1,12 @@
 {
-  "version": "2.1.0",
+  "version": "2.1.1",
   "date": "2026-03-30",
   "history": [
+    {
+      "version": "2.1.1",
+      "date": "2026-03-30",
+      "note": "Dragón rediseñado: silueta orgánica con alas de murciélago (membranas escalonadas + espolón del codo), cabeza con 3 cuernos curvos + mandíbula abierta + dientes, cola con punta de flecha — reemplaza todas las formas geométricas por curvas bezier"
+    },
     {
       "version": "2.1.0",
       "date": "2026-03-30",
