@@ -1,7 +1,12 @@
 {
-  "version": "2.0.2",
+  "version": "2.0.3",
   "date": "2026-03-30",
   "history": [
+    {
+      "version": "2.0.3",
+      "date": "2026-03-30",
+      "note": "Mapa y notas de campaña rediseñados: mapa con pan/zoom, imagen de fondo, 9 tipos de marcador, pins secretos del DM; notas con categorías, markdown y pins fijados"
+    },
     {
       "version": "2.0.2",
       "date": "2026-03-30",
