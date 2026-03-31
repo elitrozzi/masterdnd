@@ -355,7 +355,7 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .cs-dbd-section-title{font:700 18px/1 'Cinzel',serif;letter-spacing:.15em;color:var(--lol-gold);text-transform:uppercase;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid rgba(200,170,110,.25);display:flex;align-items:center;gap:8px;}
 .cs-dbd-section-title::before{content:'';display:block;width:3px;height:12px;background:var(--lol-gold);flex-shrink:0;}
 /* ── Header ── */
-.cs-dbd-header{display:flex;align-items:center;gap:18px;padding:16px 20px;flex-wrap:wrap;background:var(--lol-panel2);border:1px solid var(--lol-border);position:relative;}
+.cs-dbd-header{display:flex;align-items:center;gap:18px;padding:16px 20px;flex-wrap:wrap;background:var(--lol-panel2);border:1px solid var(--lol-border);position:relative;border-radius:8px;}
 .cs-dbd-header::before,.cs-dbd-header::after{content:'';position:absolute;width:12px;height:12px;border-color:var(--lol-gold);border-style:solid;}
 .cs-dbd-header::before{top:-1px;left:-1px;border-width:2px 0 0 2px;}
 .cs-dbd-header::after{bottom:-1px;right:-1px;border-width:0 2px 2px 0;}
@@ -396,7 +396,7 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .cs-dbd-btn-ghost:hover{color:var(--lol-gray);}
 /* ── Stats row ── */
 .cs-dbd-stats-row{display:flex;gap:6px;align-items:stretch;}
-.cs-dbd-stat-box{flex:1;background:var(--lol-panel2);border:1px solid rgba(120,90,40,.5);padding:10px 6px 9px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:0;position:relative;transition:all .15s;cursor:pointer;}
+.cs-dbd-stat-box{flex:1;background:var(--lol-panel2);border:1px solid rgba(120,90,40,.5);padding:10px 6px 9px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:0;position:relative;transition:all .15s;cursor:pointer;border-radius:8px;}
 .cs-dbd-stat-box:hover{border-color:var(--lol-border);background:rgba(200,170,110,.08);box-shadow:0 0 10px rgba(200,170,110,.15);}
 .cs-dbd-stat-mod{font-size:20px;font-weight:700;color:var(--lol-gold);font-family:'Cinzel',serif;line-height:1;}
 .cs-dbd-stat-abbr{font-size:16px;color:var(--lol-gray-dim);font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-top:3px;}
@@ -411,7 +411,7 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .cs-dbd-col-skills{flex:0 0 22%;min-width:180px;display:flex;flex-direction:column;overflow-y:auto;}
 .cs-dbd-col-main{flex:1;display:flex;flex-direction:column;gap:12px;overflow-y:auto;min-width:0;}
 /* Panel wrapper for columns */
-.cs-dbd-col-panel{background:var(--lol-panel);border:1px solid rgba(120,90,40,.45);padding:14px;position:relative;}
+.cs-dbd-col-panel{background:var(--lol-panel);border:1px solid rgba(120,90,40,.45);padding:14px;position:relative;border-radius:8px;}
 .cs-dbd-col-panel::before{content:'';position:absolute;top:-1px;left:-1px;width:8px;height:8px;border-top:1.5px solid var(--lol-gold);border-left:1.5px solid var(--lol-gold);}
 .cs-dbd-col-panel::after{content:'';position:absolute;bottom:-1px;right:-1px;width:8px;height:8px;border-bottom:1.5px solid var(--lol-gold);border-right:1.5px solid var(--lol-gold);}
 /* Saving throws */
@@ -1406,7 +1406,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 .dr-panel-title{font:700 10px/1 'Cinzel',serif;letter-spacing:.22em;color:var(--lol-gold);text-transform:uppercase;margin-bottom:12px;padding-bottom:5px;border-bottom:1px solid rgba(200,170,110,.25);display:flex;align-items:center;gap:8px;}
 .dr-panel-title::before{content:'';display:block;width:3px;height:12px;background:var(--lol-gold);flex-shrink:0;}
 .dr-panel-grid{display:flex;flex-wrap:wrap;gap:7px;}
-.dr-stat-btn{background:var(--lol-panel2);border:1px solid rgba(120,90,40,.5);padding:8px 12px;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:52px;}
+.dr-stat-btn{background:var(--lol-panel2);border:1px solid rgba(120,90,40,.5);padding:8px 12px;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:52px;border-radius:8px;}
 .dr-stat-btn:hover{background:rgba(200,170,110,.08);border-color:var(--lol-border);box-shadow:0 0 8px rgba(200,170,110,.12);}
 .dr-stat-name{font:600 9px/1 'Cinzel',serif;letter-spacing:.08em;color:var(--lol-gray-dim);}
 .dr-stat-mod{font:700 16px/1 'Cinzel',serif;color:var(--lol-gold);}
@@ -1418,7 +1418,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 /* ── Level-up modal ── */
 .lu-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9000;display:none;align-items:center;justify-content:center;}
 .lu-overlay.open{display:flex;}
-.lu-box{position:relative;background:var(--lol-panel);border:1px solid rgba(200,170,110,.4);padding:28px 32px;min-width:420px;max-width:540px;width:90vw;max-height:85vh;overflow-y:auto;box-shadow:0 0 40px rgba(200,170,110,.15);}
+.lu-box{position:relative;background:var(--lol-panel);border:1px solid rgba(200,170,110,.4);padding:28px 32px;min-width:420px;max-width:540px;width:90vw;max-height:85vh;overflow-y:auto;box-shadow:0 0 40px rgba(200,170,110,.15);border-radius:8px;}
 .lu-corner{position:absolute;width:14px;height:14px;border-color:var(--lol-gold);border-style:solid;}
 .lu-tl{top:-1px;left:-1px;border-width:2px 0 0 2px;}
 .lu-tr{top:-1px;right:-1px;border-width:2px 2px 0 0;}
@@ -1437,7 +1437,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 .lu-hp-lbl{font:600 10px/1 'Cinzel',serif;color:var(--lol-gray-dim);letter-spacing:.1em;}
 .lu-asi-desc{font-size:11px;color:var(--lol-gray-dim);margin-bottom:10px;}
 .lu-asi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px;}
-.lu-asi-row{display:flex;align-items:center;gap:6px;background:var(--lol-panel2);border:1px solid rgba(120,90,40,.3);padding:6px 8px;}
+.lu-asi-row{display:flex;align-items:center;gap:6px;background:var(--lol-panel2);border:1px solid rgba(120,90,40,.3);padding:6px 8px;border-radius:8px;}
 .lu-asi-name{flex:1;font:600 9px/1 'Cinzel',serif;color:var(--lol-gray-dim);letter-spacing:.08em;text-transform:uppercase;}
 .lu-asi-val{font:700 14px/1 'Cinzel',serif;color:var(--lol-gold);min-width:22px;text-align:center;}
 .lu-asi-btn{background:none;border:1px solid rgba(120,90,40,.4);color:var(--lol-gray-dim);width:20px;height:20px;cursor:pointer;font-size:12px;line-height:1;transition:all .12s;padding:0;}
@@ -1445,7 +1445,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 .lu-asi-pts{font:600 11px/1 'Cinzel',serif;color:var(--lol-gray-dim);text-align:right;}
 .lu-asi-pts strong{color:var(--lol-teal);}
 .lu-features{display:flex;flex-direction:column;gap:8px;}
-.lu-feat{background:var(--lol-panel2);border:1px solid rgba(120,90,40,.3);padding:8px 10px;}
+.lu-feat{background:var(--lol-panel2);border:1px solid rgba(120,90,40,.3);padding:8px 10px;border-radius:8px;}
 .lu-feat-name{font:700 10px/1 'Cinzel',serif;color:var(--lol-gold);letter-spacing:.08em;margin-bottom:3px;}
 .lu-feat-desc{font-size:11px;color:var(--lol-gray-dim);line-height:1.45;}
 .lu-no-feats{font-size:11px;color:rgba(180,160,120,.4);font-style:italic;text-align:center;padding:8px 0;}
@@ -1561,26 +1561,26 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 .camp-list-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;}
 .camp-list-title{font:700 22px/1 'Cinzel',serif;color:var(--lol-gold);margin:0;}
 .camp-list-actions{display:flex;gap:8px;}
-.camp-action-btn{font:700 12px/1 'Cinzel',serif;padding:8px 18px;cursor:pointer;border:1px solid;transition:all .15s;letter-spacing:.06em;}
+.camp-action-btn{font:700 12px/1 'Cinzel',serif;padding:8px 18px;cursor:pointer;border:1px solid;transition:all .15s;letter-spacing:.06em;border-radius:8px;}
 .camp-create-btn{background:rgba(212,175,55,.12);border-color:rgba(212,175,55,.4);color:var(--lol-gold);}
 .camp-create-btn:hover{background:rgba(212,175,55,.22);}
 .camp-join-btn{background:rgba(147,197,253,.08);border-color:rgba(147,197,253,.3);color:#93c5fd;}
 .camp-join-btn:hover{background:rgba(147,197,253,.16);}
 .camp-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;}
-.camp-card{background:var(--lol-panel);border:1px solid rgba(212,175,55,.2);padding:20px;cursor:pointer;transition:all .2s;position:relative;}
+.camp-card{background:var(--lol-panel);border:1px solid rgba(212,175,55,.2);padding:20px;cursor:pointer;transition:all .2s;position:relative;border-radius:8px;}
 .camp-card:hover{border-color:rgba(212,175,55,.5);background:rgba(212,175,55,.05);}
 .camp-card-name{font:700 18px/1 'Cinzel',serif;color:var(--lol-gold);margin-bottom:6px;}
-.camp-card-role{font-size:11px;text-transform:uppercase;letter-spacing:.12em;padding:2px 8px;border-radius:10px;display:inline-block;margin-bottom:10px;}
+.camp-card-role{font-size:11px;text-transform:uppercase;letter-spacing:.12em;padding:3px 10px;border-radius:8px;display:inline-block;margin-bottom:10px;}
 .camp-card-role.dm{background:rgba(212,175,55,.15);color:var(--lol-gold);border:1px solid rgba(212,175,55,.3);}
 .camp-card-role.player{background:rgba(147,197,253,.1);color:#93c5fd;border:1px solid rgba(147,197,253,.25);}
 .camp-card-meta{font-size:12px;color:var(--text-d);}
 .camp-card-members{font-size:12px;color:var(--text-m);margin-top:8px;}
 .camp-detail-header{display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap;}
-.camp-back-btn{font:700 12px/1 'Cinzel',serif;padding:7px 14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--text-m);cursor:pointer;transition:all .15s;white-space:nowrap;}
+.camp-back-btn{font:700 12px/1 'Cinzel',serif;padding:7px 14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--text-m);cursor:pointer;transition:all .15s;white-space:nowrap;border-radius:8px;}
 .camp-back-btn:hover{background:rgba(255,255,255,.12);}
 .camp-detail-name{font:700 22px/1 'Cinzel',serif;color:var(--lol-gold);}
 .camp-detail-meta{font-size:12px;color:var(--text-d);margin-top:3px;}
-.camp-session-inc-btn{margin-left:auto;font:700 11px/1 'Cinzel',serif;padding:7px 14px;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.3);color:#4ade80;cursor:pointer;white-space:nowrap;}
+.camp-session-inc-btn{margin-left:auto;font:700 11px/1 'Cinzel',serif;padding:7px 14px;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.3);color:#4ade80;cursor:pointer;white-space:nowrap;border-radius:8px;}
 .camp-session-inc-btn:hover{background:rgba(74,222,128,.2);}
 .camp-tabs{display:flex;gap:4px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:20px;}
 .camp-tab{font:600 13px/1 'Cinzel',serif;padding:10px 18px;background:none;border:none;color:var(--text-d);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;letter-spacing:.05em;}
@@ -1588,7 +1588,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 .camp-tab.active{color:var(--lol-gold);border-bottom-color:var(--lol-gold);}
 .camp-tab-content{flex:1;overflow-y:auto;}
 .camp-party-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;}
-.camp-member-card{background:var(--lol-panel);border:1px solid rgba(255,255,255,.08);padding:16px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;transition:border-color .2s;}
+.camp-member-card{background:var(--lol-panel);border:1px solid rgba(255,255,255,.08);padding:16px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;transition:border-color .2s;border-radius:8px;}
 .camp-member-card:hover{border-color:rgba(212,175,55,.3);}
 .camp-member-avatar{width:64px;height:64px;border-radius:50%;border:2px solid rgba(212,175,55,.3);background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-size:28px;overflow:hidden;background-size:cover;background-position:center top;}
 .camp-member-name{font:700 14px/1 'Cinzel',serif;color:var(--lol-gold);}
@@ -1629,19 +1629,19 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 .camp-code-val.dm-code{color:#93c5fd;}
 .camp-copy-btn{font-size:11px;padding:3px 8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--text-d);cursor:pointer;}
 .camp-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:800;display:flex;align-items:center;justify-content:center;padding:20px;}
-.camp-modal{background:var(--lol-panel);border:1px solid rgba(212,175,55,.25);padding:32px;max-width:480px;width:100%;position:relative;max-height:90vh;overflow-y:auto;}
+.camp-modal{background:var(--lol-panel);border:1px solid rgba(212,175,55,.25);padding:32px;max-width:480px;width:100%;position:relative;max-height:90vh;overflow-y:auto;border-radius:8px;}
 .camp-modal-close{position:absolute;top:14px;right:16px;background:none;border:none;color:var(--text-d);font-size:18px;cursor:pointer;}
 .camp-modal-title{font:700 20px/1 'Cinzel',serif;color:var(--lol-gold);margin-bottom:20px;}
 .camp-modal-label{font-size:12px;color:var(--text-d);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;display:block;}
-.camp-modal-input{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);color:#fff;padding:10px 12px;font-size:14px;outline:none;margin-bottom:14px;box-sizing:border-box;}
+.camp-modal-input{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);color:#fff;padding:10px 12px;font-size:14px;outline:none;margin-bottom:14px;box-sizing:border-box;border-radius:8px;}
 .camp-modal-input:focus{border-color:rgba(212,175,55,.4);}
 .camp-role-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;}
-.camp-role-btn{padding:16px;border:2px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);cursor:pointer;transition:all .15s;text-align:center;}
+.camp-role-btn{padding:16px;border:2px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);cursor:pointer;transition:all .15s;text-align:center;border-radius:8px;}
 .camp-role-btn.selected{border-color:var(--lol-gold);background:rgba(212,175,55,.1);}
 .camp-role-btn-icon{font-size:28px;display:block;margin-bottom:6px;}
 .camp-role-btn-label{font:700 13px/1 'Cinzel',serif;color:var(--text-p);}
 .camp-role-btn-sub{font-size:11px;color:var(--text-d);margin-top:3px;}
-.camp-modal-submit{width:100%;font:700 13px/1 'Cinzel',serif;padding:12px;background:rgba(212,175,55,.15);border:1px solid rgba(212,175,55,.4);color:var(--lol-gold);cursor:pointer;letter-spacing:.08em;margin-top:4px;transition:all .15s;}
+.camp-modal-submit{width:100%;font:700 13px/1 'Cinzel',serif;padding:12px;background:rgba(212,175,55,.15);border:1px solid rgba(212,175,55,.4);color:var(--lol-gold);cursor:pointer;letter-spacing:.08em;margin-top:4px;transition:all .15s;border-radius:8px;}
 .camp-modal-submit:hover{background:rgba(212,175,55,.25);}
 .camp-modal-err{font-size:13px;color:#f87171;margin-top:10px;text-align:center;}
 .cmb-conditions{display:flex;flex-wrap:wrap;gap:3px;padding:4px 0 2px;}
@@ -1774,7 +1774,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.2.1</span>
+    <span class="ver-badge">v2.2.2</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">31 Mar 2026</span>
   </div>
@@ -2242,7 +2242,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="margin-top:48px;display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,200,150,.35);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.2.1</span>
+          <span class="ver-badge">v2.2.2</span>
           <span>·</span>
           <span class="ver-date">31 Mar 2026</span>
         </div>
