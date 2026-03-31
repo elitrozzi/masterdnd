@@ -1,7 +1,12 @@
 {
-  "version": "2.1.7",
+  "version": "2.1.8",
   "date": "2026-03-31",
   "history": [
+    {
+      "version": "2.1.8",
+      "date": "2026-03-31",
+      "note": "CTA: fogata recién apagada con humo continuo — llamas casi extintas (opacity .15), humo suave que sube persistentemente"
+    },
     {
       "version": "2.1.7",
       "date": "2026-03-31",

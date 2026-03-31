@@ -1766,7 +1766,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.1.7</span>
+    <span class="ver-badge">v2.1.8</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">31 Mar 2026</span>
   </div>
@@ -2234,7 +2234,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="margin-top:48px;display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,200,150,.35);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.1.7</span>
+          <span class="ver-badge">v2.1.8</span>
           <span>·</span>
           <span class="ver-date">31 Mar 2026</span>
         </div>
@@ -2313,13 +2313,14 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         </svg>
         <!-- Campfire (dying — low flames) -->
         <div class="ls-cta-campfire">
-          <div class="sc-fire-glow" style="opacity:.45;"></div>
-          <div class="sc-flames" style="opacity:.5;">
+          <div class="sc-fire-glow" style="opacity:.18;"></div>
+          <div class="sc-flames" style="opacity:.15;">
             <div class="sc-flame sc-f4"></div>
             <div class="sc-flame sc-f1"></div>
             <div class="sc-flame sc-f2"></div>
           </div>
           <div class="sc-logs"></div>
+          <div id="ctaSmokeWrap" class="sc-smoke-wrap"></div>
         </div>
       </div>
     </div>
@@ -7964,6 +7965,25 @@ function togglePlay(){
     wrap.appendChild(s);
     setTimeout(()=>s.remove(),(dur+.3)*1000);
   }
+
+  // CTA campfire: persistent dying-fire smoke
+  (function ctaDyingSmoke(){
+    const wrap=document.getElementById('ctaSmokeWrap');
+    if(!wrap){setTimeout(ctaDyingSmoke,500);return;}
+    function spawnCtaSmoke(){
+      const s=document.createElement('div');
+      s.className='sc-smoke';
+      const sz=16+Math.random()*20;
+      const opacity=.08+Math.random()*.1;
+      const dur=3+Math.random()*2.5;
+      const sx=(Math.random()-.5)*28;
+      s.style.cssText=`width:${sz}px;height:${sz}px;margin-left:${(Math.random()-.5)*8}px;--sd:${dur}s;--so:${opacity};--sx:${sx}px;`;
+      wrap.appendChild(s);
+      setTimeout(()=>s.remove(),(dur+.3)*1000);
+      setTimeout(spawnCtaSmoke,900+Math.random()*900);
+    }
+    spawnCtaSmoke();
+  })();
 
   let _rogueDone=false;
 
