@@ -769,8 +769,8 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .nav-dropdown.open .nav-dropdown-menu{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0);}
 .nav-dropdown .anav-link{cursor:pointer;}
 .nav-dd-trigger{display:inline-flex;align-items:center;gap:3px;}
-.nav-chevron{font-size:13px;color:inherit;margin-left:3px;transition:transform .2s;display:inline-block;line-height:1;}
-.nav-dropdown.open .nav-chevron{transform:rotate(180deg);}
+.nav-chevron{display:inline-block;width:6px;height:6px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);margin-left:5px;vertical-align:middle;position:relative;top:-2px;transition:transform .2s,top .2s;font-size:0;}
+.nav-dropdown.open .nav-chevron{transform:rotate(-135deg);top:1px;}
 .nav-dd-item{display:flex;align-items:center;gap:10px;padding:10px 13px;border-radius:8px;font-size:13px;font-weight:500;color:var(--text-m);cursor:pointer;transition:background .15s,color .15s;white-space:nowrap;}
 .nav-dd-item:hover{background:rgba(248,198,98,.1);color:var(--gold);}
 .nav-dd-icon{font-size:15px;line-height:1;}
@@ -1774,7 +1774,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.2.3</span>
+    <span class="ver-badge">v2.2.4</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">31 Mar 2026</span>
   </div>
@@ -2242,7 +2242,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="margin-top:48px;display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,200,150,.35);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.2.3</span>
+          <span class="ver-badge">v2.2.4</span>
           <span>·</span>
           <span class="ver-date">31 Mar 2026</span>
         </div>
