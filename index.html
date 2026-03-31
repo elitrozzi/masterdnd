@@ -482,15 +482,13 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 /* compat shims — keep sheet-hp-tracker hidden (HP always in header now) */
 .sheet-hp-tracker{display:none!important;}
 .saved-chars-section{position:relative;z-index:10;padding:80px 24px 0;background:rgba(9,7,15,.85);border-bottom:1px solid rgba(255,255,255,.06);}
-/* ── Character picker modal ── */
-.char-picker-overlay{position:fixed;inset:0;z-index:200;background:rgba(5,3,14,.97);backdrop-filter:blur(10px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 40px 48px;opacity:0;pointer-events:none;transition:opacity .25s;}
-.char-picker-overlay.open{opacity:1;pointer-events:auto;}
+/* ── Character picker page ── */
+#page-my-chars{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:100px 40px 60px;background:var(--dark);}
+#page-my-chars.active{display:flex!important;}
 .char-picker-box{width:100%;max-width:1200px;display:flex;flex-direction:column;align-items:center;}
 .char-picker-header{text-align:center;margin-bottom:36px;}
 .char-picker-title{font-family:'Cinzel',serif;font-size:28px;font-weight:700;color:var(--gold);margin-bottom:8px;}
 .char-picker-sub{font-size:14px;color:var(--text-m);}
-.char-picker-close{position:fixed;top:18px;right:24px;background:transparent;border:1px solid var(--border);border-radius:8px;padding:7px 16px;color:var(--text-m);cursor:pointer;font-size:13px;transition:.15s;}
-.char-picker-close:hover{border-color:var(--gold);color:var(--gold);}
 .char-picker-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:20px;}
 .char-picker-card{width:220px;flex-shrink:0;background:var(--lol-panel);border:1px solid rgba(248,198,98,.18);border-radius:12px;overflow:hidden;cursor:pointer;transition:all .2s;}
 .char-picker-card:hover{border-color:rgba(248,198,98,.6);transform:translateY(-5px);box-shadow:0 10px 36px rgba(248,198,98,.18);}
@@ -1749,7 +1747,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.1.5</span>
+    <span class="ver-badge">v2.1.6</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">31 Mar 2026</span>
   </div>
@@ -2212,7 +2210,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     </div>
     <div style="display:flex;align-items:center;gap:6px;justify-content:center;font-size:10px;color:var(--text-d);font-family:monospace;">
       <span style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;display:inline-block;"></span>
-      <span class="ver-badge">v2.1.5</span>
+      <span class="ver-badge">v2.1.6</span>
       <span>·</span>
       <span class="ver-date">31 Mar 2026</span>
     </div>
@@ -2530,15 +2528,14 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 </div>
 
 <!-- ── Character picker modal ── -->
-<div class="char-picker-overlay" id="charPickerOverlay">
-  <button class="char-picker-close" onclick="closeCharPicker()">✕ Cerrar</button>
+<div class="page" id="page-my-chars">
   <div class="char-picker-box">
     <div class="char-picker-header">
       <div class="char-picker-title">Mis personajes</div>
       <div class="char-picker-sub">Seleccioná un personaje para continuar</div>
     </div>
     <div class="char-picker-grid" id="charPickerGrid"></div>
-    <button class="char-picker-new" onclick="closeCharPicker();goToCreateChar()">+ Crear personaje</button>
+    <button class="char-picker-new" onclick="goToCreateChar()">+ Crear personaje</button>
   </div>
 </div>
 
@@ -4009,7 +4006,7 @@ function closeCompPanel(){
 }
 
 /* ══ NAV ══ */
-const PAGE_URLS={home:'/',characters:'/personajes',maps:'/mapas',sounds:'/efectos-sonidos',compendium:'/compendio',notes:'/notas',combat:'/combate',campaign:'/campana'};
+const PAGE_URLS={home:'/',characters:'/personajes','my-chars':'/personajes/mis-personajes',maps:'/mapas',sounds:'/efectos-sonidos',compendium:'/compendio',notes:'/notas',combat:'/combate',campaign:'/campana'};
 const URL_PAGES={'/personajes':'characters','/mapas':'maps','/efectos-sonidos':'sounds','/compendio':'compendium','/notas':'notes','/combate':'combat'};
 function goTo(page,fromPop){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -4025,15 +4022,16 @@ function goTo(page,fromPop){
   if(page==='combat')initCombat();
   if(page==='campaign')initCampaignPage();
   if(page==='characters')initCharSelect();
+  if(page==='my-chars')_showCharPicker();
   if(!fromPop)history.pushState({page},'',(PAGE_URLS[page]||'/'));
 }
 window.addEventListener('popstate',e=>{
   const s=e.state||{};
   if(!s.page){goTo('home',true);return;}
-  if(s.page==='characters'){
+  if(s.page==='my-chars'){goTo('my-chars',true);}
+  else if(s.page==='characters'){
     goTo('characters',true);
-    if(s.sub==='mis-personajes')requestAnimationFrame(()=>_showCharPicker&&_showCharPicker());
-    else if(s.sub==='crear-personaje'){_suppressSavedChars=true;}
+    if(s.sub==='crear-personaje'){_suppressSavedChars=true;}
     else if(s.charId)requestAnimationFrame(()=>loadChar(s.charId,true));
   }else{goTo(s.page,true);}
 });
@@ -4051,10 +4049,7 @@ window.addEventListener('popstate',e=>{
     return;
   }
   if(path==='/personajes/mis-personajes'){
-    setTimeout(()=>{
-      goTo('characters',true);
-      requestAnimationFrame(()=>_showCharPicker&&_showCharPicker());
-    },0);
+    setTimeout(()=>goTo('my-chars',true),0);
     return;
   }
   const m=path.match(/^\/personajes\/(.+)$/);
@@ -6133,14 +6128,12 @@ let _suppressSavedChars=true;
 function goToMyChars(){
   const chars=_loadSavedChars();
   if(chars.length===0){goToCreateChar();return;}
-  goTo('characters');
   if(chars.length===1){
-    // Replace /personajes with the char URL so back goes to previous page
+    goTo('characters');
     history.replaceState({page:'characters',charId:chars[0].id},'','/personajes/'+_charSlug(chars[0]));
     requestAnimationFrame(()=>loadChar(chars[0].id,true));
   } else {
-    history.replaceState({page:'characters',sub:'mis-personajes'},'','/personajes/mis-personajes');
-    requestAnimationFrame(()=>_showCharPicker());
+    goTo('my-chars');
   }
 }
 function _showCharPicker(){
@@ -6153,7 +6146,7 @@ function _showCharPicker(){
     const cn=currentLang==='es'?(cd.nameEs||c.class):(cd.nameEn||c.class);
     const cur=c.currentHp!=null?c.currentHp:c.hp;
     const low=cur<=Math.floor(c.hp/2);
-    return `<div class="char-picker-card" onclick="closeCharPicker();loadChar('${c.id}')">
+    return `<div class="char-picker-card" onclick="loadChar('${c.id}')">
       <div class="char-picker-portrait" style="${raceBg(c.race)};background-repeat:no-repeat;background-size:300% 400%;"></div>
       <div class="char-picker-info">
         <div class="char-picker-name">${c.name}</div>
@@ -6167,10 +6160,6 @@ function _showCharPicker(){
   const cols=n<=4?n:n===5?3:4;
   const cardW=220,gap=20;
   grid.style.maxWidth=(cols*cardW+(cols-1)*gap)+'px';
-  document.getElementById('charPickerOverlay').classList.add('open');
-}
-function closeCharPicker(){
-  document.getElementById('charPickerOverlay')?.classList.remove('open');
 }
 function goToCreateChar(){
   _suppressSavedChars=true;

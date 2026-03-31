@@ -1,7 +1,12 @@
 {
-  "version": "2.1.5",
+  "version": "2.1.6",
   "date": "2026-03-31",
   "history": [
+    {
+      "version": "2.1.6",
+      "date": "2026-03-31",
+      "note": "Mis personajes: convertido de overlay modal a página real del flujo — header visible, sin botón Cerrar, navegación integrada con goTo y URL routing"
+    },
     {
       "version": "2.1.5",
       "date": "2026-03-31",
