@@ -13,8 +13,10 @@
   --brand-400:#7a72a8; --brand-500:#595082; --brand-600:#3e3860;
   --gold:#F8C662; --gold-l:#fad888; --gold-d:#c89630;
   --teal:#41644A; --purple:#595082;
-  --dark:#130f1e; --surface:#2C263F; --card:#1e1930; --border:#3e3658;
-  --text:#e8e0f5; --text-m:#a49bc0; --text-d:#6a5f82;
+  --dark:#05081a; --surface:#0d1230; --card:#080c22; --border:#1c2252;
+  --text:#e8e0f5; --text-m:#9da8cc; --text-d:#4e5a80;
+  /* new palette */
+  --crimson:#e63946; --violet:#7c3aed; --emerald:#10b981; --sky:#0ea5e9; --amber:#f59e0b;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{width:100%;min-height:100%;overflow-x:hidden;}
@@ -112,25 +114,25 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 
 /* Landing nav */
 .land-nav{position:fixed;top:0;left:0;right:0;height:68px;display:flex;align-items:center;padding:0 48px;gap:32px;z-index:100;pointer-events:auto;transition:background .3s,backdrop-filter .3s,border-bottom .3s;}
-.land-nav.scrolled{background:rgba(9,7,15,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.06);}
+.land-nav.scrolled{background:rgba(5,8,26,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(124,58,237,.2);}
 .land-logo{display:flex;align-items:baseline;gap:0;text-decoration:none;cursor:none;}
-.llogo-m{font-family:'Cinzel',serif;font-size:13px;font-weight:400;letter-spacing:.4em;color:rgba(220,230,245,.6);text-transform:uppercase;}
-.llogo-d{font-family:'Cinzel',serif;font-size:20px;font-weight:700;color:var(--gold);letter-spacing:.1em;margin-left:6px;}
+.llogo-m{font-family:'Cinzel',serif;font-size:13px;font-weight:400;letter-spacing:.4em;color:rgba(220,230,245,.55);text-transform:uppercase;}
+.llogo-d{font-family:'Cinzel',serif;font-size:20px;font-weight:700;background:linear-gradient(135deg,#f8c662,#e63946);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.1em;margin-left:6px;}
 .land-nav-links{display:flex;gap:2px;margin-left:12px;}
 .land-nav-links a,.land-nav-link{padding:6px 14px;font-size:13px;color:var(--text-m);border-radius:8px;transition:.15s;letter-spacing:.5px;cursor:pointer;}
-.land-nav-links a:hover,.land-nav-link:hover{color:var(--text);background:rgba(255,255,255,.05);}
+.land-nav-links a:hover,.land-nav-link:hover{color:var(--text);background:rgba(124,58,237,.1);}
 .land-nav-spacer{flex:1;}
 .land-nav-right{display:flex;align-items:center;gap:12px;}
 .land-nav-dropdown{position:relative;}
 .land-nav-dropdown>a{cursor:pointer;}
-.land-nav-dd-menu{position:absolute;top:calc(100% + 10px);left:0;background:rgba(9,7,20,.97);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:6px;min-width:185px;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;z-index:300;backdrop-filter:blur(12px);transform:translateY(-6px);}
+.land-nav-dd-menu{position:absolute;top:calc(100% + 10px);left:0;background:rgba(5,8,26,.97);border:1px solid rgba(124,58,237,.2);border-radius:10px;padding:6px;min-width:185px;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;z-index:300;backdrop-filter:blur(12px);transform:translateY(-6px);}
 .land-nav-dropdown.open .land-nav-dd-menu{opacity:1;pointer-events:auto;transform:translateY(0);}
 .land-nav-dd-item{padding:9px 14px;border-radius:7px;font-size:13px;color:rgba(220,230,245,.75);cursor:pointer;transition:.15s;white-space:nowrap;}
-.land-nav-dd-item:hover{background:rgba(248,198,98,.1);color:var(--gold);}
-.lbtn-ghost{background:transparent;border:1px solid var(--border);color:var(--text-m);padding:8px 18px;border-radius:8px;font-size:13px;font-weight:600;transition:.15s;letter-spacing:.3px;}
-.lbtn-ghost:hover{border-color:var(--gold);color:var(--gold);}
-.lbtn-gold{background:linear-gradient(135deg,var(--gold) 0%,#e8a820 100%);color:#1a1400;padding:8px 20px;border-radius:8px;font-size:13px;font-weight:600;transition:.15s;}
-.lbtn-gold:hover{filter:brightness(1.1);}
+.land-nav-dd-item:hover{background:rgba(124,58,237,.12);color:#a78bfa;}
+.lbtn-ghost{background:transparent;border:1px solid rgba(124,58,237,.35);color:var(--text-m);padding:8px 18px;border-radius:8px;font-size:13px;font-weight:600;transition:.15s;letter-spacing:.3px;}
+.lbtn-ghost:hover{border-color:rgba(124,58,237,.7);color:#a78bfa;background:rgba(124,58,237,.08);}
+.lbtn-gold{background:linear-gradient(135deg,#7c3aed,#e63946);color:#fff;padding:8px 20px;border-radius:8px;font-size:13px;font-weight:600;transition:.15s;}
+.lbtn-gold:hover{filter:brightness(1.1);box-shadow:0 4px 20px rgba(124,58,237,.4);}
 .lang-toggle{display:flex;background:rgba(255,255,255,.05);border-radius:8px;overflow:hidden;border:1px solid var(--border);}
 .lang-btn{padding:6px 11px;font-size:12px;font-weight:600;color:var(--text-m);transition:.15s;cursor:none;background:transparent;}
 .lang-btn.active{background:var(--brand-500);color:#fff;}
@@ -201,63 +203,76 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .ls-title-em{color:var(--gold);}
 .ls-sub{font-size:15px;color:var(--text-m);line-height:1.75;max-width:540px;}
 
-/* ── FEATURES SECTION — purple atmosphere ── */
+/* ── FEATURES SECTION ── */
 .ls-features{background:
-  radial-gradient(ellipse 90% 55% at 50% 0%,rgba(109,40,217,.13) 0%,transparent 65%),
-  radial-gradient(ellipse 40% 30% at 10% 80%,rgba(11,196,227,.06) 0%,transparent 60%),
-  linear-gradient(180deg,rgba(6,3,14,0) 0%,#070410 4%,#070410 96%,rgba(6,3,14,0) 100%);}
+  radial-gradient(ellipse 80% 60% at 50% -10%,rgba(124,58,237,.22) 0%,transparent 60%),
+  radial-gradient(ellipse 50% 40% at 90% 80%,rgba(14,165,233,.1) 0%,transparent 55%),
+  linear-gradient(180deg,var(--dark) 0%,#06091f 100%);}
 .ls-feat-header{text-align:center;margin-bottom:72px;}
 .ls-feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
-.ls-feat-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:32px 26px;cursor:pointer;transition:border-color .25s,background .25s,transform .3s,box-shadow .3s;position:relative;overflow:hidden;}
-.ls-feat-top{position:absolute;top:0;left:0;right:0;height:2px;}
-.ls-feat-card:hover{transform:translateY(-5px);box-shadow:0 16px 50px rgba(0,0,0,.5);}
+.ls-feat-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:32px 26px;cursor:pointer;transition:border-color .25s,background .25s,transform .3s,box-shadow .3s;position:relative;overflow:hidden;}
+.ls-feat-top{position:absolute;top:0;left:0;right:0;height:3px;}
+.ls-feat-card:hover{transform:translateY(-6px);}
+.ls-feat-card[data-accent="violet"]{background:rgba(124,58,237,.08);border-color:rgba(124,58,237,.25);}
+.ls-feat-card[data-accent="violet"]:hover{background:rgba(124,58,237,.14);border-color:rgba(124,58,237,.5);box-shadow:0 16px 50px rgba(124,58,237,.2);}
+.ls-feat-card[data-accent="crimson"]{background:rgba(230,57,70,.07);border-color:rgba(230,57,70,.22);}
+.ls-feat-card[data-accent="crimson"]:hover{background:rgba(230,57,70,.13);border-color:rgba(230,57,70,.5);box-shadow:0 16px 50px rgba(230,57,70,.2);}
+.ls-feat-card[data-accent="gold"]{background:rgba(248,198,98,.06);border-color:rgba(248,198,98,.2);}
+.ls-feat-card[data-accent="gold"]:hover{background:rgba(248,198,98,.12);border-color:rgba(248,198,98,.45);box-shadow:0 16px 50px rgba(248,198,98,.15);}
+.ls-feat-card[data-accent="emerald"]{background:rgba(16,185,129,.07);border-color:rgba(16,185,129,.22);}
+.ls-feat-card[data-accent="emerald"]:hover{background:rgba(16,185,129,.13);border-color:rgba(16,185,129,.5);box-shadow:0 16px 50px rgba(16,185,129,.2);}
+.ls-feat-card[data-accent="sky"]{background:rgba(14,165,233,.07);border-color:rgba(14,165,233,.22);}
+.ls-feat-card[data-accent="sky"]:hover{background:rgba(14,165,233,.13);border-color:rgba(14,165,233,.5);box-shadow:0 16px 50px rgba(14,165,233,.2);}
+.ls-feat-card[data-accent="orange"]{background:rgba(194,65,12,.07);border-color:rgba(251,146,60,.22);}
+.ls-feat-card[data-accent="orange"]:hover{background:rgba(194,65,12,.13);border-color:rgba(251,146,60,.5);box-shadow:0 16px 50px rgba(251,146,60,.2);}
 .ls-feat-icon{font-size:32px;margin-bottom:16px;display:block;}
 .ls-feat-title{font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--gold);margin-bottom:10px;}
 .ls-feat-desc{font-size:13px;color:var(--text-m);line-height:1.7;}
 
-/* ── CAMPAIGN SECTION — teal + deep navy atmosphere ── */
+/* ── CAMPAIGN SECTION ── */
 .ls-campaign{background:
-  radial-gradient(ellipse 55% 80% at 15% 50%,rgba(11,196,227,.08) 0%,transparent 65%),
-  radial-gradient(ellipse 40% 50% at 85% 20%,rgba(212,175,55,.06) 0%,transparent 60%),
-  #04020d;}
+  radial-gradient(ellipse 60% 90% at 10% 50%,rgba(14,165,233,.14) 0%,transparent 60%),
+  radial-gradient(ellipse 40% 50% at 80% 80%,rgba(124,58,237,.1) 0%,transparent 55%),
+  linear-gradient(160deg,#040a1e 0%,#03060f 100%);}
 .ls-camp-inner{display:flex;gap:80px;align-items:center;}
 .ls-camp-left{flex:0 0 42%;}
-.ls-camp-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:20px;background:rgba(11,196,227,.08);border:1px solid rgba(11,196,227,.3);color:#0bc4e3;font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin-bottom:24px;}
+.ls-camp-badge{display:inline-flex;align-items:center;gap:8px;padding:7px 18px;border-radius:20px;background:linear-gradient(135deg,rgba(14,165,233,.15),rgba(124,58,237,.15));border:1px solid rgba(14,165,233,.4);color:#38bdf8;font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin-bottom:24px;}
 .ls-camp-title{font-family:'Cinzel',serif;font-size:clamp(30px,3.8vw,52px);font-weight:700;color:var(--text);line-height:.92;margin-bottom:20px;}
 .ls-camp-em{color:var(--gold);display:block;}
 .ls-camp-desc{font-size:15px;color:var(--text-m);line-height:1.8;max-width:360px;margin-bottom:32px;}
-.ls-camp-cta{display:inline-flex;align-items:center;gap:10px;padding:14px 30px;background:linear-gradient(135deg,var(--gold),#d4940a);color:#1a1400;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:.2s;border:none;font-family:'Roboto',sans-serif;}
-.ls-camp-cta:hover{filter:brightness(1.12);transform:translateY(-2px);box-shadow:0 8px 28px rgba(212,175,55,.3);}
+.ls-camp-cta{display:inline-flex;align-items:center;gap:10px;padding:14px 30px;background:linear-gradient(135deg,#0ea5e9,#7c3aed);color:#fff;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:.2s;border:none;font-family:'Roboto',sans-serif;}
+.ls-camp-cta:hover{filter:brightness(1.15);transform:translateY(-2px);box-shadow:0 8px 32px rgba(14,165,233,.35);}
 .ls-camp-right{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.ls-camp-feat{background:rgba(11,196,227,.03);border:1px solid rgba(11,196,227,.12);border-left:2px solid rgba(11,196,227,.35);border-radius:0 12px 12px 0;padding:20px 22px;transition:background .2s,border-color .2s;}
-.ls-camp-feat:hover{background:rgba(11,196,227,.05);border-left-color:rgba(11,196,227,.6);}
+.ls-camp-feat{background:rgba(14,165,233,.05);border:1px solid rgba(14,165,233,.15);border-left:2px solid rgba(14,165,233,.5);border-radius:0 12px 12px 0;padding:20px 22px;transition:background .2s,border-color .2s;}
+.ls-camp-feat:hover{background:rgba(14,165,233,.1);border-left-color:#0ea5e9;box-shadow:0 4px 20px rgba(14,165,233,.12);}
 .ls-camp-feat-icon{font-size:20px;margin-bottom:8px;display:block;}
-.ls-camp-feat-title{font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:#7ee8f5;margin-bottom:5px;}
+.ls-camp-feat-title{font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:#38bdf8;margin-bottom:5px;}
 .ls-camp-feat-desc{font-size:12px;color:var(--text-d);line-height:1.6;}
 
-/* ── HOOK SECTION — warm amber atmosphere ── */
+/* ── HOOK SECTION ── */
 .ls-hook{background:
-  radial-gradient(ellipse 60% 80% at 75% 50%,rgba(248,198,98,.07) 0%,transparent 65%),
-  radial-gradient(ellipse 40% 50% at 20% 30%,rgba(109,40,217,.06) 0%,transparent 60%),
-  linear-gradient(180deg,#04020d 0%,#050312 100%);}
+  radial-gradient(ellipse 55% 80% at 80% 50%,rgba(230,57,70,.14) 0%,transparent 60%),
+  radial-gradient(ellipse 40% 50% at 15% 70%,rgba(245,158,11,.1) 0%,transparent 55%),
+  linear-gradient(160deg,#0e040a 0%,#07030f 100%);}
 .ls-hook-inner{display:flex;gap:80px;align-items:center;}
 .ls-hook-left{flex:0 0 42%;}
 .ls-hook-right{flex:1;max-width:520px;}
 
-/* ── CTA SECTION — gold center bloom ── */
+/* ── CTA SECTION ── */
 .ls-cta{background:
-  radial-gradient(ellipse 75% 90% at 50% 60%,rgba(212,175,55,.1) 0%,transparent 65%),
-  radial-gradient(ellipse 40% 40% at 80% 10%,rgba(109,40,217,.07) 0%,transparent 60%),
-  #06030e;
+  radial-gradient(ellipse 70% 80% at 50% 50%,rgba(124,58,237,.18) 0%,transparent 55%),
+  radial-gradient(ellipse 40% 50% at 10% 20%,rgba(14,165,233,.1) 0%,transparent 55%),
+  radial-gradient(ellipse 35% 45% at 90% 80%,rgba(230,57,70,.09) 0%,transparent 55%),
+  linear-gradient(180deg,#03060f 0%,#05081a 100%);
   text-align:center;}
 .ls-cta-title{font-family:'Cinzel',serif;font-size:clamp(32px,4.8vw,66px);font-weight:700;color:var(--text);line-height:.95;margin-bottom:20px;}
-.ls-cta-em{color:var(--gold);}
+.ls-cta-em{background:linear-gradient(135deg,var(--gold),#e63946);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .ls-cta-sub{font-size:16px;color:var(--text-m);line-height:1.75;max-width:480px;margin:0 auto 44px;}
 .ls-cta-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:80px;}
-.ls-cta-btn-gold{padding:16px 40px;border-radius:10px;font-size:15px;font-weight:700;background:linear-gradient(135deg,var(--gold),#d4940a);color:#1a1400;cursor:pointer;border:none;transition:.2s;font-family:'Roboto',sans-serif;}
-.ls-cta-btn-gold:hover{filter:brightness(1.12);transform:translateY(-2px);box-shadow:0 8px 32px rgba(212,175,55,.35);}
-.ls-cta-btn-ghost{padding:16px 40px;border-radius:10px;font-size:15px;font-weight:700;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.15);color:var(--text-m);cursor:pointer;transition:.2s;font-family:'Roboto',sans-serif;}
-.ls-cta-btn-ghost:hover{border-color:var(--gold);color:var(--gold);background:rgba(212,175,55,.05);}
+.ls-cta-btn-gold{padding:16px 40px;border-radius:10px;font-size:15px;font-weight:700;background:linear-gradient(135deg,#f8c662,#e63946);color:#fff;cursor:pointer;border:none;transition:.2s;font-family:'Roboto',sans-serif;text-shadow:0 1px 3px rgba(0,0,0,.3);}
+.ls-cta-btn-gold:hover{filter:brightness(1.1);transform:translateY(-2px);box-shadow:0 8px 36px rgba(230,57,70,.4);}
+.ls-cta-btn-ghost{padding:16px 40px;border-radius:10px;font-size:15px;font-weight:700;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.18);color:var(--text-m);cursor:pointer;transition:.2s;font-family:'Roboto',sans-serif;}
+.ls-cta-btn-ghost:hover{border-color:rgba(124,58,237,.6);color:#a78bfa;background:rgba(124,58,237,.08);}
 
 /* ══════════════════════════════════ APP NAV (inner pages) */
 .app-nav{display:none;position:fixed;top:0;left:0;right:0;z-index:200;height:60px;align-items:center;padding:0 32px;gap:20px;background:rgba(19,15,30,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
@@ -2088,37 +2103,37 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
       <p class="ls-sub fiu fiu-d2" style="margin:0 auto;">Sin hojas de cálculo. Sin múltiples apps. Fichas, combate, mapas y más — listo para tu próxima sesión.</p>
     </div>
     <div class="ls-feat-grid">
-      <div class="ls-feat-card fiu fiu-d1" onclick="goToCharsSmart()">
+      <div class="ls-feat-card fiu fiu-d1" data-accent="violet" onclick="goToCharsSmart()">
         <div class="ls-feat-top" style="background:linear-gradient(90deg,#7c3aed,#a855f7);"></div>
         <div class="ls-feat-icon">⚔️</div>
         <div class="ls-feat-title">Ficha de Personaje</div>
         <div class="ls-feat-desc">Aventureros completos con stats, habilidades, retrato, inventario, hechizos y subida de nivel. Dados integrados directamente en la ficha.</div>
       </div>
-      <div class="ls-feat-card fiu fiu-d2" onclick="goTo('combat')">
-        <div class="ls-feat-top" style="background:linear-gradient(90deg,#dc2626,#f97316);"></div>
+      <div class="ls-feat-card fiu fiu-d2" data-accent="crimson" onclick="goTo('combat')">
+        <div class="ls-feat-top" style="background:linear-gradient(90deg,#e63946,#f97316);"></div>
         <div class="ls-feat-icon">⚡</div>
         <div class="ls-feat-title">Combate en Tiempo Real</div>
         <div class="ls-feat-desc">Tracker de iniciativa con HP dinámico, log de eventos, tiradas de daño y estado de cada combatiente a un vistazo.</div>
       </div>
-      <div class="ls-feat-card fiu fiu-d3" onclick="goTo('compendium')">
+      <div class="ls-feat-card fiu fiu-d3" data-accent="gold" onclick="goTo('compendium')">
         <div class="ls-feat-top" style="background:linear-gradient(90deg,#d4af37,#f8c662);"></div>
         <div class="ls-feat-icon">🐉</div>
         <div class="ls-feat-title">Compendio Completo</div>
         <div class="ls-feat-desc">600+ monstruos con sprites ilustrados, hechizos por clase y escuela, equipamiento del SRD D&D 5e con filtros avanzados.</div>
       </div>
-      <div class="ls-feat-card fiu fiu-d1" onclick="goTo('maps')">
+      <div class="ls-feat-card fiu fiu-d1" data-accent="emerald" onclick="goTo('maps')">
         <div class="ls-feat-top" style="background:linear-gradient(90deg,#059669,#34d399);"></div>
         <div class="ls-feat-icon">🗺️</div>
         <div class="ls-feat-title">Editor de Mapas</div>
         <div class="ls-feat-desc">Diseñá dungeons, ciudades y tabernas con 20+ tipos de terreno, tokens de personajes, niebla de guerra y exportar imagen.</div>
       </div>
-      <div class="ls-feat-card fiu fiu-d2" onclick="goTo('sounds')">
+      <div class="ls-feat-card fiu fiu-d2" data-accent="sky" onclick="goTo('sounds')">
         <div class="ls-feat-top" style="background:linear-gradient(90deg,#0891b2,#38bdf8);"></div>
         <div class="ls-feat-icon">🎵</div>
         <div class="ls-feat-title">Ambientación Sonora</div>
         <div class="ls-feat-desc">Música épica, efectos de combate y ambientes inmersivos: bosque, taberna, mazmorra, tormenta. Todo sincronizado para tu sesión.</div>
       </div>
-      <div class="ls-feat-card fiu fiu-d3" style="cursor:default;">
+      <div class="ls-feat-card fiu fiu-d3" data-accent="orange" style="cursor:default;">
         <div class="ls-feat-top" style="background:linear-gradient(90deg,#c2410c,#fb923c);"></div>
         <div class="ls-feat-icon">🎲</div>
         <div class="ls-feat-title">Dados 3D Físicos</div>
