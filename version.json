@@ -1,7 +1,12 @@
 {
-  "version": "2.2.4",
+  "version": "2.2.5",
   "date": "2026-03-31",
   "history": [
+    {
+      "version": "2.2.5",
+      "date": "2026-03-31",
+      "note": "Fix chevrons: ::after en nav-dd-trigger con border CSS, oculta el span"
+    },
     {
       "version": "2.2.4",
       "date": "2026-03-31",
