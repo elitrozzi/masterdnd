@@ -1,7 +1,12 @@
 {
-  "version": "2.2.0",
+  "version": "2.2.1",
   "date": "2026-03-31",
   "history": [
+    {
+      "version": "2.2.1",
+      "date": "2026-03-31",
+      "note": "Design system: btn-cta-primary/secondary/tertiary definidos; border-radius unificado a 8px en todos los botones y cards; CTAs más grandes"
+    },
     {
       "version": "2.2.0",
       "date": "2026-03-31",
