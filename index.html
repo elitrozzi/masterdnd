@@ -258,21 +258,24 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .ls-hook-left{flex:0 0 42%;}
 .ls-hook-right{flex:1;max-width:520px;}
 
-/* ── CTA SECTION ── */
-.ls-cta{background:
-  radial-gradient(ellipse 70% 80% at 50% 50%,rgba(124,58,237,.18) 0%,transparent 55%),
-  radial-gradient(ellipse 40% 50% at 10% 20%,rgba(14,165,233,.1) 0%,transparent 55%),
-  radial-gradient(ellipse 35% 45% at 90% 80%,rgba(230,57,70,.09) 0%,transparent 55%),
-  linear-gradient(180deg,#03060f 0%,#05081a 100%);
-  text-align:center;}
-.ls-cta-title{font-family:'Cinzel',serif;font-size:clamp(32px,4.8vw,66px);font-weight:700;color:var(--text);line-height:.95;margin-bottom:20px;}
-.ls-cta-em{background:linear-gradient(135deg,var(--gold),#e63946);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.ls-cta-sub{font-size:16px;color:var(--text-m);line-height:1.75;max-width:480px;margin:0 auto 44px;}
-.ls-cta-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:80px;}
-.ls-cta-btn-gold{padding:16px 40px;border-radius:10px;font-size:15px;font-weight:700;background:linear-gradient(135deg,#f8c662,#e63946);color:#fff;cursor:pointer;border:none;transition:.2s;font-family:'Roboto',sans-serif;text-shadow:0 1px 3px rgba(0,0,0,.3);}
-.ls-cta-btn-gold:hover{filter:brightness(1.1);transform:translateY(-2px);box-shadow:0 8px 36px rgba(230,57,70,.4);}
-.ls-cta-btn-ghost{padding:16px 40px;border-radius:10px;font-size:15px;font-weight:700;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.18);color:var(--text-m);cursor:pointer;transition:.2s;font-family:'Roboto',sans-serif;}
-.ls-cta-btn-ghost:hover{border-color:rgba(124,58,237,.6);color:#a78bfa;background:rgba(124,58,237,.08);}
+/* ── CTA SECTION — dawn scene ── */
+.ls-cta{position:relative;overflow:hidden;padding:0!important;min-height:100vh;display:flex;align-items:center;}
+.ls-cta-dawn-bg{position:absolute;inset:0;background:linear-gradient(180deg,#06121e 0%,#0e2240 18%,#1a3860 38%,#c84020 64%,#e86030 78%,#f89050 90%,#ffc060 100%);}
+.ls-cta-sun{position:absolute;bottom:18%;right:30%;width:280px;height:140px;border-radius:50%;background:radial-gradient(ellipse,rgba(255,185,55,.95) 0%,rgba(255,125,20,.5) 40%,transparent 70%);filter:blur(22px);}
+.ls-cta-ground{position:absolute;bottom:0;left:0;right:0;height:22%;background:linear-gradient(180deg,transparent 0%,#060412 55%,#04030a 100%);}
+.ls-cta-fog{position:absolute;bottom:10%;left:-10%;width:120%;height:20%;background:radial-gradient(ellipse 65% 55% at 40% 70%,rgba(200,100,30,.12) 0%,transparent 70%);filter:blur(20px);}
+.ls-cta-inner{position:relative;z-index:2;width:100%;display:flex;align-items:center;min-height:100vh;padding:0 8vw;}
+.ls-cta-left{flex:0 0 44%;padding:80px 0;}
+.ls-cta-right{flex:1;position:relative;height:100vh;display:flex;align-items:flex-end;justify-content:center;}
+.ls-cta-title{font-family:'Cinzel',serif;font-size:clamp(32px,4.2vw,58px);font-weight:700;color:#fff;line-height:1.0;margin-bottom:20px;text-shadow:0 2px 20px rgba(0,0,0,.5);}
+.ls-cta-em{display:block;background:linear-gradient(135deg,#ffc060,#e86030);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.ls-cta-sub{font-size:16px;color:rgba(255,220,180,.75);line-height:1.75;max-width:400px;margin-bottom:44px;text-shadow:0 1px 8px rgba(0,0,0,.4);}
+.ls-cta-btn-start{padding:18px 48px;border-radius:12px;font-size:16px;font-weight:700;background:linear-gradient(135deg,#ffc060,#e86030,#c84020);color:#fff;cursor:pointer;border:none;transition:.2s;font-family:'Roboto',sans-serif;text-shadow:0 1px 4px rgba(0,0,0,.3);box-shadow:0 4px 24px rgba(200,80,20,.4);}
+.ls-cta-btn-start:hover{filter:brightness(1.1);transform:translateY(-3px);box-shadow:0 10px 40px rgba(200,80,20,.55);}
+/* Scene inside CTA */
+.ls-cta-adventurers{position:absolute;bottom:0;left:50%;transform:translateX(-42%);height:55vh;max-height:430px;pointer-events:none;}
+.ls-cta-campfire{position:absolute;bottom:17%;left:67%;pointer-events:none;}
+.ls-cta-campfire .sc-flame{opacity:.6;}
 
 /* ══════════════════════════════════ APP NAV (inner pages) */
 .app-nav{display:none;position:fixed;top:0;left:0;right:0;z-index:200;height:60px;align-items:center;padding:0 32px;gap:20px;background:rgba(19,15,30,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
@@ -2215,19 +2218,108 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     </div>
   </section>
 
-  <!-- ══ SECTION 4: CTA ══ -->
-  <section class="land-section ls-cta" style="padding:120px 7vw 80px;">
-    <div class="ls-cta-title fiu">¿Listo para<br><span class="ls-cta-em">tu próxima aventura?</span></div>
-    <p class="ls-cta-sub fiu fiu-d1">Crea tu personaje en menos de 3 minutos o únete a la campaña de tu grupo con un código.</p>
-    <div class="ls-cta-btns fiu fiu-d2">
-      <button class="ls-cta-btn-gold" onclick="goToCreateChar()">⚔️ Crear Personaje</button>
-      <button class="ls-cta-btn-ghost" onclick="goTo('campaign')">🏰 Modo Campaña</button>
-    </div>
-    <div style="display:flex;align-items:center;gap:6px;justify-content:center;font-size:10px;color:var(--text-d);font-family:monospace;">
-      <span style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;display:inline-block;"></span>
-      <span class="ver-badge">v2.1.6</span>
-      <span>·</span>
-      <span class="ver-date">31 Mar 2026</span>
+  <!-- ══ SECTION 4: CTA — DAWN ══ -->
+  <section class="land-section ls-cta">
+    <div class="ls-cta-dawn-bg"></div>
+    <div class="ls-cta-sun"></div>
+    <div class="ls-cta-fog"></div>
+    <div class="ls-cta-ground"></div>
+    <div class="ls-cta-inner">
+      <!-- LEFT: text + CTA -->
+      <div class="ls-cta-left">
+        <div class="ls-cta-title fiu">¿Listo para<br><span class="ls-cta-em">tu próxima aventura?</span></div>
+        <p class="ls-cta-sub fiu fiu-d1">Crea tu personaje, unite a una campaña o explorá el compendio. Todo en un solo lugar.</p>
+        <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
+        <div style="margin-top:48px;display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,200,150,.35);font-family:monospace;">
+          <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
+          <span class="ver-badge">v2.1.6</span>
+          <span>·</span>
+          <span class="ver-date">31 Mar 2026</span>
+        </div>
+      </div>
+      <!-- RIGHT: scene -->
+      <div class="ls-cta-right">
+        <svg class="ls-cta-adventurers" viewBox="0 0 700 260" preserveAspectRatio="xMidYMax meet">
+          <g fill="#08061a">
+            <g id="ctaRogue">
+              <circle cx="85" cy="168" r="8"/>
+              <path d="M73,166 Q79,155 85,153 Q91,155 97,166 L100,176 Q93,171 85,171 Q77,171 70,176 Z"/>
+              <path d="M74,174 Q71,185 72,202 L80,202 Q81,190 85,188 Q89,190 90,202 L98,202 Q99,185 96,174 Q90,180 85,180 Q80,180 74,174 Z"/>
+              <rect x="72" y="202" width="7" height="30" rx="2"/>
+              <rect x="82" y="202" width="7" height="30" rx="2"/>
+              <path d="M74,174 L64,210 L71,215 L79,188 Z"/>
+              <path d="M96,174 L106,210 L99,215 L91,188 Z"/>
+              <rect x="62" y="198" width="4" height="16" rx="1.5"/>
+              <rect x="59" y="194" width="10" height="4" rx="1"/>
+              <rect x="104" y="180" width="4" height="15" rx="1.5" transform="rotate(-28 106 188)"/>
+              <rect x="101" y="192" width="10" height="4" rx="1" transform="rotate(-28 106 194)"/>
+            </g>
+            <rect x="198" y="130" width="24" height="18" rx="5 5 0 0"/>
+            <rect x="196" y="146" width="28" height="5" rx="2"/>
+            <rect x="201" y="151" width="18" height="14" rx="2"/>
+            <ellipse cx="192" cy="170" rx="11" ry="5" transform="rotate(-8 192 170)"/>
+            <ellipse cx="228" cy="170" rx="11" ry="5" transform="rotate(8 228 170)"/>
+            <rect x="195" y="165" width="30" height="30" rx="2"/>
+            <rect x="193" y="193" width="34" height="7" rx="1"/>
+            <rect x="194" y="200" width="13" height="32" rx="3"/>
+            <rect x="213" y="200" width="13" height="32" rx="3"/>
+            <rect x="175" y="157" width="16" height="46" rx="5 0 8 5"/>
+            <rect x="228" y="162" width="10" height="20" rx="3"/>
+            <rect x="232" y="110" width="6" height="54" rx="2" transform="rotate(8 235 140)"/>
+            <rect x="226" y="159" width="22" height="5" rx="2"/>
+            <polygon points="320,98 308,150 332,150"/>
+            <rect x="303" y="146" width="34" height="7" rx="3.5"/>
+            <circle cx="320" cy="160" r="10"/>
+            <path d="M313,168 Q316,176 320,177 Q324,176 327,168 L324,165 Q320,169 316,165 Z"/>
+            <path d="M307,170 L300,248 L340,248 L333,170 Q327,177 320,177 Q313,177 307,170 Z"/>
+            <path d="M308,174 L290,204 L297,210 L313,183 Z"/>
+            <path d="M332,174 L350,204 L343,210 L327,183 Z"/>
+            <rect x="287" y="86" width="5" height="117" rx="2.5"/>
+            <circle cx="289" cy="83" r="12"/>
+            <circle cx="289" cy="83" r="6" fill="#1a1040" opacity="0.45"/>
+            <rect x="311" y="183" width="18" height="4" rx="2"/>
+            <circle cx="430" cy="162" r="9"/>
+            <rect x="423" y="171" width="14" height="28" rx="3"/>
+            <rect x="423" y="199" width="6" height="33" rx="2"/>
+            <rect x="431" y="199" width="6" height="33" rx="2"/>
+            <rect x="402" y="166" width="19" height="7" rx="3.5"/>
+            <path d="M402,146 Q384,168 402,192" fill="none" stroke="#08061a" stroke-width="5.5" stroke-linecap="round"/>
+            <line x1="402" y1="146" x2="415" y2="168" stroke="#08061a" stroke-width="2"/>
+            <line x1="402" y1="192" x2="415" y2="168" stroke="#08061a" stroke-width="2"/>
+            <rect x="413" y="166" width="30" height="3.5" rx="1.5"/>
+            <polygon points="443,165 450,168 443,171"/>
+            <rect x="437" y="164" width="15" height="7" rx="3.5"/>
+            <rect x="436" y="154" width="10" height="22" rx="3"/>
+            <rect x="438" y="152" width="2" height="6" rx="1"/><rect x="441" y="151" width="2" height="7" rx="1"/><rect x="444" y="153" width="2" height="5" rx="1"/>
+            <circle cx="530" cy="151" r="14"/>
+            <rect x="519" y="156" width="22" height="6" rx="2"/>
+            <rect x="522" y="162" width="16" height="8" rx="2"/>
+            <rect x="515" y="170" width="30" height="30" rx="3"/>
+            <ellipse cx="509" cy="175" rx="12" ry="7" transform="rotate(-8 509 175)"/>
+            <ellipse cx="551" cy="175" rx="12" ry="7" transform="rotate(8 551 175)"/>
+            <rect x="516" y="200" width="12" height="32" rx="3"/>
+            <rect x="533" y="200" width="12" height="32" rx="3"/>
+            <rect x="499" y="172" width="14" height="10" rx="3"/>
+            <circle cx="493" cy="178" r="11"/>
+            <rect x="489" y="175" width="8" height="6" fill="#180e38" opacity="0.35" rx="1"/>
+            <rect x="490" y="171" width="6" height="14" fill="#180e38" opacity="0.35" rx="1"/>
+            <rect x="547" y="166" width="13" height="22" rx="3"/>
+            <rect x="553" y="136" width="5" height="34" rx="2"/>
+            <rect x="543" y="125" width="24" height="14" rx="4"/>
+            <polygon points="567,126 577,132 567,139"/>
+          </g>
+        </svg>
+        <!-- Campfire (dying — low flames) -->
+        <div class="ls-cta-campfire">
+          <div class="sc-fire-glow" style="opacity:.45;"></div>
+          <div class="sc-flames" style="opacity:.5;">
+            <div class="sc-flame sc-f4"></div>
+            <div class="sc-flame sc-f1"></div>
+            <div class="sc-flame sc-f2"></div>
+          </div>
+          <div class="sc-logs"></div>
+        </div>
+      </div>
     </div>
   </section>
 </div>
@@ -6175,6 +6267,10 @@ function _showCharPicker(){
   const cols=n<=4?n:n===5?3:4;
   const cardW=220,gap=20;
   grid.style.maxWidth=(cols*cardW+(cols-1)*gap)+'px';
+}
+function ctaStart(){
+  if(_currentUser) goTo('campaign');
+  else openModal('register');
 }
 function goToCreateChar(){
   _suppressSavedChars=true;
