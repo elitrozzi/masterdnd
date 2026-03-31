@@ -1,7 +1,12 @@
 {
-  "version": "2.1.9",
+  "version": "2.2.0",
   "date": "2026-03-31",
   "history": [
+    {
+      "version": "2.2.0",
+      "date": "2026-03-31",
+      "note": "Fix chevrons: aumenta tamaño (9→11px) y opacidad (.6→.85) para que sean visibles en ambos headers"
+    },
     {
       "version": "2.1.9",
       "date": "2026-03-31",
