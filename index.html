@@ -1681,8 +1681,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     <div class="mm-link" onclick="goToMaps('explore');closeMobileMenu()"><span class="mm-link-icon">🔍</span><span data-es="Mapas existentes" data-en="Existing maps">Mapas existentes</span></div>
     <div class="mm-link" onclick="goTo('sounds');closeMobileMenu()"><span class="mm-link-icon">🎵</span><span data-es="Sonidos" data-en="Sounds">Sonidos</span></div>
     <div class="mm-link" onclick="goTo('compendium');closeMobileMenu()"><span class="mm-link-icon">📖</span><span data-es="Compendio" data-en="Compendium">Compendio</span></div>
-    <div class="mm-link" onclick="goTo('notes');closeMobileMenu()"><span class="mm-link-icon">📝</span><span data-es="Notas" data-en="Notes">Notas</span></div>
-    <div class="mm-link" onclick="goToCampaign();closeMobileMenu()"><span class="mm-link-icon">🏰</span><span data-es="Campaña" data-en="Campaign">Campaña</span></div>
+    <div class="mm-link" id="mm-campaign" onclick="goToCampaign();closeMobileMenu()" style="display:none;"><span class="mm-link-icon">🏰</span><span data-es="Campaña" data-en="Campaign">Campaña</span></div>
   </div>
   <div class="mm-footer">
     <div class="mm-footer-label">Idioma</div>
@@ -1727,15 +1726,14 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     </div>
     <a class="anav-link" id="nl-sounds" onclick="goTo('sounds')" data-es="Sonidos" data-en="Sounds">Sonidos</a>
     <a class="anav-link" id="nl-compendium" onclick="goTo('compendium')" data-es="Compendio" data-en="Compendium">Compendio</a>
-    <a class="anav-link" id="nl-notes" onclick="goTo('notes')" data-es="Notas" data-en="Notes">Notas</a>
-    <a class="anav-link" id="nl-campaign" onclick="goToCampaign()" data-es="Campaña" data-en="Campaign">Campaña</a>
+    <a class="anav-link" id="nl-campaign" onclick="goToCampaign()" data-es="Campaña" data-en="Campaign" style="display:none;">Campaña</a>
   </div>
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.1.2</span>
+    <span class="ver-badge">v2.1.3</span>
     <span class="ver-sep">·</span>
-    <span class="ver-date">30 Mar 2026</span>
+    <span class="ver-date">31 Mar 2026</span>
   </div>
   <div class="lang-toggle">
     <button class="lang-btn active" onclick="setLang('es')">ES</button>
@@ -2011,8 +2009,6 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         </div>
         <a class="land-nav-link" onclick="goTo('sounds')" data-es="Sonidos" data-en="Sounds">Sonidos</a>
         <a class="land-nav-link" onclick="goTo('compendium')" data-es="Compendio" data-en="Compendium">Compendio</a>
-        <a class="land-nav-link" onclick="goTo('notes')" data-es="Notas" data-en="Notes">Notas</a>
-        <a class="land-nav-link" onclick="goTo('combat')" data-es="Combate" data-en="Combat">Combate</a>
       </div>
       <div class="land-nav-spacer"></div>
       <div class="land-nav-right">
@@ -2192,9 +2188,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     </div>
     <div style="display:flex;align-items:center;gap:6px;justify-content:center;font-size:10px;color:var(--text-d);font-family:monospace;">
       <span style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;display:inline-block;"></span>
-      <span class="ver-badge">v2.1.2</span>
+      <span class="ver-badge">v2.1.3</span>
       <span>·</span>
-      <span class="ver-date">30 Mar 2026</span>
+      <span class="ver-date">31 Mar 2026</span>
     </div>
   </section>
 </div>
@@ -4066,6 +4062,8 @@ function _updateAuthUI(){
   const lbtnE=document.getElementById('lbtnEntrar');
   const lbtnC=document.getElementById('lbtnComenzar');
   const landUser=document.getElementById('landNavUser');
+  const nlCampaign=document.getElementById('nl-campaign');
+  const mmCampaign=document.getElementById('mm-campaign');
   if(_currentUser){
     const name=_currentUser.user_metadata?.username||_currentUser.email?.split('@')[0]||'Aventurero';
     const greeting=(currentLang==='es'?'Hola ':'Hi ')+name+'!';
@@ -4080,6 +4078,9 @@ function _updateAuthUI(){
     if(lgreet)lgreet.textContent=greeting;
     if(lbtnE)lbtnE.style.display='none';
     if(lbtnC)lbtnC.style.display='none';
+    // campaign link — only visible when logged in
+    if(nlCampaign)nlCampaign.style.display='';
+    if(mmCampaign)mmCampaign.style.display='';
   }else{
     if(navUser)navUser.style.display='none';
     if(btnE)btnE.style.display='';
@@ -4087,6 +4088,9 @@ function _updateAuthUI(){
     if(landUser)landUser.style.display='none';
     if(lbtnE)lbtnE.style.display='';
     if(lbtnC)lbtnC.style.display='';
+    // hide campaign link when logged out
+    if(nlCampaign)nlCampaign.style.display='none';
+    if(mmCampaign)mmCampaign.style.display='none';
   }
 }
 function toggleUserMenu(force){
