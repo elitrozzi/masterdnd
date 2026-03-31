@@ -1715,7 +1715,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     <div class="mm-link" onclick="goToMaps('editor');closeMobileMenu()"><span class="mm-link-icon">🗺️</span><span data-es="Crear mapa" data-en="Create map">Crear mapa</span></div>
     <div class="mm-link" onclick="goToMaps('explore');closeMobileMenu()"><span class="mm-link-icon">🔍</span><span data-es="Mapas existentes" data-en="Existing maps">Mapas existentes</span></div>
     <div class="mm-link" onclick="goTo('sounds');closeMobileMenu()"><span class="mm-link-icon">🎵</span><span data-es="Sonidos" data-en="Sounds">Sonidos</span></div>
-    <div class="mm-link" onclick="goTo('compendium');closeMobileMenu()"><span class="mm-link-icon">📖</span><span data-es="Compendio" data-en="Compendium">Compendio</span></div>
+    <div class="mm-link" onclick="goTo('compendium');closeMobileMenu()"><span class="mm-link-icon">📖</span><span data-es="Grimorio" data-en="Grimoire">Grimorio</span></div>
     <div class="mm-link" id="mm-campaign" onclick="goToCampaign();closeMobileMenu()" style="display:none;"><span class="mm-link-icon">🏰</span><span data-es="Campaña" data-en="Campaign">Campaña</span></div>
   </div>
   <div class="mm-footer">
@@ -1760,13 +1760,13 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
       </div>
     </div>
     <a class="anav-link" id="nl-sounds" onclick="goTo('sounds')" data-es="Sonidos" data-en="Sounds">Sonidos</a>
-    <a class="anav-link" id="nl-compendium" onclick="goTo('compendium')" data-es="Compendio" data-en="Compendium">Compendio</a>
+    <a class="anav-link" id="nl-compendium" onclick="goTo('compendium')" data-es="Grimorio" data-en="Grimoire">Grimorio</a>
     <a class="anav-link" id="nl-campaign" onclick="goToCampaign()" data-es="Campaña" data-en="Campaign" style="display:none;">Campaña</a>
   </div>
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.1.8</span>
+    <span class="ver-badge">v2.1.9</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">31 Mar 2026</span>
   </div>
@@ -2043,7 +2043,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
           </div>
         </div>
         <a class="land-nav-link" onclick="goTo('sounds')" data-es="Sonidos" data-en="Sounds">Sonidos</a>
-        <a class="land-nav-link" onclick="goTo('compendium')" data-es="Compendio" data-en="Compendium">Compendio</a>
+        <a class="land-nav-link" onclick="goTo('compendium')" data-es="Grimorio" data-en="Grimoire">Grimorio</a>
         <a class="land-nav-link" id="lndd-campaign" onclick="closeNavDropdowns();goToCampaign()" style="display:none;" data-es="Campaña" data-en="Campaign">Campaña</a>
       </div>
       <div class="land-nav-spacer"></div>
@@ -2123,7 +2123,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
       <div class="ls-feat-card fiu fiu-d3" data-accent="gold" onclick="goTo('compendium')">
         <div class="ls-feat-top" style="background:linear-gradient(90deg,#d4af37,#f8c662);"></div>
         <div class="ls-feat-icon">🐉</div>
-        <div class="ls-feat-title">Compendio Completo</div>
+        <div class="ls-feat-title">Grimorio Completo</div>
         <div class="ls-feat-desc">600+ monstruos con sprites ilustrados, hechizos por clase y escuela, equipamiento del SRD D&D 5e con filtros avanzados.</div>
       </div>
       <div class="ls-feat-card fiu fiu-d1" data-accent="emerald" onclick="goTo('maps')">
@@ -2230,11 +2230,11 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
       <!-- LEFT: text + CTA -->
       <div class="ls-cta-left">
         <div class="ls-cta-title fiu">¿Listo para<br><span class="ls-cta-em">tu próxima aventura?</span></div>
-        <p class="ls-cta-sub fiu fiu-d1">Crea tu personaje, unite a una campaña o explorá el compendio. Todo en un solo lugar.</p>
+        <p class="ls-cta-sub fiu fiu-d1">Crea tu personaje, unite a una campaña o explorá el grimorio. Todo en un solo lugar.</p>
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="margin-top:48px;display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,200,150,.35);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.1.8</span>
+          <span class="ver-badge">v2.1.9</span>
           <span>·</span>
           <span class="ver-date">31 Mar 2026</span>
         </div>
@@ -2759,7 +2759,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="inner-page">
     <div class="comp-wrap">
       <div class="comp-header">
-        <h2 data-es="📖 Compendio D&D 5e" data-en="📖 D&D 5e Compendium">📖 Compendio D&D 5e</h2>
+        <h2 data-es="📖 Grimorio D&D 5e" data-en="📖 D&D 5e Grimoire">📖 Grimorio D&D 5e</h2>
         <p data-es="Hechizos, monstruos, clases y razas del SRD oficial" data-en="Spells, monsters, classes and races from the official SRD">Hechizos, monstruos, clases y razas del SRD oficial</p>
       </div>
       <div class="comp-tabs" id="compTabs">
@@ -4116,8 +4116,8 @@ function closeCompPanel(){
 }
 
 /* ══ NAV ══ */
-const PAGE_URLS={home:'/',characters:'/personajes','my-chars':'/personajes/mis-personajes',maps:'/mapas',sounds:'/efectos-sonidos',compendium:'/compendio',notes:'/notas',combat:'/combate',campaign:'/campana'};
-const URL_PAGES={'/personajes':'characters','/mapas':'maps','/efectos-sonidos':'sounds','/compendio':'compendium','/notas':'notes','/combate':'combat'};
+const PAGE_URLS={home:'/',characters:'/personajes','my-chars':'/personajes/mis-personajes',maps:'/mapas',sounds:'/efectos-sonidos',compendium:'/grimorio',notes:'/notas',combat:'/combate',campaign:'/campana'};
+const URL_PAGES={'/personajes':'characters','/mapas':'maps','/efectos-sonidos':'sounds','/grimorio':'compendium','/notas':'notes','/combate':'combat'};
 function goTo(page,fromPop){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+page).classList.add('active');
@@ -4151,7 +4151,7 @@ window.addEventListener('popstate',e=>{
 (function _routeInitialUrl(){
   const path=window.location.pathname;
   if(path==='/'||path==='')return;
-  const pageMap={'/mapas':'maps','/efectos-sonidos':'sounds','/compendio':'compendium','/notas':'notes','/combate':'combat','/campana':'campaign'};
+  const pageMap={'/mapas':'maps','/efectos-sonidos':'sounds','/grimorio':'compendium','/notas':'notes','/combate':'combat','/campana':'campaign'};
   if(pageMap[path]){setTimeout(()=>goTo(pageMap[path],true),0);return;}
   if(path==='/personajes'){setTimeout(()=>goTo('characters',true),0);return;}
   if(path==='/personajes/crear-personaje'){

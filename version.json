@@ -1,7 +1,12 @@
 {
-  "version": "2.1.8",
+  "version": "2.1.9",
   "date": "2026-03-31",
   "history": [
+    {
+      "version": "2.1.9",
+      "date": "2026-03-31",
+      "note": "Compendio renombrado a Grimorio en ambos navs, landing, página interna y URL (/compendio → /grimorio)"
+    },
     {
       "version": "2.1.8",
       "date": "2026-03-31",
