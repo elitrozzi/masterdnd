@@ -1775,7 +1775,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.2.5</span>
+    <span class="ver-badge">v2.2.6</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">31 Mar 2026</span>
   </div>
@@ -2243,7 +2243,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="margin-top:48px;display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,200,150,.35);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.2.5</span>
+          <span class="ver-badge">v2.2.6</span>
           <span>·</span>
           <span class="ver-date">31 Mar 2026</span>
         </div>
@@ -6259,6 +6259,14 @@ function goToMyChars(){
     goTo('my-chars');
   }
 }
+function pickChar(id){
+  const chars=_loadSavedChars();
+  const c=chars.find(x=>x.id===id);
+  if(!c)return;
+  goTo('characters');
+  history.replaceState({page:'characters',charId:id},'','/personajes/'+_charSlug(c));
+  requestAnimationFrame(()=>loadChar(id,true));
+}
 function _showCharPicker(){
   const chars=_loadSavedChars();
   const grid=document.getElementById('charPickerGrid');
@@ -6269,7 +6277,7 @@ function _showCharPicker(){
     const cn=currentLang==='es'?(cd.nameEs||c.class):(cd.nameEn||c.class);
     const cur=c.currentHp!=null?c.currentHp:c.hp;
     const low=cur<=Math.floor(c.hp/2);
-    return `<div class="char-picker-card" onclick="loadChar('${c.id}')">
+    return `<div class="char-picker-card" onclick="pickChar('${c.id}')">
       <div class="char-picker-portrait" style="${raceBg(c.race)};background-repeat:no-repeat;background-size:300% 400%;"></div>
       <div class="char-picker-info">
         <div class="char-picker-name">${c.name}</div>
