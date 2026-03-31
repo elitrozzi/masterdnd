@@ -1,7 +1,12 @@
 {
-  "version": "2.1.4",
+  "version": "2.1.5",
   "date": "2026-03-31",
   "history": [
+    {
+      "version": "2.1.5",
+      "date": "2026-03-31",
+      "note": "Landing: secciones con identidad de color propia — fondos radial-gradient por sección (purpura/teal/amber/gold), más padding, y barras de color individuales en cada card de herramientas"
+    },
     {
       "version": "2.1.4",
       "date": "2026-03-31",

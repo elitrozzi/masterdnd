@@ -188,59 +188,76 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .hook-label{font-size:10px;letter-spacing:.25em;color:var(--text-d);text-transform:uppercase;margin-bottom:12px;}
 
 /* ══════════════════════════════════ LANDING STATIC SECTIONS */
-.land-section{position:relative;z-index:12;padding:96px 7vw;}
+.land-section{position:relative;z-index:12;padding:150px 8vw;}
 .land-section-hero-spacer{height:100vh;pointer-events:none;}
 /* Scroll fade-in animation */
 .fiu{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease;}
 .fiu.vis{opacity:1;transform:none;}
 .fiu-d1{transition-delay:.08s;}.fiu-d2{transition-delay:.17s;}.fiu-d3{transition-delay:.26s;}.fiu-d4{transition-delay:.35s;}.fiu-d5{transition-delay:.44s;}
 /* Section header */
-.ls-eyebrow{font-size:10px;letter-spacing:.38em;color:var(--gold);font-weight:700;text-transform:uppercase;margin-bottom:12px;}
-.ls-title{font-family:'Cinzel',serif;font-size:clamp(28px,3.5vw,50px);font-weight:700;color:var(--text);line-height:.95;margin-bottom:16px;}
+.ls-eyebrow{font-size:10px;letter-spacing:.4em;color:var(--gold);font-weight:700;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+.ls-eyebrow::before{content:'';display:inline-block;width:28px;height:1px;background:var(--gold);opacity:.5;}
+.ls-title{font-family:'Cinzel',serif;font-size:clamp(32px,3.8vw,54px);font-weight:700;color:var(--text);line-height:.95;margin-bottom:20px;}
 .ls-title-em{color:var(--gold);}
-.ls-sub{font-size:15px;color:var(--text-m);line-height:1.7;max-width:540px;}
-/* Features section */
-.ls-features{background:linear-gradient(180deg,rgba(6,3,14,.0) 0%,rgba(6,3,10,.98) 4%,rgba(6,3,10,.98) 96%,rgba(6,3,14,.0) 100%);}
-.ls-feat-header{text-align:center;margin-bottom:56px;}
-.ls-feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
-.ls-feat-card{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:28px 24px;cursor:pointer;transition:border-color .25s,background .25s,transform .25s;position:relative;overflow:hidden;}
-.ls-feat-card::after{content:'';position:absolute;top:-1px;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(248,198,98,.3),transparent);opacity:0;transition:opacity .3s;}
-.ls-feat-card:hover::after{opacity:1;}
-.ls-feat-card:hover{border-color:rgba(248,198,98,.3);background:rgba(248,198,98,.04);transform:translateY(-3px);}
-.ls-feat-icon{font-size:30px;margin-bottom:14px;}
-.ls-feat-title{font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--gold);margin-bottom:8px;}
-.ls-feat-desc{font-size:13px;color:var(--text-m);line-height:1.65;}
-/* Campaign section */
-.ls-campaign{background:linear-gradient(180deg,rgba(6,3,10,.98) 0%,rgba(4,2,12,.98) 50%,rgba(6,3,10,.98) 100%);}
-.ls-camp-inner{display:flex;gap:72px;align-items:center;}
+.ls-sub{font-size:15px;color:var(--text-m);line-height:1.75;max-width:540px;}
+
+/* ── FEATURES SECTION — purple atmosphere ── */
+.ls-features{background:
+  radial-gradient(ellipse 90% 55% at 50% 0%,rgba(109,40,217,.13) 0%,transparent 65%),
+  radial-gradient(ellipse 40% 30% at 10% 80%,rgba(11,196,227,.06) 0%,transparent 60%),
+  linear-gradient(180deg,rgba(6,3,14,0) 0%,#070410 4%,#070410 96%,rgba(6,3,14,0) 100%);}
+.ls-feat-header{text-align:center;margin-bottom:72px;}
+.ls-feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.ls-feat-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:32px 26px;cursor:pointer;transition:border-color .25s,background .25s,transform .3s,box-shadow .3s;position:relative;overflow:hidden;}
+.ls-feat-top{position:absolute;top:0;left:0;right:0;height:2px;}
+.ls-feat-card:hover{transform:translateY(-5px);box-shadow:0 16px 50px rgba(0,0,0,.5);}
+.ls-feat-icon{font-size:32px;margin-bottom:16px;display:block;}
+.ls-feat-title{font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--gold);margin-bottom:10px;}
+.ls-feat-desc{font-size:13px;color:var(--text-m);line-height:1.7;}
+
+/* ── CAMPAIGN SECTION — teal + deep navy atmosphere ── */
+.ls-campaign{background:
+  radial-gradient(ellipse 55% 80% at 15% 50%,rgba(11,196,227,.08) 0%,transparent 65%),
+  radial-gradient(ellipse 40% 50% at 85% 20%,rgba(212,175,55,.06) 0%,transparent 60%),
+  #04020d;}
+.ls-camp-inner{display:flex;gap:80px;align-items:center;}
 .ls-camp-left{flex:0 0 42%;}
-.ls-camp-badge{display:inline-flex;align-items:center;gap:8px;padding:5px 14px;border-radius:20px;background:rgba(11,196,227,.08);border:1px solid rgba(11,196,227,.25);color:#0bc4e3;font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin-bottom:22px;}
-.ls-camp-title{font-family:'Cinzel',serif;font-size:clamp(30px,3.8vw,50px);font-weight:700;color:var(--text);line-height:.92;margin-bottom:18px;}
+.ls-camp-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:20px;background:rgba(11,196,227,.08);border:1px solid rgba(11,196,227,.3);color:#0bc4e3;font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin-bottom:24px;}
+.ls-camp-title{font-family:'Cinzel',serif;font-size:clamp(30px,3.8vw,52px);font-weight:700;color:var(--text);line-height:.92;margin-bottom:20px;}
 .ls-camp-em{color:var(--gold);display:block;}
-.ls-camp-desc{font-size:15px;color:var(--text-m);line-height:1.75;max-width:360px;margin-bottom:30px;}
-.ls-camp-cta{display:inline-flex;align-items:center;gap:10px;padding:13px 28px;background:linear-gradient(135deg,var(--gold),#d4940a);color:#1a1400;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:.2s;border:none;font-family:'Roboto',sans-serif;}
-.ls-camp-cta:hover{filter:brightness(1.1);transform:translateY(-2px);}
-.ls-camp-right{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.ls-camp-feat{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:18px 20px;position:relative;overflow:hidden;}
-.ls-camp-feat::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(200,170,110,.04) 0%,transparent 60%);pointer-events:none;}
-.ls-camp-feat-icon{font-size:20px;margin-bottom:8px;}
-.ls-camp-feat-title{font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:var(--lol-gold);margin-bottom:4px;}
-.ls-camp-feat-desc{font-size:12px;color:var(--text-d);line-height:1.55;}
-/* Hook section (static) */
-.ls-hook{background:linear-gradient(180deg,rgba(4,2,12,.98) 0%,rgba(4,2,10,.98) 100%);}
-.ls-hook-inner{display:flex;gap:72px;align-items:center;}
+.ls-camp-desc{font-size:15px;color:var(--text-m);line-height:1.8;max-width:360px;margin-bottom:32px;}
+.ls-camp-cta{display:inline-flex;align-items:center;gap:10px;padding:14px 30px;background:linear-gradient(135deg,var(--gold),#d4940a);color:#1a1400;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:.2s;border:none;font-family:'Roboto',sans-serif;}
+.ls-camp-cta:hover{filter:brightness(1.12);transform:translateY(-2px);box-shadow:0 8px 28px rgba(212,175,55,.3);}
+.ls-camp-right{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.ls-camp-feat{background:rgba(11,196,227,.03);border:1px solid rgba(11,196,227,.12);border-left:2px solid rgba(11,196,227,.35);border-radius:0 12px 12px 0;padding:20px 22px;transition:background .2s,border-color .2s;}
+.ls-camp-feat:hover{background:rgba(11,196,227,.05);border-left-color:rgba(11,196,227,.6);}
+.ls-camp-feat-icon{font-size:20px;margin-bottom:8px;display:block;}
+.ls-camp-feat-title{font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:#7ee8f5;margin-bottom:5px;}
+.ls-camp-feat-desc{font-size:12px;color:var(--text-d);line-height:1.6;}
+
+/* ── HOOK SECTION — warm amber atmosphere ── */
+.ls-hook{background:
+  radial-gradient(ellipse 60% 80% at 75% 50%,rgba(248,198,98,.07) 0%,transparent 65%),
+  radial-gradient(ellipse 40% 50% at 20% 30%,rgba(109,40,217,.06) 0%,transparent 60%),
+  linear-gradient(180deg,#04020d 0%,#050312 100%);}
+.ls-hook-inner{display:flex;gap:80px;align-items:center;}
 .ls-hook-left{flex:0 0 42%;}
 .ls-hook-right{flex:1;max-width:520px;}
-/* CTA section */
-.ls-cta{background:linear-gradient(180deg,rgba(4,2,10,.98) 0%,rgba(6,3,14,.98) 100%);text-align:center;}
-.ls-cta-title{font-family:'Cinzel',serif;font-size:clamp(30px,4.5vw,62px);font-weight:700;color:var(--text);line-height:.95;margin-bottom:18px;}
+
+/* ── CTA SECTION — gold center bloom ── */
+.ls-cta{background:
+  radial-gradient(ellipse 75% 90% at 50% 60%,rgba(212,175,55,.1) 0%,transparent 65%),
+  radial-gradient(ellipse 40% 40% at 80% 10%,rgba(109,40,217,.07) 0%,transparent 60%),
+  #06030e;
+  text-align:center;}
+.ls-cta-title{font-family:'Cinzel',serif;font-size:clamp(32px,4.8vw,66px);font-weight:700;color:var(--text);line-height:.95;margin-bottom:20px;}
 .ls-cta-em{color:var(--gold);}
-.ls-cta-sub{font-size:16px;color:var(--text-m);line-height:1.7;max-width:480px;margin:0 auto 40px;}
-.ls-cta-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:72px;}
-.ls-cta-btn-gold{padding:15px 36px;border-radius:10px;font-size:15px;font-weight:700;background:linear-gradient(135deg,var(--gold),#d4940a);color:#1a1400;cursor:pointer;border:none;transition:.2s;font-family:'Roboto',sans-serif;}
-.ls-cta-btn-gold:hover{filter:brightness(1.1);transform:translateY(-2px);}
-.ls-cta-btn-ghost{padding:15px 36px;border-radius:10px;font-size:15px;font-weight:700;background:transparent;border:1px solid rgba(255,255,255,.15);color:var(--text-m);cursor:pointer;transition:.2s;font-family:'Roboto',sans-serif;}
-.ls-cta-btn-ghost:hover{border-color:var(--gold);color:var(--gold);}
+.ls-cta-sub{font-size:16px;color:var(--text-m);line-height:1.75;max-width:480px;margin:0 auto 44px;}
+.ls-cta-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:80px;}
+.ls-cta-btn-gold{padding:16px 40px;border-radius:10px;font-size:15px;font-weight:700;background:linear-gradient(135deg,var(--gold),#d4940a);color:#1a1400;cursor:pointer;border:none;transition:.2s;font-family:'Roboto',sans-serif;}
+.ls-cta-btn-gold:hover{filter:brightness(1.12);transform:translateY(-2px);box-shadow:0 8px 32px rgba(212,175,55,.35);}
+.ls-cta-btn-ghost{padding:16px 40px;border-radius:10px;font-size:15px;font-weight:700;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.15);color:var(--text-m);cursor:pointer;transition:.2s;font-family:'Roboto',sans-serif;}
+.ls-cta-btn-ghost:hover{border-color:var(--gold);color:var(--gold);background:rgba(212,175,55,.05);}
 
 /* ══════════════════════════════════ APP NAV (inner pages) */
 .app-nav{display:none;position:fixed;top:0;left:0;right:0;z-index:200;height:60px;align-items:center;padding:0 32px;gap:20px;background:rgba(19,15,30,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
@@ -1732,7 +1749,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.1.4</span>
+    <span class="ver-badge">v2.1.5</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">31 Mar 2026</span>
   </div>
@@ -2074,31 +2091,37 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     </div>
     <div class="ls-feat-grid">
       <div class="ls-feat-card fiu fiu-d1" onclick="goToCharsSmart()">
+        <div class="ls-feat-top" style="background:linear-gradient(90deg,#7c3aed,#a855f7);"></div>
         <div class="ls-feat-icon">⚔️</div>
         <div class="ls-feat-title">Ficha de Personaje</div>
         <div class="ls-feat-desc">Aventureros completos con stats, habilidades, retrato, inventario, hechizos y subida de nivel. Dados integrados directamente en la ficha.</div>
       </div>
       <div class="ls-feat-card fiu fiu-d2" onclick="goTo('combat')">
+        <div class="ls-feat-top" style="background:linear-gradient(90deg,#dc2626,#f97316);"></div>
         <div class="ls-feat-icon">⚡</div>
         <div class="ls-feat-title">Combate en Tiempo Real</div>
         <div class="ls-feat-desc">Tracker de iniciativa con HP dinámico, log de eventos, tiradas de daño y estado de cada combatiente a un vistazo.</div>
       </div>
       <div class="ls-feat-card fiu fiu-d3" onclick="goTo('compendium')">
+        <div class="ls-feat-top" style="background:linear-gradient(90deg,#d4af37,#f8c662);"></div>
         <div class="ls-feat-icon">🐉</div>
         <div class="ls-feat-title">Compendio Completo</div>
         <div class="ls-feat-desc">600+ monstruos con sprites ilustrados, hechizos por clase y escuela, equipamiento del SRD D&D 5e con filtros avanzados.</div>
       </div>
       <div class="ls-feat-card fiu fiu-d1" onclick="goTo('maps')">
+        <div class="ls-feat-top" style="background:linear-gradient(90deg,#059669,#34d399);"></div>
         <div class="ls-feat-icon">🗺️</div>
         <div class="ls-feat-title">Editor de Mapas</div>
         <div class="ls-feat-desc">Diseñá dungeons, ciudades y tabernas con 20+ tipos de terreno, tokens de personajes, niebla de guerra y exportar imagen.</div>
       </div>
       <div class="ls-feat-card fiu fiu-d2" onclick="goTo('sounds')">
+        <div class="ls-feat-top" style="background:linear-gradient(90deg,#0891b2,#38bdf8);"></div>
         <div class="ls-feat-icon">🎵</div>
         <div class="ls-feat-title">Ambientación Sonora</div>
         <div class="ls-feat-desc">Música épica, efectos de combate y ambientes inmersivos: bosque, taberna, mazmorra, tormenta. Todo sincronizado para tu sesión.</div>
       </div>
       <div class="ls-feat-card fiu fiu-d3" style="cursor:default;">
+        <div class="ls-feat-top" style="background:linear-gradient(90deg,#c2410c,#fb923c);"></div>
         <div class="ls-feat-icon">🎲</div>
         <div class="ls-feat-title">Dados 3D Físicos</div>
         <div class="ls-feat-desc">Animación física real con todos los poliedros: d4, d6, d8, d10, d12, d20. Cada tirada desde la ficha actualiza automáticamente.</div>
@@ -2189,7 +2212,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     </div>
     <div style="display:flex;align-items:center;gap:6px;justify-content:center;font-size:10px;color:var(--text-d);font-family:monospace;">
       <span style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;display:inline-block;"></span>
-      <span class="ver-badge">v2.1.4</span>
+      <span class="ver-badge">v2.1.5</span>
       <span>·</span>
       <span class="ver-date">31 Mar 2026</span>
     </div>
