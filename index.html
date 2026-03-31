@@ -1775,7 +1775,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.2.6</span>
+    <span class="ver-badge">v2.2.7</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">31 Mar 2026</span>
   </div>
@@ -2243,7 +2243,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="margin-top:48px;display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,200,150,.35);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.2.6</span>
+          <span class="ver-badge">v2.2.7</span>
           <span>·</span>
           <span class="ver-date">31 Mar 2026</span>
         </div>
@@ -8304,34 +8304,36 @@ function _drFaceTex(value,diceType){
   const S=512,cv=document.createElement('canvas');
   cv.width=cv.height=S;
   const ctx=cv.getContext('2d');
-  const g=ctx.createRadialGradient(S/2,S/2,40,S/2,S/2,S/2);
+  // UV triangle vertices: top-center, bottom-left, bottom-right
+  const isTriangle=['d4','d8','d10','d20'].includes(diceType);
+  const triCy=isTriangle?S*.66:S/2; // centroid of UV triangle = (0+0+1)*S/3 vertically
+  const g=ctx.createRadialGradient(S/2,triCy,30,S/2,triCy,S*.6);
   g.addColorStop(0,'#1c1628');g.addColorStop(1,'#070510');
   ctx.fillStyle=g;ctx.fillRect(0,0,S,S);
   // Border shape
-  ctx.strokeStyle='rgba(212,175,55,0.28)';ctx.lineWidth=11;ctx.beginPath();
-  const isTriangle=['d4','d8','d10','d20'].includes(diceType);
+  ctx.strokeStyle='rgba(212,175,55,0.65)';ctx.lineWidth=12;ctx.beginPath();
   if(isTriangle){
-    const cx=S/2,cy=S*.52,r=S*.4;
-    for(let i=0;i<3;i++){const a=-Math.PI/2+(i/3)*Math.PI*2;i?ctx.lineTo(cx+r*Math.cos(a),cy+r*Math.sin(a)):ctx.moveTo(cx+r*Math.cos(a),cy+r*Math.sin(a));}
-    ctx.closePath();
+    // Match exactly the UV mapping: A=(0.5,1)→top-center, B=(0,0)→bottom-left, C=(1,0)→bottom-right
+    const pad=18;
+    ctx.moveTo(S/2,pad);ctx.lineTo(pad,S-pad);ctx.lineTo(S-pad,S-pad);ctx.closePath();
   } else {
-    // roundRect polyfill for older browsers
     if(ctx.roundRect){ctx.roundRect(22,22,S-44,S-44,38);}
     else{const r=38,x=22,y=22,w=S-44,h=S-44;ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.arcTo(x+w,y,x+w,y+r,r);ctx.lineTo(x+w,y+h-r);ctx.arcTo(x+w,y+h,x+w-r,y+h,r);ctx.lineTo(x+r,y+h);ctx.arcTo(x,y+h,x,y+h-r,r);ctx.lineTo(x,y+r);ctx.arcTo(x,y,x+r,y,r);ctx.closePath();}
   }
   ctx.stroke();
-  // Number
+  // Number — centered at UV triangle centroid
   ctx.shadowColor='#d4af37';ctx.shadowBlur=30;
   ctx.fillStyle='#f0d060';
   const fs=value>9?148:180;
   ctx.font=`700 ${fs}px Cinzel,Georgia,serif`;
   ctx.textAlign='center';ctx.textBaseline='middle';
+  const numY=isTriangle?S*.68:S/2;
   const yOff=(value===6||value===9)?-12:0;
-  ctx.fillText(value.toString(),S/2,S/2+yOff);
+  ctx.fillText(value.toString(),S/2,numY+yOff);
   if(value===6||value===9){
     const tw=ctx.measureText(value.toString()).width;
     ctx.shadowBlur=10;ctx.strokeStyle='#f0d060';ctx.lineWidth=7;
-    ctx.beginPath();ctx.moveTo(S/2-tw/2+10,S/2+84);ctx.lineTo(S/2+tw/2-10,S/2+84);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(S/2-tw/2+10,numY+84);ctx.lineTo(S/2+tw/2-10,numY+84);ctx.stroke();
   }
   return new THREE.CanvasTexture(cv);
 }

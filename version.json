@@ -1,7 +1,12 @@
 {
-  "version": "2.2.6",
+  "version": "2.2.7",
   "date": "2026-03-31",
   "history": [
+    {
+      "version": "2.2.7",
+      "date": "2026-03-31",
+      "note": "Fix dado 3D: triángulo en textura alineado al UV mapping real, número centrado en centroide de cara"
+    },
     {
       "version": "2.2.6",
       "date": "2026-03-31",
