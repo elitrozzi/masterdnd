@@ -278,14 +278,15 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .ls-cta-campfire .sc-flame{opacity:.6;}
 
 /* ══════════════════════════════════ APP NAV (inner pages) */
-.app-nav{display:none;position:fixed;top:0;left:0;right:0;z-index:200;height:60px;align-items:center;padding:0 32px;gap:20px;background:rgba(19,15,30,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+.app-nav{display:none;position:fixed;top:0;left:0;right:0;z-index:200;height:68px;align-items:center;padding:0 48px;gap:32px;transition:background .3s,backdrop-filter .3s,border-bottom .3s;}
 .app-nav.visible{display:flex;}
+.app-nav.scrolled{background:rgba(5,8,26,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(124,58,237,.2);}
 .anav-logo{font-family:'Cinzel',serif;font-size:14px;cursor:none;display:flex;align-items:baseline;gap:0;}
-.anav-logo .llogo-m{font-size:11px;letter-spacing:.35em;color:var(--text-m);}
-.anav-logo .llogo-d{font-size:17px;color:var(--gold);}
-.anav-links{display:flex;gap:2px;margin-left:8px;}
-.anav-link{padding:5px 13px;border-radius:8px;font-size:13px;color:var(--text-m);cursor:none;transition:.15s;}
-.anav-link:hover,.anav-link.active{background:rgba(255,255,255,.06);color:var(--text);}
+.anav-logo .llogo-m{font-size:13px;letter-spacing:.4em;color:rgba(220,230,245,.55);}
+.anav-logo .llogo-d{font-size:20px;background:linear-gradient(135deg,#f8c662,#e63946);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.1em;margin-left:6px;}
+.anav-links{display:flex;gap:2px;margin-left:12px;}
+.anav-link{padding:6px 14px;border-radius:8px;font-size:13px;color:var(--text-m);cursor:none;transition:.15s;letter-spacing:.5px;}
+.anav-link:hover,.anav-link.active{color:var(--text);background:rgba(124,58,237,.1);}
 .anav-spacer{flex:1;}
 .anav-btn{padding:7px 16px;border-radius:8px;font-size:13px;font-weight:600;}
 
@@ -1765,7 +1766,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.1.6</span>
+    <span class="ver-badge">v2.1.7</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">31 Mar 2026</span>
   </div>
@@ -2043,6 +2044,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         </div>
         <a class="land-nav-link" onclick="goTo('sounds')" data-es="Sonidos" data-en="Sounds">Sonidos</a>
         <a class="land-nav-link" onclick="goTo('compendium')" data-es="Compendio" data-en="Compendium">Compendio</a>
+        <a class="land-nav-link" id="lndd-campaign" onclick="closeNavDropdowns();goToCampaign()" style="display:none;" data-es="Campaña" data-en="Campaign">Campaña</a>
       </div>
       <div class="land-nav-spacer"></div>
       <div class="land-nav-right">
@@ -2232,7 +2234,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="margin-top:48px;display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,200,150,.35);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.1.6</span>
+          <span class="ver-badge">v2.1.7</span>
           <span>·</span>
           <span class="ver-date">31 Mar 2026</span>
         </div>
@@ -4208,6 +4210,8 @@ function _updateAuthUI(){
     // campaign link — only visible when logged in
     if(nlCampaign)nlCampaign.style.display='';
     if(mmCampaign)mmCampaign.style.display='';
+    const lnddCampaign=document.getElementById('lndd-campaign');
+    if(lnddCampaign)lnddCampaign.style.display='';
   }else{
     if(navUser)navUser.style.display='none';
     if(btnE)btnE.style.display='';
@@ -4218,6 +4222,8 @@ function _updateAuthUI(){
     // hide campaign link when logged out
     if(nlCampaign)nlCampaign.style.display='none';
     if(mmCampaign)mmCampaign.style.display='none';
+    const lnddCampaign=document.getElementById('lndd-campaign');
+    if(lnddCampaign)lnddCampaign.style.display='none';
   }
 }
 function toggleUserMenu(force){
@@ -8218,6 +8224,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   const landNav=document.querySelector('.land-nav');
   if(landNav){
     window.addEventListener('scroll',()=>landNav.classList.toggle('scrolled',window.scrollY>40),{passive:true});
+    const appNav=document.getElementById('appNav');
+    if(appNav)window.addEventListener('scroll',()=>appNav.classList.toggle('scrolled',window.scrollY>40),{passive:true});
   }
   rollHook(false);
   _attachCarouselSwipe('raceCarouselTrack',carouselMove);

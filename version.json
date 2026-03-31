@@ -1,7 +1,12 @@
 {
-  "version": "2.1.6",
+  "version": "2.1.7",
   "date": "2026-03-31",
   "history": [
+    {
+      "version": "2.1.7",
+      "date": "2026-03-31",
+      "note": "Nav unificado: header app-nav con fondo transparente hasta scroll, Campaña visible al hacer login en ambos navs, mismo alto (68px) y chevrons en Personajes y Mapas"
+    },
     {
       "version": "2.1.6",
       "date": "2026-03-31",
