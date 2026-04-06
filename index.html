@@ -1757,39 +1757,59 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 #page-dados .inner-page{display:flex;justify-content:center;padding:80px 24px 64px;}
 .dados-wrap{width:100%;max-width:740px;}
 .dados-title{font-family:'Cinzel',serif;font-size:clamp(22px,3.5vw,34px);font-weight:700;color:#fff;text-align:center;margin-bottom:8px;}
-.dados-sub{font-size:15px;color:var(--text-m);text-align:center;margin-bottom:44px;font-family:'Roboto',sans-serif;}
-.dados-type-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-bottom:36px;}
+.dados-sub{font-size:15px;color:var(--text-m);text-align:center;margin-bottom:32px;font-family:'Roboto',sans-serif;}
+.dados-type-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-bottom:24px;}
 .dado-btn{background:rgba(255,255,255,.04);border:2px solid rgba(255,255,255,.1);border-radius:12px;padding:14px 6px 10px;cursor:pointer;transition:.2s;text-align:center;font-family:'Cinzel',serif;display:flex;flex-direction:column;align-items:center;gap:4px;}
-.dado-btn:hover{border-color:rgba(248,198,98,.4);background:rgba(248,198,98,.06);transform:translateY(-2px);}
-.dado-btn.active{border-color:var(--gold);background:rgba(248,198,98,.1);box-shadow:0 0 20px rgba(248,198,98,.18);}
+.dado-btn:hover{border-color:rgba(248,198,98,.5);background:rgba(248,198,98,.08);transform:translateY(-3px);}
+.dado-btn.flash{animation:dadoFlash .3s ease;}
+@keyframes dadoFlash{0%{transform:scale(1);}40%{transform:scale(.92);border-color:var(--gold);background:rgba(248,198,98,.18);}100%{transform:scale(1);}}
 .dado-face{font-size:22px;font-weight:700;color:#fff;line-height:1;font-family:'Cinzel',serif;min-height:28px;display:flex;align-items:center;justify-content:center;}
-.dado-btn.active .dado-face{color:var(--gold);}
 .dado-name{font-size:13px;font-weight:700;color:var(--text-m);}
-.dado-btn.active .dado-name{color:var(--gold);}
 .dado-desc{font-size:10px;color:var(--text-d);font-family:'Roboto',sans-serif;line-height:1.3;}
-.dados-controls{display:flex;align-items:center;justify-content:center;gap:20px;margin-bottom:36px;flex-wrap:wrap;}
-.dados-qty-wrap{display:flex;align-items:center;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
-.dados-qty-btn{background:transparent;border:none;color:var(--text-m);font-size:22px;padding:0 16px;height:46px;cursor:pointer;transition:.15s;line-height:1;}
-.dados-qty-btn:hover{color:var(--gold);background:rgba(248,198,98,.06);}
-.dados-qty-val{font-size:18px;font-weight:700;color:var(--text);font-family:'Cinzel',serif;padding:0 16px;min-width:44px;text-align:center;line-height:46px;}
-.dados-qty-label{font-size:14px;color:var(--text-m);font-family:'Roboto',sans-serif;}
-.dados-roll-btn{padding:14px 48px;background:linear-gradient(135deg,var(--brand-500),var(--brand-700));border:none;border-radius:10px;color:#fff;font-size:16px;font-weight:700;font-family:'Cinzel',serif;cursor:pointer;transition:.2s;letter-spacing:.5px;}
+/* Tray */
+.dados-tray-wrap{background:rgba(124,58,237,.07);border:1px solid rgba(124,58,237,.22);border-radius:12px;padding:18px 20px 16px;margin-bottom:24px;text-align:center;transition:border-color .3s;}
+.dados-tray-title{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-d);font-family:'Roboto',sans-serif;margin-bottom:12px;}
+.dados-tray{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;min-height:44px;margin-bottom:14px;align-items:center;}
+.dado-tray-item{display:flex;align-items:center;gap:6px;background:rgba(124,58,237,.18);border:1px solid rgba(124,58,237,.4);border-radius:8px;padding:7px 8px 7px 13px;animation:trayIn .2s ease;}
+@keyframes trayIn{from{opacity:0;transform:scale(.8);}to{opacity:1;transform:scale(1);}}
+.dado-tray-type{font-size:16px;font-weight:700;color:var(--gold);font-family:'Cinzel',serif;}
+.dado-tray-del{background:transparent;border:none;color:rgba(255,255,255,.25);cursor:pointer;font-size:13px;padding:3px 5px;border-radius:4px;transition:.15s;line-height:1;}
+.dado-tray-del:hover{color:#f87171;background:rgba(232,57,70,.15);}
+.dados-tray-max{font-size:12px;color:#f87171;font-family:'Roboto',sans-serif;margin-bottom:8px;display:none;}
+.dados-tray-actions{display:flex;justify-content:center;}
+.dados-roll-btn{padding:13px 44px;background:linear-gradient(135deg,var(--brand-500),var(--brand-700));border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:700;font-family:'Cinzel',serif;cursor:pointer;transition:.2s;letter-spacing:.5px;}
 .dados-roll-btn:hover{filter:brightness(1.15);transform:translateY(-2px);box-shadow:0 8px 24px rgba(124,58,237,.4);}
 .dados-roll-btn:active{transform:translateY(0);}
-.dados-history{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:24px;}
+/* History */
+.dados-history{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:22px 24px;}
 .dados-history-title{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-d);font-family:'Roboto',sans-serif;margin-bottom:16px;}
-.dados-roll-log{display:flex;flex-wrap:wrap;gap:10px;}
-.dados-log-item{display:flex;flex-direction:column;align-items:center;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.25);border-radius:10px;padding:10px 16px;min-width:60px;cursor:default;}
-.dados-log-item .log-die{font-size:11px;color:var(--text-d);font-family:'Roboto',sans-serif;margin-bottom:4px;}
-.dados-log-item .log-val{font-size:20px;font-weight:700;color:var(--gold);font-family:'Cinzel',serif;line-height:1;}
-.dados-log-item.log-crit{border-color:rgba(248,198,98,.6);background:rgba(248,198,98,.12);}
-.dados-log-item.log-crit .log-val{color:#fff;text-shadow:0 0 12px var(--gold);}
-.dados-log-item.log-fumble{border-color:rgba(232,57,70,.4);background:rgba(232,57,70,.08);}
+.dados-history-empty{color:var(--text-d);font-size:14px;text-align:center;padding:20px;font-family:'Roboto',sans-serif;}
+.dados-roll-log{display:flex;flex-direction:column;gap:10px;}
+.dados-log-group{background:rgba(255,255,255,.03);border-radius:8px;padding:12px 14px;}
+.dados-log-group-dice{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px;align-items:center;}
+.dados-log-item{display:flex;flex-direction:column;align-items:center;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.25);border-radius:8px;padding:7px 12px;min-width:50px;}
+.dados-log-item .log-die{font-size:11px;color:var(--text-d);font-family:'Roboto',sans-serif;margin-bottom:3px;}
+.dados-log-item .log-val{font-size:18px;font-weight:700;color:var(--gold);font-family:'Cinzel',serif;line-height:1;}
+.dados-log-item.log-crit{border-color:rgba(248,198,98,.6);background:rgba(248,198,98,.1);}
+.dados-log-item.log-crit .log-val{color:#fff;text-shadow:0 0 10px var(--gold);}
+.dados-log-item.log-fumble{border-color:rgba(232,57,70,.4);background:rgba(232,57,70,.07);}
 .dados-log-item.log-fumble .log-val{color:#f87171;}
-.dados-history-empty{color:var(--text-d);font-size:14px;text-align:center;padding:24px;font-family:'Roboto',sans-serif;}
-.dados-total{font-size:13px;color:var(--text-m);font-family:'Roboto',sans-serif;padding:12px 16px;background:rgba(255,255,255,.03);border-radius:8px;margin-bottom:12px;display:none;}
-.dados-total span{color:var(--gold);font-weight:700;font-family:'Cinzel',serif;font-size:15px;}
-@media(max-width:640px){.dados-type-grid{grid-template-columns:repeat(4,1fr);}.dados-controls{gap:12px;}.dados-roll-btn{width:100%;justify-content:center;}}
+.dados-log-total{font-size:13px;color:var(--text-m);font-family:'Roboto',sans-serif;}
+.dados-log-total strong{color:var(--gold);font-family:'Cinzel',serif;font-size:14px;}
+/* Multi-dice overlay result */
+.dr-result-multi{max-width:520px!important;}
+.dr-multi-cards{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:14px;}
+.dr-mini-card{display:flex;flex-direction:column;align-items:center;background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.4);border-radius:8px;padding:8px 14px;min-width:52px;}
+.dr-mini-type{font-size:11px;color:rgba(255,255,255,.5);font-family:'Roboto',sans-serif;margin-bottom:3px;}
+.dr-mini-val{font-size:26px;font-weight:700;color:var(--gold);font-family:'Cinzel',serif;line-height:1;}
+.dr-mini-crit{border-color:rgba(248,198,98,.7);background:rgba(248,198,98,.15);}
+.dr-mini-crit .dr-mini-val{color:#fff;text-shadow:0 0 12px var(--gold);}
+.dr-mini-fumble{border-color:rgba(232,57,70,.5);background:rgba(232,57,70,.1);}
+.dr-mini-fumble .dr-mini-val{color:#f87171;}
+.dr-multi-total{text-align:center;}
+.dr-multi-eq{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.45);font-family:'Roboto',sans-serif;margin-bottom:4px;}
+.dr-multi-sum{font-size:60px;font-weight:700;color:#fff;font-family:'Cinzel',serif;line-height:1;text-shadow:0 0 24px rgba(248,198,98,.4);}
+@media(max-width:640px){.dados-type-grid{grid-template-columns:repeat(4,1fr);}.dados-roll-btn{width:100%;}}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
@@ -1866,7 +1886,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.3.9</span>
+    <span class="ver-badge">v2.4.0</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">06 Apr 2026</span>
   </div>
@@ -2367,7 +2387,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="margin-top:48px;display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.3.5</span>
+          <span class="ver-badge">v2.4.0</span>
           <span>·</span>
           <span class="ver-date">06 Apr 2026</span>
         </div>
@@ -2929,42 +2949,40 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="inner-page">
     <div class="dados-wrap">
       <h2 class="dados-title">🎲 Lanzador de Dados 3D</h2>
-      <p class="dados-sub" data-es="Elegí el tipo y la cantidad, después tirá" data-en="Choose type and quantity, then roll">Elegí el tipo y la cantidad, después tirá</p>
+      <p class="dados-sub">Hacé click en un dado para agregarlo — máximo 6 a la vez</p>
       <div class="dados-type-grid">
-        <button class="dado-btn" data-die="d4" onclick="selectDado('d4',this)">
+        <button class="dado-btn" data-die="d4" onclick="addDadoToTray('d4',this)">
           <div class="dado-face">4</div><div class="dado-name">d4</div><div class="dado-desc">Daño bajo</div>
         </button>
-        <button class="dado-btn" data-die="d6" onclick="selectDado('d6',this)">
+        <button class="dado-btn" data-die="d6" onclick="addDadoToTray('d6',this)">
           <div class="dado-face">6</div><div class="dado-name">d6</div><div class="dado-desc">Estándar</div>
         </button>
-        <button class="dado-btn" data-die="d8" onclick="selectDado('d8',this)">
+        <button class="dado-btn" data-die="d8" onclick="addDadoToTray('d8',this)">
           <div class="dado-face">8</div><div class="dado-name">d8</div><div class="dado-desc">Marcial</div>
         </button>
-        <button class="dado-btn" data-die="d10" onclick="selectDado('d10',this)">
+        <button class="dado-btn" data-die="d10" onclick="addDadoToTray('d10',this)">
           <div class="dado-face">10</div><div class="dado-name">d10</div><div class="dado-desc">Pesado</div>
         </button>
-        <button class="dado-btn" data-die="d12" onclick="selectDado('d12',this)">
+        <button class="dado-btn" data-die="d12" onclick="addDadoToTray('d12',this)">
           <div class="dado-face">12</div><div class="dado-name">d12</div><div class="dado-desc">Hacha</div>
         </button>
-        <button class="dado-btn active" data-die="d20" onclick="selectDado('d20',this)">
+        <button class="dado-btn" data-die="d20" onclick="addDadoToTray('d20',this)">
           <div class="dado-face">20</div><div class="dado-name">d20</div><div class="dado-desc">Ataque · Check</div>
         </button>
-        <button class="dado-btn" data-die="d100" onclick="selectDado('d100',this)">
+        <button class="dado-btn" data-die="d100" onclick="addDadoToTray('d100',this)">
           <div class="dado-face">%</div><div class="dado-name">d100</div><div class="dado-desc">Tablas</div>
         </button>
       </div>
-      <div class="dados-controls">
-        <div class="dados-qty-wrap">
-          <button class="dados-qty-btn" onclick="dadoQty(-1)">−</button>
-          <span class="dados-qty-val" id="dadosQtyVal">1</span>
-          <button class="dados-qty-btn" onclick="dadoQty(1)">+</button>
+      <div class="dados-tray-wrap" id="dadosTrayWrap" style="display:none;">
+        <div class="dados-tray-title">DADOS A LANZAR</div>
+        <div class="dados-tray-max" id="dadosTrayMax">Máximo 6 dados</div>
+        <div class="dados-tray" id="dadosTray"></div>
+        <div class="dados-tray-actions">
+          <button class="dados-roll-btn" onclick="tirarDados()">🎲 Lanzar dados</button>
         </div>
-        <span class="dados-qty-label" id="dadosQtyLabel">dado</span>
-        <button class="dados-roll-btn" onclick="tirarDados()">🎲 Tirar</button>
       </div>
       <div class="dados-history">
         <div class="dados-history-title">HISTORIAL DE TIRADAS</div>
-        <div class="dados-total" id="dadosTotal">Total: <span id="dadosTotalVal"></span></div>
         <div class="dados-history-empty" id="dadosEmpty">Todavía no tiraste ningún dado</div>
         <div class="dados-roll-log" id="dadosRollLog"></div>
       </div>
@@ -8775,8 +8793,14 @@ function closeDiceRoller(){
   document.getElementById('drOverlay').style.display='none';
   if(_dr?.animId){cancelAnimationFrame(_dr.animId);_dr.animId=null;}
   if(_dr?.mesh){_dr.scene.remove(_dr.mesh);_dr.mesh=null;}
-  // Auto-advance dados queue
-  if(typeof _dadoQueue!=='undefined'&&_dadoQueue.length)setTimeout(_nextDadoInQueue,300);
+  if(_dr?.meshes){_dr.meshes.forEach(m=>_dr.scene.remove(m));_dr.meshes=null;}
+  if(_dr?.camera){_dr.camera.fov=48;_dr.camera.updateProjectionMatrix();}
+  // Restore single-die result structure if overwritten by multi-dice
+  const resEl=document.getElementById('drResult');
+  if(resEl&&resEl.classList.contains('dr-result-multi')){
+    resEl.className='dr-result';
+    resEl.innerHTML='<div id="drRollNum" class="dr-roll-num"></div><div id="drFormula" class="dr-formula"></div><div id="drTotal" class="dr-total"></div>';
+  }
 }
 
 function rollD20(mod,label){
@@ -8811,65 +8835,164 @@ function _renderSkillPanel(){
 }
 
 /* ══ DADOS PAGE ══ */
-let _dadoSelected='d20',_dadoQty=1,_dadoQueue=[];
-function _initDadosPage(){
-  _dadoSelected='d20';_dadoQty=1;_dadoQueue=[];
-  document.getElementById('dadosQtyVal').textContent='1';
-  document.querySelectorAll('.dado-btn').forEach(b=>b.classList.toggle('active',b.dataset.die==='d20'));
+let _dadoTray=[];
+function _initDadosPage(){_dadoTray=[];_renderDadoTray();}
+function addDadoToTray(type,el){
+  if(_dadoTray.length>=6){
+    const w=document.getElementById('dadosTrayWrap');
+    if(w){w.style.borderColor='rgba(232,57,70,.6)';setTimeout(()=>{w.style.borderColor='';},600);}
+    const mx=document.getElementById('dadosTrayMax');if(mx)mx.style.display='block';setTimeout(()=>{if(mx)mx.style.display='none';},1500);
+    return;
+  }
+  _dadoTray.push(type);
+  _renderDadoTray();
+  el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash');setTimeout(()=>el.classList.remove('flash'),350);
 }
-function selectDado(type,el){
-  _dadoSelected=type;
-  document.querySelectorAll('.dado-btn').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
+function removeDadoFromTray(idx){
+  _dadoTray.splice(idx,1);
+  _renderDadoTray();
 }
-function dadoQty(delta){
-  _dadoQty=Math.max(1,Math.min(8,_dadoQty+delta));
-  document.getElementById('dadosQtyVal').textContent=_dadoQty;
-  document.getElementById('dadosQtyLabel').textContent=_dadoQty===1?'dado':'dados';
+function _renderDadoTray(){
+  const wrap=document.getElementById('dadosTrayWrap');
+  const tray=document.getElementById('dadosTray');
+  if(!wrap||!tray)return;
+  if(!_dadoTray.length){wrap.style.display='none';return;}
+  wrap.style.display='block';
+  tray.innerHTML=_dadoTray.map((t,i)=>
+    `<div class="dado-tray-item"><span class="dado-tray-type">${t}</span><button class="dado-tray-del" onclick="removeDadoFromTray(${i})" title="Eliminar">🗑</button></div>`
+  ).join('');
 }
 function tirarDados(){
-  const sides=parseInt(_dadoSelected.slice(1));
-  _dadoQueue=[];
-  for(let i=0;i<_dadoQty;i++)_dadoQueue.push(Math.floor(Math.random()*sides)+1);
-  // Store for totaling
-  _dadoQueue._type=_dadoSelected;
-  _dadoQueue._all=[..._dadoQueue];
-  _nextDadoInQueue();
+  if(!_dadoTray.length)return;
+  const results=_dadoTray.map(t=>({type:t,result:Math.floor(Math.random()*parseInt(t.slice(1)))+1}));
+  openMultiDiceRoller(results);
+  _addDadoGroupToLog(results);
+  _dadoTray=[];_renderDadoTray();
 }
-function _nextDadoInQueue(){
-  if(!_dadoQueue.length)return;
-  const val=_dadoQueue.shift();
-  const idx=(_dadoQueue._all?.length||_dadoQty)-_dadoQueue.length;
-  const total=_dadoQueue._all?.length||_dadoQty;
-  const label=total>1?`${_dadoQueue._type||_dadoSelected} ${idx}/${total}`:(_dadoQueue._type||_dadoSelected);
-  openDiceRoller(_dadoQueue._type||_dadoSelected,val,0,label);
-  _addDadoLog(_dadoQueue._type||_dadoSelected,val);
-  // Update total if last die
-  if(!_dadoQueue.length&&_dadoQueue._all?.length>1){
-    const sum=_dadoQueue._all.reduce((a,b)=>a+b,0);
-    const totEl=document.getElementById('dadosTotal');
-    const totVal=document.getElementById('dadosTotalVal');
-    if(totEl&&totVal){totVal.textContent=`${_dadoQueue._all.join(' + ')} = ${sum}`;totEl.style.display='block';}
-  }
-}
-function _addDadoLog(type,val){
-  const log=document.getElementById('dadosRollLog');
-  const empty=document.getElementById('dadosEmpty');
+function _addDadoGroupToLog(results){
+  const log=document.getElementById('dadosRollLog'),empty=document.getElementById('dadosEmpty');
   if(!log||!empty)return;
   empty.style.display='none';
-  const sides=parseInt(type.slice(1));
-  const isCrit=type==='d20'&&val===20,isFumble=type==='d20'&&val===1;
-  const item=document.createElement('div');
-  item.className='dados-log-item'+(isCrit?' log-crit':isFumble?' log-fumble':'');
-  item.innerHTML=`<span class="log-die">${type}</span><span class="log-val">${val}</span>`;
-  log.insertBefore(item,log.firstChild);
-  while(log.children.length>24)log.removeChild(log.lastChild);
+  const total=results.reduce((s,d)=>s+d.result,0);
+  const showTotal=results.length>1;
+  const cards=results.map(d=>{
+    const isCrit=d.type==='d20'&&d.result===20,isFumble=d.type==='d20'&&d.result===1;
+    return `<div class="dados-log-item${isCrit?' log-crit':isFumble?' log-fumble':''}"><span class="log-die">${d.type}</span><span class="log-val">${d.result}</span></div>`;
+  }).join('');
+  const totalHtml=showTotal?`<div class="dados-log-total">Total: <strong>${results.map(d=>d.result).join(' + ')} = ${total}</strong></div>`:'';
+  const group=document.createElement('div');
+  group.className='dados-log-group';
+  group.innerHTML=`<div class="dados-log-group-dice">${cards}</div>${totalHtml}`;
+  log.insertBefore(group,log.firstChild);
+  while(log.children.length>10)log.removeChild(log.lastChild);
+}
+/* ── Multi-dice simultaneous 3D animation ── */
+function openMultiDiceRoller(diceList){
+  if(typeof THREE==='undefined'){
+    document.getElementById('drOverlay').style.display='flex';
+    _drShowMultiResult(diceList);
+    document.getElementById('drHint').style.display='block';
+    return;
+  }
+  const n=diceList.length;
+  const ov=document.getElementById('drOverlay');
+  ov.style.display='flex';
+  document.getElementById('drResult').classList.remove('show');
+  document.getElementById('drHint').style.display='none';
+  document.getElementById('drLabel').textContent=diceList.map(d=>d.type).join(' + ');
+  _drInit();
+  // Canvas size
+  const canvas=document.getElementById('drCanvas');
+  const isMobile=window.innerWidth<=700;
+  const sz=Math.round(Math.min(window.innerWidth*(isMobile?.92:.72),window.innerHeight*(isMobile?.5:.65)));
+  canvas.style.width=canvas.style.height=sz+'px';
+  _dr.renderer.setSize(sz,sz);
+  // Camera FOV widens for more dice
+  const fovMap=[48,48,54,60,66,72,78];
+  _dr.camera.fov=fovMap[Math.min(n,6)]||78;
+  _dr.camera.updateProjectionMatrix();
+  // Clear previous
+  if(_dr.mesh){_dr.scene.remove(_dr.mesh);_dr.mesh=null;}
+  if(_dr.meshes){_dr.meshes.forEach(m=>_dr.scene.remove(m));_dr.meshes=null;}
+  if(_dr.animId){cancelAnimationFrame(_dr.animId);_dr.animId=null;}
+  _dr.allSettled=false;
+  // Spacing per count
+  const spMap=[0,0,1.7,1.65,1.45,1.4,1.35];
+  const spacing=spMap[Math.min(n,6)]||1.35;
+  const startX=-(n-1)*spacing/2;
+  const meshes=[],states=[];
+  for(let i=0;i<n;i++){
+    const d=diceList[i];
+    const mesh=_drBuildMesh(d.type,d.result);
+    if(!mesh)continue;
+    _dr.scene.add(mesh);meshes.push(mesh);
+    const tx=startX+i*spacing;
+    const sy=5.5+Math.random()*1.5;
+    mesh.position.set(tx+(Math.random()-.5)*.3,sy,0);
+    mesh.quaternion.copy(new THREE.Quaternion(Math.random(),Math.random(),Math.random(),Math.random()).normalize());
+    states.push({wx:(Math.random()-.5)*22,wy:(Math.random()-.5)*22,wz:(Math.random()-.5)*13,vy:-4-Math.random()*2,py:sy,px:mesh.position.x,targetX:tx,bounces:0,phase:'fall',settleT:0,settleQ:null,settled:false});
+  }
+  _dr.meshes=meshes;
+  const FLOOR=-1.3;
+  function tick(){
+    _dr.animId=requestAnimationFrame(tick);
+    const dt=1/60;let allDone=meshes.length>0;
+    for(let i=0;i<meshes.length;i++){
+      const m=meshes[i],st=states[i];
+      if(!m||!st)continue;
+      if(st.phase==='fall'){
+        allDone=false;
+        st.vy-=22*dt;st.py+=st.vy*dt;st.px+=(st.targetX-st.px)*3*dt;
+        if(st.py<=FLOOR){st.py=FLOOR;st.bounces++;
+          if(st.bounces===1)st.vy=Math.abs(st.vy)*.48;
+          else if(st.bounces===2)st.vy=Math.abs(st.vy)*.28;
+          else if(st.bounces===3)st.vy=Math.abs(st.vy)*.12;
+          else{st.vy=0;st.phase='settle';}
+        }
+        m.position.set(st.px,st.py,0);
+        const sd=Math.max(0,1-st.bounces*.24);
+        m.rotation.x+=st.wx*dt*sd;m.rotation.y+=st.wy*dt*sd;m.rotation.z+=st.wz*dt*sd;
+      }
+      if(st.phase==='settle'){
+        st.settleT+=dt;
+        if(!st.settleQ){const wn=m.userData.topN.clone().applyQuaternion(m.quaternion);const cd=_dr.camera.position.clone().sub(m.position).normalize();const dq=new THREE.Quaternion().setFromUnitVectors(wn,cd);st.settleQ=new THREE.Quaternion().multiplyQuaternions(dq,m.quaternion);}
+        m.quaternion.slerp(st.settleQ,.07);
+        if(st.settleT>.85)st.settled=true;
+        if(!st.settled)allDone=false;
+      }
+    }
+    if(allDone&&!_dr.allSettled){_dr.allSettled=true;_drShowMultiResult(diceList);}
+    _dr.renderer.render(_dr.scene,_dr.camera);
+  }
+  tick();
+}
+function _drShowMultiResult(diceList){
+  const resEl=document.getElementById('drResult');
+  resEl.classList.remove('show');
+  if(diceList.length===1){
+    const d=diceList[0];
+    const numEl=document.getElementById('drRollNum');
+    if(numEl){numEl.textContent=d.result;numEl.className='dr-roll-num';if(d.type==='d20'){if(d.result===20)numEl.classList.add('crit');else if(d.result===1)numEl.classList.add('fumble');}}
+    const fEl=document.getElementById('drFormula'),tEl=document.getElementById('drTotal');
+    if(fEl)fEl.textContent=d.type;if(tEl)tEl.style.display='none';
+    resEl.className='dr-result';
+  } else {
+    const total=diceList.reduce((s,d)=>s+d.result,0);
+    const cards=diceList.map(d=>{
+      const isCrit=d.type==='d20'&&d.result===20,isFumble=d.type==='d20'&&d.result===1;
+      const cls=isCrit?'dr-mini-crit':isFumble?'dr-mini-fumble':'';
+      return `<div class="dr-mini-card ${cls}"><div class="dr-mini-type">${d.type}</div><div class="dr-mini-val">${d.result}</div></div>`;
+    }).join('');
+    resEl.className='dr-result dr-result-multi';
+    resEl.innerHTML=`<div class="dr-multi-cards">${cards}</div><div class="dr-multi-total"><div class="dr-multi-eq">TOTAL</div><div class="dr-multi-sum">${total}</div></div>`;
+  }
+  requestAnimationFrame(()=>{resEl.classList.add('show');document.getElementById('drHint').style.display='block';});
 }
 </script>
 
 <!-- ══ 3D DICE ROLLER OVERLAY ══ -->
-<div id="drOverlay" class="dr-overlay" style="display:none;" onclick="if(event.target===this&&_dr?.settled)closeDiceRoller()">
-  <canvas id="drCanvas" class="dr-canvas" onclick="if(_dr?.settled)closeDiceRoller()"></canvas>
+<div id="drOverlay" class="dr-overlay" style="display:none;" onclick="if(event.target===this&&(_dr?.settled||_dr?.allSettled))closeDiceRoller()">
+  <canvas id="drCanvas" class="dr-canvas" onclick="if(_dr?.settled||_dr?.allSettled)closeDiceRoller()"></canvas>
   <div class="dr-ui">
     <div id="drLabel" class="dr-label"></div>
     <div id="drResult" class="dr-result">
