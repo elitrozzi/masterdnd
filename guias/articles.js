@@ -5,6 +5,7 @@ const ARTICLES = [
     title: 'Cómo jugar D&D por primera vez',
     tag: '⭐ Principiante',
     color: 'linear-gradient(90deg,#7c3aed,#a855f7)',
+    img: '/Im%C3%A1genes/Gu%C3%ADa/1.png',
     time: '10 min'
   },
   {
@@ -12,6 +13,7 @@ const ARTICLES = [
     title: 'Las 12 clases de D&D 5e explicadas',
     tag: '⚔️ Clases',
     color: 'linear-gradient(90deg,#e63946,#f97316)',
+    img: '/Im%C3%A1genes/Gu%C3%ADa/2.png',
     time: '12 min'
   },
   {
@@ -19,6 +21,7 @@ const ARTICLES = [
     title: 'Todas las razas de D&D 5e: guía completa',
     tag: '🧝 Razas',
     color: 'linear-gradient(90deg,#059669,#34d399)',
+    img: '/Im%C3%A1genes/Gu%C3%ADa/3.png',
     time: '10 min'
   },
   {
@@ -26,6 +29,7 @@ const ARTICLES = [
     title: 'Cómo crear un personaje en D&D 5e paso a paso',
     tag: '✨ Tutorial',
     color: 'linear-gradient(90deg,#d4af37,#f8c662)',
+    img: '/Im%C3%A1genes/Gu%C3%ADa/4.png',
     time: '8 min'
   },
   {
@@ -33,6 +37,7 @@ const ARTICLES = [
     title: 'Los 9 alineamientos de D&D explicados',
     tag: '⚖️ Rol',
     color: 'linear-gradient(90deg,#0891b2,#38bdf8)',
+    img: '/Im%C3%A1genes/Gu%C3%ADa/5.png',
     time: '7 min'
   },
   {
@@ -40,6 +45,7 @@ const ARTICLES = [
     title: 'Guía del Dungeon Master principiante',
     tag: '🐉 Dungeon Master',
     color: 'linear-gradient(90deg,#c2410c,#fb923c)',
+    img: '/Im%C3%A1genes/Gu%C3%ADa/6.png',
     time: '12 min'
   }
 ];
@@ -50,7 +56,7 @@ function renderRelated(excludeSlug, containerId) {
   const related = ARTICLES.filter(a => a.slug !== excludeSlug).slice(0, 3);
   el.innerHTML = related.map(a => `
     <a class="g-related-card" href="/guias/${a.slug}">
-      <div class="g-related-card-top" style="background:${a.color};"></div>
+      <div class="g-related-card-top"><img src="${a.img}" alt="${a.title}" loading="lazy"/></div>
       <div class="g-related-card-body">
         <div class="g-related-card-tag">${a.tag}</div>
         <div class="g-related-card-title">${a.title}</div>

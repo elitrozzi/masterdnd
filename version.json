@@ -1,7 +1,12 @@
 {
-  "version": "2.3.1",
+  "version": "2.3.2",
   "date": "2026-04-06",
   "history": [
+    {
+      "version": "2.3.2",
+      "date": "2026-04-06",
+      "note": "Ilustraciones en cards y artículos de Guías: imagen hero en cada artículo y en todas las cards del índice y relacionados"
+    },
     {
       "version": "2.3.1",
       "date": "2026-04-06",

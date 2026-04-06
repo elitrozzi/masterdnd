@@ -101,6 +101,10 @@ img { max-width: 100%; }
 .g-like-btn.pulse .g-like-icon { transform: scale(1.4); }
 .g-like-count { font-size: 13px; }
 
+/* ── ARTICLE HERO IMAGE ── */
+.g-article-hero-img { width: 100%; max-width: 860px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; }
+.g-article-hero-img img { width: 100%; border-radius: 10px; display: block; object-fit: cover; }
+
 /* ── ARTICLE BODY ── */
 .g-article-body { padding: 56px 24px 80px; }
 .g-article-content { max-width: 680px; margin: 0 auto; }
@@ -206,7 +210,8 @@ img { max-width: 100%; }
   transition: border-color .2s, transform .2s, background .2s; display: flex; flex-direction: column;
 }
 .g-related-card:hover { border-color: rgba(248,198,98,.3); transform: translateY(-4px); background: rgba(248,198,98,.03); text-decoration: none; }
-.g-related-card-top { height: 4px; }
+.g-related-card-top { height: 130px; overflow: hidden; }
+.g-related-card-top img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .g-related-card-body { padding: 18px 20px 20px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
 .g-related-card-tag { font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--text-d); text-transform: uppercase; font-family: 'Roboto', sans-serif; }
 .g-related-card-title { font-family: 'Cinzel', serif; font-size: 14px; color: var(--text); line-height: 1.45; flex: 1; }
@@ -248,7 +253,8 @@ img { max-width: 100%; }
 .g-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
 .g-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; transition: border-color .2s, transform .2s; cursor: pointer; }
 .g-card:hover { border-color: rgba(248,198,98,.3); transform: translateY(-3px); }
-.g-card-top { height: 5px; }
+.g-card-top { height: 190px; overflow: hidden; }
+.g-card-top img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .g-card-body { padding: 22px 24px 24px; }
 .g-card-tag { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-d); margin-bottom: 10px; font-family: 'Roboto', sans-serif; }
 .g-card-title { font-family: 'Cinzel', serif; font-size: 16px; color: var(--text); line-height: 1.4; margin-bottom: 10px; }
