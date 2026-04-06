@@ -16,6 +16,24 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Cómo Crear un Personaje en D&D 5e Paso a Paso","description":"Guía completa para crear tu personaje en D&D 5e: raza, clase, estadísticas, trasfondo y equipo.","url":"https://masterdnd.com/guias/crear-personaje-dnd","datePublished":"2026-04-06","dateModified":"2026-04-06","publisher":{"@type":"Organization","name":"MasterDnD","url":"https://masterdnd.com"},"author":{"@type":"Organization","name":"MasterDnD"}}</script>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230e0c1e'/%3E%3Cpolygon points='16,3 29,10.5 29,21.5 16,29 3,21.5 3,10.5' fill='none' stroke='%23d4a843' stroke-width='1.5'/%3E%3C/svg%3E"/>
 <link rel="stylesheet" href="/guias/style.css"/>
+<script>
+(function(){
+  try{
+    var raw=localStorage.getItem("sb-clgrrrpvhnwxrmxpfosq-auth-token");
+    if(!raw)return;
+    var s=JSON.parse(raw);
+    var user=s&&(s.user||(s.session&&s.session.user));
+    if(!user)return;
+    var name=(user.user_metadata&&(user.user_metadata.full_name||user.user_metadata.name))||user.email.split("@")[0]||"Tú";
+    var first=name.split(" ")[0];
+    document.addEventListener("DOMContentLoaded",function(){
+      document.querySelectorAll(".btn-ghost,.btn-gold").forEach(function(b){b.style.display="none";});
+      var nav=document.querySelector(".g-nav");
+      if(nav){var el=document.createElement("a");el.href="/";el.style.cssText="font-size:13px;color:var(--gold);font-family:Cinzel,serif;font-weight:600;padding:6px 14px;border:1px solid rgba(248,198,98,.3);border-radius:8px;text-decoration:none;white-space:nowrap;flex-shrink:0;";el.textContent="Hola "+first+" →";nav.appendChild(el);}
+    });
+  }catch(e){}
+})();
+</script>
 </head>
 <body>
 

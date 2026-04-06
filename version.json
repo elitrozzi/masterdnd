@@ -1,7 +1,12 @@
 {
-  "version": "2.3.8",
+  "version": "2.3.9",
   "date": "2026-04-06",
   "history": [
+    {
+      "version": "2.3.9",
+      "date": "2026-04-06",
+      "note": "Nueva página /dados con lanzador 3D (d4–d100, multi-dado, historial); fix auth en guías: muestra usuario si hay sesión activa"
+    },
     {
       "version": "2.3.8",
       "date": "2026-04-06",
