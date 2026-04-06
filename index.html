@@ -1112,7 +1112,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 /* Active turn card */
 .combat-active-panel{padding:16px 20px;border-bottom:1px solid rgba(212,175,55,.2);background:rgba(212,175,55,.04);}
 .combat-active-label{font:700 11px/1 'Cinzel',serif;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,175,55,.5);margin-bottom:10px;}
-.combat-active-card{display:flex;align-items:center;gap:14px;padding:14px 16px;background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.35);border-radius:8px;}
+.combat-active-card{display:flex;flex-direction:column;gap:0;padding:14px 16px;background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.35);border-radius:8px;}
 .combat-active-info{flex:1;min-width:0;}
 .combat-active-name{font:700 20px/1 'Cinzel',serif;color:#fff;margin-bottom:6px;}
 .combat-active-stats{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
@@ -1134,7 +1134,27 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 .combat-log-entry.log-dmg{border-left-color:#f87171;}
 .combat-log-entry.log-heal{border-left-color:#6ee7b7;}
 .combat-log-entry.log-dead{border-left-color:#888;}
+.combat-log-entry.log-crit{border-left-color:#f97316;background:rgba(249,115,22,.1);font-weight:700;}
+.combat-log-entry.log-miss{border-left-color:#6b7280;color:var(--text-d);}
 .combat-log-entry .log-time{font-size:10px;color:var(--text-d);margin-left:6px;}
+/* Active card overhaul */
+.cmb-active-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px;}
+.cmb-your-turn-badge{font-size:12px;color:var(--gold);font-weight:700;margin-top:3px;}
+.cmb-next-big{align-self:center;flex-shrink:0;}
+.cmb-turn-actions{border-top:1px solid rgba(255,255,255,.08);padding-top:12px;display:flex;flex-direction:column;gap:10px;}
+.cmb-turn-row{display:flex;gap:12px;flex-wrap:wrap;}
+.cmb-turn-section{display:flex;flex-direction:column;gap:5px;min-width:130px;}
+.cmb-turn-section-wide{flex:1;}
+.cmb-turn-label{font-size:11px;color:var(--text-d);font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
+.cmb-turn-hint{font-weight:400;color:var(--gold);text-transform:none;letter-spacing:0;}
+.cmb-target-select{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.18);border-radius:6px;color:var(--text-m);padding:5px 8px;font-size:12px;cursor:pointer;}
+.cmb-target-select:focus{outline:none;border-color:rgba(212,175,55,.5);}
+.cmb-attack-btn{padding:7px 14px;border-radius:6px;border:1px solid rgba(212,175,55,.5);background:rgba(212,175,55,.15);color:var(--gold);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.cmb-attack-btn:hover{background:rgba(212,175,55,.28);}
+.cmb-dice-row{display:flex;gap:6px;flex-wrap:wrap;}
+.cmb-dice-btn{padding:6px 10px;border-radius:6px;border:1px solid rgba(248,113,113,.4);background:rgba(248,113,113,.12);color:#f87171;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;}
+.cmb-dice-btn:hover{background:rgba(248,113,113,.28);}
+.cmb-player-note{font-size:12px;color:var(--text-d);padding:6px 0;}
 .combat-hp-modal{display:none;position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.6);align-items:center;justify-content:center;}
 .combat-hp-modal.open{display:flex;}
 .combat-hp-modal-box{background:#1a1428;border:1px solid rgba(212,175,55,.3);border-radius:12px;padding:20px 24px;min-width:240px;display:flex;flex-direction:column;gap:12px;}
@@ -1775,9 +1795,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.2.7</span>
+    <span class="ver-badge">v2.2.8</span>
     <span class="ver-sep">·</span>
-    <span class="ver-date">31 Mar 2026</span>
+    <span class="ver-date">06 Apr 2026</span>
   </div>
   <div class="lang-toggle">
     <button class="lang-btn active" onclick="setLang('es')">ES</button>
@@ -2243,9 +2263,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="margin-top:48px;display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,200,150,.35);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.2.7</span>
+          <span class="ver-badge">v2.2.8</span>
           <span>·</span>
-          <span class="ver-date">31 Mar 2026</span>
+          <span class="ver-date">06 Apr 2026</span>
         </div>
       </div>
       <!-- RIGHT: scene -->
@@ -6415,6 +6435,8 @@ let _combatRound=1;
 let _activeTurnId=null;
 let _combatLog=[];
 let _hpModalTargetId=null;
+let _combatTargetId=null;
+let _lastAttackRoll=null;
 
 function _saveCombat(){
   localStorage.setItem(COMBAT_LS_KEY,JSON.stringify({combatants:_combatants,round:_combatRound,activeId:_activeTurnId,log:_combatLog.slice(-50)}));
@@ -6522,8 +6544,56 @@ function combatNextTurn(){
 function combatReset(){
   if(_combatants.length>0&&!confirm('¿Reiniciar el combate? Se perderán los datos actuales.'))return;
   _combatants=[];_combatRound=1;_activeTurnId=null;_combatLog=[];
+  _combatTargetId=null;_lastAttackRoll=null;
   _saveCombat();
   renderCombat();
+}
+function combatSetTarget(id){
+  _combatTargetId=id||null;
+  renderCombat();
+}
+function combatQuickAttack(attackerId){
+  const attacker=_combatants.find(c=>c.id===attackerId);
+  if(!attacker)return;
+  const roll=_rollD20();
+  _lastAttackRoll=roll;
+  const target=_combatTargetId?_combatants.find(c=>c.id===_combatTargetId):null;
+  let msg,type;
+  if(roll===20){
+    msg=`💥 ¡CRÍTICO! ${attacker.name} sacó 20 en el ataque`;
+    type='log-crit';
+  }else if(roll===1){
+    msg=`😬 ¡PIFIA! ${attacker.name} sacó 1`;
+    type='log-miss';
+  }else if(target){
+    const hit=roll>=target.ac;
+    msg=`⚔️ ${attacker.name} ataca a ${target.name}: tiró ${roll} vs CA ${target.ac} → ${hit?'✅ ¡IMPACTA!':'❌ Falla'}`;
+    type=hit?'log-dmg':'log-miss';
+  }else{
+    msg=`⚔️ ${attacker.name} tiró ataque: ${roll}`;
+    type='log-turn';
+  }
+  _addLog(msg,type);
+  _saveCombat();
+  renderCombat();
+  _broadcastDmUpdate();
+}
+function combatQuickDamage(attackerId,sides){
+  const attacker=_combatants.find(c=>c.id===attackerId);
+  if(!attacker)return;
+  const isCrit=_lastAttackRoll===20;
+  const roll1=Math.floor(Math.random()*sides)+1;
+  const roll2=isCrit?Math.floor(Math.random()*sides)+1:0;
+  const total=roll1+roll2;
+  const target=_combatTargetId?_combatants.find(c=>c.id===_combatTargetId):null;
+  _lastAttackRoll=null;
+  if(target){
+    _addLog(`💥 ${attacker.name} → ${target.name}: ${total} de daño${isCrit?` (${roll1}+${roll2} ¡crítico!)`:''} (d${sides})`,'log-dmg');
+    combatApplyHp(target.id,'dmg',total);
+  }else{
+    _addLog(`💥 ${attacker.name} tiró daño: ${total}${isCrit?` (${roll1}+${roll2} crítico)`:''} (d${sides})`,'log-dmg');
+    _saveCombat();renderCombat();_broadcastDmUpdate();
+  }
 }
 function combatOpenHpModal(id){
   const c=_combatants.find(x=>x.id===id);
@@ -6781,22 +6851,51 @@ function renderCombat(){
     const showExactHp=!isPlayerRole||isSelf;
     const hpDisplay=showExactHp?`❤️ ${active.hp}/${active.maxHp}`:`❤️ ${_hpDesc(pct)}`;
     const isMyTurn=isSelf;
+    const targetOptions=sorted
+      .filter(c=>c.id!==active.id&&!c.isDead)
+      .map(c=>`<option value="${c.id}"${c.id===_combatTargetId?' selected':''}>${c.name} (CA ${c.ac})</option>`)
+      .join('');
+    const diceButtons=[4,6,8,10,12].map(s=>`<button class="cmb-dice-btn" onclick="combatQuickDamage('${active.id}',${s})">d${s}</button>`).join('');
     activeCard.innerHTML=`
-      <div class="combat-active-info">
-        <div class="combat-active-name">${active.name}${isMyTurn?' ⚔️':''}</div>
-        ${isMyTurn?`<div style="font-size:13px;color:var(--lol-gold);font-weight:700;margin-bottom:4px;">¡Es tu turno!</div>`:''}
-        <div class="combat-active-stats">
-          <span class="combat-active-hp" style="color:${barColor}">${hpDisplay}</span>
-          <span class="combat-active-ac">CA ${active.ac}</span>
-          <span style="font-size:12px;color:var(--text-d);">${typeLabel}</span>
-          <span style="font-size:12px;color:rgba(212,175,55,.6);">INI ${active.initiative}</span>
+      <div class="cmb-active-header">
+        <div class="combat-active-info">
+          <div class="combat-active-name">${active.name}${isMyTurn?' ⚔️':''}</div>
+          ${isMyTurn?`<div class="cmb-your-turn-badge">¡Es tu turno!</div>`:''}
+          <div class="combat-active-stats">
+            <span class="combat-active-hp" style="color:${barColor}">${hpDisplay}</span>
+            <span class="combat-active-ac">CA ${active.ac}</span>
+            <span style="font-size:12px;color:var(--text-d);">${typeLabel}</span>
+            <span style="font-size:12px;color:rgba(212,175,55,.6);">INI ${active.initiative}</span>
+          </div>
+          <div class="combat-active-hp-bar"><div class="combat-active-hp-fill" style="width:${Math.round(pct*100)}%;background:${barColor};"></div></div>
         </div>
-        <div class="combat-active-hp-bar"><div class="combat-active-hp-fill" style="width:${Math.round(pct*100)}%;background:${barColor};"></div></div>
+        ${!isPlayerRole?`<button class="combat-active-btn btn-next cmb-next-big" onclick="combatNextTurn()">Siguiente ▶</button>`:''}
       </div>
-      ${!isPlayerRole?`<div class="combat-active-btns">
-        <button class="combat-active-btn btn-hp" onclick="combatOpenHpModal('${active.id}')">🗡 Daño / Curar</button>
-        <button class="combat-active-btn btn-next" onclick="combatNextTurn()">Siguiente ▶</button>
-      </div>`:`<div style="padding:6px 0;font-size:12px;color:var(--text-d);">Solo el DM controla el tracker</div>`}`;
+      ${!isPlayerRole?`<div class="cmb-turn-actions">
+        <div class="cmb-turn-row">
+          <div class="cmb-turn-section">
+            <div class="cmb-turn-label">🎯 Objetivo</div>
+            <select class="cmb-target-select" onchange="combatSetTarget(this.value)">
+              <option value="">— Sin objetivo —</option>
+              ${targetOptions}
+            </select>
+          </div>
+          <div class="cmb-turn-section">
+            <div class="cmb-turn-label">⚔️ Tirada de Ataque</div>
+            <button class="cmb-attack-btn" onclick="combatQuickAttack('${active.id}')">🎲 Tirar d20${_lastAttackRoll!==null?` (último: ${_lastAttackRoll})`:''}</button>
+          </div>
+        </div>
+        <div class="cmb-turn-row">
+          <div class="cmb-turn-section cmb-turn-section-wide">
+            <div class="cmb-turn-label">💥 Tirada de Daño <span class="cmb-turn-hint">${_lastAttackRoll===20?'⚡ CRÍTICO — doble dado!':_lastAttackRoll!==null&&_combatTargetId?`último ataque: ${_lastAttackRoll}`:''}</span></div>
+            <div class="cmb-dice-row">${diceButtons}</div>
+          </div>
+          <div class="cmb-turn-section">
+            <div class="cmb-turn-label">🗡 Manual</div>
+            <button class="combat-active-btn btn-hp" onclick="combatOpenHpModal('${active.id}')">Daño / Curar</button>
+          </div>
+        </div>
+      </div>`:`<div class="cmb-player-note">Solo el DM controla el tracker</div>`}`;
   }
 
   // log
