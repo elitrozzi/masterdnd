@@ -58,13 +58,11 @@ img { max-width: 100%; }
 .g-nav-link:hover { color: var(--text); background: rgba(124,58,237,.1); text-decoration: none; }
 .g-nav-link.active { color: var(--gold); background: rgba(124,58,237,.1); }
 .g-nav-spacer { flex: 1; }
-.g-nav-cta {
-  padding: 8px 18px; border-radius: 8px; font-size: 13px;
-  font-weight: 600; background: var(--gold); color: #09070f;
-  transition: .15s; text-decoration: none; flex-shrink: 0; cursor: pointer;
-  font-family: 'Roboto', sans-serif;
-}
-.g-nav-cta:hover { background: var(--gold-d); color: #09070f; text-decoration: none; }
+.btn-nav { padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: .15s; text-decoration: none; flex-shrink: 0; font-family: 'Roboto', sans-serif; }
+.btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--text-m); }
+.btn-ghost:hover { border-color: var(--gold); color: var(--gold); text-decoration: none; }
+.btn-gold { background: linear-gradient(135deg, var(--gold), #e8a820); color: #1a1400; font-weight: 600; }
+.btn-gold:hover { filter: brightness(1.08); text-decoration: none; color: #1a1400; }
 /* Nav dropdowns (CSS hover) */
 .g-nav-dropdown { position: relative; }
 .g-nav-dropdown-menu {
@@ -277,12 +275,12 @@ img { max-width: 100%; }
 }
 .g-cta-title { font-family: 'Cinzel', serif; font-size: 22px; color: #fff; margin-bottom: 12px; }
 .g-cta-desc { color: var(--text-m); margin-bottom: 28px; font-size: 16px; font-family: 'Roboto', sans-serif; }
-.g-cta-btn {
+.g-cta-btn, .g-article-content .g-cta-btn {
   display: inline-block; padding: 13px 32px; background: var(--gold);
   color: #09070f; font-weight: 700; font-size: 15px; border-radius: 8px;
-  transition: .2s; font-family: 'Roboto', sans-serif;
+  transition: .2s; font-family: 'Roboto', sans-serif; text-decoration: none;
 }
-.g-cta-btn:hover { background: var(--gold-d); text-decoration: none; color: #09070f; }
+.g-cta-btn:hover, .g-article-content .g-cta-btn:hover { background: var(--gold-d); text-decoration: none; color: #09070f; }
 .g-cta-secondary { display: block; margin-top: 14px; font-size: 13px; color: var(--text-d); font-family: 'Roboto', sans-serif; }
 .g-cta-secondary a { color: var(--text-d); }
 .g-cta-secondary a:hover { color: var(--gold); }

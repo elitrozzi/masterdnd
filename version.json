@@ -1,7 +1,12 @@
 {
-  "version": "2.3.6",
+  "version": "2.3.7",
   "date": "2026-04-06",
   "history": [
+    {
+      "version": "2.3.7",
+      "date": "2026-04-06",
+      "note": "Fix nav guías: botones Entrar+Comenzar reemplazan Abrir App; fix texto invisible en CTA dentro de artículos"
+    },
     {
       "version": "2.3.6",
       "date": "2026-04-06",
