@@ -21,13 +21,41 @@
 <body>
 
 <nav class="g-nav">
-  <a class="g-nav-logo" href="/"><span>MASTER</span>DND</a>
-  <div class="g-nav-spacer"></div>
+  <a class="g-nav-logo" href="/">
+    <span class="llogo-m">MASTER</span><span class="llogo-d">DND</span>
+  </a>
   <div class="g-nav-links">
-    <a class="g-nav-link" href="/">Inicio</a>
+    <div class="g-nav-dropdown">
+      <a class="g-nav-link g-nav-dd-trigger" href="/#personajes">Personajes</a>
+      <div class="g-nav-dropdown-menu">
+        <a class="g-nav-dd-item" href="/#personajes">
+          <span class="g-nav-dd-icon">✨</span>
+          <div class="g-nav-dd-label"><span>Crear personaje</span><span class="g-nav-dd-sub">Nuevo aventurero</span></div>
+        </a>
+        <a class="g-nav-dd-item" href="/#personajes">
+          <span class="g-nav-dd-icon">⚔️</span>
+          <div class="g-nav-dd-label"><span>Mis personajes</span><span class="g-nav-dd-sub">Ver personajes guardados</span></div>
+        </a>
+      </div>
+    </div>
+    <div class="g-nav-dropdown">
+      <a class="g-nav-link g-nav-dd-trigger" href="/#mapas">Mapas</a>
+      <div class="g-nav-dropdown-menu">
+        <a class="g-nav-dd-item" href="/#mapas">
+          <span class="g-nav-dd-icon">🗺️</span>
+          <div class="g-nav-dd-label"><span>Crear mapa</span><span class="g-nav-dd-sub">Editor de terreno</span></div>
+        </a>
+        <a class="g-nav-dd-item" href="/#mapas">
+          <span class="g-nav-dd-icon">🔍</span>
+          <div class="g-nav-dd-label"><span>Mapas existentes</span><span class="g-nav-dd-sub">Explorar la comunidad</span></div>
+        </a>
+      </div>
+    </div>
+    <a class="g-nav-link" href="/#sonidos">Sonidos</a>
+    <a class="g-nav-link" href="/#grimorio">Grimorio</a>
     <a class="g-nav-link active" href="/guias/">Guías</a>
-    <a class="g-nav-link" href="/#personajes">Personajes</a>
   </div>
+  <div class="g-nav-spacer"></div>
   <a class="g-nav-cta" href="/">Abrir App</a>
 </nav>
 
@@ -40,7 +68,7 @@
   </div>
 </header>
 
-<div class="g-layout">
+<div class="g-index-layout">
   <div class="g-grid">
 
     <div class="g-card" onclick="location.href='/guias/como-jugar-dnd-principiantes'">

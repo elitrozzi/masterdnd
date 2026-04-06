@@ -1,7 +1,12 @@
 {
-  "version": "2.3.5",
+  "version": "2.3.6",
   "date": "2026-04-06",
   "history": [
+    {
+      "version": "2.3.6",
+      "date": "2026-04-06",
+      "note": "Nav y grid: nav completa con Personajes/Mapas/Sonidos/Grimorio en todas las páginas de guías; grid 3 columnas fijo + layout centrado"
+    },
     {
       "version": "2.3.5",
       "date": "2026-04-06",
