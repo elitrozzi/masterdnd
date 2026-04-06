@@ -248,7 +248,9 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .ls-guides-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
 .ls-guide-card{display:flex;flex-direction:column;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:8px;overflow:hidden;text-decoration:none;color:var(--text);transition:border-color .2s,transform .2s,background .2s;cursor:pointer;}
 .ls-guide-card:hover{border-color:rgba(248,198,98,.3);transform:translateY(-4px);background:rgba(248,198,98,.04);text-decoration:none;}
-.ls-guide-top{height:4px;flex-shrink:0;}
+.ls-guide-top{height:160px;overflow:hidden;flex-shrink:0;}
+.ls-guide-top img{width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.85);transition:filter .2s;}
+.ls-guide-card:hover .ls-guide-top img{filter:brightness(1);}
 .ls-guide-tag{font-size:13px;font-weight:700;letter-spacing:1px;color:var(--text-d);padding:16px 18px 0;text-transform:uppercase;}
 .ls-guide-title{font-family:'Cinzel',serif;font-size:14px;color:var(--text);line-height:1.4;padding:8px 18px 16px;flex:1;}
 .ls-guide-arrow{padding:0 18px 14px;font-size:14px;color:var(--gold);opacity:0;transition:opacity .2s;}
@@ -1826,7 +1828,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.3.7</span>
+    <span class="ver-badge">v2.3.8</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">06 Apr 2026</span>
   </div>
@@ -2290,39 +2292,21 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     </div>
     <div class="ls-guides-grid">
       <a class="ls-guide-card fiu fiu-d1" href="/guias/como-jugar-dnd-principiantes">
-        <div class="ls-guide-top" style="background:linear-gradient(90deg,#7c3aed,#a855f7);"></div>
+        <div class="ls-guide-top"><img src="/Im%C3%A1genes/Gu%C3%ADa/1.png" alt="Cómo jugar D&D por primera vez" loading="lazy"/></div>
         <div class="ls-guide-tag">⭐ Principiante</div>
         <div class="ls-guide-title">Cómo jugar D&D por primera vez</div>
         <div class="ls-guide-arrow">→</div>
       </a>
       <a class="ls-guide-card fiu fiu-d2" href="/guias/clases-dnd-5e">
-        <div class="ls-guide-top" style="background:linear-gradient(90deg,#e63946,#f97316);"></div>
+        <div class="ls-guide-top"><img src="/Im%C3%A1genes/Gu%C3%ADa/2.png" alt="Las 12 clases de D&D 5e" loading="lazy"/></div>
         <div class="ls-guide-tag">⚔️ Clases</div>
         <div class="ls-guide-title">Las 12 clases de D&D 5e explicadas</div>
         <div class="ls-guide-arrow">→</div>
       </a>
       <a class="ls-guide-card fiu fiu-d3" href="/guias/razas-dnd-5e">
-        <div class="ls-guide-top" style="background:linear-gradient(90deg,#059669,#34d399);"></div>
+        <div class="ls-guide-top"><img src="/Im%C3%A1genes/Gu%C3%ADa/3.png" alt="Todas las razas de D&D 5e" loading="lazy"/></div>
         <div class="ls-guide-tag">🧝 Razas</div>
         <div class="ls-guide-title">Todas las razas de D&D 5e: guía completa</div>
-        <div class="ls-guide-arrow">→</div>
-      </a>
-      <a class="ls-guide-card fiu fiu-d1" href="/guias/crear-personaje-dnd">
-        <div class="ls-guide-top" style="background:linear-gradient(90deg,#d4af37,#f8c662);"></div>
-        <div class="ls-guide-tag">✨ Tutorial</div>
-        <div class="ls-guide-title">Crear un personaje en D&D 5e paso a paso</div>
-        <div class="ls-guide-arrow">→</div>
-      </a>
-      <a class="ls-guide-card fiu fiu-d2" href="/guias/alineamientos-dnd">
-        <div class="ls-guide-top" style="background:linear-gradient(90deg,#0891b2,#38bdf8);"></div>
-        <div class="ls-guide-tag">⚖️ Rol</div>
-        <div class="ls-guide-title">Los 9 alineamientos de D&D con ejemplos</div>
-        <div class="ls-guide-arrow">→</div>
-      </a>
-      <a class="ls-guide-card fiu fiu-d3" href="/guias/guia-dungeon-master-principiante">
-        <div class="ls-guide-top" style="background:linear-gradient(90deg,#c2410c,#fb923c);"></div>
-        <div class="ls-guide-tag">🐉 Dungeon Master</div>
-        <div class="ls-guide-title">Guía del DM principiante: tu primera sesión</div>
         <div class="ls-guide-arrow">→</div>
       </a>
     </div>
@@ -8002,10 +7986,11 @@ async function initMapsExplore(){
   _mapsExploreLoaded=true;
   const grid=document.getElementById('commMapsGrid');
   try{
-    const r=await fetch('https://www.reddit.com/r/battlemaps/hot.json?limit=24&raw_json=1');
+    const r=await fetch('https://www.reddit.com/r/battlemaps/hot.json?limit=24&raw_json=1',{credentials:'omit',cache:'no-store'});
+    if(!r.ok)throw new Error('status '+r.status);
     const j=await r.json();
     const posts=j.data.children.filter(p=>p.data.post_hint==='image'||p.data.url?.match(/\.(jpg|jpeg|png|webp)/i));
-    if(!posts.length){grid.innerHTML='<div class="comm-loading">No se encontraron mapas.</div>';return;}
+    if(!posts.length)throw new Error('empty');
     grid.innerHTML=posts.slice(0,24).map(p=>{
       const d=p.data;
       const img=d.preview?.images?.[0]?.resolutions?.slice(-1)[0]?.url?.replace(/&amp;/g,'&')||d.url;
@@ -8014,7 +7999,12 @@ async function initMapsExplore(){
       return `<div class="comm-card" onclick="window.open('${d.url}','_blank')"><img src="${img}" loading="lazy" alt="${title}"><div class="comm-card-body"><div class="comm-card-title">${title}</div><div class="comm-card-meta">▲ ${ups} · r/battlemaps</div></div></div>`;
     }).join('');
   }catch(e){
-    grid.innerHTML='<div class="comm-loading" style="color:var(--text-m)">No se pudo cargar.<br>Verifica tu conexión.</div>';
+    grid.innerHTML=`<div class="comm-loading" style="padding:64px 32px;display:flex;flex-direction:column;align-items:center;gap:12px;">
+      <div style="font-size:40px;">🗺️</div>
+      <div style="font-size:16px;font-weight:600;color:var(--text);">Mapas de la comunidad</div>
+      <div style="font-size:14px;color:var(--text-m);max-width:340px;text-align:center;line-height:1.6;">Próximamente podrás explorar y compartir mapas creados por otros aventureros de MasterDnD.</div>
+      <button onclick="_mapsExploreLoaded=false;initMapsExplore()" style="margin-top:8px;padding:8px 20px;background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--text-m);font-size:13px;cursor:pointer;transition:.15s;" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-m)'">↺ Reintentar</button>
+    </div>`;
   }
 }
 function openGenModal(url){
