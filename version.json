@@ -1,7 +1,12 @@
 {
-  "version": "2.3.4",
+  "version": "2.3.5",
   "date": "2026-04-06",
   "history": [
+    {
+      "version": "2.3.5",
+      "date": "2026-04-06",
+      "note": "Accesibilidad WCAG AAA: contraste texto-d elevado a 7:1+ en todas las superficies, font-size mínimo 12px (era 9px), focus-visible dorado, line-height 1.6, links subrayados en artículos"
+    },
     {
       "version": "2.3.4",
       "date": "2026-04-06",
