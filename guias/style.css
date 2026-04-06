@@ -4,8 +4,8 @@
 :root {
   --gold: #F8C662;
   --gold-d: #c89630;
-  --dark: #09070f;
-  --surface: #100e1a;
+  --dark: #0d0b18;
+  --surface: #141220;
   --border: #1e1a2e;
   --border-l: #2a2440;
   --text: #e2ddf0;
@@ -142,14 +142,14 @@ img { max-width: 100%; }
   font-family: 'Roboto', sans-serif; font-size: 18px; font-weight: 700;
   color: var(--text); margin: 36px 0 12px;
 }
-.g-article-content p { color: var(--text-m); margin-bottom: 24px; line-height: 1.9; }
+.g-article-content p { color: var(--text); margin-bottom: 24px; line-height: 1.9; }
 .g-article-content p strong { color: var(--text); font-weight: 600; }
 .g-article-content a { color: var(--gold); }
 .g-article-content ul, .g-article-content ol {
   padding-left: 24px; margin-bottom: 24px;
   display: flex; flex-direction: column; gap: 10px;
 }
-.g-article-content li { color: var(--text-m); line-height: 1.8; }
+.g-article-content li { color: var(--text); line-height: 1.8; }
 .g-article-content li strong { color: var(--text); }
 
 /* Info box */
