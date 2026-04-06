@@ -229,6 +229,22 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .ls-feat-title{font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--gold);margin-bottom:10px;}
 .ls-feat-desc{font-size:13px;color:var(--text-m);line-height:1.7;}
 
+/* ── GUIDES SECTION ── */
+.ls-guides{background:radial-gradient(ellipse 60% 80% at 50% 100%,rgba(248,198,98,.06) 0%,transparent 65%),linear-gradient(180deg,#03060f 0%,#040a1e 100%);}
+.ls-guides-header{text-align:center;margin-bottom:64px;}
+.ls-guides-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.ls-guide-card{display:flex;flex-direction:column;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:8px;overflow:hidden;text-decoration:none;color:var(--text);transition:border-color .2s,transform .2s,background .2s;cursor:pointer;}
+.ls-guide-card:hover{border-color:rgba(248,198,98,.3);transform:translateY(-4px);background:rgba(248,198,98,.04);text-decoration:none;}
+.ls-guide-top{height:4px;flex-shrink:0;}
+.ls-guide-tag{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--text-d);padding:16px 18px 0;text-transform:uppercase;}
+.ls-guide-title{font-family:'Cinzel',serif;font-size:14px;color:var(--text);line-height:1.4;padding:8px 18px 16px;flex:1;}
+.ls-guide-arrow{padding:0 18px 14px;font-size:14px;color:var(--gold);opacity:0;transition:opacity .2s;}
+.ls-guide-card:hover .ls-guide-arrow{opacity:1;}
+.ls-guides-all{display:inline-block;font-size:14px;color:var(--gold);border:1px solid rgba(248,198,98,.3);border-radius:8px;padding:10px 28px;transition:.2s;text-decoration:none;}
+.ls-guides-all:hover{background:rgba(248,198,98,.08);text-decoration:none;}
+@media(max-width:900px){.ls-guides-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:600px){.ls-guides-grid{grid-template-columns:1fr;}}
+
 /* ── CAMPAIGN SECTION ── */
 .ls-campaign{background:
   radial-gradient(ellipse 60% 90% at 10% 50%,rgba(14,165,233,.14) 0%,transparent 60%),
@@ -1745,6 +1761,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     <div class="mm-link" onclick="goToMaps('explore');closeMobileMenu()"><span class="mm-link-icon">🔍</span><span data-es="Mapas existentes" data-en="Existing maps">Mapas existentes</span></div>
     <div class="mm-link" onclick="goTo('sounds');closeMobileMenu()"><span class="mm-link-icon">🎵</span><span data-es="Sonidos" data-en="Sounds">Sonidos</span></div>
     <div class="mm-link" onclick="goTo('compendium');closeMobileMenu()"><span class="mm-link-icon">📖</span><span data-es="Grimorio" data-en="Grimoire">Grimorio</span></div>
+    <a class="mm-link" href="/guias/" style="text-decoration:none;color:inherit;"><span class="mm-link-icon">📚</span><span data-es="Guías" data-en="Guides">Guías</span></a>
     <div class="mm-link" id="mm-campaign" onclick="goToCampaign();closeMobileMenu()" style="display:none;"><span class="mm-link-icon">🏰</span><span data-es="Campaña" data-en="Campaign">Campaña</span></div>
   </div>
   <div class="mm-footer">
@@ -1790,12 +1807,13 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     </div>
     <a class="anav-link" id="nl-sounds" onclick="goTo('sounds')" data-es="Sonidos" data-en="Sounds">Sonidos</a>
     <a class="anav-link" id="nl-compendium" onclick="goTo('compendium')" data-es="Grimorio" data-en="Grimoire">Grimorio</a>
+    <a class="anav-link" href="/guias/" data-es="Guías" data-en="Guides">Guías</a>
     <a class="anav-link" id="nl-campaign" onclick="goToCampaign()" data-es="Campaña" data-en="Campaign" style="display:none;">Campaña</a>
   </div>
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.2.8</span>
+    <span class="ver-badge">v2.2.9</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">06 Apr 2026</span>
   </div>
@@ -2073,6 +2091,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         </div>
         <a class="land-nav-link" onclick="goTo('sounds')" data-es="Sonidos" data-en="Sounds">Sonidos</a>
         <a class="land-nav-link" onclick="goTo('compendium')" data-es="Grimorio" data-en="Grimoire">Grimorio</a>
+        <a class="land-nav-link" href="/guias/" data-es="Guías" data-en="Guides">Guías</a>
         <a class="land-nav-link" id="lndd-campaign" onclick="closeNavDropdowns();goToCampaign()" style="display:none;" data-es="Campaña" data-en="Campaign">Campaña</a>
       </div>
       <div class="land-nav-spacer"></div>
@@ -2249,7 +2268,57 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     </div>
   </section>
 
-  <!-- ══ SECTION 4: CTA — DAWN ══ -->
+  <!-- ══ SECTION 4: GUÍAS ══ -->
+  <section class="land-section ls-guides">
+    <div class="ls-guides-header">
+      <div class="ls-eyebrow fiu">03 — GUÍAS D&amp;D 5e</div>
+      <div class="ls-title fiu fiu-d1">Aprendé a jugar<br><span class="ls-title-em">como un experto</span></div>
+      <p class="ls-sub fiu fiu-d2" style="margin:0 auto;">Guías en español para principiantes y veteranos — clases, razas, combate, roleplay y más.</p>
+    </div>
+    <div class="ls-guides-grid">
+      <a class="ls-guide-card fiu fiu-d1" href="/guias/como-jugar-dnd-principiantes">
+        <div class="ls-guide-top" style="background:linear-gradient(90deg,#7c3aed,#a855f7);"></div>
+        <div class="ls-guide-tag">⭐ Principiante</div>
+        <div class="ls-guide-title">Cómo jugar D&D por primera vez</div>
+        <div class="ls-guide-arrow">→</div>
+      </a>
+      <a class="ls-guide-card fiu fiu-d2" href="/guias/clases-dnd-5e">
+        <div class="ls-guide-top" style="background:linear-gradient(90deg,#e63946,#f97316);"></div>
+        <div class="ls-guide-tag">⚔️ Clases</div>
+        <div class="ls-guide-title">Las 12 clases de D&D 5e explicadas</div>
+        <div class="ls-guide-arrow">→</div>
+      </a>
+      <a class="ls-guide-card fiu fiu-d3" href="/guias/razas-dnd-5e">
+        <div class="ls-guide-top" style="background:linear-gradient(90deg,#059669,#34d399);"></div>
+        <div class="ls-guide-tag">🧝 Razas</div>
+        <div class="ls-guide-title">Todas las razas de D&D 5e: guía completa</div>
+        <div class="ls-guide-arrow">→</div>
+      </a>
+      <a class="ls-guide-card fiu fiu-d1" href="/guias/crear-personaje-dnd">
+        <div class="ls-guide-top" style="background:linear-gradient(90deg,#d4af37,#f8c662);"></div>
+        <div class="ls-guide-tag">✨ Tutorial</div>
+        <div class="ls-guide-title">Crear un personaje en D&D 5e paso a paso</div>
+        <div class="ls-guide-arrow">→</div>
+      </a>
+      <a class="ls-guide-card fiu fiu-d2" href="/guias/alineamientos-dnd">
+        <div class="ls-guide-top" style="background:linear-gradient(90deg,#0891b2,#38bdf8);"></div>
+        <div class="ls-guide-tag">⚖️ Rol</div>
+        <div class="ls-guide-title">Los 9 alineamientos de D&D con ejemplos</div>
+        <div class="ls-guide-arrow">→</div>
+      </a>
+      <a class="ls-guide-card fiu fiu-d3" href="/guias/guia-dungeon-master-principiante">
+        <div class="ls-guide-top" style="background:linear-gradient(90deg,#c2410c,#fb923c);"></div>
+        <div class="ls-guide-tag">🐉 Dungeon Master</div>
+        <div class="ls-guide-title">Guía del DM principiante: tu primera sesión</div>
+        <div class="ls-guide-arrow">→</div>
+      </a>
+    </div>
+    <div style="text-align:center;margin-top:40px;">
+      <a class="ls-guides-all fiu" href="/guias/">Ver todas las guías →</a>
+    </div>
+  </section>
+
+  <!-- ══ SECTION 5: CTA — DAWN ══ -->
   <section class="land-section ls-cta">
     <div class="ls-cta-dawn-bg"></div>
     <div class="ls-cta-sun"></div>
@@ -2263,7 +2332,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="margin-top:48px;display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,200,150,.35);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.2.8</span>
+          <span class="ver-badge">v2.2.9</span>
           <span>·</span>
           <span class="ver-date">06 Apr 2026</span>
         </div>
