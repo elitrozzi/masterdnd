@@ -1,7 +1,12 @@
 {
-  "version": "2.3.2",
+  "version": "2.3.3",
   "date": "2026-04-06",
   "history": [
+    {
+      "version": "2.3.3",
+      "date": "2026-04-06",
+      "note": "Índice de Guías: reemplaza g-hero por g-article-header igual al de los artículos"
+    },
     {
       "version": "2.3.2",
       "date": "2026-04-06",
