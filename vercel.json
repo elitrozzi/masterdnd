@@ -1,9 +1,6 @@
 {
   "rewrites": [
-    { "source": "/google(.*)\\.html", "destination": "/google$1.html" },
-    { "source": "/sitemap\\.xml", "destination": "/sitemap.xml" },
-    { "source": "/robots\\.txt", "destination": "/robots.txt" },
-    { "source": "/guias/(.*)", "destination": "/guias/$1" },
+    { "source": "/guias/:slug", "destination": "/guias/:slug.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

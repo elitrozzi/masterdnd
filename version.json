@@ -1,7 +1,12 @@
 {
-  "version": "2.3.0",
+  "version": "2.3.1",
   "date": "2026-04-06",
   "history": [
+    {
+      "version": "2.3.1",
+      "date": "2026-04-06",
+      "note": "Rediseño Medium: todos los artículos de Guías con progreso, likes, \"Continúa tu aventura\" y nuevo header"
+    },
     {
       "version": "2.3.0",
       "date": "2026-04-06",

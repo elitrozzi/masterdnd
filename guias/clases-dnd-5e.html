@@ -15,11 +15,11 @@
 <meta property="og:site_name" content="MasterDnD"/>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Las 12 Clases de D&D 5e Explicadas: Cuál Elegir Según Tu Estilo","description":"Guía completa de todas las clases de Dungeons & Dragons 5e con descripción, dificultad y rol en el grupo.","url":"https://masterdnd.com/guias/clases-dnd-5e","datePublished":"2026-04-06","dateModified":"2026-04-06","publisher":{"@type":"Organization","name":"MasterDnD","url":"https://masterdnd.com"},"author":{"@type":"Organization","name":"MasterDnD"}}</script>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230e0c1e'/%3E%3Cpolygon points='16,3 29,10.5 29,21.5 16,29 3,21.5 3,10.5' fill='none' stroke='%23d4a843' stroke-width='1.5'/%3E%3C/svg%3E"/>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="/guias/style.css"/>
 </head>
 <body>
+
+<div id="g-progress"></div>
 
 <nav class="g-nav">
   <a class="g-nav-logo" href="/"><span>MASTER</span>DND</a>
@@ -27,46 +27,53 @@
   <div class="g-nav-links">
     <a class="g-nav-link" href="/">Inicio</a>
     <a class="g-nav-link active" href="/guias/">Guías</a>
-    <a class="g-nav-link" href="/">Crear personaje</a>
   </div>
   <a class="g-nav-cta" href="/">Abrir App</a>
 </nav>
 
-<div class="g-hero">
-  <div class="g-eyebrow">⚔️ Clases D&D 5e</div>
-  <h1>Las 12 Clases de D&amp;D 5e Explicadas</h1>
-  <p>Guerrero, Mago, Pícaro o Paladín — cada clase define cómo vas a vivir la aventura. Descubrí cuál es la tuya.</p>
-  <div class="g-hero-meta">
-    <span>📖 12 min de lectura</span>
-    <span>🗓️ Abril 2026</span>
-    <span>🎯 Principiante · Intermedio</span>
+<header class="g-article-header">
+  <div class="g-article-header-inner">
+    <div class="g-eyebrow">⚔️ Clases</div>
+    <h1>Las 12 Clases de D&amp;D 5e Explicadas</h1>
+    <p class="g-article-subtitle">Guerrero, Mago, Pícaro o Paladín — cada clase define cómo vas a vivir la aventura. Descubrí cuál es la tuya.</p>
+    <div class="g-article-meta">
+      <div class="g-author-row">
+        <div class="g-author-avatar">M</div>
+        <div>
+          <div class="g-author-name">MasterDnD</div>
+          <div class="g-author-info">6 de abril, 2026 · 12 min de lectura</div>
+        </div>
+      </div>
+      <button class="g-like-btn" onclick="toggleLike()">
+        <span class="g-like-icon">♡</span>
+        <span class="g-like-count">0</span>
+      </button>
+    </div>
+    <div class="g-article-divider"></div>
   </div>
-</div>
+</header>
 
-<div class="g-layout">
+<div class="g-article-body">
+  <div class="g-article-content">
 
-  <div class="g-breadcrumb">
-    <a href="/">Inicio</a>
-    <span class="g-breadcrumb-sep">›</span>
-    <a href="/guias/">Guías</a>
-    <span class="g-breadcrumb-sep">›</span>
-    <span>Clases de D&D 5e</span>
-  </div>
+    <div class="g-breadcrumb">
+      <a href="/">Inicio</a><span class="g-breadcrumb-sep">›</span>
+      <a href="/guias/">Guías</a><span class="g-breadcrumb-sep">›</span>
+      <span>Clases de D&D 5e</span>
+    </div>
 
-  <div class="g-toc">
-    <div class="g-toc-title">📋 Contenido</div>
-    <ol>
-      <li><a href="#por-que-importa">¿Por qué importa tu clase?</a></li>
-      <li><a href="#para-principiantes">Clases para principiantes</a></li>
-      <li><a href="#dano-y-sigilo">Clases de daño y sigilo</a></li>
-      <li><a href="#magias">Clases de magia pura</a></li>
-      <li><a href="#versatiles">Clases versátiles</a></li>
-      <li><a href="#avanzadas">Clases avanzadas</a></li>
-      <li><a href="#resumen">Resumen: cuál elegir</a></li>
-    </ol>
-  </div>
-
-  <article class="g-article">
+    <div class="g-toc">
+      <div class="g-toc-title">📋 Contenido</div>
+      <ol>
+        <li><a href="#por-que-importa">¿Por qué importa tu clase?</a></li>
+        <li><a href="#para-principiantes">Clases para principiantes</a></li>
+        <li><a href="#dano-y-sigilo">Clases de daño y sigilo</a></li>
+        <li><a href="#magias">Clases de magia pura</a></li>
+        <li><a href="#versatiles">Clases versátiles</a></li>
+        <li><a href="#avanzadas">Clases avanzadas</a></li>
+        <li><a href="#resumen">Resumen: cuál elegir</a></li>
+      </ol>
+    </div>
 
     <h2 id="por-que-importa">¿Por qué importa tu clase?</h2>
     <p>En D&D 5e, tu <strong>clase</strong> define qué podés hacer en el juego: qué habilidades tenés, cómo contribuís en combate, qué tan robusto es tu personaje y qué rol cumplís en el grupo. A diferencia de la raza, que da bonos de estadísticas, la clase es el corazón mecánico de tu personaje.</p>
@@ -153,28 +160,47 @@
       <p>La mejor clase es la que te entusiasma interpretar. Un jugador apasionado con cualquier clase siempre va a ser más efectivo que alguien optimizando stats con una clase que no le gusta.</p>
     </div>
 
-  </article>
+    <div class="g-cta">
+      <div class="g-cta-title">¿Elegiste tu clase? Creá tu personaje ahora.</div>
+      <p class="g-cta-desc">MasterDnD tiene un creador de personajes guiado con todas las clases y razas de D&D 5e. Listo en 5 minutos.</p>
+      <a class="g-cta-btn" href="/">⚔️ Crear mi personaje gratis</a>
+      <p class="g-cta-secondary">¿Aún no sabés qué raza elegir? <a href="/guias/razas-dnd-5e">Guía completa de razas de D&D 5e →</a></p>
+    </div>
 
-  <div class="g-cta">
-    <div class="g-cta-title">¿Elegiste tu clase? Creá tu personaje ahora.</div>
-    <p class="g-cta-desc">MasterDnD tiene un creador de personajes guiado con todas las clases y razas de D&D 5e. Listo en 5 minutos.</p>
-    <a class="g-cta-btn" href="/">⚔️ Crear mi personaje gratis</a>
-    <p class="g-cta-secondary">¿Aún no sabés qué raza elegir? <a href="/guias/razas-dnd-5e">Guía completa de razas de D&D 5e →</a></p>
+    <div class="g-article-footer">
+      <span class="g-footer-like-label">¿Te fue útil este artículo?</span>
+      <button class="g-like-btn" onclick="toggleLike()">
+        <span class="g-like-icon">♡</span>
+        <span class="g-like-count">0</span>
+        <span style="font-size:13px;margin-left:2px;">Me fue útil</span>
+      </button>
+    </div>
+
   </div>
-
 </div>
+
+<section class="g-related">
+  <div class="g-related-inner">
+    <div class="g-related-heading">Continúa tu aventura</div>
+    <p class="g-related-sub">Más guías para dominar Dungeons & Dragons</p>
+    <div class="g-related-grid" id="relatedGrid"></div>
+  </div>
+</section>
 
 <footer class="g-footer">
   <div class="g-footer-logo"><span>MASTER</span>DND</div>
   <p>La herramienta de D&D en español. Gratis, sin registro requerido.</p>
   <div class="g-footer-links">
-    <a href="/">Inicio</a>
-    <a href="/guias/">Todas las guías</a>
-    <a href="/guias/razas-dnd-5e">Razas D&D 5e</a>
-    <a href="/guias/crear-personaje-dnd">Crear personaje</a>
-    <a href="/guias/como-jugar-dnd-principiantes">Guía principiantes</a>
+    <a href="/">Inicio</a><a href="/guias/">Todas las guías</a>
+    <a href="/guias/razas-dnd-5e">Razas</a><a href="/guias/crear-personaje-dnd">Crear personaje</a>
   </div>
 </footer>
 
+<script src="/guias/articles.js"></script>
+<script>
+  initProgress();
+  initLikes('clases-dnd-5e');
+  renderRelated('clases-dnd-5e', 'relatedGrid');
+</script>
 </body>
 </html>

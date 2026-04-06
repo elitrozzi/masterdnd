@@ -15,11 +15,11 @@
 <meta property="og:site_name" content="MasterDnD"/>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Guía del Dungeon Master Principiante: Cómo Dirigir Tu Primera Sesión de D&D","description":"Guía completa para ser Dungeon Master por primera vez: preparación, combate, manejo de jugadores e improvisación.","url":"https://masterdnd.com/guias/guia-dungeon-master-principiante","datePublished":"2026-04-06","dateModified":"2026-04-06","publisher":{"@type":"Organization","name":"MasterDnD","url":"https://masterdnd.com"},"author":{"@type":"Organization","name":"MasterDnD"}}</script>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230e0c1e'/%3E%3Cpolygon points='16,3 29,10.5 29,21.5 16,29 3,21.5 3,10.5' fill='none' stroke='%23d4a843' stroke-width='1.5'/%3E%3C/svg%3E"/>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="/guias/style.css"/>
 </head>
 <body>
+
+<div id="g-progress"></div>
 
 <nav class="g-nav">
   <a class="g-nav-logo" href="/"><span>MASTER</span>DND</a>
@@ -27,47 +27,54 @@
   <div class="g-nav-links">
     <a class="g-nav-link" href="/">Inicio</a>
     <a class="g-nav-link active" href="/guias/">Guías</a>
-    <a class="g-nav-link" href="/">Abrir App</a>
   </div>
   <a class="g-nav-cta" href="/">Abrir App</a>
 </nav>
 
-<div class="g-hero">
-  <div class="g-eyebrow">🐉 Dungeon Master</div>
-  <h1>Guía del Dungeon Master Principiante</h1>
-  <p>Ser DM es el rol más desafiante y más satisfactorio de D&D. Esta guía te lleva desde cero hasta tu primera sesión con confianza.</p>
-  <div class="g-hero-meta">
-    <span>📖 12 min de lectura</span>
-    <span>🗓️ Abril 2026</span>
-    <span>🎯 Nivel: Principiante · DM nuevo</span>
+<header class="g-article-header">
+  <div class="g-article-header-inner">
+    <div class="g-eyebrow">🐉 Dungeon Master</div>
+    <h1>Guía del Dungeon Master Principiante</h1>
+    <p class="g-article-subtitle">Ser DM es el rol más desafiante y más satisfactorio de D&D. Esta guía te lleva desde cero hasta tu primera sesión con confianza.</p>
+    <div class="g-article-meta">
+      <div class="g-author-row">
+        <div class="g-author-avatar">M</div>
+        <div>
+          <div class="g-author-name">MasterDnD</div>
+          <div class="g-author-info">6 de abril, 2026 · 12 min de lectura</div>
+        </div>
+      </div>
+      <button class="g-like-btn" onclick="toggleLike()">
+        <span class="g-like-icon">♡</span>
+        <span class="g-like-count">0</span>
+      </button>
+    </div>
+    <div class="g-article-divider"></div>
   </div>
-</div>
+</header>
 
-<div class="g-layout">
+<div class="g-article-body">
+  <div class="g-article-content">
 
-  <div class="g-breadcrumb">
-    <a href="/">Inicio</a>
-    <span class="g-breadcrumb-sep">›</span>
-    <a href="/guias/">Guías</a>
-    <span class="g-breadcrumb-sep">›</span>
-    <span>Guía del DM principiante</span>
-  </div>
+    <div class="g-breadcrumb">
+      <a href="/">Inicio</a><span class="g-breadcrumb-sep">›</span>
+      <a href="/guias/">Guías</a><span class="g-breadcrumb-sep">›</span>
+      <span>Guía del DM principiante</span>
+    </div>
 
-  <div class="g-toc">
-    <div class="g-toc-title">📋 Contenido</div>
-    <ol>
-      <li><a href="#que-hace">¿Qué hace realmente un DM?</a></li>
-      <li><a href="#prep">Cómo preparar tu primera sesión</a></li>
-      <li><a href="#sesion-cero">La sesión cero: el contrato social</a></li>
-      <li><a href="#combate">Dirigir combates</a></li>
-      <li><a href="#improvisar">El arte de improvisar</a></li>
-      <li><a href="#jugadores">Manejar distintos tipos de jugadores</a></li>
-      <li><a href="#herramientas">Herramientas digitales para el DM</a></li>
-      <li><a href="#errores">Errores más comunes del DM nuevo</a></li>
-    </ol>
-  </div>
-
-  <article class="g-article">
+    <div class="g-toc">
+      <div class="g-toc-title">📋 Contenido</div>
+      <ol>
+        <li><a href="#que-hace">¿Qué hace realmente un DM?</a></li>
+        <li><a href="#prep">Cómo preparar tu primera sesión</a></li>
+        <li><a href="#sesion-cero">La sesión cero: el contrato social</a></li>
+        <li><a href="#combate">Dirigir combates</a></li>
+        <li><a href="#improvisar">El arte de improvisar</a></li>
+        <li><a href="#jugadores">Manejar distintos tipos de jugadores</a></li>
+        <li><a href="#herramientas">Herramientas digitales para el DM</a></li>
+        <li><a href="#errores">Errores más comunes del DM nuevo</a></li>
+      </ol>
+    </div>
 
     <h2 id="que-hace">¿Qué hace realmente un DM?</h2>
     <p>El <strong>Dungeon Master</strong> es simultáneamente el narrador, el director de teatro, el árbitro de reglas y el motor del mundo. Es la voz de cada NPC, el diseñador de cada dungeon y el responsable de que todos se diviertan.</p>
@@ -157,28 +164,47 @@
       <p>Que todos en la mesa quieran volver a jugar la semana siguiente. Eso es todo. Si lográs eso, fuiste un buen DM.</p>
     </div>
 
-  </article>
+    <div class="g-cta">
+      <div class="g-cta-title">MasterDnD: la herramienta del DM moderno</div>
+      <p class="g-cta-desc">Combat tracker en tiempo real, grimorio de monstruos, editor de mapas y sesiones en vivo para tu grupo. Todo gratis, todo en español.</p>
+      <a class="g-cta-btn" href="/">🐉 Probar MasterDnD gratis</a>
+      <p class="g-cta-secondary">¿Tus jugadores aún no tienen personaje? <a href="/guias/crear-personaje-dnd">Guía para crear personaje →</a></p>
+    </div>
 
-  <div class="g-cta">
-    <div class="g-cta-title">MasterDnD: la herramienta del DM moderno</div>
-    <p class="g-cta-desc">Combat tracker en tiempo real, grimorio de monstruos, editor de mapas y sesiones en vivo para tu grupo. Todo gratis, todo en español.</p>
-    <a class="g-cta-btn" href="/">🐉 Probar MasterDnD gratis</a>
-    <p class="g-cta-secondary">¿Tus jugadores aún no tienen personaje? <a href="/guias/crear-personaje-dnd">Guía para crear personaje →</a></p>
+    <div class="g-article-footer">
+      <span class="g-footer-like-label">¿Te fue útil este artículo?</span>
+      <button class="g-like-btn" onclick="toggleLike()">
+        <span class="g-like-icon">♡</span>
+        <span class="g-like-count">0</span>
+        <span style="font-size:13px;margin-left:2px;">Me fue útil</span>
+      </button>
+    </div>
+
   </div>
-
 </div>
+
+<section class="g-related">
+  <div class="g-related-inner">
+    <div class="g-related-heading">Continúa tu aventura</div>
+    <p class="g-related-sub">Más guías para dominar Dungeons & Dragons</p>
+    <div class="g-related-grid" id="relatedGrid"></div>
+  </div>
+</section>
 
 <footer class="g-footer">
   <div class="g-footer-logo"><span>MASTER</span>DND</div>
   <p>La herramienta de D&D en español. Gratis, sin registro requerido.</p>
   <div class="g-footer-links">
-    <a href="/">Inicio</a>
-    <a href="/guias/">Todas las guías</a>
-    <a href="/guias/clases-dnd-5e">Clases D&D 5e</a>
-    <a href="/guias/razas-dnd-5e">Razas D&D 5e</a>
-    <a href="/guias/como-jugar-dnd-principiantes">Guía principiantes</a>
+    <a href="/">Inicio</a><a href="/guias/">Todas las guías</a>
+    <a href="/guias/clases-dnd-5e">Clases</a><a href="/guias/como-jugar-dnd-principiantes">Principiantes</a>
   </div>
 </footer>
 
+<script src="/guias/articles.js"></script>
+<script>
+  initProgress();
+  initLikes('guia-dungeon-master-principiante');
+  renderRelated('guia-dungeon-master-principiante', 'relatedGrid');
+</script>
 </body>
 </html>
