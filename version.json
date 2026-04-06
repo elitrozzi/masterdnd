@@ -1,7 +1,12 @@
 {
-  "version": "2.4.0",
+  "version": "2.4.1",
   "date": "2026-04-06",
   "history": [
+    {
+      "version": "2.4.1",
+      "date": "2026-04-06",
+      "note": "Fix dados múltiples: spacing 4.0, canvas más ancho proporcional al nº de dados, cámara retrocede para encuadre correcto"
+    },
     {
       "version": "2.4.0",
       "date": "2026-04-06",
