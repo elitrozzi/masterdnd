@@ -1,11 +1,16 @@
 {
-  "version": "2.5.4",
+  "version": "2.5.5",
   "date": "2026-04-07",
   "history": [
     {
+      "version": "2.5.5",
+      "date": "2026-04-07",
+      "note": "Fix mobile: landing carga normalmente, sin redirect; menú hamburguesa con Dados/Sonidos/Grimorio/Guías"
+    },
+    {
       "version": "2.5.4",
       "date": "2026-04-07",
-      "note": "Mobile: solo Dados/Sonidos/Grimorio/Guías disponibles — resto muestra pantalla desktop-required; home redirige a Grimorio en mobile"
+      "note": "Mobile: solo Dados/Sonidos/Grimorio/Guías disponibles — resto muestra pantalla desktop-required"
     },
     {
       "version": "2.5.3",

@@ -2043,7 +2043,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.5.4</span>
+    <span class="ver-badge">v2.5.5</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">07 Apr 2026</span>
   </div>
@@ -2561,7 +2561,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.5.4</span>
+          <span class="ver-badge">v2.5.5</span>
           <span>·</span>
           <span class="ver-date">07 Apr 2026</span>
         </div>
@@ -4586,7 +4586,7 @@ function closeCompPanel(){
 /* ══ NAV ══ */
 const PAGE_URLS={home:'/',characters:'/personajes','my-chars':'/personajes/mis-personajes',maps:'/mapas',sounds:'/efectos-sonidos',compendium:'/grimorio',notes:'/notas',combat:'/combate',campaign:'/campana',dados:'/dados'};
 const URL_PAGES={'/personajes':'characters','/mapas':'maps','/efectos-sonidos':'sounds','/grimorio':'compendium','/notas':'notes','/combate':'combat'};
-const _MOBILE_BLOCKED=['characters','maps','campaign','combat','notes','home','my-chars'];
+const _MOBILE_BLOCKED=['characters','maps','campaign','combat','notes','my-chars'];
 function _isMobile(){return window.matchMedia('(max-width:700px)').matches;}
 function goTo(page,fromPop){
   if(_isMobile()&&_MOBILE_BLOCKED.includes(page)){
@@ -4620,13 +4620,6 @@ window.addEventListener('popstate',e=>{
     else if(s.charId)requestAnimationFrame(()=>loadChar(s.charId,true));
   }else{goTo(s.page,true);}
 });
-
-// On mobile, redirect home to grimorio immediately
-if(_isMobile()){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page-compendium')?.classList.add('active');
-  setTimeout(()=>initCompendium(),0);
-}
 
 // Initial URL routing on page load
 // Deferred via setTimeout so all let declarations are initialized first
