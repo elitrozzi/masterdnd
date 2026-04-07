@@ -1921,7 +1921,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.4.6</span>
+    <span class="ver-badge">v2.4.7</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">07 Apr 2026</span>
   </div>
@@ -2439,7 +2439,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.4.6</span>
+          <span class="ver-badge">v2.4.7</span>
           <span>·</span>
           <span class="ver-date">07 Apr 2026</span>
         </div>
@@ -4099,9 +4099,12 @@ function renderSpellCard(s){
   const schoolBadge=schoolObj?`<span class="cc-badge ${schoolObj.badge}" style="font-size:12px;">${schoolObj[currentLang]||school}</span>`:'';
   const conc=detail?.concentration?`<span class="cc-badge cb-purple" style="font-size:12px;">${currentLang==='es'?'Conc.':'Conc.'}</span>`:'';
   const ritual=detail?.ritual?`<span class="cc-badge cb-teal" style="font-size:12px;">Ritual</span>`:'';
-  return`<div class="comp-card" onclick="openCompDetail('spells','${s.index}')">
-    <div class="cc-row" style="display:flex;gap:4px;flex-wrap:wrap;">${spellLevelBadge(s.level||0)}${schoolBadge}${conc}${ritual}</div>
-    <div class="cc-name" style="margin-top:6px;">${s.name}</div>
+  return`<div class="comp-card monster-card" onclick="openCompDetail('spells','${s.index}')">
+    <div class="mc-avatar">${spellAvatar(school)}</div>
+    <div class="mc-info">
+      <div class="cc-name">${s.name}</div>
+      <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px;">${spellLevelBadge(s.level||0)}${schoolBadge}${conc}${ritual}</div>
+    </div>
   </div>`;
 }
 
@@ -4139,6 +4142,24 @@ const _MVG={
   monstrosity:(c)=>`<circle cx="20" cy="20" r="20" fill="#12101e"/><g fill="${c}"><ellipse cx="20" cy="23" rx="12" ry="10"/><ellipse cx="20" cy="14" rx="9" ry="7"/></g><circle cx="15" cy="13" r="3" fill="#12101e"/><circle cx="20" cy="11" r="3" fill="#12101e"/><circle cx="25" cy="13" r="3" fill="#12101e"/><circle cx="15.5" cy="12.5" r="1" fill="${c}"/><circle cx="20.5" cy="10.5" r="1" fill="${c}"/><circle cx="25.5" cy="12.5" r="1" fill="${c}"/><path d="M8,27 L4,22 L8,24 M8,29 L4,31 L8,28" stroke="${c}" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M32,27 L36,22 L32,24 M32,29 L36,31 L32,28" stroke="${c}" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M13,20 L15,18 L17,21 L19,18 L21,21 L23,18 L25,21 L27,18 L27,20 Q22,27 13,20Z" fill="#12101e"/>`,
 };
 const _MVCOL={dragon:'#F8C662',undead:'#7fc8c0',fiend:'#e07878',aberration:'#9b78e0',humanoid:'#a898c8',beast:'#c8a060',elemental:'#e8a040',construct:'#8898b0',plant:'#60a868',ooze:'#60c890',celestial:'#c8d8f8',fey:'#e0b8f8',giant:'#b8a068',monstrosity:'#c87858'};
+/* ══ SPELL SCHOOL SVG AVATARS ══ */
+const _SVCOL={abjuration:'#72d68a',conjuration:'#8b78f0',divination:'#5ec8c0',enchantment:'#F8C662',evocation:'#f87171',illusion:'#c084e0',necromancy:'#8898b0',transmutation:'#5ec8c0'};
+const _SPVG={
+  abjuration:(c)=>`<circle cx="20" cy="20" r="20" fill="#12101e"/><path d="M20,6 L31,11.5 L31,22 Q31,31 20,35 Q9,31 9,22 L9,11.5Z" fill="${c}" opacity=".8"/><path d="M20,10.5 L27,14 L27,22 Q27,28 20,31 Q13,28 13,22 L13,14Z" fill="#12101e"/><path d="M16,21 L19,24 L25,17" stroke="${c}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`,
+  conjuration:(c)=>`<circle cx="20" cy="20" r="20" fill="#12101e"/><circle cx="20" cy="20" r="12" fill="none" stroke="${c}" stroke-width="2.5"/><circle cx="20" cy="20" r="7" fill="none" stroke="${c}" stroke-width="1.5" opacity=".6"/><circle cx="20" cy="20" r="3.5" fill="${c}"/><path d="M20,8 Q29,8 29,20 Q29,32 16,32" stroke="${c}" stroke-width="2" fill="none" stroke-linecap="round" opacity=".45"/><path d="M20,32 Q11,32 11,20 Q11,8 24,8" stroke="${c}" stroke-width="2" fill="none" stroke-linecap="round" opacity=".3"/>`,
+  divination:(c)=>`<circle cx="20" cy="20" r="20" fill="#12101e"/><circle cx="20" cy="18" r="10.5" fill="${c}" opacity=".2" stroke="${c}" stroke-width="2"/><ellipse cx="20" cy="18" rx="6" ry="4.5" fill="#12101e"/><ellipse cx="20" cy="18" rx="3" ry="4.5" fill="${c}"/><circle cx="20" cy="18" r="2" fill="#12101e"/><circle cx="21.2" cy="16.8" r="1" fill="white" opacity=".5"/><rect x="13" y="28" width="14" height="2.5" rx="1.25" fill="${c}" opacity=".55"/><rect x="16" y="32" width="8" height="2" rx="1" fill="${c}" opacity=".35"/>`,
+  enchantment:(c)=>`<circle cx="20" cy="20" r="20" fill="#12101e"/><path d="M20,31 Q7,22 7,14.5 Q7,7 14,7 Q17.5,7 20,11.5 Q22.5,7 26,7 Q33,7 33,14.5 Q33,22 20,31Z" fill="${c}" opacity=".85"/><path d="M20,28 Q10.5,20 10.5,14.5 Q10.5,11 14,11 Q17,11 20,15.5 Q23,11 26,11 Q29.5,11 29.5,14.5 Q29.5,20 20,28Z" fill="#12101e"/><circle cx="20" cy="20" r="2.5" fill="${c}" opacity=".8"/>`,
+  evocation:(c)=>`<circle cx="20" cy="20" r="20" fill="#12101e"/><path d="M20,36 Q7,27 9,16 Q11,8 18,5 Q15,13 19,15 Q17,8 22,5 Q24,9.5 22,15 Q26,11 26,18 Q30,13 28,22 Q32,20 30,28 Q27,34 20,36Z" fill="${c}" opacity=".9"/><path d="M20,33 Q12,25 13,18 Q14,13 17.5,11.5 Q16,17 20,18 Q21.5,13.5 23.5,12.5 Q23.5,18 25,15 Q27,19 24,24 Q26.5,22 25.5,27 Q23,31 20,33Z" fill="#F8C662" opacity=".75"/>`,
+  illusion:(c)=>`<circle cx="20" cy="20" r="20" fill="#12101e"/><ellipse cx="20" cy="20" rx="13" ry="8" fill="none" stroke="${c}" stroke-width="2"/><circle cx="20" cy="20" r="5" fill="${c}"/><circle cx="20" cy="20" r="3" fill="#12101e"/><circle cx="21.2" cy="18.8" r="1.2" fill="white" opacity=".45"/><circle cx="12" cy="13" r="2.5" fill="${c}" opacity=".4"/><circle cx="28" cy="13" r="2.5" fill="${c}" opacity=".4"/><circle cx="12" cy="27" r="2.5" fill="${c}" opacity=".3"/><circle cx="28" cy="27" r="2.5" fill="${c}" opacity=".3"/>`,
+  necromancy:(c)=>`<circle cx="20" cy="20" r="20" fill="#12101e"/><ellipse cx="20" cy="16.5" rx="11" ry="10" fill="${c}"/><path d="M11,21.5 Q11,28 14,30 L14,34 L17,34 L17,32 L20,32 L23,32 L23,34 L26,34 L26,30 Q29,28 29,21.5Z" fill="${c}"/><ellipse cx="16" cy="16.5" rx="3.5" ry="3" fill="#12101e"/><ellipse cx="24" cy="16.5" rx="3.5" ry="3" fill="#12101e"/><path d="M18,22 L20,19.5 L22,22 L21,23 L19,23Z" fill="#12101e"/>`,
+  transmutation:(c)=>`<circle cx="20" cy="20" r="20" fill="#12101e"/><path d="M16,7 L24,7 L24,14 L30,27 Q32,33 20,35 Q8,33 10,27 L16,14Z" fill="${c}" opacity=".25" stroke="${c}" stroke-width="2"/><circle cx="20" cy="24" r="6.5" fill="${c}" opacity=".65"/><line x1="15" y1="7" x2="25" y2="7" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/><path d="M17,24 L20,20.5 L23,24 M20,20.5 L20,27.5" stroke="#12101e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`,
+};
+function spellAvatar(school){
+  const s=(school||'').toLowerCase();
+  const c=_SVCOL[s]||'#8898b0';
+  const body=(_SPVG[s]||_SPVG.evocation)(c);
+  return`<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">${body}</svg>`;
+}
 function monsterAvatar(name, index){
   const css=monsterSpriteCss(index);
   if(css)return`<div class="mc-avatar-img" style="${css}"></div>`;
@@ -4233,12 +4254,18 @@ function renderSpellDetail(d){
   const material=currentLang==='es'?(d._mat_es||d.material||''):(d.material||'');
   const ritual=d.ritual?`<span class="cc-badge cb-teal" style="font-size:12px;">Ritual</span>`:'';
   const conc=d.concentration?`<span class="cc-badge cb-purple" style="font-size:12px;">${L('Concentración','Concentration')}</span>`:'';
+  const spellSvg=spellAvatar(school);
   document.getElementById('compPanelContent').innerHTML=`
-    <div class="cp-title">${d.name}</div>
-    <div class="cp-sub" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
-      <span class="cc-badge ${badge}">${schoolLabel}</span>
-      <span class="cc-badge cb-gold">${lvl}</span>
-      ${ritual}${conc}
+    <div style="display:flex;gap:14px;align-items:flex-start;padding-top:6px;margin-bottom:4px;">
+      <div style="width:72px;height:72px;flex-shrink:0;border-radius:50%;overflow:hidden;">${spellSvg}</div>
+      <div style="flex:1;min-width:0;">
+        <div class="cp-title" style="margin-top:0;">${d.name}</div>
+        <div class="cp-sub" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+          <span class="cc-badge ${badge}">${schoolLabel}</span>
+          <span class="cc-badge cb-gold">${lvl}</span>
+          ${ritual}${conc}
+        </div>
+      </div>
     </div>
     <div class="cp-divider"></div>
     <div class="cp-grid2">
@@ -4276,7 +4303,7 @@ function renderMonsterDetail(d){
   const mCss=monsterSpriteCss(d.index);
   const portraitHtml=mCss
     ?`<div style="display:flex;gap:16px;align-items:flex-start;padding-top:6px;margin-bottom:4px;"><div style="width:120px;height:120px;flex-shrink:0;border-radius:12px;overflow:hidden;${mCss}"></div><div style="flex:1;min-width:0;"><div class="cp-title" style="margin-top:0;">${d.name}</div><div class="cp-sub">${sz} ${tp} · <span class="cc-badge cb-teal">CR ${d.challenge_rating}</span></div></div></div>`
-    :`<div class="cp-title">${d.name}</div><div class="cp-sub">${sz} ${tp} · <span class="cc-badge cb-teal">CR ${d.challenge_rating}</span></div>`;
+    :`<div style="display:flex;gap:14px;align-items:flex-start;padding-top:6px;margin-bottom:4px;"><div style="width:72px;height:72px;flex-shrink:0;border-radius:50%;overflow:hidden;">${monsterAvatar(d.name,d.index)}</div><div style="flex:1;min-width:0;"><div class="cp-title" style="margin-top:0;">${d.name}</div><div class="cp-sub">${sz} ${tp} · <span class="cc-badge cb-teal">CR ${d.challenge_rating}</span></div></div></div>`;
   document.getElementById('compPanelContent').innerHTML=`
     ${portraitHtml}
     <div class="cp-divider"></div>
@@ -5941,7 +5968,10 @@ function _showAc(inputEl,items,query,onSelect){
     const meta=item.level!=null
       ?`<span class="ac-item-meta">${item.level===0?'Truco':'Niv. '+item.level}</span>`
       :item.weight>0?`<span class="ac-item-meta">${item.weight} lb</span>`:'';
-    return`<div class="ac-item" data-idx="${idx}"><span class="ac-item-name">${item.name}</span>${meta}</div>`;
+    const icon=item.level!=null
+      ?`<span style="font-size:14px;flex-shrink:0;">✨</span>`
+      :`<span style="font-size:14px;flex-shrink:0;">${INV_ICONS[item.type]||'🎒'}</span>`;
+    return`<div class="ac-item" data-idx="${idx}">${icon}<span class="ac-item-name">${item.name}</span>${meta}</div>`;
   }).join('');
   document.body.appendChild(dd);
   _acDropdown=dd;

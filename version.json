@@ -1,7 +1,12 @@
 {
-  "version": "2.4.6",
+  "version": "2.4.7",
   "date": "2026-04-07",
   "history": [
+    {
+      "version": "2.4.7",
+      "date": "2026-04-07",
+      "note": "Avatares SVG por escuela de hechizo en cards y detalle del Grimorio; SVG de monstruo en panel de detalle; iconos en autocomplete de inventario y hechizos"
+    },
     {
       "version": "2.4.6",
       "date": "2026-04-07",
