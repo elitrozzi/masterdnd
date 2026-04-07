@@ -2037,7 +2037,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.5.2</span>
+    <span class="ver-badge">v2.5.3</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">07 Apr 2026</span>
   </div>
@@ -2555,7 +2555,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.5.2</span>
+          <span class="ver-badge">v2.5.3</span>
           <span>·</span>
           <span class="ver-date">07 Apr 2026</span>
         </div>
@@ -8905,27 +8905,47 @@ function _drBuildMesh(diceType,targetValue){
     faceCount=6;
     faceNormals=[new THREE.Vector3(1,0,0),new THREE.Vector3(-1,0,0),new THREE.Vector3(0,1,0),new THREE.Vector3(0,-1,0),new THREE.Vector3(0,0,1),new THREE.Vector3(0,0,-1)];
   } else if(diceType==='d12'){
-    geo=new THREE.DodecahedronGeometry(1.25,0).toNonIndexed();
-    geo.clearGroups();
+    // Build d12 from scratch: explicit vertices + per-face flat normals + UV from geometry projection
+    const phi=(1+Math.sqrt(5))/2, ri=1/phi, R12=1.25;
+    const dv=[[-1,-1,-1],[-1,-1,1],[-1,1,-1],[-1,1,1],[1,-1,-1],[1,-1,1],[1,1,-1],[1,1,1],
+              [0,-ri,-phi],[0,-ri,phi],[0,ri,-phi],[0,ri,phi],[-ri,-phi,0],[-ri,phi,0],[ri,-phi,0],[ri,phi,0],
+              [-phi,0,-ri],[-phi,0,ri],[phi,0,-ri],[phi,0,ri]];
+    // 12 faces: each is 5 vertex indices in CCW order (fan from index 0)
+    const df=[[3,11,7,15,13],[7,19,17,6,15],[17,4,8,10,19],[8,0,16,2,10],
+              [0,12,1,18,16],[6,10,2,13,15],[2,16,18,3,13],[18,1,9,11,3],
+              [4,14,12,0,8],[11,9,5,19,7],[19,5,14,4,17],[1,12,14,5,9]];
+    const posArr=[],nrmArr=[],uvArr=[];
     faceCount=12;
-    for(let f=0;f<12;f++)geo.addGroup(f*9,9,f);
-    const pos=geo.attributes.position;
-    for(let f=0;f<12;f++){
-      const base=f*9;
-      const a=new THREE.Vector3().fromBufferAttribute(pos,base);
-      const b=new THREE.Vector3().fromBufferAttribute(pos,base+1);
-      const c=new THREE.Vector3().fromBufferAttribute(pos,base+2);
-      faceNormals.push(new THREE.Vector3().crossVectors(new THREE.Vector3().subVectors(b,a),new THREE.Vector3().subVectors(c,a)).normalize());
-    }
-    // Fix UVs: DodecahedronGeometry uses spherical projection — replace with pentagon UV layout
-    // Pentagon vertices (pointing up, fan from v0): angles 90,162,234,306,18 deg
-    const R_UV=0.44;
-    const pentUV=Array.from({length:5},(_,k)=>{const a=(90+k*72)*Math.PI/180;return[0.5+R_UV*Math.cos(a),0.5+R_UV*Math.sin(a)];});
-    // THREE.js fans pentagons as (v0,v1,v2),(v0,v2,v3),(v0,v3,v4)
-    const fanUV=[pentUV[0],pentUV[1],pentUV[2],pentUV[0],pentUV[2],pentUV[3],pentUV[0],pentUV[3],pentUV[4]];
-    const uvArr=[];
-    for(let f=0;f<12;f++)fanUV.forEach(([u,v])=>uvArr.push(u,v));
+    df.forEach((fi)=>{
+      const pts=fi.map(i=>{const[x,y,z]=dv[i];const l=Math.hypot(x,y,z);return new THREE.Vector3(x/l*R12,y/l*R12,z/l*R12);});
+      // Flat face normal
+      const n=new THREE.Vector3().crossVectors(
+        new THREE.Vector3().subVectors(pts[1],pts[0]),
+        new THREE.Vector3().subVectors(pts[2],pts[0])
+      ).normalize();
+      faceNormals.push(n.clone());
+      // Face centroid
+      const cen=new THREE.Vector3(); pts.forEach(p=>cen.add(p)); cen.divideScalar(5);
+      // Local 2D basis on face plane
+      const tx=new THREE.Vector3().subVectors(pts[0],cen).normalize();
+      const ty=new THREE.Vector3().crossVectors(tx,n).normalize(); // ty = tx × n (not n × tx)
+      // Project to 2D and scale to UV space
+      const flat=pts.map(p=>{const d=new THREE.Vector3().subVectors(p,cen);return[d.dot(tx),d.dot(ty)];});
+      const maxR=Math.max(...flat.map(([u,v])=>Math.hypot(u,v)));
+      const sc=0.44/maxR;
+      const uvP=flat.map(([u,v])=>[0.5+u*sc,0.5+v*sc]);
+      // Fan triangulation: (0,1,2),(0,2,3),(0,3,4)
+      [[0,1,2],[0,2,3],[0,3,4]].forEach(([ia,ib,ic])=>{
+        [pts[ia],pts[ib],pts[ic]].forEach(p=>{posArr.push(p.x,p.y,p.z);nrmArr.push(n.x,n.y,n.z);});
+        [uvP[ia],uvP[ib],uvP[ic]].forEach(([u,v])=>uvArr.push(u,v));
+      });
+    });
+    geo=new THREE.BufferGeometry();
+    geo.setAttribute('position',new THREE.Float32BufferAttribute(posArr,3));
+    geo.setAttribute('normal',new THREE.Float32BufferAttribute(nrmArr,3));
     geo.setAttribute('uv',new THREE.Float32BufferAttribute(uvArr,2));
+    geo.clearGroups();
+    for(let i=0;i<12;i++)geo.addGroup(i*9,9,i);
   } else {
     const def=_DR_DEFS[diceType];if(!def)return null;
     faceCount=def.f.length;

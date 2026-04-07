@@ -1,7 +1,12 @@
 {
-  "version": "2.5.2",
+  "version": "2.5.3",
   "date": "2026-04-07",
   "history": [
+    {
+      "version": "2.5.3",
+      "date": "2026-04-07",
+      "note": "Fix d12: reconstruye geometría desde cero con normales flat por cara y UV calculados desde proyección 3D — elimina líneas de triángulos visibles"
+    },
     {
       "version": "2.5.2",
       "date": "2026-04-07",
