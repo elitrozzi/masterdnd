@@ -1,7 +1,12 @@
 {
-  "version": "2.5.3",
+  "version": "2.5.4",
   "date": "2026-04-07",
   "history": [
+    {
+      "version": "2.5.4",
+      "date": "2026-04-07",
+      "note": "Mobile: solo Dados/Sonidos/Grimorio/Guías disponibles — resto muestra pantalla desktop-required; home redirige a Grimorio en mobile"
+    },
     {
       "version": "2.5.3",
       "date": "2026-04-07",

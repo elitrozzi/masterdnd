@@ -1437,6 +1437,16 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   /* ── Ver footer ── */
   .ver-footer{padding:8px 12px;}
 }
+/* ══ MOBILE BLOCK PAGE ══ */
+.mob-block-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:40px 24px;text-align:center;gap:16px;}
+.mob-block-icon{font-size:56px;line-height:1;}
+.mob-block-title{font-family:'Cinzel',serif;font-size:26px;font-weight:700;color:var(--gold);margin:0;}
+.mob-block-sub{font-size:15px;color:var(--text-m);line-height:1.6;margin:0;}
+.mob-block-links{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:8px;}
+.mob-block-btn{padding:12px 20px;background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.35);border-radius:10px;color:var(--gold);font-size:15px;font-weight:600;cursor:pointer;font-family:'Cinzel',serif;text-decoration:none;transition:.15s;}
+.mob-block-btn:hover,.mob-block-btn:active{background:rgba(212,175,55,.22);}
+/* Desktop hint in mobile menu */
+.mm-desktop-hint{color:var(--text-d)!important;font-size:13px!important;font-family:'Roboto',sans-serif!important;letter-spacing:.02em!important;border-top:1px solid rgba(255,255,255,.06)!important;}
 
 /* ══════════════════════════════════ MOBILE EXTENDED FIXES */
 @media (max-width:700px){
@@ -1961,15 +1971,11 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     <button class="mm-close" onclick="closeMobileMenu()">✕</button>
   </div>
   <div class="mm-links">
-    <div class="mm-link" id="mm-my-chars" onclick="goToMyChars();closeMobileMenu()" style="display:none;"><span class="mm-link-icon">⚔️</span><span data-es="Mis personajes" data-en="My characters">Mis personajes</span></div>
-    <div class="mm-link" onclick="goToCreateChar();closeMobileMenu()"><span class="mm-link-icon">✨</span><span data-es="Crear personaje" data-en="Create character">Crear personaje</span></div>
     <div class="mm-link" onclick="goTo('dados');closeMobileMenu()"><span class="mm-link-icon">🎲</span><span data-es="Dados" data-en="Dice">Dados</span></div>
-    <div class="mm-link" onclick="goToMaps('editor');closeMobileMenu()"><span class="mm-link-icon">🗺️</span><span data-es="Crear mapa" data-en="Create map">Crear mapa</span></div>
-    <div class="mm-link" onclick="goToMaps('explore');closeMobileMenu()"><span class="mm-link-icon">🔍</span><span data-es="Mapas existentes" data-en="Existing maps">Mapas existentes</span></div>
     <div class="mm-link" onclick="goTo('sounds');closeMobileMenu()"><span class="mm-link-icon">🎵</span><span data-es="Sonidos" data-en="Sounds">Sonidos</span></div>
     <div class="mm-link" onclick="goTo('compendium');closeMobileMenu()"><span class="mm-link-icon">📖</span><span data-es="Grimorio" data-en="Grimoire">Grimorio</span></div>
     <a class="mm-link" href="/guias/" style="text-decoration:none;color:inherit;"><span class="mm-link-icon">📚</span><span data-es="Guías" data-en="Guides">Guías</span></a>
-    <div class="mm-link" id="mm-campaign" onclick="goToCampaign();closeMobileMenu()" style="display:none;"><span class="mm-link-icon">🏰</span><span data-es="Campaña" data-en="Campaign">Campaña</span></div>
+    <div class="mm-link mm-desktop-hint" onclick="closeMobileMenu()"><span class="mm-link-icon">🖥️</span><span data-es="Más funciones en desktop" data-en="More features on desktop">Más funciones en desktop</span></div>
   </div>
   <div class="mm-footer">
     <div class="mm-footer-label">Idioma</div>
@@ -2037,7 +2043,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.5.3</span>
+    <span class="ver-badge">v2.5.4</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">07 Apr 2026</span>
   </div>
@@ -2555,7 +2561,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.5.3</span>
+          <span class="ver-badge">v2.5.4</span>
           <span>·</span>
           <span class="ver-date">07 Apr 2026</span>
         </div>
@@ -3352,6 +3358,21 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     <div class="form-group"><label class="form-label" data-es="Contraseña" data-en="Password">Contraseña</label><input class="form-input" id="modalPassword" type="password" placeholder="••••••••"/></div>
     <div id="modalMsg"></div>
     <button class="btn-full btn-primary" id="modalSubmitBtn" style="margin-top:8px;" onclick="authSubmit()">Iniciar sesión</button>
+  </div>
+</div>
+
+<!-- ══ MOBILE BLOCK PAGE ══ -->
+<div id="page-mobile-block" class="page">
+  <div class="mob-block-wrap">
+    <div class="mob-block-icon">🖥️</div>
+    <h2 class="mob-block-title">Pantalla pequeña</h2>
+    <p class="mob-block-sub">Esta función está optimizada para tablet o desktop.<br>En tu móvil podés usar:</p>
+    <div class="mob-block-links">
+      <button class="mob-block-btn" onclick="goTo('dados')">🎲 Dados</button>
+      <button class="mob-block-btn" onclick="goTo('sounds')">🎵 Sonidos</button>
+      <button class="mob-block-btn" onclick="goTo('compendium')">📖 Grimorio</button>
+      <a class="mob-block-btn" href="/guias/">📚 Guías</a>
+    </div>
   </div>
 </div>
 
@@ -4565,13 +4586,19 @@ function closeCompPanel(){
 /* ══ NAV ══ */
 const PAGE_URLS={home:'/',characters:'/personajes','my-chars':'/personajes/mis-personajes',maps:'/mapas',sounds:'/efectos-sonidos',compendium:'/grimorio',notes:'/notas',combat:'/combate',campaign:'/campana',dados:'/dados'};
 const URL_PAGES={'/personajes':'characters','/mapas':'maps','/efectos-sonidos':'sounds','/grimorio':'compendium','/notas':'notes','/combate':'combat'};
+const _MOBILE_BLOCKED=['characters','maps','campaign','combat','notes','home','my-chars'];
+function _isMobile(){return window.matchMedia('(max-width:700px)').matches;}
 function goTo(page,fromPop){
+  if(_isMobile()&&_MOBILE_BLOCKED.includes(page)){
+    page='mobile-block';
+  }
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page-'+page).classList.add('active');
+  document.getElementById('page-'+page)?.classList.add('active');
   const nav=document.getElementById('appNav');
   if(page==='home'){nav.classList.remove('visible');}
   else{nav.classList.add('visible');document.querySelectorAll('.anav-link').forEach(n=>n.classList.remove('active'));const nl=document.getElementById('nl-'+page);if(nl)nl.classList.add('active');}
   window.scrollTo(0,0);
+  if(page==='mobile-block')return; // no further init needed
   if(page==='sounds')renderSounds('all');
   if(page==='maps'){initMap();_mapsExploreLoaded=false;}
   if(page==='compendium')initCompendium();
@@ -4593,6 +4620,13 @@ window.addEventListener('popstate',e=>{
     else if(s.charId)requestAnimationFrame(()=>loadChar(s.charId,true));
   }else{goTo(s.page,true);}
 });
+
+// On mobile, redirect home to grimorio immediately
+if(_isMobile()){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-compendium')?.classList.add('active');
+  setTimeout(()=>initCompendium(),0);
+}
 
 // Initial URL routing on page load
 // Deferred via setTimeout so all let declarations are initialized first
