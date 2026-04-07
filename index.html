@@ -1921,7 +1921,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.4.5</span>
+    <span class="ver-badge">v2.4.6</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">07 Apr 2026</span>
   </div>
@@ -2439,7 +2439,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.4.5</span>
+          <span class="ver-badge">v2.4.6</span>
           <span>·</span>
           <span class="ver-date">07 Apr 2026</span>
         </div>
@@ -4296,7 +4296,7 @@ function renderMonsterDetail(d){
     ${d.actions?.length?`<div class="cp-divider"></div><div class="cp-section-title">${L('Acciones','Actions')}</div>${d.actions.map(a=>`<div class="cp-action"><div class="cp-action-name">${a.name}</div><div class="cp-action-desc">${aDesc(a)}</div></div>`).join('')}`:''}
     ${d.legendary_actions?.length?`<div class="cp-divider"></div><div class="cp-section-title">${L('Acciones legendarias','Legendary Actions')}</div>${d.legendary_actions.map(a=>`<div class="cp-action"><div class="cp-action-name">${a.name}</div><div class="cp-action-desc">${aDesc(a)}</div></div>`).join('')}`:''}
     <div class="cp-divider"></div>
-    <button onclick="combatAddFromBestiary('${d.name.replace(/'/g,"\\'")}',${d.hit_points||10},${ac||10})" style="width:100%;padding:9px;border-radius:8px;border:1px solid rgba(248,113,113,.4);background:rgba(248,113,113,.12);color:#f87171;font-size:13px;font-weight:600;cursor:pointer;margin-top:4px;" onmouseover="this.style.background='rgba(248,113,113,.25)'" onmouseout="this.style.background='rgba(248,113,113,.12)'"">⚔️ ${L('Añadir al Combate','Add to Combat')}</button>`;
+    <button onclick="combatAddFromBestiary('${_esc(d.name)}',${d.hit_points||10},${ac||10})" style="width:100%;padding:9px;border-radius:8px;border:1px solid rgba(248,113,113,.4);background:rgba(248,113,113,.12);color:#f87171;font-size:13px;font-weight:600;cursor:pointer;margin-top:4px;" onmouseover="this.style.background='rgba(248,113,113,.25)'" onmouseout="this.style.background='rgba(248,113,113,.12)'"">⚔️ ${L('Añadir al Combate','Add to Combat')}</button>`;
 }
 
 function combatAddFromBestiary(name,hp,ac){
@@ -4717,6 +4717,8 @@ function buildSheet(){
   _activeConditions=new Set();
   _renderConditions();
 }
+/* ══ XSS HELPER ══ */
+function _esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 /* ══ LOCAL STORAGE CHARACTERS ══ */
 const CHARS_LS_KEY='masterdnd_chars';
 function _loadSavedChars(){try{return JSON.parse(localStorage.getItem(CHARS_LS_KEY))||[];}catch(e){return[];}}
@@ -4814,8 +4816,8 @@ function renderSavedChars(){
       <div class="saved-char-main">
         <div class="saved-char-top">
           <div class="saved-char-info">
-            <div class="saved-char-name">${c.name}</div>
-            <div class="saved-char-sub">${rn} · ${cn} · Nv.${c.level||1} · CA ${c.ca}</div>
+            <div class="saved-char-name">${_esc(c.name)}</div>
+            <div class="saved-char-sub">${_esc(rn)} · ${_esc(cn)} · Nv.${c.level||1} · CA ${c.ca}</div>
           </div>
           <div class="saved-char-actions">
             <button class="btn-load-char" onclick="loadChar('${c.id}')">${currentLang==='es'?'Cargar':'Load'}</button>
@@ -5435,7 +5437,7 @@ function _renderInventory(){
   list.innerHTML=_charInventory.map(item=>`
     <div class="inv-item${item.equipped?' equipped':''}">
       <span class="inv-item-icon">${INV_ICONS[item.type]||'🎒'}</span>
-      <span class="inv-item-name" title="${item.name}">${item.name}</span>
+      <span class="inv-item-name" title="${_esc(item.name)}">${_esc(item.name)}</span>
       <span class="inv-item-meta">×${item.qty}${item.weight>0?' · '+item.weight+'lb':''}</span>
       <div class="inv-item-equip${item.equipped?' equipped':''}" onclick="toggleInvEquip('${item.id}')" title="${item.equipped?'Equipado':'Sin equipar'}">✓</div>
       <span class="inv-item-del" onclick="removeInvItem('${item.id}')">✕</span>
@@ -6526,8 +6528,8 @@ function _showCharPicker(){
     return `<div class="char-picker-card" onclick="pickChar('${c.id}')">
       <div class="char-picker-portrait" style="${raceBg(c.race)};background-repeat:no-repeat;background-size:300% 400%;"></div>
       <div class="char-picker-info">
-        <div class="char-picker-name">${c.name}</div>
-        <div class="char-picker-meta">${rn} · ${cn}</div>
+        <div class="char-picker-name">${_esc(c.name)}</div>
+        <div class="char-picker-meta">${_esc(rn)} · ${_esc(cn)}</div>
         <div class="char-picker-hp">HP: <span class="${low?'hp-low':''}">${cur}</span> / ${c.hp}</div>
       </div>
     </div>`;
@@ -6575,8 +6577,8 @@ function renderNotesList(){
     return;
   }
   list.innerHTML=notes.map(n=>`
-    <div class="note-item${n.id===_activeNoteId?' active':''}" onclick="openNote('${n.id}')">
-      <div class="note-item-title">${n.title||'Sin título'}</div>
+    <div class="note-item${n.id===_activeNoteId?' active':''}" onclick="openNote('${_esc(n.id)}')">
+      <div class="note-item-title">${_esc(n.title)||'Sin título'}</div>
       <div class="note-item-date">${_fmtNoteDate(n.updatedAt)}</div>
     </div>`).join('');
 }
@@ -7054,7 +7056,7 @@ function renderCombat(){
   const chips=document.getElementById('combatCharChips');
   if(chips){
     const chars=_loadSavedChars();
-    chips.innerHTML=chars.length?chars.map(c=>`<span class="combat-char-chip" onclick="combatAddFromChar('${c.id}')" title="Añadir ${c.name} al combate">+${c.name}</span>`).join(''):'';
+    chips.innerHTML=chars.length?chars.map(c=>`<span class="combat-char-chip" onclick="combatAddFromChar('${_esc(c.id)}')" title="Añadir ${_esc(c.name)} al combate">+${_esc(c.name)}</span>`).join(''):'';
   }
   // guide / active panel visibility
   const guide=document.getElementById('combatGuide');
@@ -7196,7 +7198,7 @@ function _renderCampaignList(campaigns){
   }
   grid.innerHTML=campaigns.map(c=>`
     <div class="camp-card" onclick="openCampaignDetail('${c.id}')">
-      <div class="camp-card-name">${c.name}</div>
+      <div class="camp-card-name">${_esc(c.name)}</div>
       <span class="camp-card-role ${c.myRole}">${c.myRole==='dm'?'🎲 Dungeon Master':'⚔️ Jugador'}</span>
       <div class="camp-card-members">${c.memberCount} miembro${c.memberCount!==1?'s':''}</div>
       <div class="camp-card-meta" style="margin-top:6px;">${c.session_count||0} sesión${c.session_count!==1?'es':''} jugada${c.session_count!==1?'s':''}</div>
