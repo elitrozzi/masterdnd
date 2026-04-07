@@ -1,7 +1,12 @@
 {
-  "version": "2.4.4",
+  "version": "2.4.5",
   "date": "2026-04-07",
   "history": [
+    {
+      "version": "2.4.5",
+      "date": "2026-04-07",
+      "note": "Fix portrait bug: siempre preserva foto local al sincronizar desde nube"
+    },
     {
       "version": "2.4.4",
       "date": "2026-04-07",
