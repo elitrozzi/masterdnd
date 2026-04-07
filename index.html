@@ -1921,7 +1921,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.4.7</span>
+    <span class="ver-badge">v2.4.8</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">07 Apr 2026</span>
   </div>
@@ -2439,7 +2439,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.4.7</span>
+          <span class="ver-badge">v2.4.8</span>
           <span>·</span>
           <span class="ver-date">07 Apr 2026</span>
         </div>
@@ -5911,18 +5911,37 @@ const AC_CAT_MAP={
   'adventuring-gear':'misc',tools:'misc','mounts-and-vehicles':'misc',
   'wondrous-items':'misc',rings:'misc',rods:'misc',staves:'misc',wands:'misc'
 };
+const AC_MAGIC_CAT_MAP={
+  'wondrous-items':'misc','weapon':'weapon','armor':'armor',
+  'ring':'misc','rod':'misc','staff':'misc','wand':'misc',
+  'scroll':'consumable','potion':'consumable'
+};
 
 async function _loadInvAcData(){
   if(_acInvCache)return _acInvCache;
   _acInvCache=[];
   try{
-    const r=await fetch(`${DND_API}/equipment?limit=500`);
-    const j=await r.json();
-    _acInvCache=(j.results||[]).map(i=>({
+    const [rEq,rMg]=await Promise.all([
+      fetch(`${DND_API}/equipment?limit=500`),
+      fetch(`${DND_API}/magic-items?limit=500`)
+    ]);
+    const [jEq,jMg]=await Promise.all([rEq.json(),rMg.json()]);
+    const mundane=(jEq.results||[]).map(i=>({
       name:i.name,
       type:AC_CAT_MAP[i.equipment_category?.index]||'misc',
-      weight:i.weight||0
+      weight:i.weight||0,
+      magic:false
     }));
+    const magic=(jMg.results||[]).map(i=>({
+      name:i.name,
+      type:AC_MAGIC_CAT_MAP[i.equipment_category?.index]||'misc',
+      weight:0,
+      magic:true
+    }));
+    // Merge: mundane first, then magic; deduplicate by name
+    const seen=new Set(mundane.map(i=>i.name.toLowerCase()));
+    const uniqueMagic=magic.filter(i=>!seen.has(i.name.toLowerCase()));
+    _acInvCache=[...mundane,...uniqueMagic].sort((a,b)=>a.name.localeCompare(b.name));
   }catch(e){}
   return _acInvCache;
 }
@@ -5967,10 +5986,13 @@ function _showAc(inputEl,items,query,onSelect){
   dd.innerHTML=matches.map((item,idx)=>{
     const meta=item.level!=null
       ?`<span class="ac-item-meta">${item.level===0?'Truco':'Niv. '+item.level}</span>`
+      :item.magic?`<span class="ac-item-meta" style="color:rgba(192,132,224,.85);">Mágico</span>`
       :item.weight>0?`<span class="ac-item-meta">${item.weight} lb</span>`:'';
     const icon=item.level!=null
       ?`<span style="font-size:14px;flex-shrink:0;">✨</span>`
-      :`<span style="font-size:14px;flex-shrink:0;">${INV_ICONS[item.type]||'🎒'}</span>`;
+      :item.magic
+        ?`<span style="font-size:14px;flex-shrink:0;">🔮</span>`
+        :`<span style="font-size:14px;flex-shrink:0;">${INV_ICONS[item.type]||'🎒'}</span>`;
     return`<div class="ac-item" data-idx="${idx}">${icon}<span class="ac-item-name">${item.name}</span>${meta}</div>`;
   }).join('');
   document.body.appendChild(dd);
