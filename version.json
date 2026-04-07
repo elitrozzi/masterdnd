@@ -1,7 +1,12 @@
 {
-  "version": "2.5.1",
+  "version": "2.5.2",
   "date": "2026-04-07",
   "history": [
+    {
+      "version": "2.5.2",
+      "date": "2026-04-07",
+      "note": "Fix CSP: agrega dnd5eapi.co a connect-src (Grimorio) y media-src incompetech.com (música real en lugar de síntesis Web Audio)"
+    },
     {
       "version": "2.5.1",
       "date": "2026-04-07",
