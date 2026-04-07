@@ -1,7 +1,12 @@
 {
-  "version": "2.4.2",
+  "version": "2.4.3",
   "date": "2026-04-07",
   "history": [
+    {
+      "version": "2.4.3",
+      "date": "2026-04-07",
+      "note": "Widget de feedback flotante en todo el sitio: rating emoji + texto libre, guarda en Supabase"
+    },
     {
       "version": "2.4.2",
       "date": "2026-04-07",

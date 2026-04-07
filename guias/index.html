@@ -185,5 +185,83 @@
   </div>
 </footer>
 
+
+<!-- ── FEEDBACK WIDGET ── -->
+<style>
+.fb-btn{position:fixed;bottom:24px;right:24px;z-index:2500;background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;border:none;border-radius:50px;padding:9px 16px 9px 13px;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 4px 20px rgba(124,58,237,.45);transition:.2s;display:flex;align-items:center;gap:6px;font-family:'Roboto',sans-serif;letter-spacing:.3px;}
+.fb-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(124,58,237,.6);}
+.fb-panel{position:fixed;bottom:70px;right:24px;z-index:2500;width:296px;background:#0e0c1e;border:1px solid rgba(124,58,237,.4);border-radius:14px;padding:18px 20px 16px;box-shadow:0 16px 48px rgba(0,0,0,.7);display:none;flex-direction:column;gap:13px;font-family:'Roboto',sans-serif;animation:fbSlideUp .18s ease;}
+.fb-panel.open{display:flex;}
+@keyframes fbSlideUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.fb-header{display:flex;justify-content:space-between;align-items:center;}
+.fb-title{font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:#fff;}
+.fb-x{background:none;border:none;color:rgba(180,160,220,.45);font-size:20px;cursor:pointer;padding:0;line-height:1;transition:.15s;}
+.fb-x:hover{color:#fff;}
+.fb-ratings{display:flex;gap:8px;}
+.fb-r{flex:1;background:rgba(124,58,237,.07);border:1px solid rgba(124,58,237,.18);border-radius:8px;padding:7px 4px;font-size:22px;cursor:pointer;transition:.15s;text-align:center;}
+.fb-r:hover,.fb-r.sel{background:rgba(124,58,237,.22);border-color:rgba(124,58,237,.55);}
+.fb-ta{background:rgba(255,255,255,.05);border:1px solid rgba(124,58,237,.22);border-radius:8px;color:#ddd8f0;font-size:13px;font-family:'Roboto',sans-serif;padding:9px 11px;resize:none;width:100%;box-sizing:border-box;outline:none;line-height:1.5;}
+.fb-ta:focus{border-color:rgba(124,58,237,.5);}
+.fb-send{background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;border:none;border-radius:8px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Roboto',sans-serif;transition:.15s;width:100%;}
+.fb-send:hover{filter:brightness(1.15);}
+.fb-send:disabled{opacity:.45;cursor:not-allowed;}
+.fb-ok{text-align:center;padding:8px 0;font-size:14px;color:#f8c662;}
+</style>
+<button class="fb-btn" onclick="fbOpen()">💬 Feedback</button>
+<div class="fb-panel" id="fbPanel">
+  <div class="fb-header">
+    <div class="fb-title">¿Cómo podemos mejorar?</div>
+    <button class="fb-x" onclick="fbClose()">×</button>
+  </div>
+  <div id="fbForm" style="display:flex;flex-direction:column;gap:11px;">
+    <div class="fb-ratings">
+      <button class="fb-r" onclick="fbRate('love',this)" title="¡Me encanta!">😍</button>
+      <button class="fb-r" onclick="fbRate('ok',this)" title="Está bien">😐</button>
+      <button class="fb-r" onclick="fbRate('bad',this)" title="Necesita mejoras">😕</button>
+    </div>
+    <textarea class="fb-ta" id="fbTa" rows="3" placeholder="Contanos tu experiencia..."></textarea>
+    <button class="fb-send" id="fbSend" onclick="fbSubmit()">Enviar feedback</button>
+  </div>
+  <div id="fbOk" style="display:none;" class="fb-ok">¡Gracias por tu feedback! 🙌</div>
+</div>
+<script>
+(function(){
+  const SB_URL= + SB_URL + ;
+  const SB_KEY= + SB_KEY + ;
+  let _fbRating=null;
+  window.fbOpen=function(){document.getElementById('fbPanel').classList.add('open');};
+  window.fbClose=function(){
+    document.getElementById('fbPanel').classList.remove('open');
+    _fbRating=null;
+    document.querySelectorAll('.fb-r').forEach(b=>b.classList.remove('sel'));
+    document.getElementById('fbTa').value='';
+    document.getElementById('fbOk').style.display='none';
+    document.getElementById('fbForm').style.display='flex';
+    const s=document.getElementById('fbSend');s.disabled=false;s.textContent='Enviar feedback';
+  };
+  window.fbRate=function(r,el){
+    _fbRating=r;
+    document.querySelectorAll('.fb-r').forEach(b=>b.classList.remove('sel'));
+    el.classList.add('sel');
+  };
+  window.fbSubmit=async function(){
+    const msg=document.getElementById('fbTa').value.trim();
+    if(!msg&&!_fbRating)return;
+    const btn=document.getElementById('fbSend');
+    btn.disabled=true;btn.textContent='Enviando...';
+    try{
+      await fetch(SB_URL+'/rest/v1/feedback',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Prefer':'return=minimal'},
+        body:JSON.stringify({message:msg||null,rating:_fbRating,page_url:window.location.href,user_id:null})
+      });
+    }catch(e){}
+    document.getElementById('fbForm').style.display='none';
+    document.getElementById('fbOk').style.display='block';
+    setTimeout(()=>fbClose(),2200);
+  };
+})();
+</script>
+
 </body>
 </html>
