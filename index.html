@@ -1921,7 +1921,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.4.3</span>
+    <span class="ver-badge">v2.4.4</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">06 Apr 2026</span>
   </div>
@@ -2439,7 +2439,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.4.3</span>
+          <span class="ver-badge">v2.4.4</span>
           <span>·</span>
           <span class="ver-date">06 Apr 2026</span>
         </div>
@@ -8647,6 +8647,11 @@ function _drFaceTex(value,diceType){
     // Match exactly the UV mapping: A=(0.5,1)→top-center, B=(0,0)→bottom-left, C=(1,0)→bottom-right
     const pad=18;
     ctx.moveTo(S/2,pad);ctx.lineTo(pad,S-pad);ctx.lineTo(S-pad,S-pad);ctx.closePath();
+  } else if(diceType==='d12'){
+    // Pentagon border matching UV layout (pointing up)
+    const Rp=S*0.41,cx=S/2,cy=S/2;
+    for(let k=0;k<5;k++){const a=(90+k*72)*Math.PI/180;const px=cx+Rp*Math.cos(a),py=cy-Rp*Math.sin(a);k===0?ctx.moveTo(px,py):ctx.lineTo(px,py);}
+    ctx.closePath();
   } else {
     if(ctx.roundRect){ctx.roundRect(22,22,S-44,S-44,38);}
     else{const r=38,x=22,y=22,w=S-44,h=S-44;ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.arcTo(x+w,y,x+w,y+r,r);ctx.lineTo(x+w,y+h-r);ctx.arcTo(x+w,y+h,x+w-r,y+h,r);ctx.lineTo(x+r,y+h);ctx.arcTo(x,y+h,x,y+h-r,r);ctx.lineTo(x,y+r);ctx.arcTo(x,y,x+r,y,r);ctx.closePath();}
@@ -8692,6 +8697,15 @@ function _drBuildMesh(diceType,targetValue){
       const c=new THREE.Vector3().fromBufferAttribute(pos,base+2);
       faceNormals.push(new THREE.Vector3().crossVectors(new THREE.Vector3().subVectors(b,a),new THREE.Vector3().subVectors(c,a)).normalize());
     }
+    // Fix UVs: DodecahedronGeometry uses spherical projection — replace with pentagon UV layout
+    // Pentagon vertices (pointing up, fan from v0): angles 90,162,234,306,18 deg
+    const R_UV=0.44;
+    const pentUV=Array.from({length:5},(_,k)=>{const a=(90+k*72)*Math.PI/180;return[0.5+R_UV*Math.cos(a),0.5-R_UV*Math.sin(a)];});
+    // THREE.js fans pentagons as (v0,v1,v2),(v0,v2,v3),(v0,v3,v4)
+    const fanUV=[pentUV[0],pentUV[1],pentUV[2],pentUV[0],pentUV[2],pentUV[3],pentUV[0],pentUV[3],pentUV[4]];
+    const uvArr=[];
+    for(let f=0;f<12;f++)fanUV.forEach(([u,v])=>uvArr.push(u,v));
+    geo.setAttribute('uv',new THREE.Float32BufferAttribute(uvArr,2));
   } else {
     const def=_DR_DEFS[diceType];if(!def)return null;
     faceCount=def.f.length;

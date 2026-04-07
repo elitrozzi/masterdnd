@@ -1,7 +1,12 @@
 {
-  "version": "2.4.3",
+  "version": "2.4.4",
   "date": "2026-04-07",
   "history": [
+    {
+      "version": "2.4.4",
+      "date": "2026-04-07",
+      "note": "Fix d12: UVs de pentágono correcto + borde pentagonal en textura — número visible en la cara"
+    },
     {
       "version": "2.4.3",
       "date": "2026-04-07",
