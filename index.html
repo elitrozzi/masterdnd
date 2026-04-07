@@ -1438,7 +1438,122 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   .ver-footer{padding:8px 12px;}
 }
 
-/* ── Dice Roller 3D ── */
+/* ══════════════════════════════════ MOBILE EXTENDED FIXES */
+@media (max-width:700px){
+
+  /* ── iOS safe area ── */
+  .page{padding-bottom:env(safe-area-inset-bottom,0px);}
+
+  /* ── Character sheet: fix stacked columns overflow ── */
+  .cs-dbd-col-saves,.cs-dbd-col-skills,.cs-dbd-col-main{
+    flex:none;width:100%;min-width:0;overflow-y:visible;
+  }
+  .cs-dbd-content{overflow-y:auto;}
+
+  /* ── Character sheet: tabs scrollable ── */
+  .cs-tabs{overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  .cs-tabs::-webkit-scrollbar{display:none;}
+  .cs-tab{flex-shrink:0;font-size:12px;padding:7px 10px;}
+
+  /* ── Inventory add form: stack inputs ── */
+  .inv-add-form .inv-form-row{flex-wrap:wrap;}
+  .inv-add-form .inv-form-row .inv-input{min-width:0;}
+
+  /* ── Spell add row: stack on mobile ── */
+  .cs-spell-add-row{flex-wrap:wrap;}
+  .cs-spell-add-row select{width:100%;flex:none;}
+  .cs-spell-add-row button{width:100%;padding:10px;}
+
+  /* ── Compendium tabs: scrollable ── */
+  .comp-tabs{overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:4px;}
+  .comp-tabs::-webkit-scrollbar{display:none;}
+  .comp-tab{flex-shrink:0;padding:7px 14px;font-size:12px;}
+
+  /* ── Compendium pills: scrollable ── */
+  #compPills{overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  #compPills::-webkit-scrollbar{display:none;}
+  .comp-pill{flex-shrink:0;}
+
+  /* ── Compendium type pills: scrollable ── */
+  #compTypePills{overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  #compTypePills::-webkit-scrollbar{display:none;}
+
+  /* ── Compendium toolbar gap ── */
+  .comp-toolbar{gap:8px;}
+
+  /* ── Compendium detail panel: full screen slide-up on mobile ── */
+  .comp-panel{position:fixed!important;inset:0!important;top:auto!important;height:88vh!important;border-radius:16px 16px 0 0!important;transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1)!important;overflow-y:auto!important;}
+  .comp-panel.open{transform:translateY(0)!important;}
+  #compPanelContent{padding-bottom:env(safe-area-inset-bottom,24px);}
+
+  /* ── Autocomplete dropdown: prevent overflow ── */
+  .ac-dropdown{max-width:calc(100vw - 24px)!important;left:12px!important;right:12px!important;width:auto!important;}
+
+  /* ── Level-up modal: full padding ── */
+  .lu-box{padding:20px 16px;width:calc(100vw - 24px);box-sizing:border-box;}
+
+  /* ── Level-up modal: asi choice grid ── */
+  .lu-asi-grid{grid-template-columns:1fr 1fr!important;}
+
+  /* ── Combat: touch-friendlier buttons ── */
+  .cmb-hp-btn{padding:5px 10px;font-size:13px;}
+  .combat-active-btn{padding:10px 16px;}
+  .cmb-dice-btn{padding:8px 12px;}
+
+  /* ── Saved chars: full width ── */
+  .saved-char-card{max-width:100%;flex:1 1 100%;}
+
+  /* ── HP tracker card buttons ── */
+  .btn-dmg,.btn-heal{padding:7px 10px;font-size:12px;}
+
+  /* ── Dados page ── */
+  #page-dados.active{padding:0;}
+  #page-dados .inner-page{padding:80px 16px 40px;}
+
+  /* ── Sound grid: 2 cols ── */
+  .sounds-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));}
+
+  /* ── Map canvas ── */
+  .map-canvas-wrap{height:55vw;min-height:200px;}
+
+  /* ── Campaign layout ── */
+  .camp-layout,.camp-tabs-section{padding:0!important;}
+  .camp-tab-content{padding:12px;}
+
+  /* ── Feedback widget: smaller on mobile ── */
+  .fb-btn{bottom:16px;right:16px;width:44px;height:44px;font-size:20px;}
+  .fb-panel{bottom:72px;right:12px;left:12px;width:auto!important;max-width:none!important;}
+
+  /* ── General: bigger touch targets for inline buttons ── */
+  .inv-item-equip,.inv-item-del{width:30px;height:30px;display:flex;align-items:center;justify-content:center;}
+
+  /* ── Char creator: step navigation ── */
+  .char-creator-actions{padding:12px 14px;}
+
+  /* ── Campaign tabs: scrollable (7 tabs overflow on mobile) ── */
+  .camp-tabs{overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:2px;}
+  .camp-tabs::-webkit-scrollbar{display:none;}
+  .camp-tab{flex-shrink:0;white-space:nowrap;padding:10px 14px;}
+
+  /* ── Campaign inv header: stack on mobile ── */
+  .camp-inv-header{flex-wrap:wrap;}
+  .camp-inv-input{min-width:0;}
+
+  /* ── Character picker cards: responsive width ── */
+  .char-picker-grid{gap:12px;padding:0 4px;}
+  .char-picker-card{width:calc(50% - 6px);flex-shrink:0;}
+  .char-picker-portrait{height:130px;}
+
+  /* ── Char picker container ── */
+  .char-picker-box{padding:0 4px;}
+  .char-picker-header{margin-bottom:20px;}
+  .char-picker-title{font-size:22px;}
+
+  /* ── Scroll padding for fixed nav ── */
+  html{scroll-padding-top:60px;}
+}
+
+/* Dice Roller 3D ── */
 .dr-overlay{position:fixed;inset:0;z-index:3000;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(4,2,10,.95);backdrop-filter:blur(10px);}
 .dr-canvas{display:block;cursor:pointer;}
 .dr-ui{display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:10px;pointer-events:none;}
@@ -1470,7 +1585,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 /* ── Level-up modal ── */
 .lu-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9000;display:none;align-items:center;justify-content:center;}
 .lu-overlay.open{display:flex;}
-.lu-box{position:relative;background:var(--lol-panel);border:1px solid rgba(200,170,110,.4);padding:28px 32px;min-width:420px;max-width:540px;width:90vw;max-height:85vh;overflow-y:auto;box-shadow:0 0 40px rgba(200,170,110,.15);border-radius:8px;}
+.lu-box{position:relative;background:var(--lol-panel);border:1px solid rgba(200,170,110,.4);padding:28px 32px;min-width:min(420px,calc(100vw - 32px));max-width:540px;width:90vw;max-height:85vh;overflow-y:auto;box-shadow:0 0 40px rgba(200,170,110,.15);border-radius:8px;}
 .lu-corner{position:absolute;width:14px;height:14px;border-color:var(--lol-gold);border-style:solid;}
 .lu-tl{top:-1px;left:-1px;border-width:2px 0 0 2px;}
 .lu-tr{top:-1px;right:-1px;border-width:2px 2px 0 0;}
@@ -1848,6 +1963,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="mm-links">
     <div class="mm-link" id="mm-my-chars" onclick="goToMyChars();closeMobileMenu()" style="display:none;"><span class="mm-link-icon">⚔️</span><span data-es="Mis personajes" data-en="My characters">Mis personajes</span></div>
     <div class="mm-link" onclick="goToCreateChar();closeMobileMenu()"><span class="mm-link-icon">✨</span><span data-es="Crear personaje" data-en="Create character">Crear personaje</span></div>
+    <div class="mm-link" onclick="goTo('dados');closeMobileMenu()"><span class="mm-link-icon">🎲</span><span data-es="Dados" data-en="Dice">Dados</span></div>
     <div class="mm-link" onclick="goToMaps('editor');closeMobileMenu()"><span class="mm-link-icon">🗺️</span><span data-es="Crear mapa" data-en="Create map">Crear mapa</span></div>
     <div class="mm-link" onclick="goToMaps('explore');closeMobileMenu()"><span class="mm-link-icon">🔍</span><span data-es="Mapas existentes" data-en="Existing maps">Mapas existentes</span></div>
     <div class="mm-link" onclick="goTo('sounds');closeMobileMenu()"><span class="mm-link-icon">🎵</span><span data-es="Sonidos" data-en="Sounds">Sonidos</span></div>
@@ -1921,7 +2037,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.4.9</span>
+    <span class="ver-badge">v2.5.0</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">07 Apr 2026</span>
   </div>
@@ -2439,7 +2555,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.4.9</span>
+          <span class="ver-badge">v2.5.0</span>
           <span>·</span>
           <span class="ver-date">07 Apr 2026</span>
         </div>

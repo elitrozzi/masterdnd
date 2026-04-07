@@ -1,7 +1,12 @@
 {
-  "version": "2.4.9",
+  "version": "2.5.0",
   "date": "2026-04-07",
   "history": [
+    {
+      "version": "2.5.0",
+      "date": "2026-04-07",
+      "note": "Mejora mobile completa: menú hamburguesa con Dados, tabs de campaña scrollables, cards de personaje responsivas, form de inventario corregido, padding dados y compendium panel como bottom sheet"
+    },
     {
       "version": "2.4.9",
       "date": "2026-04-07",
