@@ -1,7 +1,12 @@
 {
-  "version": "2.4.1",
-  "date": "2026-04-06",
+  "version": "2.4.2",
+  "date": "2026-04-07",
   "history": [
+    {
+      "version": "2.4.2",
+      "date": "2026-04-07",
+      "note": "Nav: 3 secciones (Personaje / Mesa / Recursos) en todos los headers; footer con amor; versión oculta"
+    },
     {
       "version": "2.4.1",
       "date": "2026-04-06",

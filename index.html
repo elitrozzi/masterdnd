@@ -1852,7 +1852,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   </div>
   <div class="anav-links">
     <div class="nav-dropdown" id="navdd-characters">
-      <a class="anav-link nav-dd-trigger" id="nl-characters" onclick="toggleNavDropdown('navdd-characters',event)" data-es="Personajes" data-en="Characters">Personajes<span class="nav-chevron">▾</span></a>
+      <a class="anav-link nav-dd-trigger" id="nl-characters" onclick="toggleNavDropdown('navdd-characters',event)" data-es="Personaje" data-en="Character">Personaje<span class="nav-chevron">▾</span></a>
       <div class="nav-dropdown-menu">
         <div class="nav-dd-item" id="dd-my-chars" onclick="event.stopPropagation();closeNavDropdowns();goToMyChars()" style="display:none;">
           <span class="nav-dd-icon">⚔️</span>
@@ -1864,29 +1864,45 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         </div>
       </div>
     </div>
-    <div class="nav-dropdown" id="navdd-maps">
-      <a class="anav-link nav-dd-trigger" id="nl-maps" onclick="toggleNavDropdown('navdd-maps',event)" data-es="Mapas" data-en="Maps">Mapas<span class="nav-chevron">▾</span></a>
+    <div class="nav-dropdown" id="navdd-mesa">
+      <a class="anav-link nav-dd-trigger" onclick="toggleNavDropdown('navdd-mesa',event)" data-es="Mesa" data-en="Table">Mesa<span class="nav-chevron">▾</span></a>
       <div class="nav-dropdown-menu">
-        <div class="nav-dd-item" onclick="event.stopPropagation();closeNavDropdowns();goToMaps('editor')">
-          <span class="nav-dd-icon">🗺️</span>
-          <div class="nav-dd-label"><span data-es="Crear mapa" data-en="Create map">Crear mapa</span><span class="nav-dd-sub">Editor de terreno</span></div>
+        <div class="nav-dd-item" id="nl-dados" onclick="event.stopPropagation();closeNavDropdowns();goTo('dados')">
+          <span class="nav-dd-icon">🎲</span>
+          <div class="nav-dd-label"><span data-es="Dados" data-en="Dice">Dados</span><span class="nav-dd-sub">Lanzador 3D</span></div>
         </div>
-        <div class="nav-dd-item" onclick="event.stopPropagation();closeNavDropdowns();goToMaps('explore')">
-          <span class="nav-dd-icon">🔍</span>
-          <div class="nav-dd-label"><span data-es="Mapas existentes" data-en="Existing maps">Mapas existentes</span><span class="nav-dd-sub">Explorar la comunidad</span></div>
+        <div class="nav-dd-item" id="nl-sounds" onclick="event.stopPropagation();closeNavDropdowns();goTo('sounds')">
+          <span class="nav-dd-icon">🎵</span>
+          <div class="nav-dd-label"><span data-es="Sonidos" data-en="Sounds">Sonidos</span><span class="nav-dd-sub">Ambiente para tu partida</span></div>
+        </div>
+        <div class="nav-dd-item" id="nl-maps" onclick="event.stopPropagation();closeNavDropdowns();goToMaps('editor')">
+          <span class="nav-dd-icon">🗺️</span>
+          <div class="nav-dd-label"><span data-es="Mapas" data-en="Maps">Mapas</span><span class="nav-dd-sub">Editor y comunidad</span></div>
+        </div>
+        <div class="nav-dd-item" id="nl-campaign" onclick="event.stopPropagation();closeNavDropdowns();goToCampaign()" style="display:none;">
+          <span class="nav-dd-icon">⚔️</span>
+          <div class="nav-dd-label"><span data-es="Campaña" data-en="Campaign">Campaña</span><span class="nav-dd-sub">Modo multijugador</span></div>
         </div>
       </div>
     </div>
-    <a class="anav-link" id="nl-sounds" onclick="goTo('sounds')" data-es="Sonidos" data-en="Sounds">Sonidos</a>
-    <a class="anav-link" id="nl-compendium" onclick="goTo('compendium')" data-es="Grimorio" data-en="Grimoire">Grimorio</a>
-    <a class="anav-link" id="nl-dados" onclick="goTo('dados')" data-es="Dados" data-en="Dice">Dados</a>
-    <a class="anav-link" href="/guias/" data-es="Guías" data-en="Guides">Guías</a>
-    <a class="anav-link" id="nl-campaign" onclick="goToCampaign()" data-es="Campaña" data-en="Campaign" style="display:none;">Campaña</a>
+    <div class="nav-dropdown" id="navdd-recursos">
+      <a class="anav-link nav-dd-trigger" onclick="toggleNavDropdown('navdd-recursos',event)" data-es="Recursos" data-en="Resources">Recursos<span class="nav-chevron">▾</span></a>
+      <div class="nav-dropdown-menu">
+        <div class="nav-dd-item" id="nl-compendium" onclick="event.stopPropagation();closeNavDropdowns();goTo('compendium')">
+          <span class="nav-dd-icon">📖</span>
+          <div class="nav-dd-label"><span data-es="Grimorio" data-en="Grimoire">Grimorio</span><span class="nav-dd-sub">Hechizos y bestiario</span></div>
+        </div>
+        <a class="nav-dd-item" href="/guias/" onclick="event.stopPropagation();">
+          <span class="nav-dd-icon">📚</span>
+          <div class="nav-dd-label"><span data-es="Guías" data-en="Guides">Guías</span><span class="nav-dd-sub">D&amp;D 5e en español</span></div>
+        </a>
+      </div>
+    </div>
   </div>
   <div class="anav-spacer"></div>
-  <div class="ver-footer" style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
+  <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.4.1</span>
+    <span class="ver-badge">v2.4.2</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">06 Apr 2026</span>
   </div>
@@ -2137,7 +2153,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
       </div>
       <div class="land-nav-links">
         <div class="nav-dropdown" id="lndd-chars">
-          <a class="land-nav-link nav-dd-trigger" onclick="toggleNavDropdown('lndd-chars',event)" data-es="Personajes" data-en="Characters">Personajes<span class="nav-chevron">▾</span></a>
+          <a class="land-nav-link nav-dd-trigger" onclick="toggleNavDropdown('lndd-chars',event)" data-es="Personaje" data-en="Character">Personaje<span class="nav-chevron">▾</span></a>
           <div class="nav-dropdown-menu">
             <div class="nav-dd-item" id="lndd-my-chars" onclick="event.stopPropagation();closeNavDropdowns();goToMyChars()" style="display:none;">
               <span class="nav-dd-icon">⚔️</span>
@@ -2149,23 +2165,40 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
             </div>
           </div>
         </div>
-        <div class="nav-dropdown" id="lndd-maps">
-          <a class="land-nav-link nav-dd-trigger" onclick="toggleNavDropdown('lndd-maps',event)" data-es="Mapas" data-en="Maps">Mapas<span class="nav-chevron">▾</span></a>
+        <div class="nav-dropdown" id="lndd-mesa">
+          <a class="land-nav-link nav-dd-trigger" onclick="toggleNavDropdown('lndd-mesa',event)" data-es="Mesa" data-en="Table">Mesa<span class="nav-chevron">▾</span></a>
           <div class="nav-dropdown-menu">
+            <div class="nav-dd-item" onclick="event.stopPropagation();closeNavDropdowns();goTo('dados')">
+              <span class="nav-dd-icon">🎲</span>
+              <div class="nav-dd-label"><span data-es="Dados" data-en="Dice">Dados</span><span class="nav-dd-sub">Lanzador 3D</span></div>
+            </div>
+            <div class="nav-dd-item" onclick="event.stopPropagation();closeNavDropdowns();goTo('sounds')">
+              <span class="nav-dd-icon">🎵</span>
+              <div class="nav-dd-label"><span data-es="Sonidos" data-en="Sounds">Sonidos</span><span class="nav-dd-sub">Ambiente para tu partida</span></div>
+            </div>
             <div class="nav-dd-item" onclick="event.stopPropagation();closeNavDropdowns();goToMaps('editor')">
               <span class="nav-dd-icon">🗺️</span>
-              <div class="nav-dd-label"><span data-es="Crear mapa" data-en="Create map">Crear mapa</span><span class="nav-dd-sub">Editor de terreno</span></div>
+              <div class="nav-dd-label"><span data-es="Mapas" data-en="Maps">Mapas</span><span class="nav-dd-sub">Editor y comunidad</span></div>
             </div>
-            <div class="nav-dd-item" onclick="event.stopPropagation();closeNavDropdowns();goToMaps('explore')">
-              <span class="nav-dd-icon">🔍</span>
-              <div class="nav-dd-label"><span data-es="Mapas existentes" data-en="Existing maps">Mapas existentes</span><span class="nav-dd-sub">Explorar la comunidad</span></div>
+            <div class="nav-dd-item" id="lndd-campaign" onclick="event.stopPropagation();closeNavDropdowns();goToCampaign()" style="display:none;">
+              <span class="nav-dd-icon">⚔️</span>
+              <div class="nav-dd-label"><span data-es="Campaña" data-en="Campaign">Campaña</span><span class="nav-dd-sub">Modo multijugador</span></div>
             </div>
           </div>
         </div>
-        <a class="land-nav-link" onclick="goTo('sounds')" data-es="Sonidos" data-en="Sounds">Sonidos</a>
-        <a class="land-nav-link" onclick="goTo('compendium')" data-es="Grimorio" data-en="Grimoire">Grimorio</a>
-        <a class="land-nav-link" href="/guias/" data-es="Guías" data-en="Guides">Guías</a>
-        <a class="land-nav-link" id="lndd-campaign" onclick="closeNavDropdowns();goToCampaign()" style="display:none;" data-es="Campaña" data-en="Campaign">Campaña</a>
+        <div class="nav-dropdown" id="lndd-recursos">
+          <a class="land-nav-link nav-dd-trigger" onclick="toggleNavDropdown('lndd-recursos',event)" data-es="Recursos" data-en="Resources">Recursos<span class="nav-chevron">▾</span></a>
+          <div class="nav-dropdown-menu">
+            <div class="nav-dd-item" onclick="event.stopPropagation();closeNavDropdowns();goTo('compendium')">
+              <span class="nav-dd-icon">📖</span>
+              <div class="nav-dd-label"><span data-es="Grimorio" data-en="Grimoire">Grimorio</span><span class="nav-dd-sub">Hechizos y bestiario</span></div>
+            </div>
+            <a class="nav-dd-item" href="/guias/" onclick="event.stopPropagation();">
+              <span class="nav-dd-icon">📚</span>
+              <div class="nav-dd-label"><span data-es="Guías" data-en="Guides">Guías</span><span class="nav-dd-sub">D&amp;D 5e en español</span></div>
+            </a>
+          </div>
+        </div>
       </div>
       <div class="land-nav-spacer"></div>
       <div class="land-nav-right">
@@ -2385,9 +2418,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <div class="ls-cta-title fiu">¿Listo para<br><span class="ls-cta-em">tu próxima aventura?</span></div>
         <p class="ls-cta-sub fiu fiu-d1">Crea tu personaje, unite a una campaña o explorá el grimorio. Todo en un solo lugar.</p>
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
-        <div style="margin-top:48px;display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
+        <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.4.1</span>
+          <span class="ver-badge">v2.4.2</span>
           <span>·</span>
           <span class="ver-date">06 Apr 2026</span>
         </div>
@@ -2478,6 +2511,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
       </div>
     </div>
   </section>
+  <footer style="text-align:center;padding:32px 24px;border-top:1px solid rgba(124,58,237,.15);font-family:'Roboto',sans-serif;font-size:13px;color:rgba(180,160,220,.55);">
+    Creado con amor ♥ MasterDnD 2026
+  </footer>
 </div>
 
 <!-- ══════════════════════════ PAGE: CHARACTERS -->
