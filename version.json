@@ -1,7 +1,12 @@
 {
-  "version": "2.5.0",
+  "version": "2.5.1",
   "date": "2026-04-07",
   "history": [
+    {
+      "version": "2.5.1",
+      "date": "2026-04-07",
+      "note": "Fix d12 UVs invertidos (v-axis flip para CanvasTexture); fix Grimorio API migrada a /api/2014/"
+    },
     {
       "version": "2.5.0",
       "date": "2026-04-07",

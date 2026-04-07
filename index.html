@@ -2037,7 +2037,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.5.0</span>
+    <span class="ver-badge">v2.5.1</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">07 Apr 2026</span>
   </div>
@@ -2555,7 +2555,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.5.0</span>
+          <span class="ver-badge">v2.5.1</span>
           <span>·</span>
           <span class="ver-date">07 Apr 2026</span>
         </div>
@@ -3947,7 +3947,7 @@ function setLang(l){
 }
 
 /* ══ COMPENDIUM ══ */
-const DND_API='https://www.dnd5eapi.co/api';
+const DND_API='https://www.dnd5eapi.co/api/2014';
 
 const SPELL_SCHOOLS={
   abjuration:{es:'Abjuración',en:'Abjuration',badge:'cb-green'},
@@ -8920,7 +8920,7 @@ function _drBuildMesh(diceType,targetValue){
     // Fix UVs: DodecahedronGeometry uses spherical projection — replace with pentagon UV layout
     // Pentagon vertices (pointing up, fan from v0): angles 90,162,234,306,18 deg
     const R_UV=0.44;
-    const pentUV=Array.from({length:5},(_,k)=>{const a=(90+k*72)*Math.PI/180;return[0.5+R_UV*Math.cos(a),0.5-R_UV*Math.sin(a)];});
+    const pentUV=Array.from({length:5},(_,k)=>{const a=(90+k*72)*Math.PI/180;return[0.5+R_UV*Math.cos(a),0.5+R_UV*Math.sin(a)];});
     // THREE.js fans pentagons as (v0,v1,v2),(v0,v2,v3),(v0,v3,v4)
     const fanUV=[pentUV[0],pentUV[1],pentUV[2],pentUV[0],pentUV[2],pentUV[3],pentUV[0],pentUV[3],pentUV[4]];
     const uvArr=[];
