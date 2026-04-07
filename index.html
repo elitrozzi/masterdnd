@@ -607,10 +607,10 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .inv-add-btn:hover{background:rgba(200,170,100,.22);}
 .inv-add-form{background:rgba(0,0,0,.25);border:1px solid rgba(120,90,40,.3);padding:8px;margin-bottom:8px;display:flex;flex-direction:column;gap:5px;flex-shrink:0;}
 .inv-form-row{display:flex;gap:5px;}
-.inv-input{background:rgba(255,255,255,.05);border:1px solid rgba(120,90,40,.35);color:var(--lol-gray);padding:6px 8px;font-size:16px;width:100%;outline:none;}
-.inv-input:focus{border-color:rgba(200,170,100,.5);}
+.inv-input{background:rgba(255,255,255,.05);border:1px solid rgba(120,90,40,.35);color:var(--lol-gray);padding:10px 12px;font-size:15px;width:100%;outline:none;border-radius:8px;transition:.15s;}
+.inv-input:focus{border-color:rgba(200,170,100,.55);background:rgba(255,255,255,.07);}
 .inv-input-sm{flex:1;min-width:0;}
-.inv-input::placeholder{color:rgba(150,130,100,.45);}
+.inv-input::placeholder{color:rgba(150,130,100,.5);}
 .inv-form-actions{display:flex;gap:5px;}
 .inv-btn-confirm{flex:1;padding:6px;background:rgba(200,170,100,.18);border:1px solid rgba(200,170,100,.4);color:var(--lol-gold);cursor:pointer;font-size:14px;font-family:'Cinzel',serif;transition:.15s;}
 .inv-btn-confirm:hover{background:rgba(200,170,100,.32);}
@@ -643,7 +643,7 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .cs-slot-pip.used{background:transparent;border-color:rgba(139,92,246,.2);}
 .cs-spells-known-section{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:3px;min-height:0;}
 .cs-spell-add-row{display:flex;gap:4px;flex-shrink:0;margin-bottom:6px;}
-.cs-spell-add-row input,.cs-spell-add-row select{background:rgba(255,255,255,.05);border:1px solid rgba(120,90,40,.35);color:var(--lol-gray);padding:6px 8px;font-size:16px;outline:none;}
+.cs-spell-add-row input,.cs-spell-add-row select{background:rgba(255,255,255,.05);border:1px solid rgba(120,90,40,.35);color:var(--lol-gray);padding:10px 12px;font-size:15px;outline:none;border-radius:8px;transition:.15s;}
 .cs-spell-add-row input{flex:1;min-width:0;}
 .cs-spell-add-row select{background:rgba(0,0,0,.5);width:60px;}
 .cs-spell-add-row button{padding:6px 12px;background:rgba(139,92,246,.18);border:1px solid rgba(139,92,246,.35);color:rgba(180,160,220,.9);cursor:pointer;font-size:16px;font-weight:700;}
@@ -659,7 +659,7 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .cs-notes-area::placeholder{color:rgba(150,130,100,.4);}
 /* ── Autocomplete dropdown ── */
 .ac-dropdown{position:fixed;background:#080d1a;border:1px solid rgba(200,170,100,.45);z-index:99999;max-height:220px;overflow-y:auto;box-shadow:0 6px 28px rgba(0,0,0,.75);}
-.ac-item{padding:7px 10px;font-size:13px;color:var(--lol-gray);cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;border-bottom:1px solid rgba(255,255,255,.04);transition:.1s;}
+.ac-item{padding:10px 14px;font-size:14px;color:var(--lol-gray);cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid rgba(255,255,255,.05);transition:.1s;min-height:44px;}
 .ac-item:last-child{border-bottom:none;}
 .ac-item:hover,.ac-item.active{background:rgba(200,170,100,.12);color:var(--lol-gold);}
 .ac-item-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
@@ -957,9 +957,9 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .comp-tab{padding:7px 18px;border-radius:20px;background:var(--surface);border:1px solid var(--border);font-size:13px;color:var(--text-m);cursor:none;transition:.15s;}
 .comp-tab:hover,.comp-tab.active{background:rgba(248,198,98,.1);border-color:var(--gold);color:var(--gold);}
 .comp-toolbar{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
-.comp-search{flex:1;min-width:180px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:9px 14px;font-size:13px;color:var(--text);font-family:'Roboto',sans-serif;outline:none;transition:.15s;}
+.comp-search{flex:1;min-width:180px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:12px 16px;font-size:14px;color:var(--text);font-family:'Roboto',sans-serif;outline:none;transition:.15s;}
 .comp-search:focus{border-color:var(--brand-500);}
-.comp-filter{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:9px 12px;font-size:12px;color:var(--text-m);font-family:'Roboto',sans-serif;outline:none;cursor:none;min-width:140px;}
+.comp-filter{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--text-m);font-family:'Roboto',sans-serif;outline:none;cursor:none;min-width:140px;}
 .comp-filter:focus{border-color:var(--brand-500);}
 .comp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:32px;}
 .comp-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;cursor:none;transition:.2s;}
@@ -1921,7 +1921,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.4.8</span>
+    <span class="ver-badge">v2.4.9</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">07 Apr 2026</span>
   </div>
@@ -2439,7 +2439,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.4.8</span>
+          <span class="ver-badge">v2.4.9</span>
           <span>·</span>
           <span class="ver-date">07 Apr 2026</span>
         </div>
@@ -2973,6 +2973,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
       <div class="comp-tabs" id="compTabs">
         <div class="comp-tab active" id="ctab-spells" onclick="compTab('spells',this)">🔮 <span data-es="Hechizos" data-en="Spells">Hechizos</span></div>
         <div class="comp-tab" id="ctab-monsters" onclick="compTab('monsters',this)">👹 <span data-es="Monstruos" data-en="Monsters">Monstruos</span></div>
+        <div class="comp-tab" id="ctab-magic-items" onclick="compTab('magic-items',this)">✨ <span data-es="Items Mágicos" data-en="Magic Items">Items Mágicos</span></div>
         <div class="comp-tab" id="ctab-classes" onclick="compTab('classes',this)">⚔️ <span data-es="Clases" data-en="Classes">Clases</span></div>
         <div class="comp-tab" id="ctab-races" onclick="compTab('races',this)">🧝 <span data-es="Razas" data-en="Races">Razas</span></div>
       </div>
@@ -3902,7 +3903,7 @@ async function translateES(text){
 
 function cT(map,val){if(!val)return val;const k=val.toLowerCase().trim();const m={SPELL_SCHOOLS,MONSTER_TYPES,SIZES,STAT_NAMES,DMG_TYPES}[map];return m&&m[k]?m[k][currentLang]||val:val;}
 
-let cCache={spells:[],monsters:[],classes:[],races:[]};
+let cCache={spells:[],monsters:[],'magic-items':[],classes:[],races:[]};
 let cDetailCache={};
 let cActiveTab='spells';
 let cSearchQ='';
@@ -3989,6 +3990,12 @@ function buildCompFilter(){
       tpills.innerHTML=typeItems.map(it=>`<div class="comp-pill${cTypeFilterQ===it.v?' active':''}" onclick="compTypeFn('${it.v}',this)">${it.l}</div>`).join('');
       tpills.style.display='flex';
     }
+  } else if(cActiveTab==='magic-items'){
+    const st4=document.getElementById('spellSlotTracker');if(st4)st4.style.display='none';
+    const rarities=['common','uncommon','rare','very rare','legendary','artifact'];
+    const rarityLabels={es:{common:'Común',uncommon:'Infrecuente',rare:'Raro','very rare':'Muy Raro',legendary:'Legendario',artifact:'Artefacto'},en:{common:'Common',uncommon:'Uncommon',rare:'Rare','very rare':'Very Rare',legendary:'Legendary',artifact:'Artifact'}};
+    items=[{v:'',l:es?'Todas':'All'},...rarities.map(r=>({v:r,l:es?rarityLabels.es[r]:rarityLabels.en[r]}))];
+    if(tpills)tpills.style.display='none';
   } else {
     const st3=document.getElementById('spellSlotTracker');if(st3)st3.style.display='none';
     items=[{v:'',l:es?'Todos':'All'}];
@@ -4069,6 +4076,9 @@ function renderCompGrid(){
   if(cTypeFilterQ&&cActiveTab==='monsters'){
     list=list.filter(i=>(i.type||'').toLowerCase()===cTypeFilterQ.toLowerCase());
   }
+  if(cFilterQ&&cActiveTab==='magic-items'){
+    list=list.filter(i=>(i.rarity?.name||i.rarity||'').toLowerCase()===cFilterQ.toLowerCase());
+  }
   if(cClassFilterQ&&cActiveTab==='spells'&&_classSpellSets[cClassFilterQ]){
     list=list.filter(i=>_classSpellSets[cClassFilterQ].has(i.index));
   }
@@ -4080,6 +4090,7 @@ function renderCompGrid(){
   document.getElementById('compGrid').innerHTML=list.slice(0,limit).map(item=>{
     if(cActiveTab==='spells')return renderSpellCard(item);
     if(cActiveTab==='monsters')return renderMonsterCard(item);
+    if(cActiveTab==='magic-items')return renderMagicItemCard(item);
     return renderSimpleCard(item);
   }).join('');
   if(list.length>limit){
@@ -4190,6 +4201,42 @@ function renderSimpleCard(item){
     <div class="cc-name">${item.name}</div>
   </div>`;
 }
+const _MI_CAT_ICON={'wondrous-items':'✨',weapon:'⚔️',armor:'🛡️',ring:'💍',rod:'🔱',staff:'🪄',wand:'🪄',scroll:'📜',potion:'🧪'};
+const _MI_RARITY_BADGE={common:'cb-gray',uncommon:'cb-green',rare:'cb-brand','very rare':'cb-purple',legendary:'cb-gold',artifact:'cb-red'};
+const _MI_RARITY_ES={common:'Común',uncommon:'Infrecuente',rare:'Raro','very rare':'Muy Raro',legendary:'Legendario',artifact:'Artefacto'};
+function renderMagicItemCard(item){
+  const icon=_MI_CAT_ICON[item.equipment_category?.index]||'✨';
+  const rarityKey=(item.rarity?.name||item.rarity||'').toLowerCase();
+  const badge=rarityKey?`<span class="cc-badge ${_MI_RARITY_BADGE[rarityKey]||'cb-gray'}" style="font-size:12px;">${currentLang==='es'?(_MI_RARITY_ES[rarityKey]||rarityKey):(item.rarity?.name||rarityKey)}</span>`:'';
+  return`<div class="comp-card monster-card" onclick="openCompDetail('magic-items','${item.index}')">
+    <div class="mc-avatar" style="background:rgba(200,160,255,.08);border:1px solid rgba(192,132,224,.25);display:flex;align-items:center;justify-content:center;font-size:22px;">${icon}</div>
+    <div class="mc-info">
+      <div class="cc-name">${_esc(item.name)}</div>
+      <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px;">${badge}</div>
+    </div>
+  </div>`;
+}
+function renderMagicItemDetail(d){
+  const rarityKey=(d.rarity?.name||d.rarity||'').toLowerCase();
+  const rarityLabel=currentLang==='es'?(_MI_RARITY_ES[rarityKey]||rarityKey):(d.rarity?.name||rarityKey);
+  const badge=rarityKey?`<span class="cc-badge ${_MI_RARITY_BADGE[rarityKey]||'cb-gray'}">${rarityLabel}</span>`:'';
+  const catKey=d.equipment_category?.index||'';
+  const icon=_MI_CAT_ICON[catKey]||'✨';
+  const catName=d.equipment_category?.name||'';
+  const desc=currentLang==='es'?(d._desc_es||(d.desc||[]).join('\n\n')):(d.desc||[]).join('\n\n');
+  document.getElementById('compPanelContent').innerHTML=`
+    <div style="display:flex;gap:14px;align-items:flex-start;padding-top:6px;margin-bottom:4px;">
+      <div style="width:72px;height:72px;flex-shrink:0;border-radius:50%;background:rgba(200,160,255,.1);border:1px solid rgba(192,132,224,.3);display:flex;align-items:center;justify-content:center;font-size:32px;">${icon}</div>
+      <div style="flex:1;min-width:0;">
+        <div class="cp-title" style="margin-top:0;">${_esc(d.name)}</div>
+        <div class="cp-sub" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">${badge}${catName?`<span class="cc-badge cb-teal" style="font-size:12px;">${_esc(catName)}</span>`:''}</div>
+      </div>
+    </div>
+    <div class="cp-divider"></div>
+    <div class="cp-section-title">${currentLang==='es'?'Descripción':'Description'}</div>
+    <div class="cp-text">${desc.replace(/\n/g,'<br>')}</div>
+    ${d.variants?.length?`<div class="cp-divider"></div><div class="cp-section-title">${currentLang==='es'?'Variantes':'Variants'}</div><div style="display:flex;flex-wrap:wrap;gap:6px;">${d.variants.map(v=>`<span class="cc-badge cb-gray">${_esc(v.name)}</span>`).join('')}</div>`:''}`;
+}
 
 async function openCompDetail(type,index){
   document.querySelectorAll('.comp-card').forEach(c=>c.classList.remove('active'));
@@ -4232,10 +4279,13 @@ async function openCompDetail(type,index){
       if(d.size_description&&!d._size_es)d._size_es=await translateES(d.size_description);
       if(d.language_desc&&!d._langd_es)d._langd_es=await translateES(d.language_desc);
       if(d.traits){const tr=d.traits.filter(t=>!t._name_es);await Promise.all(tr.map(async t=>{t._name_es=await translateES(t.name);}));}
+    } else if(type==='magic-items'){
+      if(!d._desc_es){const raw=(d.desc||[]).join('\n\n');d._desc_es=await translateES(raw);}
     }
   }
   if(type==='spells')renderSpellDetail(d);
   else if(type==='monsters')renderMonsterDetail(d);
+  else if(type==='magic-items')renderMagicItemDetail(d);
   else if(type==='classes')renderClassDetail(d);
   else if(type==='races')renderRaceDetail(d);
 }

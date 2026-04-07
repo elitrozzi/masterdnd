@@ -1,7 +1,12 @@
 {
-  "version": "2.4.8",
+  "version": "2.4.9",
   "date": "2026-04-07",
   "history": [
+    {
+      "version": "2.4.9",
+      "date": "2026-04-07",
+      "note": "Inputs más grandes (padding+font-size); pestaña Items Mágicos en Grimorio con rareza y descripción; autocomplete con ícono y tag Mágico"
+    },
     {
       "version": "2.4.8",
       "date": "2026-04-07",
