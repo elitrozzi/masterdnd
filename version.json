@@ -1,7 +1,12 @@
 {
-  "version": "2.5.6",
+  "version": "2.5.7",
   "date": "2026-04-08",
   "history": [
+    {
+      "version": "2.5.7",
+      "date": "2026-04-08",
+      "note": "Fix d12: corregir winding de caras con normal apuntando hacia adentro — número ahora visible en todas las caras"
+    },
     {
       "version": "2.5.6",
       "date": "2026-04-08",
