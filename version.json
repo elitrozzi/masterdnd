@@ -1,7 +1,12 @@
 {
-  "version": "2.5.5",
-  "date": "2026-04-07",
+  "version": "2.5.6",
+  "date": "2026-04-08",
   "history": [
+    {
+      "version": "2.5.6",
+      "date": "2026-04-08",
+      "note": "Mobile landing: CTA final apilado en columna, hide adventurers, botón full-width; más espaciado entre secciones (88px)"
+    },
     {
       "version": "2.5.5",
       "date": "2026-04-07",
