@@ -1,7 +1,12 @@
 {
-  "version": "2.5.7",
-  "date": "2026-04-08",
+  "version": "2.5.8",
+  "date": "2026-04-09",
   "history": [
+    {
+      "version": "2.5.8",
+      "date": "2026-04-09",
+      "note": "Feature: DM entrega items a jugadores — buscador de objetos DnD, selector de destinatarios, modal mágico con animación en la pantalla del jugador, guardar en inventario o equipar"
+    },
     {
       "version": "2.5.7",
       "date": "2026-04-08",

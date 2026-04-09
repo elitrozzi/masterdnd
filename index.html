@@ -1817,6 +1817,60 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 .camp-copy-btn{font-size:13px;padding:3px 8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--text-d);cursor:pointer;}
 .camp-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:800;display:flex;align-items:center;justify-content:center;padding:20px;}
 .camp-modal{background:var(--lol-panel);border:1px solid rgba(212,175,55,.25);padding:32px;max-width:480px;width:100%;position:relative;max-height:90vh;overflow-y:auto;border-radius:8px;}
+/* ── Item Gift ──────────────────────────── */
+.item-gift-overlay{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;background:rgba(5,5,15,.88);backdrop-filter:blur(8px);opacity:0;transition:opacity .4s;}
+.item-gift-overlay.open{opacity:1;}
+.item-gift-modal{position:relative;background:linear-gradient(160deg,#0d1117 0%,#1a0f2e 100%);border:1px solid rgba(212,175,55,.35);border-radius:16px;padding:40px 36px 32px;max-width:440px;width:90%;text-align:center;box-shadow:0 0 60px rgba(147,100,255,.25),0 0 0 1px rgba(212,175,55,.1);transform:scale(.85);transition:transform .45s cubic-bezier(.34,1.56,.64,1);}
+.item-gift-overlay.open .item-gift-modal{transform:scale(1);}
+.item-gift-glow-ring{position:absolute;inset:-2px;border-radius:18px;background:conic-gradient(from 0deg,transparent 0%,rgba(212,175,55,.5) 25%,transparent 50%,rgba(147,100,255,.5) 75%,transparent 100%);animation:giftRingSpin 3s linear infinite;opacity:0;transition:opacity .5s;pointer-events:none;}
+.item-gift-overlay.open .item-gift-glow-ring{opacity:1;}
+.item-gift-glow-ring::after{content:'';position:absolute;inset:2px;border-radius:16px;background:linear-gradient(160deg,#0d1117 0%,#1a0f2e 100%);}
+@keyframes giftRingSpin{to{transform:rotate(360deg);}}
+.item-gift-from{font-size:12px;text-transform:uppercase;letter-spacing:.18em;color:rgba(212,175,55,.6);margin-bottom:16px;position:relative;}
+.item-gift-icon-wrap{width:100px;height:100px;margin:0 auto 20px;position:relative;}
+.item-gift-icon-bg{position:absolute;inset:0;border-radius:50%;animation:giftPulse 2s ease-in-out infinite;}
+.item-gift-icon-bg.magic{background:radial-gradient(circle,rgba(147,100,255,.45) 0%,transparent 70%);}
+.item-gift-icon-bg.normal{background:radial-gradient(circle,rgba(212,175,55,.35) 0%,transparent 70%);}
+.item-gift-icon-emoji{position:relative;font-size:52px;line-height:100px;}
+@keyframes giftPulse{0%,100%{transform:scale(1);opacity:.8;}50%{transform:scale(1.15);opacity:1;}}
+.item-gift-name{font:700 22px/1.1 'Cinzel',serif;color:var(--lol-gold);margin-bottom:8px;position:relative;}
+.item-gift-rarity{display:inline-block;font-size:11px;text-transform:uppercase;letter-spacing:.14em;padding:2px 10px;border-radius:6px;margin-bottom:14px;position:relative;}
+.item-gift-rarity.magic{background:rgba(147,100,255,.2);color:#c4b5fd;border:1px solid rgba(147,100,255,.4);}
+.item-gift-rarity.normal{display:none;}
+.item-gift-desc{font-size:13px;color:var(--text-m);line-height:1.6;max-height:110px;overflow-y:auto;text-align:left;margin-bottom:24px;padding:10px 12px;background:rgba(0,0,0,.25);border-radius:8px;border:1px solid rgba(255,255,255,.06);position:relative;}
+.item-gift-btns{display:flex;gap:8px;flex-direction:column;position:relative;}
+.item-gift-btn{font:700 13px/1 'Cinzel',serif;padding:12px 20px;border-radius:8px;cursor:pointer;letter-spacing:.06em;transition:all .15s;border:1px solid;width:100%;}
+.item-gift-btn-save{background:rgba(212,175,55,.12);border-color:rgba(212,175,55,.5);color:var(--lol-gold);}
+.item-gift-btn-save:hover{background:rgba(212,175,55,.22);}
+.item-gift-btn-equip{background:rgba(147,197,253,.1);border-color:rgba(147,197,253,.35);color:#93c5fd;}
+.item-gift-btn-equip:hover{background:rgba(147,197,253,.2);}
+.item-gift-btn-dismiss{background:transparent;border-color:rgba(255,255,255,.1);color:var(--text-d);font-size:12px;}
+.item-gift-btn-dismiss:hover{border-color:rgba(255,255,255,.2);color:var(--text-m);}
+.item-gift-particles{position:absolute;inset:0;pointer-events:none;overflow:hidden;border-radius:16px;}
+.item-gift-particle{position:absolute;width:4px;height:4px;border-radius:50%;animation:particleFly 2.5s ease-out infinite;}
+.item-gift-particle:nth-child(1){background:#d4af37;left:15%;animation-delay:0s;animation-duration:2.2s;}
+.item-gift-particle:nth-child(2){background:#9364ff;left:30%;animation-delay:.4s;animation-duration:2.8s;}
+.item-gift-particle:nth-child(3){background:#d4af37;left:60%;animation-delay:.8s;animation-duration:2.5s;}
+.item-gift-particle:nth-child(4){background:#93c5fd;left:80%;animation-delay:1.2s;animation-duration:3s;}
+.item-gift-particle:nth-child(5){background:#9364ff;left:45%;animation-delay:1.6s;animation-duration:2.3s;}
+@keyframes particleFly{0%{transform:translateY(100px) scale(0);opacity:0;}30%{opacity:1;}100%{transform:translateY(-20px) scale(1.5);opacity:0;}}
+/* DM gift sender */
+.gift-sender-modal{padding:4px 0 0;}
+.gift-sender-title{font:700 18px/1 'Cinzel',serif;color:var(--lol-gold);margin-bottom:20px;}
+.gift-sender-label{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--text-d);margin-bottom:6px;}
+.gift-sender-input{width:100%;padding:10px 14px;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:var(--text);font-size:14px;box-sizing:border-box;margin-bottom:14px;}
+.gift-sender-input:focus{outline:none;border-color:rgba(212,175,55,.4);}
+.gift-sender-preview{background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:12px;margin-bottom:16px;display:none;}
+.gift-sender-preview.visible{display:block;}
+.gift-sender-preview-name{font:600 14px/1 'Cinzel',serif;color:var(--lol-gold);margin-bottom:6px;}
+.gift-sender-preview-desc{font-size:12px;color:var(--text-m);max-height:60px;overflow-y:auto;line-height:1.5;}
+.gift-recipient-label{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--text-d);margin-bottom:8px;}
+.gift-recipient-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;}
+.gift-chip{font-size:12px;padding:5px 12px;border-radius:20px;cursor:pointer;border:1px solid rgba(255,255,255,.12);color:var(--text-m);background:rgba(255,255,255,.05);transition:all .15s;user-select:none;}
+.gift-chip.selected{border-color:rgba(212,175,55,.6);color:var(--lol-gold);background:rgba(212,175,55,.12);}
+.gift-send-btn{width:100%;padding:12px;font:700 13px/1 'Cinzel',serif;border-radius:8px;cursor:pointer;border:1px solid rgba(212,175,55,.5);background:rgba(212,175,55,.12);color:var(--lol-gold);letter-spacing:.08em;transition:all .15s;}
+.gift-send-btn:hover:not(:disabled){background:rgba(212,175,55,.22);}
+.gift-send-btn:disabled{opacity:.4;cursor:not-allowed;}
 .camp-modal-close{position:absolute;top:14px;right:16px;background:none;border:none;color:var(--text-d);font-size:18px;cursor:pointer;}
 .camp-modal-title{font:700 20px/1 'Cinzel',serif;color:var(--lol-gold);margin-bottom:20px;}
 .camp-modal-label{font-size:12px;color:var(--text-d);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;display:block;}
@@ -2053,9 +2107,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.5.7</span>
+    <span class="ver-badge">v2.5.8</span>
     <span class="ver-sep">·</span>
-    <span class="ver-date">08 Apr 2026</span>
+    <span class="ver-date">09 Apr 2026</span>
   </div>
   <div class="lang-toggle">
     <button class="lang-btn active" onclick="setLang('es')">ES</button>
@@ -2571,9 +2625,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.5.7</span>
+          <span class="ver-badge">v2.5.8</span>
           <span>·</span>
-          <span class="ver-date">08 Apr 2026</span>
+          <span class="ver-date">09 Apr 2026</span>
         </div>
       </div>
       <!-- RIGHT: scene -->
@@ -3234,6 +3288,32 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     <div class="camp-modal">
       <button class="camp-modal-close" onclick="closeCampaignModal()">✕</button>
       <div id="campModalContent"></div>
+    </div>
+  </div>
+</div>
+<!-- Item Gift Received Modal (global, shown on any page) -->
+<div id="itemGiftOverlay" class="item-gift-overlay">
+  <div class="item-gift-modal">
+    <div class="item-gift-glow-ring"></div>
+    <div class="item-gift-particles">
+      <div class="item-gift-particle"></div>
+      <div class="item-gift-particle"></div>
+      <div class="item-gift-particle"></div>
+      <div class="item-gift-particle"></div>
+      <div class="item-gift-particle"></div>
+    </div>
+    <div class="item-gift-from" id="itemGiftFrom"></div>
+    <div class="item-gift-icon-wrap">
+      <div class="item-gift-icon-bg normal" id="itemGiftIconBg"></div>
+      <div class="item-gift-icon-emoji" id="itemGiftIconEmoji">🎒</div>
+    </div>
+    <div class="item-gift-name" id="itemGiftName"></div>
+    <div class="item-gift-rarity normal" id="itemGiftRarity"></div>
+    <div class="item-gift-desc" id="itemGiftDesc"></div>
+    <div class="item-gift-btns">
+      <button class="item-gift-btn item-gift-btn-save" onclick="saveGiftedItem(false)">🎒 Guardar en inventario</button>
+      <button class="item-gift-btn item-gift-btn-equip" id="itemGiftEquipBtn" onclick="saveGiftedItem(true)" style="display:none">⚔️ Equipar</button>
+      <button class="item-gift-btn item-gift-btn-dismiss" onclick="closeItemGiftModal()">Cerrar</button>
     </div>
   </div>
 </div>
@@ -6130,13 +6210,13 @@ async function _loadInvAcData(){
     ]);
     const [jEq,jMg]=await Promise.all([rEq.json(),rMg.json()]);
     const mundane=(jEq.results||[]).map(i=>({
-      name:i.name,
+      name:i.name,index:i.index,
       type:AC_CAT_MAP[i.equipment_category?.index]||'misc',
       weight:i.weight||0,
       magic:false
     }));
     const magic=(jMg.results||[]).map(i=>({
-      name:i.name,
+      name:i.name,index:i.index,
       type:AC_MAGIC_CAT_MAP[i.equipment_category?.index]||'misc',
       weight:0,
       magic:true
@@ -7398,6 +7478,10 @@ function renderCombat(){
 let _currentCampaign=null;
 let _currentCampaignMembers=[];
 let _currentCampaignInventory=[];
+let _campGiftChannel=null;
+let _pendingGiftItem=null;
+let _giftSelectedItem=null;
+let _giftRecipients=new Set(['all']);
 let _campCreateRole='dm';
 
 function goToCampaign(){
@@ -7479,6 +7563,7 @@ async function openCampaignDetail(campaignId){
   document.getElementById('campSessionBtn').style.display=myRole==='dm'?'block':'none';
   // Load chars for members and sessions
   await Promise.all([_enrichMembersWithChars(), loadCampaignSessions(camp.id)]);
+  _joinCampGiftChannel(camp.id);
   switchCampTab('party');
 }
 
@@ -7492,7 +7577,158 @@ async function _enrichMembersWithChars(){
 
 function showCampaignList(){
   _currentCampaign=null;
+  _leaveCampGiftChannel();
   loadMyCampaigns();
+}
+
+/* ── Item Gift Channel ────────────────────────── */
+function _joinCampGiftChannel(campId){
+  if(_campGiftChannel){try{_campGiftChannel.unsubscribe();}catch(e){}_campGiftChannel=null;}
+  const ch=_SB.channel('mdn-gift-'+campId,{config:{broadcast:{self:false}}});
+  ch.on('broadcast',{event:'item_gift'},({payload})=>{
+    if(!_currentUser)return;
+    const mine=payload.recipients==='all'||payload.recipients.includes(_currentUser.id);
+    if(mine)showItemGiftModal(payload.item,payload.fromName);
+  });
+  ch.subscribe();
+  _campGiftChannel=ch;
+}
+function _leaveCampGiftChannel(){
+  if(_campGiftChannel){try{_campGiftChannel.unsubscribe();}catch(e){}_campGiftChannel=null;}
+}
+
+/* ── DM: Open item gift sender modal ─────────── */
+async function openItemGiftModal(){
+  const players=_currentCampaignMembers.filter(m=>m.role!=='dm');
+  const playerChips=players.map(m=>{
+    const name=m.display_name||m.charData?.name||'Jugador';
+    return`<span class="gift-chip" data-uid="${m.user_id}" onclick="toggleGiftChip(this,'${m.user_id}')">${name}</span>`;
+  }).join('');
+  document.getElementById('campModalContent').innerHTML=`
+    <div class="gift-sender-modal">
+      <div class="gift-sender-title">🎁 Entregar Item</div>
+      <div class="gift-sender-label">Buscar objeto</div>
+      <input class="gift-sender-input" id="giftSearchInput" placeholder="Ej: Longsword, Bag of Holding…" autocomplete="off" oninput="onGiftSearch(this)" onblur="_acBlur()">
+      <div class="gift-sender-preview" id="giftPreview">
+        <div class="gift-sender-preview-name" id="giftPreviewName"></div>
+        <div class="gift-sender-preview-desc" id="giftPreviewDesc">Cargando descripción…</div>
+      </div>
+      <div class="gift-recipient-label">Destinatario</div>
+      <div class="gift-recipient-chips">
+        <span class="gift-chip selected" data-uid="all" onclick="toggleGiftChip(this,'all')">🎭 Toda la party</span>
+        ${playerChips}
+      </div>
+      <button class="gift-send-btn" id="giftSendBtn" onclick="sendItemGift()" disabled>Enviar →</button>
+    </div>`;
+  _giftSelectedItem=null;
+  _giftRecipients=new Set(['all']);
+  document.getElementById('campModal').style.display='flex';
+  _loadInvAcData(); // pre-warm cache
+}
+
+function toggleGiftChip(el,uid){
+  if(uid==='all'){
+    _giftRecipients=new Set(['all']);
+    document.querySelectorAll('.gift-chip').forEach(c=>c.classList.remove('selected'));
+    el.classList.add('selected');
+  } else {
+    _giftRecipients.delete('all');
+    document.querySelector('.gift-chip[data-uid="all"]')?.classList.remove('selected');
+    if(el.classList.contains('selected')){
+      el.classList.remove('selected');
+      _giftRecipients.delete(uid);
+    } else {
+      el.classList.add('selected');
+      _giftRecipients.add(uid);
+    }
+    if(_giftRecipients.size===0){
+      _giftRecipients.add('all');
+      document.querySelector('.gift-chip[data-uid="all"]')?.classList.add('selected');
+    }
+  }
+}
+
+async function onGiftSearch(inputEl){
+  const items=await _loadInvAcData();
+  _showAc(inputEl,items,inputEl.value,async(item)=>{
+    _giftSelectedItem={...item};
+    document.getElementById('giftSendBtn').disabled=false;
+    const preview=document.getElementById('giftPreview');
+    const nameEl=document.getElementById('giftPreviewName');
+    const descEl=document.getElementById('giftPreviewDesc');
+    if(preview){preview.classList.add('visible');nameEl.textContent=item.name;descEl.textContent='Cargando…';}
+    // Fetch full detail for description & rarity
+    try{
+      const ep=item.magic?'magic-items':'equipment';
+      const r=await fetch(`${DND_API}/${ep}/${item.index}`);
+      const j=await r.json();
+      const desc=(Array.isArray(j.desc)?j.desc.join(' '):'')||(j.equipment_category?.name?'Categoría: '+j.equipment_category.name:'');
+      _giftSelectedItem.desc=desc||'Sin descripción disponible.';
+      _giftSelectedItem.rarity=j.rarity?.name||null;
+      if(descEl)descEl.textContent=_giftSelectedItem.desc;
+    }catch(e){if(descEl)descEl.textContent='Sin descripción disponible.';}
+  });
+}
+
+async function sendItemGift(){
+  if(!_giftSelectedItem||!_campGiftChannel)return;
+  const btn=document.getElementById('giftSendBtn');
+  if(btn){btn.disabled=true;btn.textContent='Enviando…';}
+  const myName=_currentUser?.user_metadata?.username||_currentUser?.email?.split('@')[0]||'Dungeon Master';
+  const recipients=_giftRecipients.has('all')?'all':[..._giftRecipients];
+  const payload={
+    item:{id:Date.now().toString(),name:_giftSelectedItem.name,index:_giftSelectedItem.index||'',
+      type:_giftSelectedItem.type,weight:_giftSelectedItem.weight||0,magic:!!_giftSelectedItem.magic,
+      rarity:_giftSelectedItem.rarity||null,desc:_giftSelectedItem.desc||'',qty:1,equipped:false},
+    recipients,fromName:myName
+  };
+  await _campGiftChannel.send({type:'broadcast',event:'item_gift',payload});
+  closeCampaignModal();
+}
+
+/* ── Player: Item received modal ─────────────── */
+function showItemGiftModal(item,fromName){
+  _pendingGiftItem=item;
+  const isMagic=!!item.magic;
+  document.getElementById('itemGiftFrom').textContent=(fromName||'El Dungeon Master')+' te entrega';
+  document.getElementById('itemGiftIconEmoji').textContent=INV_ICONS[item.type]||'🎒';
+  document.getElementById('itemGiftIconBg').className='item-gift-icon-bg '+(isMagic?'magic':'normal');
+  document.getElementById('itemGiftName').textContent=item.name;
+  const rarityEl=document.getElementById('itemGiftRarity');
+  rarityEl.textContent=item.rarity||'';
+  rarityEl.className='item-gift-rarity '+(isMagic&&item.rarity?'magic':'normal');
+  document.getElementById('itemGiftDesc').textContent=item.desc||'Sin descripción disponible.';
+  const canEquip=item.type==='weapon'||item.type==='armor';
+  document.getElementById('itemGiftEquipBtn').style.display=canEquip?'block':'none';
+  const overlay=document.getElementById('itemGiftOverlay');
+  overlay.style.display='flex';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>overlay.classList.add('open')));
+}
+
+function saveGiftedItem(equip){
+  if(!_pendingGiftItem)return;
+  const item={..._pendingGiftItem,equipped:!!equip};
+  if(_loadedCharId){
+    // Character is currently open in the sheet — add directly
+    _charInventory.push(item);
+    _saveInventory();
+    _renderInvList();
+  } else {
+    // Try via campaign member's linked char in Supabase
+    const me=_currentCampaignMembers.find(m=>m.user_id===_currentUser?.id);
+    if(me?.char_id&&me.charData){
+      const updInv=[...(me.charData.inventory||[]),item];
+      _SB.from('characters').update({char_data:{...me.charData,inventory:updInv}}).eq('id',me.char_id);
+    }
+  }
+  closeItemGiftModal();
+}
+
+function closeItemGiftModal(){
+  const overlay=document.getElementById('itemGiftOverlay');
+  overlay.classList.remove('open');
+  setTimeout(()=>{overlay.style.display='none';},420);
+  _pendingGiftItem=null;
 }
 
 function switchCampTab(tab){
@@ -7538,7 +7774,8 @@ function _buildPartyTab(){
   // Link char button for self if no char linked
   const me=_currentCampaignMembers.find(m=>m.user_id===_currentUser.id);
   const linkBtn=!me?.char_id?`<button class="camp-action-btn camp-create-btn" style="margin-top:16px;" onclick="openLinkCharModal()">🔗 Vincular mi personaje</button>`:'';
-  return`<div class="camp-party-grid">${cards}</div>${linkBtn}${codesHtml}`;
+  const giftBtn=myRole==='dm'?`<button class="camp-action-btn camp-create-btn" style="margin-top:16px;" onclick="openItemGiftModal()">🎁 Entregar item</button>`:'';
+  return`<div class="camp-party-grid">${cards}</div>${giftBtn}${linkBtn}${codesHtml}`;
 }
 
 function _buildDmTab(){
