@@ -1,7 +1,12 @@
 {
-  "version": "2.5.9",
+  "version": "2.6.0",
   "date": "2026-04-13",
   "history": [
+    {
+      "version": "2.6.0",
+      "date": "2026-04-13",
+      "note": "Polish Emil Kowalski: transition:.15s → propiedades específicas en ~50 elementos, comp-panel mobile con ease-drawer, asimetría enter/exit dropdowns (0.2s abrir / 0.11s cerrar)"
+    },
     {
       "version": "2.5.9",
       "date": "2026-04-13",
