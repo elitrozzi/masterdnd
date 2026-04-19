@@ -1,7 +1,12 @@
 {
-  "version": "2.6.0",
-  "date": "2026-04-13",
+  "version": "2.6.1",
+  "date": "2026-04-19",
   "history": [
+    {
+      "version": "2.6.1",
+      "date": "2026-04-19",
+      "note": "Fix Explorar mapas: reemplaza API de Reddit (bloqueada) con 24 mapas estáticos de 2minutetabletop.com"
+    },
     {
       "version": "2.6.0",
       "date": "2026-04-13",

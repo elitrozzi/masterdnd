@@ -2117,9 +2117,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.6.0</span>
+    <span class="ver-badge">v2.6.1</span>
     <span class="ver-sep">·</span>
-    <span class="ver-date">13 Apr 2026</span>
+    <span class="ver-date">19 Apr 2026</span>
   </div>
   <div class="lang-toggle">
     <button class="lang-btn active" onclick="setLang('es')">ES</button>
@@ -2635,9 +2635,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.6.0</span>
+          <span class="ver-badge">v2.6.1</span>
           <span>·</span>
-          <span class="ver-date">13 Apr 2026</span>
+          <span class="ver-date">19 Apr 2026</span>
         </div>
       </div>
       <!-- RIGHT: scene -->
@@ -8645,31 +8645,38 @@ function mapTab(tab,el){
   if(tab==='explore')initMapsExplore();
 }
 let _mapsExploreLoaded=false;
-async function initMapsExplore(){
+const STATIC_MAPS=[
+  {img:'https://i0.wp.com/2minutetabletop.com/wp-content/uploads/2026/04/Dwarven-Tavern-Everyday-Light-16x22-1.jpg?resize=500%2C350&ssl=1',title:'Taberna Enana',link:'https://2minutetabletop.com/product/dwarven-tavern/',meta:'Taberna · 16×22'},
+  {img:'https://i0.wp.com/2minutetabletop.com/wp-content/uploads/2026/04/Crochet-Castle-battle-map-Patreon-Thumbnail.jpg?resize=500%2C350&ssl=1',title:'Castillo de Croché',link:'https://2minutetabletop.com/product/crochet-castle/',meta:'Castillo · Exterior'},
+  {img:'https://i0.wp.com/2minutetabletop.com/wp-content/uploads/2026/03/Owls-Library-Pristine-Light-22x32-Cropped-Preview.jpg?resize=500%2C350&ssl=1',title:'Biblioteca del Búho',link:'https://2minutetabletop.com/product/owls-library/',meta:'Interior · 22×32'},
+  {img:'https://i0.wp.com/2minutetabletop.com/wp-content/uploads/2026/03/Island-Prison-Operational-Day-44x32-Preview.jpg?resize=500%2C350&ssl=1',title:'Prisión en la Isla',link:'https://2minutetabletop.com/product/island-prison/',meta:'Exterior · 44×32'},
+  {img:'https://i0.wp.com/2minutetabletop.com/wp-content/uploads/2026/03/Starlight-Nexus-Cosmos-Day-33x24-Cropped-Preview.jpg?resize=500%2C350&ssl=1',title:'Nexo Estelar',link:'https://2minutetabletop.com/product/starlight-nexus/',meta:'Especial · 33×24'},
+  {img:'https://i0.wp.com/2minutetabletop.com/wp-content/uploads/2026/01/Witchs-Herbgarden-Forest-Day-32x22-Preview.jpg?resize=500%2C350&ssl=1',title:'Jardín de la Bruja',link:'https://2minutetabletop.com/product/witchs-herbgarden/',meta:'Bosque · 32×22'},
+  {img:'https://i0.wp.com/2minutetabletop.com/wp-content/uploads/2026/01/Egyptian-Entryway-Pristine-Day-16x22-72-DPI-Preview-1.jpg?resize=500%2C350&ssl=1',title:'Entrada Egipcia',link:'https://2minutetabletop.com/product/egyptian-entryway/',meta:'Dungeon · 16×22'},
+  {img:'https://i0.wp.com/2minutetabletop.com/wp-content/uploads/2025/12/Frozen-Lake-Festive-Day-16x22-1.jpg?resize=500%2C350&ssl=1',title:'Lago Helado',link:'https://2minutetabletop.com/product/frozen-lake/',meta:'Exterior · 16×22'},
+  {img:'https://i0.wp.com/2minutetabletop.com/wp-content/uploads/2025/12/Magic-Toy-Store-battle-map-Store-Cover-2.jpg?resize=500%2C350&ssl=1',title:'Tienda de Magia',link:'https://2minutetabletop.com/product/magic-toy-store/',meta:'Interior · Tienda'},
+  {img:'https://i0.wp.com/2minutetabletop.com/wp-content/uploads/2025/11/Speakeasy-battle-map-Base-Map-Preview.jpg?resize=500%2C350&ssl=1',title:'El Speakeasy',link:'https://2minutetabletop.com/product/speakeasy/',meta:'Interior · Taberna'},
+  {img:'https://i0.wp.com/2minutetabletop.com/wp-content/uploads/2025/11/Greenhouse-battle-map-Preview.jpg?resize=500%2C350&ssl=1',title:'Invernadero',link:'https://2minutetabletop.com/product/greenhouse/',meta:'Interior · Exterior'},
+  {img:'https://i0.wp.com/2minutetabletop.com/wp-content/uploads/2025/10/Church-of-Bones-Dark-Day-Crop-1.jpg?resize=500%2C350&ssl=1',title:'Iglesia de los Huesos',link:'https://2minutetabletop.com/product/church-of-bones/',meta:'Interior · Templo'},
+  {img:'https://i0.wp.com/2minutetabletop.com/wp-content/uploads/2025/09/Royal-Bathhouse-Luxury-Day-22x16-1.jpg?resize=500%2C350&ssl=1',title:'Baños Reales',link:'https://2minutetabletop.com/product/royal-bathhouse/',meta:'Interior · 22×16'},
+  {img:'https://i0.wp.com/2minutetabletop.com/wp-content/uploads/2025/09/Dragonskull-Cave-Flooded-Light-Cropped.jpg?resize=500%2C350&ssl=1',title:'Cueva del Cráneo de Dragón',link:'https://2minutetabletop.com/product/dragonskull-cave/',meta:'Cueva · Exterior'},
+  {img:'https://i0.wp.com/2minutetabletop.com/wp-content/uploads/2025/08/Wizarding-School-Library-battle-map-Cover-6.webp?resize=500%2C350&ssl=1',title:'Biblioteca Arcana',link:'https://2minutetabletop.com/product/wizarding-school-library/',meta:'Interior · Escuela'},
+  {img:'https://i0.wp.com/2minutetabletop.com/wp-content/uploads/2025/08/Tournament-Ring-battle-map-Cover.webp?resize=500%2C350&ssl=1',title:'Arena del Torneo',link:'https://2minutetabletop.com/product/tournament-ring/',meta:'Exterior · Arena'},
+  {img:'https://i0.wp.com/2minutetabletop.com/wp-content/uploads/2025/07/Choked-Courtyard-battle-map-Cover.webp?resize=500%2C350&ssl=1',title:'Patio Asediado',link:'https://2minutetabletop.com/product/choked-courtyard/',meta:'Exterior · Ciudad'},
+  {img:'https://i0.wp.com/2minutetabletop.com/wp-content/uploads/2026/02/Prehistoric-Creek-Natural-Day-44x32-Preview.jpg?resize=500%2C350&ssl=1',title:'Arroyo Prehistórico',link:'https://2minutetabletop.com/product/prehistoric-creek/',meta:'Exterior · 44×32'},
+  {img:'https://i0.wp.com/2minutetabletop.com/wp-content/uploads/2025/10/Desert-Racetrack-Badlands-Day-44x32-1.jpg?resize=500%2C350&ssl=1',title:'Circuito del Desierto',link:'https://2minutetabletop.com/product/desert-racetrack/',meta:'Exterior · 44×32'},
+  {img:'https://i0.wp.com/2minutetabletop.com/wp-content/uploads/2025/11/Mecha-Ruins-Forest-Day-16x22-1.jpg?resize=500%2C350&ssl=1',title:'Ruinas Mecánicas',link:'https://2minutetabletop.com/product/mecha-ruins/',meta:'Exterior · 16×22'},
+  {img:'https://i0.wp.com/2minutetabletop.com/wp-content/uploads/2026/04/Modern-Theater-battle-map-Patreon-Thumbnail.jpg?resize=500%2C350&ssl=1',title:'Teatro Moderno',link:'https://2minutetabletop.com/product/modern-theater/',meta:'Interior · Teatro'},
+  {img:'https://i0.wp.com/2minutetabletop.com/wp-content/uploads/2026/02/Cosmic-Lab-Operational-Light-22x16-Preview.jpg?resize=500%2C350&ssl=1',title:'Laboratorio Cósmico',link:'https://2minutetabletop.com/product/cosmic-lab/',meta:'Especial · 22×16'},
+  {img:'https://i0.wp.com/2minutetabletop.com/wp-content/uploads/2025/10/Bombed-Metro-Apocalypse-Light-Crop-1.jpg?resize=500%2C350&ssl=1',title:'Metro en Ruinas',link:'https://2minutetabletop.com/product/bombed-metro/',meta:'Urbano · Exterior'},
+  {img:'https://i0.wp.com/2minutetabletop.com/wp-content/uploads/2026/02/Giant-Garden-Assets-battle-map-Patreon-Thumbnail.jpg?resize=500%2C350&ssl=1',title:'Jardín Gigante',link:'https://2minutetabletop.com/product/giant-garden-assets/',meta:'Exterior · Naturaleza'},
+];
+const _mapsFallback="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='350'%3E%3Crect width='500' height='350' fill='%231a1a2e'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23d4af37' font-size='56'%3E%F0%9F%97%BA%3C/text%3E%3C/svg%3E";
+function initMapsExplore(){
   if(_mapsExploreLoaded)return;
   _mapsExploreLoaded=true;
   const grid=document.getElementById('commMapsGrid');
-  try{
-    const r=await fetch('https://www.reddit.com/r/battlemaps/hot.json?limit=24&raw_json=1',{credentials:'omit',cache:'no-store'});
-    if(!r.ok)throw new Error('status '+r.status);
-    const j=await r.json();
-    const posts=j.data.children.filter(p=>p.data.post_hint==='image'||p.data.url?.match(/\.(jpg|jpeg|png|webp)/i));
-    if(!posts.length)throw new Error('empty');
-    grid.innerHTML=posts.slice(0,24).map(p=>{
-      const d=p.data;
-      const img=d.preview?.images?.[0]?.resolutions?.slice(-1)[0]?.url?.replace(/&amp;/g,'&')||d.url;
-      const title=d.title.length>60?d.title.slice(0,57)+'…':d.title;
-      const ups=d.ups>999?(d.ups/1000).toFixed(1)+'k':d.ups;
-      return `<div class="comm-card" onclick="window.open('${d.url}','_blank')"><img src="${img}" loading="lazy" alt="${title}"><div class="comm-card-body"><div class="comm-card-title">${title}</div><div class="comm-card-meta">▲ ${ups} · r/battlemaps</div></div></div>`;
-    }).join('');
-  }catch(e){
-    grid.innerHTML=`<div class="comm-loading" style="padding:64px 32px;display:flex;flex-direction:column;align-items:center;gap:12px;">
-      <div style="font-size:40px;">🗺️</div>
-      <div style="font-size:16px;font-weight:600;color:var(--text);">Mapas de la comunidad</div>
-      <div style="font-size:14px;color:var(--text-m);max-width:340px;text-align:center;line-height:1.6;">Próximamente podrás explorar y compartir mapas creados por otros aventureros de MasterDnD.</div>
-      <button onclick="_mapsExploreLoaded=false;initMapsExplore()" style="margin-top:8px;padding:8px 20px;background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--text-m);font-size:13px;cursor:pointer;transition:background .15s ease-out,border-color .15s ease-out,color .15s ease-out,transform .15s ease-out,opacity .15s ease-out;" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-m)'">↺ Reintentar</button>
-    </div>`;
-  }
+  grid.innerHTML=STATIC_MAPS.map(m=>`<div class="comm-card" onclick="window.open('${m.link}','_blank')"><img src="${m.img}" loading="lazy" alt="${m.title}" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='${_mapsFallback}'"><div class="comm-card-body"><div class="comm-card-title">${m.title}</div><div class="comm-card-meta">${m.meta}</div></div></div>`).join('');
 }
 function openGenModal(url){
   const m=document.getElementById('genModal');
