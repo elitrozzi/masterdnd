@@ -1,7 +1,12 @@
 {
-  "version": "2.6.1",
-  "date": "2026-04-19",
+  "version": "2.6.2",
+  "date": "2026-05-04",
   "history": [
+    {
+      "version": "2.6.2",
+      "date": "2026-05-04",
+      "note": "Grimorio: traducciones completas — nombres de hechizos, monstruos, objetos mágicos, clases y razas vía Google Translate; clases en detalle de hechizo con mapa estático; nombres de acciones/habilidades de monstruos; categorías de objetos mágicos en español"
+    },
     {
       "version": "2.6.1",
       "date": "2026-04-19",

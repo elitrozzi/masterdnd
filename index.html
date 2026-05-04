@@ -2117,9 +2117,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.6.1</span>
+    <span class="ver-badge">v2.6.2</span>
     <span class="ver-sep">·</span>
-    <span class="ver-date">19 Apr 2026</span>
+    <span class="ver-date">04 May 2026</span>
   </div>
   <div class="lang-toggle">
     <button class="lang-btn active" onclick="setLang('es')">ES</button>
@@ -2635,9 +2635,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.6.1</span>
+          <span class="ver-badge">v2.6.2</span>
           <span>·</span>
-          <span class="ver-date">19 Apr 2026</span>
+          <span class="ver-date">04 May 2026</span>
         </div>
       </div>
       <!-- RIGHT: scene -->
@@ -4093,6 +4093,8 @@ const SIZES={tiny:{es:'Diminuto',en:'Tiny'},small:{es:'Pequeño',en:'Small'},med
 const STAT_NAMES={strength:{es:'FUE',en:'STR'},dexterity:{es:'DES',en:'DEX'},constitution:{es:'CON',en:'CON'},intelligence:{es:'INT',en:'INT'},wisdom:{es:'SAB',en:'WIS'},charisma:{es:'CAR',en:'CHA'}};
 const DMG_TYPES={fire:{es:'Fuego',en:'Fire'},cold:{es:'Frío',en:'Cold'},lightning:{es:'Rayo',en:'Lightning'},thunder:{es:'Trueno',en:'Thunder'},acid:{es:'Ácido',en:'Acid'},poison:{es:'Veneno',en:'Poison'},necrotic:{es:'Necrótico',en:'Necrotic'},radiant:{es:'Radiante',en:'Radiant'},psychic:{es:'Psíquico',en:'Psychic'},force:{es:'Fuerza',en:'Force'},bludgeoning:{es:'Contundente',en:'Bludgeoning'},piercing:{es:'Perforante',en:'Piercing'},slashing:{es:'Cortante',en:'Slashing'}};
 
+const CLASS_NAMES_ES={bard:'Bardo',cleric:'Clérigo',druid:'Druida',paladin:'Paladín',ranger:'Explorador',sorcerer:'Hechicero',warlock:'Brujo',wizard:'Mago',fighter:'Guerrero',rogue:'Pícaro',barbarian:'Bárbaro',monk:'Monje'};
+const MI_CAT_NAMES_ES={'Wondrous Items':'Objetos Maravillosos','Weapon':'Arma','Armor':'Armadura','Ring':'Anillo','Rod':'Vara','Staff':'Bastón','Wand':'Varita','Scroll':'Pergamino','Potion':'Poción','Ammunition':'Munición','Equipment':'Equipo'};
 const SPEED_TR={walk:'Desplazamiento',fly:'Vuelo',swim:'Nado',climb:'Escala',burrow:'Excava',hover:'Flotar'};
 const SENSE_TR={darkvision:'Visión en la oscuridad',blindsight:'Percepción a ciegas',truesight:'Visión verdadera',tremorsense:'Detección de vibraciones',passive_perception:'Percepción pasiva'};
 const CAST_TR={'1 action':'1 acción','1 bonus action':'1 acción adicional','1 reaction':'1 reacción','1 minute':'1 minuto','10 minutes':'10 minutos','1 hour':'1 hora','8 hours':'8 horas','24 hours':'24 horas','12 hours':'12 horas'};
@@ -4350,7 +4352,7 @@ function renderSpellCard(s){
   return`<div class="comp-card monster-card" onclick="openCompDetail('spells','${s.index}')">
     <div class="mc-avatar">${spellAvatar(school)}</div>
     <div class="mc-info">
-      <div class="cc-name">${s.name}</div>
+      <div class="cc-name">${(currentLang==='es'&&cDetailCache[`spells/${s.index}`]?._name_es)||s.name}</div>
       <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px;">${spellLevelBadge(s.level||0)}${schoolBadge}${conc}${ritual}</div>
     </div>
   </div>`;
@@ -4424,7 +4426,7 @@ function renderMonsterCard(m){
   return`<div class="comp-card monster-card" onclick="openCompDetail('monsters','${m.index}')">
     <div class="mc-avatar">${monsterAvatar(m.name, m.index)}</div>
     <div class="mc-info">
-      <div class="cc-name">${m.name}</div>
+      <div class="cc-name">${(currentLang==='es'&&cDetailCache[`monsters/${m.index}`]?._name_es)||m.name}</div>
       <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px;">
         <span class="cc-badge cb-teal">CR ${cr}</span>
         ${typeLbl?`<span class="cc-badge ${typeBadge}" style="font-size:12px;">${typeLbl}</span>`:''}
@@ -4435,7 +4437,7 @@ function renderMonsterCard(m){
 
 function renderSimpleCard(item){
   return`<div class="comp-card" onclick="openCompDetail('${cActiveTab}','${item.index}')">
-    <div class="cc-name">${item.name}</div>
+    <div class="cc-name">${(currentLang==='es'&&cDetailCache[`${cActiveTab}/${item.index}`]?._name_es)||item.name}</div>
   </div>`;
 }
 const _MI_CAT_ICON={'wondrous-items':'✨',weapon:'⚔️',armor:'🛡️',ring:'💍',rod:'🔱',staff:'🪄',wand:'🪄',scroll:'📜',potion:'🧪'};
@@ -4448,7 +4450,7 @@ function renderMagicItemCard(item){
   return`<div class="comp-card monster-card" onclick="openCompDetail('magic-items','${item.index}')">
     <div class="mc-avatar" style="background:rgba(200,160,255,.08);border:1px solid rgba(192,132,224,.25);display:flex;align-items:center;justify-content:center;font-size:22px;">${icon}</div>
     <div class="mc-info">
-      <div class="cc-name">${_esc(item.name)}</div>
+      <div class="cc-name">${_esc((currentLang==='es'&&cDetailCache[`magic-items/${item.index}`]?._name_es)||item.name)}</div>
       <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px;">${badge}</div>
     </div>
   </div>`;
@@ -4465,8 +4467,8 @@ function renderMagicItemDetail(d){
     <div style="display:flex;gap:14px;align-items:flex-start;padding-top:6px;margin-bottom:4px;">
       <div style="width:72px;height:72px;flex-shrink:0;border-radius:50%;background:rgba(200,160,255,.1);border:1px solid rgba(192,132,224,.3);display:flex;align-items:center;justify-content:center;font-size:32px;">${icon}</div>
       <div style="flex:1;min-width:0;">
-        <div class="cp-title" style="margin-top:0;">${_esc(d.name)}</div>
-        <div class="cp-sub" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">${badge}${catName?`<span class="cc-badge cb-teal" style="font-size:12px;">${_esc(catName)}</span>`:''}</div>
+        <div class="cp-title" style="margin-top:0;">${_esc(currentLang==='es'&&d._name_es?d._name_es:d.name)}</div>
+        <div class="cp-sub" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">${badge}${catName?`<span class="cc-badge cb-teal" style="font-size:12px;">${_esc(currentLang==='es'?(MI_CAT_NAMES_ES[catName]||catName):catName)}</span>`:''}</div>
       </div>
     </div>
     <div class="cp-divider"></div>
@@ -4499,24 +4501,30 @@ async function openCompDetail(type,index){
     if(type==='spells'){
       const rawDesc=(d.desc||[]).join('\n\n');
       const rawHigher=(d.higher_level||[]).join('\n\n');
-      [d._desc_es,d._higher_es,d._mat_es]=await Promise.all([
-        translateES(rawDesc),translateES(rawHigher),translateES(d.material||'')
+      [d._desc_es,d._higher_es,d._mat_es,d._name_es]=await Promise.all([
+        translateES(rawDesc),translateES(rawHigher),translateES(d.material||''),translateES(d.name)
       ]);
     } else if(type==='monsters'){
+      if(!d._name_es)d._name_es=await translateES(d.name);
       const items=[...(d.special_abilities||[]),...(d.actions||[]),...(d.legendary_actions||[])].filter(a=>a.desc&&!a._desc_es);
       await Promise.all(items.map(async a=>{a._desc_es=await translateES(a.desc);}));
+      const nameItems=[...(d.special_abilities||[]),...(d.actions||[]),...(d.legendary_actions||[])].filter(a=>a.name&&!a._name_es);
+      await Promise.all(nameItems.map(async a=>{a._name_es=await translateES(a.name);}));
       if(d.languages&&!d._lang_es)d._lang_es=await translateES(d.languages);
     } else if(type==='classes'){
+      if(!d._name_es)d._name_es=await translateES(d.name);
       const items=(d.proficiencies||[]).filter(p=>!p._name_es);
       await Promise.all(items.map(async p=>{p._name_es=await translateES(p.name);}));
       if(d.subclasses){const sc=d.subclasses.filter(s=>!s._name_es);await Promise.all(sc.map(async s=>{s._name_es=await translateES(s.name);}));}
     } else if(type==='races'){
+      if(!d._name_es)d._name_es=await translateES(d.name);
       if(d.age&&!d._age_es)d._age_es=await translateES(d.age);
       if(d.alignment&&!d._align_es)d._align_es=await translateES(d.alignment);
       if(d.size_description&&!d._size_es)d._size_es=await translateES(d.size_description);
       if(d.language_desc&&!d._langd_es)d._langd_es=await translateES(d.language_desc);
       if(d.traits){const tr=d.traits.filter(t=>!t._name_es);await Promise.all(tr.map(async t=>{t._name_es=await translateES(t.name);}));}
     } else if(type==='magic-items'){
+      if(!d._name_es)d._name_es=await translateES(d.name);
       if(!d._desc_es){const raw=(d.desc||[]).join('\n\n');d._desc_es=await translateES(raw);}
     }
   }
@@ -4525,6 +4533,10 @@ async function openCompDetail(type,index){
   else if(type==='magic-items')renderMagicItemDetail(d);
   else if(type==='classes')renderClassDetail(d);
   else if(type==='races')renderRaceDetail(d);
+  if(currentLang==='es'&&d._name_es){
+    const cardEl=document.querySelector(`.comp-card[onclick*="'${index}'"]`);
+    if(cardEl){const nameEl=cardEl.querySelector('.cc-name');if(nameEl)nameEl.textContent=d._name_es;}
+  }
 }
 
 function L(es,en){return currentLang==='es'?es:en;}
@@ -4546,7 +4558,7 @@ function renderSpellDetail(d){
     <div style="display:flex;gap:14px;align-items:flex-start;padding-top:6px;margin-bottom:4px;">
       <div style="width:72px;height:72px;flex-shrink:0;border-radius:50%;overflow:hidden;">${spellSvg}</div>
       <div style="flex:1;min-width:0;">
-        <div class="cp-title" style="margin-top:0;">${d.name}</div>
+        <div class="cp-title" style="margin-top:0;">${currentLang==='es'&&d._name_es?d._name_es:d.name}</div>
         <div class="cp-sub" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
           <span class="cc-badge ${badge}">${schoolLabel}</span>
           <span class="cc-badge cb-gold">${lvl}</span>
@@ -4568,7 +4580,7 @@ function renderSpellDetail(d){
     ${higher?`<div class="cp-divider"></div><div class="cp-section-title">${L('A niveles superiores','At Higher Levels')}</div><div class="cp-text">${higher.replace(/\n/g,'<br>')}</div>`:''}
     <div class="cp-divider"></div>
     <div class="cp-section-title">${L('Clases','Classes')}</div>
-    <div style="display:flex;flex-wrap:wrap;gap:6px;">${(d.classes||[]).map(c=>`<span class="cc-badge cb-brand">${c.name}</span>`).join('')}</div>`;
+    <div style="display:flex;flex-wrap:wrap;gap:6px;">${(d.classes||[]).map(c=>{const k=(c.index||c.name||'').toLowerCase();return`<span class="cc-badge cb-brand">${currentLang==='es'?(CLASS_NAMES_ES[k]||c.name):c.name}</span>`;}).join('')}</div>`;
 }
 
 function renderMonsterDetail(d){
@@ -4586,11 +4598,13 @@ function renderMonsterDetail(d){
     return`${lbl}: ${trVal(String(v))}`;
   }).join(' · '):null;
   const aDesc=a=>(currentLang==='es'?(a._desc_es||a.desc):a.desc)||'';
+  const aName=a=>currentLang==='es'?(a._name_es||a.name):a.name;
   const langStr=currentLang==='es'?(d._lang_es||d.languages||''):(d.languages||'');
+  const dName=currentLang==='es'&&d._name_es?d._name_es:d.name;
   const mCss=monsterSpriteCss(d.index);
   const portraitHtml=mCss
-    ?`<div style="display:flex;gap:16px;align-items:flex-start;padding-top:6px;margin-bottom:4px;"><div style="width:120px;height:120px;flex-shrink:0;border-radius:12px;overflow:hidden;${mCss}"></div><div style="flex:1;min-width:0;"><div class="cp-title" style="margin-top:0;">${d.name}</div><div class="cp-sub">${sz} ${tp} · <span class="cc-badge cb-teal">CR ${d.challenge_rating}</span></div></div></div>`
-    :`<div style="display:flex;gap:14px;align-items:flex-start;padding-top:6px;margin-bottom:4px;"><div style="width:72px;height:72px;flex-shrink:0;border-radius:50%;overflow:hidden;">${monsterAvatar(d.name,d.index)}</div><div style="flex:1;min-width:0;"><div class="cp-title" style="margin-top:0;">${d.name}</div><div class="cp-sub">${sz} ${tp} · <span class="cc-badge cb-teal">CR ${d.challenge_rating}</span></div></div></div>`;
+    ?`<div style="display:flex;gap:16px;align-items:flex-start;padding-top:6px;margin-bottom:4px;"><div style="width:120px;height:120px;flex-shrink:0;border-radius:12px;overflow:hidden;${mCss}"></div><div style="flex:1;min-width:0;"><div class="cp-title" style="margin-top:0;">${dName}</div><div class="cp-sub">${sz} ${tp} · <span class="cc-badge cb-teal">CR ${d.challenge_rating}</span></div></div></div>`
+    :`<div style="display:flex;gap:14px;align-items:flex-start;padding-top:6px;margin-bottom:4px;"><div style="width:72px;height:72px;flex-shrink:0;border-radius:50%;overflow:hidden;">${monsterAvatar(d.name,d.index)}</div><div style="flex:1;min-width:0;"><div class="cp-title" style="margin-top:0;">${dName}</div><div class="cp-sub">${sz} ${tp} · <span class="cc-badge cb-teal">CR ${d.challenge_rating}</span></div></div></div>`;
   document.getElementById('compPanelContent').innerHTML=`
     ${portraitHtml}
     <div class="cp-divider"></div>
@@ -4606,9 +4620,9 @@ function renderMonsterDetail(d){
     </div>
     ${senseStr?`<div class="cp-divider"></div><div class="cp-field"><div class="cp-field-label">${L('Sentidos','Senses')}</div><div class="cp-field-value">${senseStr}</div></div>`:''}
     ${langStr?`<div class="cp-field" style="margin-top:8px;"><div class="cp-field-label">${L('Idiomas','Languages')}</div><div class="cp-field-value">${langStr}</div></div>`:''}
-    ${d.special_abilities?.length?`<div class="cp-divider"></div><div class="cp-section-title">${L('Habilidades especiales','Special Abilities')}</div>${d.special_abilities.map(a=>`<div class="cp-action"><div class="cp-action-name">${a.name}</div><div class="cp-action-desc">${aDesc(a)}</div></div>`).join('')}`:''}
-    ${d.actions?.length?`<div class="cp-divider"></div><div class="cp-section-title">${L('Acciones','Actions')}</div>${d.actions.map(a=>`<div class="cp-action"><div class="cp-action-name">${a.name}</div><div class="cp-action-desc">${aDesc(a)}</div></div>`).join('')}`:''}
-    ${d.legendary_actions?.length?`<div class="cp-divider"></div><div class="cp-section-title">${L('Acciones legendarias','Legendary Actions')}</div>${d.legendary_actions.map(a=>`<div class="cp-action"><div class="cp-action-name">${a.name}</div><div class="cp-action-desc">${aDesc(a)}</div></div>`).join('')}`:''}
+    ${d.special_abilities?.length?`<div class="cp-divider"></div><div class="cp-section-title">${L('Habilidades especiales','Special Abilities')}</div>${d.special_abilities.map(a=>`<div class="cp-action"><div class="cp-action-name">${aName(a)}</div><div class="cp-action-desc">${aDesc(a)}</div></div>`).join('')}`:''}
+    ${d.actions?.length?`<div class="cp-divider"></div><div class="cp-section-title">${L('Acciones','Actions')}</div>${d.actions.map(a=>`<div class="cp-action"><div class="cp-action-name">${aName(a)}</div><div class="cp-action-desc">${aDesc(a)}</div></div>`).join('')}`:''}
+    ${d.legendary_actions?.length?`<div class="cp-divider"></div><div class="cp-section-title">${L('Acciones legendarias','Legendary Actions')}</div>${d.legendary_actions.map(a=>`<div class="cp-action"><div class="cp-action-name">${aName(a)}</div><div class="cp-action-desc">${aDesc(a)}</div></div>`).join('')}`:''}
     <div class="cp-divider"></div>
     <button onclick="combatAddFromBestiary('${_esc(d.name)}',${d.hit_points||10},${ac||10})" style="width:100%;padding:9px;border-radius:8px;border:1px solid rgba(248,113,113,.4);background:rgba(248,113,113,.12);color:#f87171;font-size:13px;font-weight:600;cursor:pointer;margin-top:4px;" onmouseover="this.style.background='rgba(248,113,113,.25)'" onmouseout="this.style.background='rgba(248,113,113,.12)'"">⚔️ ${L('Añadir al Combate','Add to Combat')}</button>`;
 }
@@ -4643,7 +4657,7 @@ function renderClassDetail(d){
   };
   const classDesc=currentLang==='es'?(CLASS_DESC_ES[d.index]||''):'';
   document.getElementById('compPanelContent').innerHTML=`
-    <div class="cp-title">${d.name}</div>
+    <div class="cp-title">${currentLang==='es'&&d._name_es?d._name_es:d.name}</div>
     ${classDesc?`<div class="cp-text" style="margin:12px 0 0;opacity:.85;">${classDesc}</div>`:''}
     <div class="cp-divider"></div>
     <div class="cp-grid2">
@@ -4663,7 +4677,7 @@ function renderRaceDetail(d){
   const LANG_NAMES_ES={Common:'Común',Dwarvish:'Enano',Elvish:'Élfico',Giant:'Gigante',Gnomish:'Gnómico',Goblin:'Goblin',Halfling:'Mediano',Orc:'Orco',Abyssal:'Abisal',Celestial:'Celestial',Draconic:'Dracónico','Deep Speech':'Habla Profunda',Infernal:'Infernal',Primordial:'Primordial',Sylvan:'Silvano',Undercommon:'Infracomún'};
   const langList=(d.languages||[]).map(l=>currentLang==='es'?(LANG_NAMES_ES[l.name]||l.name):l.name).join(', ');
   document.getElementById('compPanelContent').innerHTML=`
-    <div class="cp-title">${d.name}</div>
+    <div class="cp-title">${currentLang==='es'&&d._name_es?d._name_es:d.name}</div>
     <div class="cp-divider"></div>
     <div class="cp-grid2">
       <div class="cp-field"><div class="cp-field-label">${L('Tamaño','Size')}</div><div class="cp-field-value">${cT('SIZES',d.size||'')}</div></div>
