@@ -2117,7 +2117,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.6.3</span>
+    <span class="ver-badge">v2.6.4</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">04 May 2026</span>
   </div>
@@ -2635,7 +2635,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.6.3</span>
+          <span class="ver-badge">v2.6.4</span>
           <span>·</span>
           <span class="ver-date">04 May 2026</span>
         </div>
@@ -4153,6 +4153,10 @@ let _classSpellSets={};  // {wizardIndex: Set<spellIndex>}
 const SLOT_LS_KEY='masterdnd_slots';
 let _spellSlots={};  // {level: {total, used}}
 let cCacheLoaded={};
+let _compList=[];
+let _compOffset=0;
+let _compObserver=null;
+const COMP_PAGE=60;
 
 async function initCompendium(){
   if(!cCacheLoaded[cActiveTab]){
@@ -4298,6 +4302,36 @@ function resetSlots(){
   renderSlotTracker();
 }
 
+function _cardHtml(item){
+  if(cActiveTab==='spells')return renderSpellCard(item);
+  if(cActiveTab==='monsters')return renderMonsterCard(item);
+  if(cActiveTab==='magic-items')return renderMagicItemCard(item);
+  return renderSimpleCard(item);
+}
+
+function _setupCompObserver(){
+  if(_compObserver)_compObserver.disconnect();
+  _compObserver=new IntersectionObserver(entries=>{
+    if(!entries[0].isIntersecting)return;
+    const sentinel=document.getElementById('compSentinel');
+    if(sentinel)sentinel.remove();
+    const batch=_compList.slice(_compOffset,_compOffset+COMP_PAGE);
+    if(!batch.length)return;
+    const grid=document.getElementById('compGrid');
+    grid.insertAdjacentHTML('beforeend',batch.map(_cardHtml).join(''));
+    _compOffset+=batch.length;
+    if(_compOffset<_compList.length){
+      grid.insertAdjacentHTML('beforeend','<div id="compSentinel" style="height:1px;grid-column:1/-1;"></div>');
+      _compObserver.observe(document.getElementById('compSentinel'));
+    } else {
+      _compObserver.disconnect();
+      _compObserver=null;
+    }
+  },{rootMargin:'300px'});
+  const sentinel=document.getElementById('compSentinel');
+  if(sentinel)_compObserver.observe(sentinel);
+}
+
 function renderCompGrid(){
   let list=cCache[cActiveTab];
   if(cSearchQ)list=list.filter(i=>i.name.toLowerCase().includes(cSearchQ.toLowerCase()));
@@ -4321,19 +4355,19 @@ function renderCompGrid(){
   if(cClassFilterQ&&cActiveTab==='spells'&&_classSpellSets[cClassFilterQ]){
     list=list.filter(i=>_classSpellSets[cClassFilterQ].has(i.index));
   }
+  if(_compObserver){_compObserver.disconnect();_compObserver=null;}
+  _compList=list;
+  _compOffset=0;
   if(!list.length){
     document.getElementById('compGrid').innerHTML=`<div class="comp-state">${currentLang==='es'?'Sin resultados':'No results'}</div>`;
     return;
   }
-  const limit=200;
-  document.getElementById('compGrid').innerHTML=list.slice(0,limit).map(item=>{
-    if(cActiveTab==='spells')return renderSpellCard(item);
-    if(cActiveTab==='monsters')return renderMonsterCard(item);
-    if(cActiveTab==='magic-items')return renderMagicItemCard(item);
-    return renderSimpleCard(item);
-  }).join('');
-  if(list.length>limit){
-    document.getElementById('compGrid').innerHTML+=`<div class="comp-state" style="padding:16px;font-size:12px;">${currentLang==='es'?`Mostrando ${limit} de ${list.length}. Buscá para filtrar.`:`Showing ${limit} of ${list.length}. Search to filter.`}</div>`;
+  const batch=list.slice(0,COMP_PAGE);
+  document.getElementById('compGrid').innerHTML=batch.map(_cardHtml).join('');
+  _compOffset=batch.length;
+  if(_compOffset<list.length){
+    document.getElementById('compGrid').insertAdjacentHTML('beforeend','<div id="compSentinel" style="height:1px;grid-column:1/-1;"></div>');
+    _setupCompObserver();
   }
 }
 

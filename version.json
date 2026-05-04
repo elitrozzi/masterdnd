@@ -1,7 +1,12 @@
 {
-  "version": "2.6.3",
+  "version": "2.6.4",
   "date": "2026-05-04",
   "history": [
+    {
+      "version": "2.6.4",
+      "date": "2026-05-04",
+      "note": "Grimorio: infinite scroll — carga 60 elementos iniciales y más al llegar al final, reemplaza el límite fijo de 200"
+    },
     {
       "version": "2.6.3",
       "date": "2026-05-04",
