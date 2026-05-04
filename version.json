@@ -1,7 +1,12 @@
 {
-  "version": "2.6.2",
+  "version": "2.6.3",
   "date": "2026-05-04",
   "history": [
+    {
+      "version": "2.6.3",
+      "date": "2026-05-04",
+      "note": "Fix CSP: agrega translate.googleapis.com a connect-src para desbloquear traducciones del Grimorio"
+    },
     {
       "version": "2.6.2",
       "date": "2026-05-04",
