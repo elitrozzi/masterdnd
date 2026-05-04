@@ -1,7 +1,12 @@
 {
-  "version": "2.6.4",
+  "version": "2.6.5",
   "date": "2026-05-04",
   "history": [
+    {
+      "version": "2.6.5",
+      "date": "2026-05-04",
+      "note": "Fix home: setLang usa innerHTML en lugar de textContent para que <br> en data-es/data-en se renderice correctamente"
+    },
     {
       "version": "2.6.4",
       "date": "2026-05-04",
