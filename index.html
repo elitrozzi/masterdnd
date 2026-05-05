@@ -2117,7 +2117,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.7.2</span>
+    <span class="ver-badge">v2.7.3</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">05 May 2026</span>
   </div>
@@ -2635,7 +2635,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.7.2</span>
+          <span class="ver-badge">v2.7.3</span>
           <span>·</span>
           <span class="ver-date">05 May 2026</span>
         </div>
@@ -8669,13 +8669,13 @@ function initCombat(){
 }
 
 function updateCharsNavDropdown(){
-  const n=_loadSavedChars().length;
+  const show=_currentUser&&_loadSavedChars().length>0;
   const dd=document.getElementById('dd-my-chars');
-  if(dd)dd.style.display=n>0?'flex':'none';
+  if(dd)dd.style.display=show?'flex':'none';
   const mm=document.getElementById('mm-my-chars');
-  if(mm)mm.style.display=n>0?'flex':'none';
+  if(mm)mm.style.display=show?'flex':'none';
   const lndd=document.getElementById('lndd-my-chars');
-  if(lndd)lndd.style.display=n>0?'flex':'none';
+  if(lndd)lndd.style.display=show?'flex':'none';
 }
 function goToMaps(tab){
   goTo('maps');
@@ -9159,8 +9159,9 @@ document.addEventListener('DOMContentLoaded',()=>{
   _attachCarouselSwipe('classCarouselTrack',classCarouselMove);
   /* Routing por URL al cargar directamente */
   const initPage=URL_PAGES[window.location.pathname];
+  const _hasAuthParams=window.location.search.includes('code=')||window.location.hash.includes('access_token=');
   if(initPage){goTo(initPage,true);}
-  else{history.replaceState({page:'home'},'','/');}
+  else if(!_hasAuthParams){history.replaceState({page:'home'},'','/');}
 });
 
 /* ══════════════════════════════════════════════════════

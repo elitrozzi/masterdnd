@@ -1,7 +1,12 @@
 {
-  "version": "2.7.2",
+  "version": "2.7.3",
   "date": "2026-05-05",
   "history": [
+    {
+      "version": "2.7.3",
+      "date": "2026-05-05",
+      "note": "Fix Google OAuth redirect: el router borraba el ?code= de la URL antes de que Supabase pudiera leerlo; fix "Mis personajes" oculto cuando no hay sesión"
+    },
     {
       "version": "2.7.2",
       "date": "2026-05-05",
@@ -380,7 +385,7 @@
     {
       "version": "1.9.0",
       "date": "2026-03-29",
-      "note": "Sesión en vivo: DM crea código, jugadores se unen desde su dispositivo — dados y estado de combate se sincronizan en tiempo real via Supabase Realtime"
+      "note": "Sesión en vivo: DM crea código, jugadores se unen desde su dispositivo — dados y estado de combate se sincranizan en tiempo real via Supabase Realtime"
     },
     {
       "version": "1.8.9",
