@@ -1,7 +1,12 @@
 {
-  "version": "2.6.5",
-  "date": "2026-05-04",
+  "version": "2.6.6",
+  "date": "2026-05-05",
   "history": [
+    {
+      "version": "2.6.6",
+      "date": "2026-05-05",
+      "note": "Feature: 6 nuevos artículos de guías — Combate, Hechizos, Trasfondos, Condiciones, Multiclase y Mecánicas básicas"
+    },
     {
       "version": "2.6.5",
       "date": "2026-05-04",

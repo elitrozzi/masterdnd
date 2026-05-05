@@ -47,6 +47,54 @@ const ARTICLES = [
     color: 'linear-gradient(90deg,#c2410c,#fb923c)',
     img: '/Im%C3%A1genes/Gu%C3%ADa/6.png',
     time: '12 min'
+  },
+  {
+    slug: 'combate-dnd-5e',
+    title: 'Combate en D&D 5e: guía completa del sistema de combate',
+    tag: '⚔️ Combate',
+    color: 'linear-gradient(90deg,#dc2626,#f97316)',
+    img: '/Im%C3%A1genes/Gu%C3%ADa/7.svg',
+    time: '10 min'
+  },
+  {
+    slug: 'mejores-hechizos-dnd-5e',
+    title: 'Los mejores hechizos de D&D 5e por nivel y clase',
+    tag: '🔮 Hechizos',
+    color: 'linear-gradient(90deg,#7c3aed,#a855f7)',
+    img: '/Im%C3%A1genes/Gu%C3%ADa/8.svg',
+    time: '13 min'
+  },
+  {
+    slug: 'trasfondos-dnd-5e',
+    title: 'Trasfondos de D&D 5e: cuál elegir y por qué',
+    tag: '📜 Trasfondo',
+    color: 'linear-gradient(90deg,#b45309,#f59e0b)',
+    img: '/Im%C3%A1genes/Gu%C3%ADa/9.svg',
+    time: '8 min'
+  },
+  {
+    slug: 'condiciones-dnd-5e',
+    title: 'Condiciones de D&D 5e: todas las condiciones explicadas',
+    tag: '💀 Reglas',
+    color: 'linear-gradient(90deg,#0d9488,#2dd4bf)',
+    img: '/Im%C3%A1genes/Gu%C3%ADa/10.svg',
+    time: '7 min'
+  },
+  {
+    slug: 'multiclase-dnd-5e',
+    title: 'Multiclase en D&D 5e: cómo funciona y las mejores combinaciones',
+    tag: '⚗️ Avanzado',
+    color: 'linear-gradient(90deg,#4338ca,#818cf8)',
+    img: '/Im%C3%A1genes/Gu%C3%ADa/11.svg',
+    time: '11 min'
+  },
+  {
+    slug: 'mecanicas-basicas-dnd-5e',
+    title: 'Mecánicas básicas de D&D 5e: tiradas, atributos y el d20',
+    tag: '🎲 Mecánicas',
+    color: 'linear-gradient(90deg,#1d4ed8,#60a5fa)',
+    img: '/Im%C3%A1genes/Gu%C3%ADa/12.svg',
+    time: '9 min'
   }
 ];
 
@@ -69,7 +117,7 @@ function renderRelated(excludeSlug, containerId) {
 function initLikes(articleSlug) {
   const KEY_LIKED = 'mdnd_liked_' + articleSlug;
   const KEY_COUNT = 'mdnd_count_' + articleSlug;
-  const BASE_COUNT = { 'como-jugar-dnd-principiantes': 24, 'clases-dnd-5e': 31, 'razas-dnd-5e': 18, 'crear-personaje-dnd': 22, 'alineamientos-dnd': 27, 'guia-dungeon-master-principiante': 15 };
+  const BASE_COUNT = { 'como-jugar-dnd-principiantes': 24, 'clases-dnd-5e': 31, 'razas-dnd-5e': 18, 'crear-personaje-dnd': 22, 'alineamientos-dnd': 27, 'guia-dungeon-master-principiante': 15, 'combate-dnd-5e': 19, 'mejores-hechizos-dnd-5e': 23, 'trasfondos-dnd-5e': 14, 'condiciones-dnd-5e': 11, 'multiclase-dnd-5e': 17, 'mecanicas-basicas-dnd-5e': 16 };
 
   let liked = localStorage.getItem(KEY_LIKED) === '1';
   let count = parseInt(localStorage.getItem(KEY_COUNT) || (BASE_COUNT[articleSlug] || 10));

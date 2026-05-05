@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0c1a3a"/><stop offset="1" stop-color="#1e3a6e"/></linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#3b82f6" stop-opacity="0.25"/><stop offset="1" stop-color="transparent"/></radialGradient>
+  </defs>
+  <rect width="800" height="420" fill="url(#bg)"/>
+  <rect width="800" height="420" fill="url(#glow)"/>
+  <!-- d20 shape -->
+  <polygon points="400,60 480,130 510,220 440,300 360,300 290,220 320,130" fill="#0c1a3a" stroke="#3b82f6" stroke-width="2.5" opacity="0.9"/>
+  <!-- Inner triangle lines -->
+  <line x1="400" y1="60" x2="440" y2="300" stroke="#60a5fa" stroke-width="1" opacity="0.3"/>
+  <line x1="400" y1="60" x2="360" y2="300" stroke="#60a5fa" stroke-width="1" opacity="0.3"/>
+  <line x1="320" y1="130" x2="510" y2="220" stroke="#60a5fa" stroke-width="1" opacity="0.3"/>
+  <line x1="480" y1="130" x2="290" y2="220" stroke="#60a5fa" stroke-width="1" opacity="0.3"/>
+  <line x1="320" y1="130" x2="480" y2="130" stroke="#60a5fa" stroke-width="1" opacity="0.25"/>
+  <line x1="290" y1="220" x2="510" y2="220" stroke="#60a5fa" stroke-width="1" opacity="0.25"/>
+  <!-- 20 text inside d20 -->
+  <text x="400" y="202" font-family="Georgia,serif" font-size="72" font-weight="bold" fill="#93c5fd" opacity="0.8" text-anchor="middle" dominant-baseline="middle">20</text>
+  <!-- Decorative circles at corners of d20 -->
+  <circle cx="400" cy="60" r="5" fill="#3b82f6" opacity="0.7"/>
+  <circle cx="480" cy="130" r="4" fill="#60a5fa" opacity="0.6"/>
+  <circle cx="510" cy="220" r="4" fill="#3b82f6" opacity="0.6"/>
+  <circle cx="440" cy="300" r="4" fill="#60a5fa" opacity="0.6"/>
+  <circle cx="360" cy="300" r="4" fill="#3b82f6" opacity="0.6"/>
+  <circle cx="290" cy="220" r="4" fill="#60a5fa" opacity="0.6"/>
+  <circle cx="320" cy="130" r="4" fill="#3b82f6" opacity="0.6"/>
+  <!-- Small dice floating -->
+  <rect x="155" y="170" width="30" height="30" rx="6" fill="none" stroke="#3b82f6" stroke-width="1.5" opacity="0.35" transform="rotate(15,170,185)"/>
+  <rect x="620" y="165" width="28" height="28" rx="5" fill="none" stroke="#60a5fa" stroke-width="1.5" opacity="0.3" transform="rotate(-12,634,179)"/>
+  <!-- Dots on small dice -->
+  <circle cx="165" cy="182" r="2.5" fill="#3b82f6" opacity="0.4"/>
+  <circle cx="175" cy="182" r="2.5" fill="#3b82f6" opacity="0.4"/>
+  <!-- Ambient dots -->
+  <circle cx="140" cy="100" r="2" fill="#3b82f6" opacity="0.3"/>
+  <circle cx="660" cy="100" r="2" fill="#60a5fa" opacity="0.3"/>
+  <circle cx="130" cy="340" r="2" fill="#3b82f6" opacity="0.25"/>
+  <circle cx="665" cy="330" r="2" fill="#60a5fa" opacity="0.25"/>
+</svg>

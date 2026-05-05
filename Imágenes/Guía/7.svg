@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1a0808"/><stop offset="1" stop-color="#3b0f0f"/></linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#dc2626" stop-opacity="0.25"/><stop offset="1" stop-color="transparent"/></radialGradient>
+  </defs>
+  <rect width="800" height="420" fill="url(#bg)"/>
+  <rect width="800" height="420" fill="url(#glow)"/>
+  <circle cx="400" cy="210" r="160" fill="none" stroke="#dc2626" stroke-width="1.5" opacity="0.25"/>
+  <circle cx="400" cy="210" r="120" fill="none" stroke="#f97316" stroke-width="1" opacity="0.2"/>
+  <circle cx="400" cy="210" r="80" fill="none" stroke="#dc2626" stroke-width="1" opacity="0.15"/>
+  <!-- Sword 1 -->
+  <line x1="320" y1="130" x2="480" y2="290" stroke="#f97316" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
+  <polygon points="320,130 308,148 326,142" fill="#f97316" opacity="0.7"/>
+  <line x1="308" y1="200" x2="332" y2="160" stroke="#dc2626" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+  <!-- Sword 2 -->
+  <line x1="480" y1="130" x2="320" y2="290" stroke="#ef4444" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
+  <polygon points="480,130 492,148 474,142" fill="#ef4444" opacity="0.7"/>
+  <line x1="492" y1="200" x2="468" y2="160" stroke="#f97316" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+  <!-- Center sparkle -->
+  <circle cx="400" cy="210" r="10" fill="#fbbf24" opacity="0.6"/>
+  <circle cx="400" cy="210" r="5" fill="#fff" opacity="0.8"/>
+  <!-- Dots decoration -->
+  <circle cx="150" cy="80" r="2" fill="#f97316" opacity="0.3"/>
+  <circle cx="650" cy="80" r="2" fill="#dc2626" opacity="0.3"/>
+  <circle cx="120" cy="340" r="2" fill="#f97316" opacity="0.2"/>
+  <circle cx="680" cy="340" r="2" fill="#dc2626" opacity="0.2"/>
+</svg>

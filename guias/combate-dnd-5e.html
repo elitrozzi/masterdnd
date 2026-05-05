@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Combate en D&D 5e: Guía Completa del Sistema de Combate — MasterDnD</title>
+<meta name="description" content="Guía completa del combate en D&D 5e: iniciativa, acciones, economía de acción, tiradas de ataque, puntos de vida, tiradas de muerte y condiciones. Entendé el combate de una vez."/>
+<meta name="keywords" content="combate dnd 5e, como funciona el combate dnd, iniciativa dnd, acciones dnd, tirada de ataque dnd, puntos de vida dnd"/>
+<meta name="robots" content="index, follow"/>
+<link rel="canonical" href="https://masterdnd.com/guias/combate-dnd-5e"/>
+<meta property="og:title" content="Combate en D&D 5e: Guía Completa del Sistema de Combate"/>
+<meta property="og:description" content="Todo lo que necesitás saber sobre el combate en D&D 5e: iniciativa, economía de acción, ataques y tiradas de muerte."/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="https://masterdnd.com/guias/combate-dnd-5e"/>
+<meta property="og:site_name" content="MasterDnD"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Combate en D&D 5e: Guía Completa del Sistema de Combate","description":"Guía completa del combate en D&D 5e con iniciativa, acciones, tiradas de ataque y tiradas de muerte.","url":"https://masterdnd.com/guias/combate-dnd-5e","datePublished":"2026-05-04","dateModified":"2026-05-04","publisher":{"@type":"Organization","name":"MasterDnD","url":"https://masterdnd.com"},"author":{"@type":"Organization","name":"MasterDnD"}}</script>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230e0c1e'/%3E%3Cpolygon points='16,3 29,10.5 29,21.5 16,29 3,21.5 3,10.5' fill='none' stroke='%23d4a843' stroke-width='1.5'/%3E%3C/svg%3E"/>
+<link rel="stylesheet" href="/guias/style.css"/>
+<script>
+(function(){
+  try{
+    var raw=localStorage.getItem("sb-clgrrrpvhnwxrmxpfosq-auth-token");
+    if(!raw)return;
+    var s=JSON.parse(raw);
+    var user=s&&(s.user||(s.session&&s.session.user));
+    if(!user)return;
+    var name=(user.user_metadata&&(user.user_metadata.full_name||user.user_metadata.name))||user.email.split("@")[0]||"Tú";
+    var first=name.split(" ")[0];
+    document.addEventListener("DOMContentLoaded",function(){
+      document.querySelectorAll(".btn-ghost,.btn-gold").forEach(function(b){b.style.display="none";});
+      var nav=document.querySelector(".g-nav");
+      if(nav){var el=document.createElement("a");el.href="/";el.style.cssText="font-size:13px;color:var(--gold);font-family:Cinzel,serif;font-weight:600;padding:6px 14px;border:1px solid rgba(248,198,98,.3);border-radius:8px;text-decoration:none;white-space:nowrap;flex-shrink:0;";el.textContent="Hola "+first+" →";nav.appendChild(el);}
+    });
+  }catch(e){}
+})();
+</script>
+</head>
+<body>
+
+<div id="g-progress"></div>
+
+<nav class="g-nav">
+  <a class="g-nav-logo" href="/">
+    <span class="llogo-m">MASTER</span><span class="llogo-d">DND</span>
+  </a>
+  <div class="g-nav-links">
+    <div class="g-nav-dropdown">
+      <a class="g-nav-link g-nav-dd-trigger" href="/#personajes">Personaje</a>
+      <div class="g-nav-dropdown-menu">
+        <a class="g-nav-dd-item" href="/#personajes">
+          <span class="g-nav-dd-icon">✨</span>
+          <div class="g-nav-dd-label"><span>Crear personaje</span><span class="g-nav-dd-sub">Nuevo aventurero</span></div>
+        </a>
+        <a class="g-nav-dd-item" href="/#personajes">
+          <span class="g-nav-dd-icon">⚔️</span>
+          <div class="g-nav-dd-label"><span>Mis personajes</span><span class="g-nav-dd-sub">Ver personajes guardados</span></div>
+        </a>
+      </div>
+    </div>
+    <div class="g-nav-dropdown">
+      <a class="g-nav-link g-nav-dd-trigger" href="/#sonidos">Mesa</a>
+      <div class="g-nav-dropdown-menu">
+        <a class="g-nav-dd-item" href="/dados">
+          <span class="g-nav-dd-icon">🎲</span>
+          <div class="g-nav-dd-label"><span>Dados</span><span class="g-nav-dd-sub">Lanzador 3D</span></div>
+        </a>
+        <a class="g-nav-dd-item" href="/#sonidos">
+          <span class="g-nav-dd-icon">🎵</span>
+          <div class="g-nav-dd-label"><span>Sonidos</span><span class="g-nav-dd-sub">Ambiente para tu partida</span></div>
+        </a>
+        <a class="g-nav-dd-item" href="/#mapas">
+          <span class="g-nav-dd-icon">🗺️</span>
+          <div class="g-nav-dd-label"><span>Mapas</span><span class="g-nav-dd-sub">Editor y comunidad</span></div>
+        </a>
+      </div>
+    </div>
+    <div class="g-nav-dropdown">
+      <a class="g-nav-link g-nav-dd-trigger active" href="/#grimorio">Recursos</a>
+      <div class="g-nav-dropdown-menu">
+        <a class="g-nav-dd-item" href="/#grimorio">
+          <span class="g-nav-dd-icon">📖</span>
+          <div class="g-nav-dd-label"><span>Grimorio</span><span class="g-nav-dd-sub">Hechizos y bestiario</span></div>
+        </a>
+        <a class="g-nav-dd-item" href="/guias/">
+          <span class="g-nav-dd-icon">📚</span>
+          <div class="g-nav-dd-label"><span>Guías</span><span class="g-nav-dd-sub">D&amp;D 5e en español</span></div>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="g-nav-spacer"></div>
+  <a class="btn-nav btn-ghost" href="/">Entrar</a>
+  <a class="btn-nav btn-gold" href="/">Comenzar</a>
+</nav>
+
+
+<header class="g-article-header">
+  <div class="g-article-header-inner">
+    <div class="g-eyebrow">⚔️ Combate</div>
+    <h1>Combate en D&amp;D 5e: Guía Completa</h1>
+    <p class="g-article-subtitle">Iniciativa, economía de acción, tiradas de ataque y cómo sobrevivir cuando los dados no acompañan.</p>
+    <div class="g-article-meta">
+      <div class="g-author-row">
+        <div class="g-author-avatar">M</div>
+        <div>
+          <div class="g-author-name">MasterDnD</div>
+          <div class="g-author-info">4 de mayo, 2026 · 10 min de lectura</div>
+        </div>
+      </div>
+      <button class="g-like-btn" onclick="toggleLike()">
+        <span class="g-like-icon">♡</span>
+        <span class="g-like-count">0</span>
+      </button>
+    </div>
+    <div class="g-article-divider"></div>
+  </div>
+</header>
+
+<div class="g-article-hero-img">
+  <img src="/Im%C3%A1genes/Gu%C3%ADa/7.svg" alt="Combate en D&D 5e"/>
+</div>
+
+<div class="g-article-body">
+  <div class="g-article-content">
+
+    <div class="g-breadcrumb">
+      <a href="/">Inicio</a><span class="g-breadcrumb-sep">›</span>
+      <a href="/guias/">Guías</a><span class="g-breadcrumb-sep">›</span>
+      <span>Combate en D&D 5e</span>
+    </div>
+
+    <div class="g-toc">
+      <div class="g-toc-title">📋 Contenido</div>
+      <ol>
+        <li><a href="#cuando-empieza">¿Cuándo empieza el combate?</a></li>
+        <li><a href="#iniciativa">La iniciativa y el orden de turno</a></li>
+        <li><a href="#economia-accion">La economía de acción</a></li>
+        <li><a href="#tirada-ataque">Cómo funciona una tirada de ataque</a></li>
+        <li><a href="#puntos-de-vida">Puntos de vida y daño</a></li>
+        <li><a href="#tiradas-muerte">Tiradas de muerte</a></li>
+        <li><a href="#terminar">Cómo termina el combate</a></li>
+        <li><a href="#consejos">Consejos para combatir mejor</a></li>
+      </ol>
+    </div>
+
+    <h2 id="cuando-empieza">¿Cuándo empieza el combate?</h2>
+    <p>El combate en D&D 5e comienza cuando hay <strong>hostilidad intencional</strong> entre personajes. Puede empezar con una emboscada (sorpresa), una amenaza que escala, o simplemente cuando alguien decide atacar. Una vez iniciado, el tiempo se divide en <strong>rondas</strong> de 6 segundos cada una, y el juego entra en modo turno a turno.</p>
+    <p>Si algún bando está <strong>sorprendido</strong> al inicio, esos personajes no pueden actuar durante la primera ronda. Sorprender requiere que el grupo atacante se haya movido sigilosamente y ganado una tirada de Destreza (Sigilo) contra la Percepción pasiva de los enemigos.</p>
+
+    <h2 id="iniciativa">La iniciativa y el orden de turno</h2>
+    <p>Antes de la primera ronda, todos tiran <strong>iniciativa</strong>: 1d20 + modificador de Destreza. El resultado determina el orden en que actúan todos los participantes del combate, de mayor a menor. En caso de empate, los jugadores actúan antes que los PNJs (o el DM decide).</p>
+    <div class="g-box tip">
+      <div class="g-box-title">💡 Consejo</div>
+      <p>Apuntá tu iniciativa en un papel antes de empezar la sesión. Si tu DM usa iniciativa fija por sesión o por combate, podés hacer la tirada una vez y quedartela para toda la sesión.</p>
+    </div>
+    <p>El orden se mantiene igual durante todo el combate. Cada participante actúa en su turno y luego espera la siguiente ronda. Una <strong>ronda completa</strong> equivale a 6 segundos de tiempo en el mundo del juego.</p>
+
+    <h2 id="economia-accion">La economía de acción</h2>
+    <p>Este es el concepto más importante para entender el combate en 5e. Cada turno tenés tres recursos posibles:</p>
+    <div class="g-table-wrap">
+      <table class="g-table">
+        <thead><tr><th>Recurso</th><th>Qué podés hacer</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Acción</strong></td><td>Atacar, lanzar un hechizo, usar un objeto, correr (Dash), esquivar (Dodge), ayudar (Help), desengancharse (Disengage), esconderse (Hide)</td></tr>
+          <tr><td><strong>Acción adicional</strong></td><td>Solo si una habilidad o hechizo la otorga (ej: Ataque con arma secundaria, ciertas habilidades de clase)</td></tr>
+          <tr><td><strong>Reacción</strong></td><td>Una por ronda, fuera de tu turno. Ej: Ataque de oportunidad, hechizo Escudo, habilidades de Explorador</td></tr>
+          <tr><td><strong>Movimiento</strong></td><td>Hasta tu velocidad total (normalmente 30 ft / 9m). Podés dividirlo antes y después de tu acción</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>El <strong>Ataque de Oportunidad</strong> (reacción) se produce cuando un enemigo sale voluntariamente de tu alcance de melee sin usar la acción Disengage. Podés hacer un ataque cuerpo a cuerpo gratis como reacción.</p>
+
+    <h2 id="tirada-ataque">Cómo funciona una tirada de ataque</h2>
+    <p>Para atacar tirás <strong>1d20 + bono de ataque</strong> y comparás contra la Clase de Armadura (CA) del objetivo. Si igualás o superás la CA, el ataque conecta y tirás dados de daño.</p>
+    <p>El <strong>bono de ataque</strong> se calcula así:</p>
+    <ul>
+      <li>Ataque con arma de melee: 1d20 + modificador de Fuerza + bono de competencia</li>
+      <li>Ataque con arma a distancia: 1d20 + modificador de Destreza + bono de competencia</li>
+      <li>Ataque con hechizo: 1d20 + modificador de lanzamiento (Int/Sab/Car) + bono de competencia</li>
+    </ul>
+    <div class="g-box">
+      <div class="g-box-title">🎲 Casos especiales</div>
+      <p><strong>Crítico (natural 20):</strong> El ataque conecta automáticamente y tirás el doble de dados de daño (no el doble del total).</p>
+      <p><strong>Pifia (natural 1):</strong> El ataque falla automáticamente, sin importar bonos.</p>
+    </div>
+    <p>La <strong>ventaja</strong> te permite tirar 2d20 y quedarte con el resultado más alto. La <strong>desventaja</strong> hace lo opuesto: tirás 2d20 y te quedás con el menor. Ventaja y desventaja se cancelan entre sí — no importa cuántas fuentes de cada una tengas.</p>
+
+    <h2 id="puntos-de-vida">Puntos de vida y daño</h2>
+    <p>Los <strong>Puntos de Vida (PV o HP)</strong> representan la combinación de resistencia física, reflejos y suerte de un personaje. Cuando llegan a 0, el personaje cae inconsciente. Cada clase tiene un dado de golpe diferente: el Bárbaro usa d12, el Guerrero d10, el Clérigo d8, el Mago d6.</p>
+    <p>Los PV se recuperan con:</p>
+    <ul>
+      <li><strong>Descanso corto (1 hora):</strong> Podés gastar Dados de Golpe para recuperar PV (1 dado + modificador de Constitución por dado gastado)</li>
+      <li><strong>Descanso largo (8 horas):</strong> Recuperás todos los PV y la mitad de los Dados de Golpe gastados</li>
+      <li><strong>Curación mágica:</strong> Hechizos como Curar Heridas (Cure Wounds) o pociones</li>
+    </ul>
+    <p>Los <strong>Puntos de Vida Temporales</strong> son un escudo separado — se pierden primero, antes de los PV reales. No se suman a tus PV, y no se recuperan con descanso.</p>
+
+    <h2 id="tiradas-muerte">Tiradas de muerte</h2>
+    <p>Cuando un personaje llega a 0 PV, cae inconsciente y empieza a hacer <strong>tiradas de muerte</strong> al inicio de cada uno de sus turnos: tira 1d20.</p>
+    <ul>
+      <li><strong>10 o más:</strong> Éxito (marcá un éxito)</li>
+      <li><strong>9 o menos:</strong> Fallo (marcá un fallo)</li>
+      <li><strong>Natural 20:</strong> Recuperás 1 PV e inmediatamente te ponés en pie</li>
+      <li><strong>Natural 1:</strong> Cuenta como dos fallos</li>
+    </ul>
+    <p>Con <strong>3 éxitos</strong>: el personaje se estabiliza (ya no hace tiradas pero sigue inconsciente). Con <strong>3 fallos</strong>: muere. Un aliado puede estabilizarte usando su acción con una tirada de Medicina (CD 10) o gastando cualquier curación mágica.</p>
+    <div class="g-box warning">
+      <div class="g-box-title">⚠️ Ojo con los ataques en el suelo</div>
+      <p>Si un enemigo ataca a tu personaje inconsciente, cualquier impacto desde adyacente cuenta como dos fallos de muerte. Un crítico desde adyacente = muerte instantánea.</p>
+    </div>
+
+    <h2 id="terminar">Cómo termina el combate</h2>
+    <p>El combate termina cuando todos los enemigos están derrotados (a 0 PV, rendidos o huyendo) o cuando todos los héroes están fuera de combate. En algunos casos el DM puede declarar el fin del combate cuando uno de los bandos cede o huye.</p>
+    <p>Después del combate el grupo típicamente hace un <strong>descanso corto</strong> para recuperarse antes de seguir. Un buen DM gestiona el ritmo de los encuentros para que los recursos de descanso tengan peso.</p>
+
+    <h2 id="consejos">Consejos para combatir mejor</h2>
+    <ul>
+      <li><strong>Usá el terreno.</strong> La cobertura reduce el daño que recibís. Atacar desde altura o desde cobertura puede darte ventaja.</li>
+      <li><strong>Coordiná con el grupo.</strong> El Bardo puede usar Inspiración, el Clérigo puede lanzar Guía, el Guerrero puede posicionarse para dar ventaja al Pícaro.</li>
+      <li><strong>No subestimes Disengage.</strong> Alejarte sin provocar ataques de oportunidad puede salvar la vida.</li>
+      <li><strong>Usá la acción Dodge.</strong> Si estás en una posición terrible, esquivar te da desventaja a todos los ataques contra vos hasta tu próximo turno.</li>
+      <li><strong>Foco en un objetivo a la vez.</strong> Es más eficiente eliminar enemigos de uno en uno que distribuir el daño.</li>
+    </ul>
+
+    <div class="g-cta">
+      <div class="g-cta-title">Llevá el combate a tu mesa digital</div>
+      <p class="g-cta-desc">MasterDnD tiene tracker de iniciativa, HP de personajes y hechizos disponibles en tiempo real para toda la partida.</p>
+      <a class="g-cta-btn" href="/">⚔️ Abrir MasterDnD gratis</a>
+      <p class="g-cta-secondary">¿Querés saber qué hechizos usar en combate? <a href="/guias/mejores-hechizos-dnd-5e">Los mejores hechizos de D&D 5e →</a></p>
+    </div>
+
+    <div class="g-article-footer">
+      <span class="g-footer-like-label">¿Te fue útil este artículo?</span>
+      <button class="g-like-btn" onclick="toggleLike()">
+        <span class="g-like-icon">♡</span>
+        <span class="g-like-count">0</span>
+        <span style="font-size:13px;margin-left:2px;">Me fue útil</span>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<section class="g-related">
+  <div class="g-related-inner">
+    <div class="g-related-heading">Continúa tu aventura</div>
+    <p class="g-related-sub">Más guías para dominar Dungeons &amp; Dragons</p>
+    <div class="g-related-grid" id="relatedGrid"></div>
+  </div>
+</section>
+
+<footer class="g-footer">
+  <div class="g-footer-logo"><span>MASTER</span>DND</div>
+  <p>Creado con amor ♥ MasterDnD 2026</p>
+  <div class="g-footer-links">
+    <a href="/">Inicio</a>
+    <a href="/guias/">Guías</a>
+    <a href="/#personajes">Crear personaje</a>
+    <a href="/#grimorio">Grimorio</a>
+    <a href="/dados">Dados</a>
+  </div>
+</footer>
+
+<script src="/guias/articles.js"></script>
+<script>
+  initProgress();
+  initLikes('combate-dnd-5e');
+  renderRelated('combate-dnd-5e', 'relatedGrid');
+</script>
+
+<!-- ── FEEDBACK WIDGET ── -->
+<style>
+.fb-btn{position:fixed;bottom:24px;right:24px;z-index:2500;background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;border:none;border-radius:50px;padding:9px 16px 9px 13px;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 4px 20px rgba(124,58,237,.45);transition:.2s;display:flex;align-items:center;gap:6px;font-family:'Roboto',sans-serif;letter-spacing:.3px;}
+.fb-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(124,58,237,.6);}
+.fb-modal-bg{display:none;position:fixed;inset:0;z-index:2400;background:rgba(0,0,0,.55);backdrop-filter:blur(3px);}
+.fb-modal-bg.open{display:flex;align-items:center;justify-content:center;}
+.fb-modal{background:#1a1333;border:1px solid rgba(124,58,237,.35);border-radius:16px;padding:28px 28px 22px;width:min(420px,92vw);box-shadow:0 20px 60px rgba(0,0,0,.6);}
+.fb-modal h3{font-family:Cinzel,serif;color:#f8c662;margin:0 0 6px;font-size:17px;}
+.fb-modal p{color:#b0a8c8;font-size:13px;margin:0 0 16px;}
+.fb-stars{display:flex;gap:8px;margin-bottom:16px;}
+.fb-star{font-size:28px;cursor:pointer;transition:.15s;opacity:.4;}
+.fb-star.on{opacity:1;}
+.fb-modal textarea{width:100%;box-sizing:border-box;background:#0e0c1e;border:1px solid rgba(124,58,237,.3);border-radius:8px;color:#e2dff0;font-size:13px;padding:10px 12px;resize:vertical;min-height:80px;font-family:Roboto,sans-serif;outline:none;}
+.fb-modal textarea:focus{border-color:#7c3aed;}
+.fb-modal-actions{display:flex;gap:10px;margin-top:14px;justify-content:flex-end;}
+.fb-cancel{background:none;border:1px solid rgba(255,255,255,.15);color:#b0a8c8;border-radius:8px;padding:7px 16px;font-size:13px;cursor:pointer;}
+.fb-submit{background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;border:none;border-radius:8px;padding:7px 18px;font-size:13px;font-weight:600;cursor:pointer;}
+.fb-thanks{display:none;text-align:center;padding:12px 0 4px;}
+.fb-thanks .fb-thanks-icon{font-size:36px;display:block;margin-bottom:8px;}
+.fb-thanks p{color:#b0a8c8;font-size:14px;margin:0;}
+</style>
+<button class="fb-btn" onclick="document.getElementById('fbBg').classList.add('open')">💬 Feedback</button>
+<div class="fb-modal-bg" id="fbBg" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="fb-modal">
+    <div id="fbForm">
+      <h3>¿Cómo estuvo el artículo?</h3>
+      <p>Tu opinión nos ayuda a mejorar las guías.</p>
+      <div class="fb-stars" id="fbStars">
+        <span class="fb-star" data-v="1" onclick="setStars(1)">★</span>
+        <span class="fb-star" data-v="2" onclick="setStars(2)">★</span>
+        <span class="fb-star" data-v="3" onclick="setStars(3)">★</span>
+        <span class="fb-star" data-v="4" onclick="setStars(4)">★</span>
+        <span class="fb-star" data-v="5" onclick="setStars(5)">★</span>
+      </div>
+      <textarea id="fbText" placeholder="(Opcional) ¿Qué mejorarías o qué te faltó?"></textarea>
+      <div class="fb-modal-actions">
+        <button class="fb-cancel" onclick="document.getElementById('fbBg').classList.remove('open')">Cancelar</button>
+        <button class="fb-submit" onclick="submitFb()">Enviar</button>
+      </div>
+    </div>
+    <div class="fb-thanks" id="fbThanks">
+      <span class="fb-thanks-icon">🎲</span>
+      <h3 style="font-family:Cinzel,serif;color:#f8c662;margin:0 0 8px;">¡Gracias!</h3>
+      <p>Tu feedback ayuda a que las guías sean mejores.</p>
+    </div>
+  </div>
+</div>
+<script>
+var fbRating=0;
+function setStars(n){fbRating=n;document.querySelectorAll('.fb-star').forEach(function(s){s.classList.toggle('on',+s.dataset.v<=n);});}
+function submitFb(){document.getElementById('fbForm').style.display='none';document.getElementById('fbThanks').style.display='block';setTimeout(function(){document.getElementById('fbBg').classList.remove('open');document.getElementById('fbForm').style.display='';document.getElementById('fbThanks').style.display='none';fbRating=0;document.querySelectorAll('.fb-star').forEach(function(s){s.classList.remove('on');});document.getElementById('fbText').value='';},2200);}
+</script>
+
+</body>
+</html>
