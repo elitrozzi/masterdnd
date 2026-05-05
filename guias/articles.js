@@ -85,7 +85,7 @@ const ARTICLES = [
     title: 'Multiclase en D&D 5e: cómo funciona y las mejores combinaciones',
     tag: '⚗️ Avanzado',
     color: 'linear-gradient(90deg,#4338ca,#818cf8)',
-    img: '/Im%C3%A1genes/Gu%C3%ADa/11.svg',
+    img: '/Im%C3%A1genes/Gu%C3%ADa/Multiclase.png',
     time: '11 min'
   },
   {
