@@ -2117,7 +2117,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.7.3</span>
+    <span class="ver-badge">v2.7.4</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">05 May 2026</span>
   </div>
@@ -2635,7 +2635,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.7.3</span>
+          <span class="ver-badge">v2.7.4</span>
           <span>·</span>
           <span class="ver-date">05 May 2026</span>
         </div>
@@ -4806,6 +4806,7 @@ _SB.auth.onAuthStateChange((event,session)=>{
   _currentUser=session?.user||null;
   _updateAuthUI();
   if(event==='SIGNED_IN'){closeModal();_loadCharsFromCloud();if(document.getElementById('page-campaign')?.classList.contains('active'))initCampaignPage();}
+  if(event==='SIGNED_OUT'){localStorage.removeItem('masterdnd_chars');renderSavedChars();}
 });
 _SB.auth.getSession().then(({data:{session}})=>{_currentUser=session?.user||null;_updateAuthUI();});
 function _updateAuthUI(){
@@ -5114,24 +5115,14 @@ async function _cloudDeleteChar(charId){
 async function _loadCharsFromCloud(){
   if(!_currentUser)return;
   const {data,error}=await _SB.from('characters').select('char_data').eq('user_id',_currentUser.id);
-  if(error||!data||!data.length)return;
+  if(error)return;
+  // Replace local chars with cloud chars for this user (preserving local portraits)
   const local=_loadSavedChars();
-  const localMap=new Map(local.map(c=>[c.id,c]));
-  let changed=false;
-  for(const row of data){
-    const cloud=row.char_data;
-    if(!cloud||!cloud.id)continue;
-    const loc=localMap.get(cloud.id);
-    if(!loc||(cloud.savedAt||0)>(loc.savedAt||0)){
-      if(loc?.portrait)cloud.portrait=loc.portrait;
-      localMap.set(cloud.id,cloud);
-      changed=true;
-    }
-  }
-  if(changed){
-    localStorage.setItem(CHARS_LS_KEY,JSON.stringify([...localMap.values()]));
-    renderSavedChars();
-  }
+  const localPortraits=new Map(local.map(c=>[c.id,c.portrait]).filter(([,p])=>p));
+  const cloudChars=(data||[]).map(r=>r.char_data).filter(c=>c&&c.id);
+  for(const c of cloudChars){if(localPortraits.has(c.id))c.portrait=localPortraits.get(c.id);}
+  localStorage.setItem(CHARS_LS_KEY,JSON.stringify(cloudChars));
+  renderSavedChars();
   // Resolve any pending char load from initial URL routing
   if(_pendingCharLoad){
     const c=_findCharBySlug(_pendingCharLoad);

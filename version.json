@@ -1,7 +1,12 @@
 {
-  "version": "2.7.3",
+  "version": "2.7.4",
   "date": "2026-05-05",
   "history": [
+    {
+      "version": "2.7.4",
+      "date": "2026-05-05",
+      "note": "Fix aislamiento de personajes por usuario: limpiar localStorage al cerrar sesión, reemplazar en lugar de mergear al cargar desde nube"
+    },
     {
       "version": "2.7.3",
       "date": "2026-05-05",
