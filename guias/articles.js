@@ -77,7 +77,7 @@ const ARTICLES = [
     title: 'Condiciones de D&D 5e: todas las condiciones explicadas',
     tag: '💀 Reglas',
     color: 'linear-gradient(90deg,#0d9488,#2dd4bf)',
-    img: '/Im%C3%A1genes/Gu%C3%ADa/10.svg',
+    img: '/Im%C3%A1genes/Gu%C3%ADa/condiciones.png',
     time: '7 min'
   },
   {
