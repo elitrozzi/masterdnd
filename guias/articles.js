@@ -69,7 +69,7 @@ const ARTICLES = [
     title: 'Trasfondos de D&D 5e: cuál elegir y por qué',
     tag: '📜 Trasfondo',
     color: 'linear-gradient(90deg,#b45309,#f59e0b)',
-    img: '/Im%C3%A1genes/Gu%C3%ADa/9.svg',
+    img: '/Im%C3%A1genes/Gu%C3%ADa/Trasfondos.png',
     time: '8 min'
   },
   {
