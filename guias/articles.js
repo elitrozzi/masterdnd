@@ -61,7 +61,7 @@ const ARTICLES = [
     title: 'Los mejores hechizos de D&D 5e por nivel y clase',
     tag: '🔮 Hechizos',
     color: 'linear-gradient(90deg,#7c3aed,#a855f7)',
-    img: '/Im%C3%A1genes/Gu%C3%ADa/8.svg',
+    img: '/Im%C3%A1genes/Gu%C3%ADa/hechizos.png',
     time: '13 min'
   },
   {

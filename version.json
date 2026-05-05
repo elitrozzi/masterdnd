@@ -1,7 +1,12 @@
 {
-  "version": "2.6.7",
+  "version": "2.6.8",
   "date": "2026-05-05",
   "history": [
+    {
+      "version": "2.6.8",
+      "date": "2026-05-05",
+      "note": "Imagen hechizos.png para el artículo de mejores hechizos de D&D 5e"
+    },
     {
       "version": "2.6.7",
       "date": "2026-05-05",
