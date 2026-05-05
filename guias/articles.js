@@ -93,7 +93,7 @@ const ARTICLES = [
     title: 'Mecánicas básicas de D&D 5e: tiradas, atributos y el d20',
     tag: '🎲 Mecánicas',
     color: 'linear-gradient(90deg,#1d4ed8,#60a5fa)',
-    img: '/Im%C3%A1genes/Gu%C3%ADa/12.svg',
+    img: '/Im%C3%A1genes/Gu%C3%ADa/mecanicas.png',
     time: '9 min'
   }
 ];
