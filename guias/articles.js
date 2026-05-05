@@ -53,7 +53,7 @@ const ARTICLES = [
     title: 'Combate en D&D 5e: guía completa del sistema de combate',
     tag: '⚔️ Combate',
     color: 'linear-gradient(90deg,#dc2626,#f97316)',
-    img: '/Im%C3%A1genes/Gu%C3%ADa/7.svg',
+    img: '/Im%C3%A1genes/Gu%C3%ADa/Combate.png',
     time: '10 min'
   },
   {
