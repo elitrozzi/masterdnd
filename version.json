@@ -1,7 +1,12 @@
 {
-  "version": "2.8.0",
+  "version": "2.8.1",
   "date": "2026-05-06",
   "history": [
+    {
+      "version": "2.8.1",
+      "date": "2026-05-06",
+      "note": "Fix spacing en cards Grimorio: 8px entre avatar, nombre y subtítulo en hechizos, monstruos e items mágicos"
+    },
     {
       "version": "2.8.0",
       "date": "2026-05-06",
