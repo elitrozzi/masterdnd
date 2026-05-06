@@ -2131,7 +2131,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.7.8</span>
+    <span class="ver-badge">v2.7.9</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">06 May 2026</span>
   </div>
@@ -2649,7 +2649,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.7.8</span>
+          <span class="ver-badge">v2.7.9</span>
           <span>·</span>
           <span class="ver-date">06 May 2026</span>
         </div>
@@ -4181,7 +4181,10 @@ let cSearchQ='';
 let cFilterQ='';
 let cTypeFilterQ='';
 let cClassFilterQ='';
-let _classSpellSets={};  // {wizardIndex: Set<spellIndex>}
+let _classSpellSets={};  // {className: Set<spellIndex>}
+let _spellClassMap={};   // {spellIndex: [className,...]}
+let _spellClassMapReady=false;
+const _SPELL_CASTERS=['bard','cleric','druid','paladin','ranger','sorcerer','warlock','wizard'];
 const SLOT_LS_KEY='masterdnd_slots';
 let _spellSlots={};  // {level: {total, used}}
 let cCacheLoaded={};
@@ -4205,6 +4208,53 @@ async function initCompendium(){
   }
   buildCompFilter();
   renderCompGrid();
+  if(cActiveTab==='spells'){
+    _buildSpellClassMap();
+    _batchTranslateSpellNames();
+  }
+}
+
+async function _buildSpellClassMap(){
+  if(_spellClassMapReady)return;
+  try{
+    await Promise.all(_SPELL_CASTERS.map(async cls=>{
+      if(!_classSpellSets[cls]){
+        const r=await fetch(`${DND_API}/classes/${cls}/spells`);
+        const j=await r.json();
+        _classSpellSets[cls]=new Set((j.results||[]).map(s=>s.index));
+      }
+      for(const si of _classSpellSets[cls]){
+        if(!_spellClassMap[si])_spellClassMap[si]=[];
+        if(!_spellClassMap[si].includes(cls))_spellClassMap[si].push(cls);
+      }
+    }));
+    _spellClassMapReady=true;
+    if(cActiveTab==='spells')renderCompGrid();
+  }catch(e){}
+}
+
+async function _batchTranslateSpellNames(){
+  if(currentLang!=='es')return;
+  const untranslated=cCache.spells.filter(s=>!cDetailCache[`spells/${s.index}`]?._name_es);
+  if(!untranslated.length)return;
+  for(let i=0;i<untranslated.length;i+=20){
+    const batch=untranslated.slice(i,i+20);
+    await Promise.all(batch.map(async s=>{
+      const es=await translateES(s.name);
+      if(!cDetailCache[`spells/${s.index}`])cDetailCache[`spells/${s.index}`]={};
+      cDetailCache[`spells/${s.index}`]._name_es=es;
+      const card=document.querySelector(`.comp-card[onclick*="'${s.index}'"]`);
+      if(card&&cActiveTab==='spells'){
+        const nameEl=card.querySelector('.cc-name');
+        if(nameEl&&nameEl.textContent===s.name){
+          nameEl.textContent=es;
+          if(!card.querySelector('.cc-name-en')){
+            const sub=document.createElement('div');sub.className='cc-name-en';sub.textContent=s.name;nameEl.after(sub);
+          }
+        }
+      }
+    }));
+  }
 }
 
 function compTab(type,el){
@@ -4418,7 +4468,8 @@ function renderSpellCard(s){
   const esSpellName=currentLang==='es'?detail?._name_es:null;
   const lvl=s.level||0;
   const levelBadge=`<span class="cc-badge cb-gold">${lvl===0?(currentLang==='es'?'Truco':'Cantrip'):(currentLang==='es'?`Nivel ${lvl}`:`Lvl ${lvl}`)}</span>`;
-  const classes=(detail?.classes||[]).slice(0,2).map(c=>{const k=(c.index||c.name||'').toLowerCase();return`<span class="cc-badge cb-brand">${currentLang==='es'?(CLASS_NAMES_ES[k]||c.name):c.name}</span>`;}).join('');
+  const rawClasses=_spellClassMapReady?(_spellClassMap[s.index]||[]):(detail?.classes||[]).map(c=>(c.index||c.name||'').toLowerCase());
+  const classes=rawClasses.slice(0,2).map(cls=>{const n=CLASS_NAMES_ES[cls]||cls.charAt(0).toUpperCase()+cls.slice(1);return`<span class="cc-badge cb-brand">${currentLang==='es'?n:cls.charAt(0).toUpperCase()+cls.slice(1)}</span>`;}).join('');
   return`<div class="comp-card spell-card" onclick="openCompDetail('spells','${s.index}')">
     <div class="mc-avatar">${spellAvatar(school)}</div>
     <div class="mc-info">

@@ -1,7 +1,12 @@
 {
-  "version": "2.7.8",
+  "version": "2.7.9",
   "date": "2026-05-06",
   "history": [
+    {
+      "version": "2.7.9",
+      "date": "2026-05-06",
+      "note": "Grimorio hechizos: traducciones y clases upfront — nombres en español al cargar la lista (batch translate), chips de clase desde mapa invertido precargado (8 endpoints de clase)"
+    },
     {
       "version": "2.7.8",
       "date": "2026-05-06",
