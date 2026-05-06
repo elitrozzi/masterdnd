@@ -1,7 +1,12 @@
 {
-  "version": "2.7.9",
+  "version": "2.8.0",
   "date": "2026-05-06",
   "history": [
+    {
+      "version": "2.8.0",
+      "date": "2026-05-06",
+      "note": "Grimorio monstruos e items mágicos: mismo rediseño que hechizos — nombre ES grande, subtítulo EN, chips CR+tipo / rareza+categoría, batch translate al cargar"
+    },
     {
       "version": "2.7.9",
       "date": "2026-05-06",

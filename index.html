@@ -2131,7 +2131,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.7.9</span>
+    <span class="ver-badge">v2.8.0</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">06 May 2026</span>
   </div>
@@ -2649,7 +2649,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.7.9</span>
+          <span class="ver-badge">v2.8.0</span>
           <span>·</span>
           <span class="ver-date">06 May 2026</span>
         </div>
@@ -4211,6 +4211,8 @@ async function initCompendium(){
   if(cActiveTab==='spells'){
     _buildSpellClassMap();
     _batchTranslateSpellNames();
+  } else if(cActiveTab==='monsters'||cActiveTab==='magic-items'){
+    _batchTranslateTab(cActiveTab);
   }
 }
 
@@ -4233,23 +4235,26 @@ async function _buildSpellClassMap(){
   }catch(e){}
 }
 
-async function _batchTranslateSpellNames(){
+async function _batchTranslateSpellNames(){await _batchTranslateTab('spells');}
+
+async function _batchTranslateTab(tab){
   if(currentLang!=='es')return;
-  const untranslated=cCache.spells.filter(s=>!cDetailCache[`spells/${s.index}`]?._name_es);
+  const list=cCache[tab]||[];
+  const untranslated=list.filter(s=>!cDetailCache[`${tab}/${s.index}`]?._name_es);
   if(!untranslated.length)return;
   for(let i=0;i<untranslated.length;i+=20){
     const batch=untranslated.slice(i,i+20);
-    await Promise.all(batch.map(async s=>{
-      const es=await translateES(s.name);
-      if(!cDetailCache[`spells/${s.index}`])cDetailCache[`spells/${s.index}`]={};
-      cDetailCache[`spells/${s.index}`]._name_es=es;
-      const card=document.querySelector(`.comp-card[onclick*="'${s.index}'"]`);
-      if(card&&cActiveTab==='spells'){
+    await Promise.all(batch.map(async item=>{
+      const es=await translateES(item.name);
+      if(!cDetailCache[`${tab}/${item.index}`])cDetailCache[`${tab}/${item.index}`]={};
+      cDetailCache[`${tab}/${item.index}`]._name_es=es;
+      const card=document.querySelector(`.comp-card[onclick*="'${item.index}'"]`);
+      if(card&&cActiveTab===tab){
         const nameEl=card.querySelector('.cc-name');
-        if(nameEl&&nameEl.textContent===s.name){
+        if(nameEl&&nameEl.textContent===item.name){
           nameEl.textContent=es;
           if(!card.querySelector('.cc-name-en')){
-            const sub=document.createElement('div');sub.className='cc-name-en';sub.textContent=s.name;nameEl.after(sub);
+            const sub=document.createElement('div');sub.className='cc-name-en';sub.textContent=item.name;nameEl.after(sub);
           }
         }
       }
@@ -4546,14 +4551,14 @@ function renderMonsterCard(m){
   const typeBadge=MONSTER_TYPE_BADGE[type]||'cb-gray';
   const typeLbl=currentLang==='es'?(MONSTER_TYPE_LABELS.es[type]||m.type||''):(MONSTER_TYPE_LABELS.en[type]||m.type||'');
   const esMonsterName=currentLang==='es'?cDetailCache[`monsters/${m.index}`]?._name_es:null;
-  return`<div class="comp-card monster-card" onclick="openCompDetail('monsters','${m.index}')">
+  return`<div class="comp-card spell-card" onclick="openCompDetail('monsters','${m.index}')">
     <div class="mc-avatar">${monsterAvatar(m.name, m.index)}</div>
     <div class="mc-info">
       <div class="cc-name">${esMonsterName||m.name}</div>
       ${esMonsterName?`<div class="cc-name-en">${m.name}</div>`:''}
-      <div style="display:flex;gap:4px;flex-wrap:wrap;">
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
         <span class="cc-badge cb-teal">CR ${cr}</span>
-        ${typeLbl?`<span class="cc-badge ${typeBadge}" style="font-size:12px;">${typeLbl}</span>`:''}
+        ${typeLbl?`<span class="cc-badge ${typeBadge}">${typeLbl}</span>`:''}
       </div>
     </div>
   </div>`;
@@ -4583,17 +4588,21 @@ function renderSimpleCard(item){
 const _MI_CAT_ICON={'wondrous-items':'✨',weapon:'⚔️',armor:'🛡️',ring:'💍',rod:'🔱',staff:'🪄',wand:'🪄',scroll:'📜',potion:'🧪'};
 const _MI_RARITY_BADGE={common:'cb-gray',uncommon:'cb-green',rare:'cb-brand','very rare':'cb-purple',legendary:'cb-gold',artifact:'cb-red'};
 const _MI_RARITY_ES={common:'Común',uncommon:'Infrecuente',rare:'Raro','very rare':'Muy Raro',legendary:'Legendario',artifact:'Artefacto'};
+const _MI_CAT_ES={'wondrous-items':'Maravilloso',weapon:'Arma',armor:'Armadura',ring:'Anillo',rod:'Bastón',staff:'Báculo',wand:'Varita',scroll:'Pergamino',potion:'Poción'};
 function renderMagicItemCard(item){
   const icon=_MI_CAT_ICON[item.equipment_category?.index]||'✨';
   const rarityKey=(item.rarity?.name||item.rarity||'').toLowerCase();
-  const badge=rarityKey?`<span class="cc-badge ${_MI_RARITY_BADGE[rarityKey]||'cb-gray'}" style="font-size:12px;">${currentLang==='es'?(_MI_RARITY_ES[rarityKey]||rarityKey):(item.rarity?.name||rarityKey)}</span>`:'';
+  const rarityBadge=rarityKey?`<span class="cc-badge ${_MI_RARITY_BADGE[rarityKey]||'cb-gray'}">${currentLang==='es'?(_MI_RARITY_ES[rarityKey]||rarityKey):(item.rarity?.name||rarityKey)}</span>`:'';
+  const catKey=item.equipment_category?.index||'';
+  const catLabel=catKey?(currentLang==='es'?(_MI_CAT_ES[catKey]||item.equipment_category?.name||''):(item.equipment_category?.name||'')):'';
+  const catBadge=catLabel?`<span class="cc-badge cb-teal">${catLabel}</span>`:'';
   const esMiName=currentLang==='es'?cDetailCache[`magic-items/${item.index}`]?._name_es:null;
-  return`<div class="comp-card monster-card" onclick="openCompDetail('magic-items','${item.index}')">
+  return`<div class="comp-card spell-card" onclick="openCompDetail('magic-items','${item.index}')">
     <div class="mc-avatar" style="background:rgba(200,160,255,.08);border:1px solid rgba(192,132,224,.25);display:flex;align-items:center;justify-content:center;font-size:22px;">${icon}</div>
     <div class="mc-info">
       <div class="cc-name">${_esc(esMiName||item.name)}</div>
       ${esMiName?`<div class="cc-name-en">${_esc(item.name)}</div>`:''}
-      <div style="display:flex;gap:4px;flex-wrap:wrap;">${badge}</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">${rarityBadge}${catBadge}</div>
     </div>
   </div>`;
 }
