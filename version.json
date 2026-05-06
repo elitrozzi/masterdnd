@@ -1,7 +1,12 @@
 {
-  "version": "2.8.1",
+  "version": "2.8.2",
   "date": "2026-05-06",
   "history": [
+    {
+      "version": "2.8.2",
+      "date": "2026-05-06",
+      "note": "Grimorio: drawer de filtros — botón Filtrar en toolbar, pills de nivel/clase/CR/tipo/rareza dentro del drawer deslizable, badge con conteo de filtros activos, huecos de conjuro dentro del drawer"
+    },
     {
       "version": "2.8.1",
       "date": "2026-05-06",

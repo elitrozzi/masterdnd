@@ -1022,12 +1022,33 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .slot-pip:hover{border-color:var(--gold);}
 /* Spell card school indicator */
 .sc-school-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:4px;flex-shrink:0;}
-/* Filter pills */
+/* Filter pills — hidden (now live inside the filter drawer) */
 .comp-filter{display:none;}
-.comp-pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px;}
-.comp-pill{padding:5px 14px;border-radius:20px;background:var(--surface);border:1px solid var(--border);font-size:12px;font-weight:500;color:var(--text-m);cursor:none;transition:background .15s ease-out,border-color .15s ease-out,color .15s ease-out,transform .15s ease-out,opacity .15s ease-out;white-space:nowrap;}
-.comp-pill:hover{border-color:var(--brand-400);color:var(--text);}
-.comp-pill.active{background:rgba(248,198,98,.12);border-color:var(--gold);color:var(--gold);}
+.comp-pills{display:none!important;}
+/* Filter button */
+.comp-filter-btn{display:flex;align-items:center;gap:7px;padding:11px 16px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid var(--border);font-size:13px;color:var(--text-m);cursor:none;white-space:nowrap;font-family:'Roboto',sans-serif;transition:background .15s ease-out,border-color .15s ease-out,color .15s ease-out;}
+.comp-filter-btn:hover{border-color:var(--brand-400);color:var(--text);}
+.comp-filter-btn.active-filters{border-color:var(--gold);color:var(--gold);background:rgba(248,198,98,.06);}
+.cfb-badge{background:var(--gold);color:#0d0a1c;border-radius:50%;width:17px;height:17px;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;}
+/* Filter drawer */
+.fd-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:240;opacity:0;pointer-events:none;transition:opacity .25s;}
+.fd-backdrop.open{opacity:1;pointer-events:auto;}
+.fd-drawer{position:fixed;top:0;right:0;bottom:0;width:300px;max-width:88vw;background:var(--surface);border-left:1px solid var(--border);z-index:241;transform:translateX(100%);transition:transform .3s var(--ease-drawer);overflow-y:auto;display:flex;flex-direction:column;}
+.fd-drawer.open{transform:translateX(0);}
+.fd-head{display:flex;align-items:center;justify-content:space-between;padding:20px 20px 16px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);z-index:2;}
+.fd-head-title{font-size:16px;font-weight:700;color:var(--text);}
+.fd-head-close{background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:50%;width:32px;height:32px;color:var(--text-m);font-size:14px;cursor:none;display:flex;align-items:center;justify-content:center;transition:background .15s ease-out,border-color .15s ease-out;}
+.fd-head-close:hover{background:rgba(255,255,255,.13);}
+.fd-body{padding:20px;flex:1;}
+.fd-section{margin-bottom:22px;}
+.fd-section-label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-d);margin-bottom:10px;font-weight:700;}
+.fd-pills{display:flex;flex-wrap:wrap;gap:7px;}
+.fd-pill{padding:6px 13px;border-radius:20px;background:var(--card);border:1px solid var(--border);font-size:13px;color:var(--text-m);cursor:none;transition:background .15s ease-out,border-color .15s ease-out,color .15s ease-out;white-space:nowrap;}
+.fd-pill:hover{border-color:var(--brand-400);color:var(--text);}
+.fd-pill.active{background:rgba(248,198,98,.12);border-color:var(--gold);color:var(--gold);}
+.fd-clear{width:100%;padding:11px;border-radius:10px;background:transparent;border:1px solid var(--border);color:var(--text-m);font-size:13px;cursor:none;margin-top:8px;font-family:'Roboto',sans-serif;transition:border-color .15s ease-out,color .15s ease-out;}
+.fd-clear:hover{border-color:var(--brand-400);color:var(--text);}
+.fd-divider{border:none;border-top:1px solid var(--border);margin:20px 0;}
 /* Detail overlay */
 .comp-overlay{position:fixed;inset:0;background:rgba(13,10,28,.75);z-index:249;opacity:0;pointer-events:none;transition:opacity .3s cubic-bezier(.4,0,.2,1);backdrop-filter:blur(3px);}
 .comp-overlay.open{opacity:1;pointer-events:auto;}
@@ -2131,7 +2152,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.8.1</span>
+    <span class="ver-badge">v2.8.2</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">06 May 2026</span>
   </div>
@@ -2649,7 +2670,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.8.1</span>
+          <span class="ver-badge">v2.8.2</span>
           <span>·</span>
           <span class="ver-date">06 May 2026</span>
         </div>
@@ -3207,24 +3228,44 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
       </div>
       <div class="comp-toolbar">
         <input class="comp-search" id="compSearchInput" data-placeholder-es="Buscar..." data-placeholder-en="Search..." placeholder="Buscar..." oninput="compSearchFn(this.value)">
-        <select class="comp-filter" id="compFilterSel" onchange="compFilterFn(this.value)">
-          <option value="" data-es="Todo" data-en="All">Todo</option>
-        </select>
-      </div>
-      <div class="comp-pills" id="compPills"></div>
-      <div class="comp-pills" id="compTypePills" style="display:none;"></div>
-      <!-- Spell slot tracker (spells tab only) -->
-      <div id="spellSlotTracker" style="display:none;">
-        <div class="slot-tracker-bar">
-          <span class="slot-tracker-title" data-es="Huecos de conjuro" data-en="Spell Slots">Huecos de conjuro</span>
-          <button class="slot-tracker-reset" onclick="resetSlots()" data-es="Descanso largo" data-en="Long rest">Descanso largo</button>
-        </div>
-        <div class="slot-tracker-grid" id="slotTrackerGrid"></div>
+        <button class="comp-filter-btn" id="compFilterBtn" onclick="openFilterDrawer()">
+          ⚙ <span data-es="Filtrar" data-en="Filter">Filtrar</span>
+          <span class="cfb-badge" id="cfbBadge" style="display:none;">0</span>
+        </button>
       </div>
       <div id="compGrid" class="comp-grid">
         <div class="comp-state"><div class="comp-spinner"></div><span data-es="Cargando..." data-en="Loading...">Cargando...</span></div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- ══ FILTER DRAWER ══ -->
+<div class="fd-backdrop" id="fdBackdrop" onclick="closeFilterDrawer()"></div>
+<div class="fd-drawer" id="filterDrawer">
+  <div class="fd-head">
+    <span class="fd-head-title" data-es="Filtros" data-en="Filters">Filtros</span>
+    <button class="fd-head-close" onclick="closeFilterDrawer()">✕</button>
+  </div>
+  <div class="fd-body">
+    <div class="fd-section" id="fdSectionMain">
+      <div class="fd-section-label" id="fdLabelMain">NIVEL</div>
+      <div class="fd-pills" id="compPills"></div>
+    </div>
+    <div class="fd-section" id="fdSectionClass" style="display:none;">
+      <hr class="fd-divider">
+      <div class="fd-section-label" id="fdLabelClass">CLASE</div>
+      <div class="fd-pills" id="compTypePills"></div>
+    </div>
+    <hr class="fd-divider" id="fdSlotDivider" style="display:none;">
+    <div id="spellSlotTracker" style="display:none;">
+      <div class="slot-tracker-bar">
+        <span class="slot-tracker-title" data-es="Huecos de conjuro" data-en="Spell Slots">Huecos de conjuro</span>
+        <button class="slot-tracker-reset" onclick="resetSlots()" data-es="Descanso largo" data-en="Long rest">Descanso largo</button>
+      </div>
+      <div class="slot-tracker-grid" id="slotTrackerGrid"></div>
+    </div>
+    <button class="fd-clear" id="fdClearBtn" onclick="clearAllFilters()" data-es="Limpiar filtros" data-en="Clear filters">Limpiar filtros</button>
   </div>
 </div>
 
@@ -4265,19 +4306,18 @@ async function _batchTranslateTab(tab){
 function compTab(type,el){
   cActiveTab=type;cSearchQ='';cFilterQ='';cTypeFilterQ='';cClassFilterQ='';
   const si=document.getElementById('compSearchInput');
-  const fi=document.getElementById('compFilterSel');
-  if(si)si.value='';if(fi)fi.value='';
+  if(si)si.value='';
   document.querySelectorAll('.comp-tab').forEach(t=>t.classList.remove('active'));
   if(el)el.classList.add('active');
-  closeCompPanel();
+  closeCompPanel();closeFilterDrawer();updateFilterBadge();
   initCompendium();
 }
 
 function compSearchFn(v){cSearchQ=v;renderCompGrid();}
 function compFilterFn(v,el){
   cFilterQ=v;
-  if(el){document.querySelectorAll('.comp-pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');}
-  renderCompGrid();
+  if(el){document.querySelectorAll('#compPills .fd-pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');}
+  renderCompGrid();updateFilterBadge();
 }
 
 const MONSTER_TYPE_LABELS={es:{dragon:'Dragón',undead:'Muerto viviente',humanoid:'Humanoide',beast:'Bestia',monstrosity:'Monstruosidad',elemental:'Elemental',aberration:'Aberración',construct:'Constructo',plant:'Planta',fiend:'Demonio',fey:'Hada',giant:'Gigante',celestial:'Celestial',ooze:'Cieno'},en:{dragon:'Dragon',undead:'Undead',humanoid:'Humanoid',beast:'Beast',monstrosity:'Monstrosity',elemental:'Elemental',aberration:'Aberration',construct:'Construct',plant:'Plant',fiend:'Fiend',fey:'Fey',giant:'Giant',celestial:'Celestial',ooze:'Ooze'}};
@@ -4288,61 +4328,95 @@ function buildCompFilter(){
   const tpills=document.getElementById('compTypePills');
   if(!pills)return;
   const es=currentLang==='es';
+  const secClass=document.getElementById('fdSectionClass');
+  const lblMain=document.getElementById('fdLabelMain');
+  const lblClass=document.getElementById('fdLabelClass');
+  const st=document.getElementById('spellSlotTracker');
+  const slotDiv=document.getElementById('fdSlotDivider');
+  const filterBtn=document.getElementById('compFilterBtn');
   let items=[];
+
   if(cActiveTab==='spells'){
+    if(lblMain)lblMain.textContent=es?'NIVEL':'LEVEL';
+    if(lblClass)lblClass.textContent=es?'CLASE':'CLASS';
     items=[{v:'',l:es?'Todos':'All'}];
     for(let i=0;i<=9;i++){
       items.push({v:String(i),l:i===0?(es?'Truco':'Cantrip'):(es?`Niv. ${i}`:`Lv. ${i}`)});
     }
-    // Class filter row
     if(tpills){
       const classes=['bard','cleric','druid','paladin','ranger','sorcerer','warlock','wizard'];
       const classNames={es:{bard:'Bardo',cleric:'Clérigo',druid:'Druida',paladin:'Paladín',ranger:'Explorador',sorcerer:'Hechicero',warlock:'Brujo',wizard:'Mago'},en:{bard:'Bard',cleric:'Cleric',druid:'Druid',paladin:'Paladin',ranger:'Ranger',sorcerer:'Sorcerer',warlock:'Warlock',wizard:'Wizard'}};
       const classItems=[{v:'',l:es?'Todas las clases':'All classes'},...classes.map(c=>({v:c,l:es?classNames.es[c]:classNames.en[c]}))];
-      tpills.innerHTML=classItems.map(it=>`<div class="comp-pill${cClassFilterQ===it.v?' active':''}" onclick="compClassFn('${it.v}',this)">${it.l}</div>`).join('');
-      tpills.style.display='flex';
+      tpills.innerHTML=classItems.map(it=>`<div class="fd-pill${cClassFilterQ===it.v?' active':''}" onclick="compClassFn('${it.v}',this)">${it.l}</div>`).join('');
     }
-    // Show slot tracker
-    const st=document.getElementById('spellSlotTracker');
+    if(secClass)secClass.style.display='block';
     if(st){st.style.display='block';initSlotTracker();}
+    if(slotDiv)slotDiv.style.display='block';
+    if(filterBtn)filterBtn.style.display='flex';
 
   } else if(cActiveTab==='monsters'){
-    const st2=document.getElementById('spellSlotTracker');if(st2)st2.style.display='none';
-    items=[
-      {v:'',l:es?'Todos':'All'},
-      {v:'low',l:'CR 0–4'},{v:'mid',l:'CR 5–9'},
-      {v:'high',l:'CR 10–19'},{v:'epic',l:'CR 20+'}
-    ];
-    // Build type pills from available data
+    if(lblMain)lblMain.textContent=es?'DIFICULTAD':'DIFFICULTY';
+    if(lblClass)lblClass.textContent=es?'TIPO':'TYPE';
+    items=[{v:'',l:es?'Todos':'All'},{v:'low',l:'CR 0–4'},{v:'mid',l:'CR 5–9'},{v:'high',l:'CR 10–19'},{v:'epic',l:'CR 20+'}];
     if(tpills){
       const types=[...new Set(cCache.monsters.map(m=>m.type).filter(Boolean))].sort();
       const typeItems=[{v:'',l:es?'Todos los tipos':'All types'},...types.map(t=>({v:t,l:(es?MONSTER_TYPE_LABELS.es[t]:MONSTER_TYPE_LABELS.en[t])||t}))];
-      tpills.innerHTML=typeItems.map(it=>`<div class="comp-pill${cTypeFilterQ===it.v?' active':''}" onclick="compTypeFn('${it.v}',this)">${it.l}</div>`).join('');
-      tpills.style.display='flex';
+      tpills.innerHTML=typeItems.map(it=>`<div class="fd-pill${cTypeFilterQ===it.v?' active':''}" onclick="compTypeFn('${it.v}',this)">${it.l}</div>`).join('');
     }
+    if(secClass)secClass.style.display='block';
+    if(st)st.style.display='none';
+    if(slotDiv)slotDiv.style.display='none';
+    if(filterBtn)filterBtn.style.display='flex';
+
   } else if(cActiveTab==='magic-items'){
-    const st4=document.getElementById('spellSlotTracker');if(st4)st4.style.display='none';
+    if(lblMain)lblMain.textContent=es?'RAREZA':'RARITY';
     const rarities=['common','uncommon','rare','very rare','legendary','artifact'];
     const rarityLabels={es:{common:'Común',uncommon:'Infrecuente',rare:'Raro','very rare':'Muy Raro',legendary:'Legendario',artifact:'Artefacto'},en:{common:'Common',uncommon:'Uncommon',rare:'Rare','very rare':'Very Rare',legendary:'Legendary',artifact:'Artifact'}};
     items=[{v:'',l:es?'Todas':'All'},...rarities.map(r=>({v:r,l:es?rarityLabels.es[r]:rarityLabels.en[r]}))];
-    if(tpills)tpills.style.display='none';
+    if(secClass)secClass.style.display='none';
+    if(st)st.style.display='none';
+    if(slotDiv)slotDiv.style.display='none';
+    if(filterBtn)filterBtn.style.display='flex';
+
   } else {
-    const st3=document.getElementById('spellSlotTracker');if(st3)st3.style.display='none';
-    items=[{v:'',l:es?'Todos':'All'}];
-    if(tpills)tpills.style.display='none';
+    if(st)st.style.display='none';
+    if(slotDiv)slotDiv.style.display='none';
+    if(secClass)secClass.style.display='none';
+    if(filterBtn)filterBtn.style.display='none';
+    items=[];
   }
-  pills.innerHTML=items.map(it=>`<div class="comp-pill${cFilterQ===it.v?' active':''}" onclick="compFilterFn('${it.v}',this)">${it.l}</div>`).join('');
+  pills.innerHTML=items.map(it=>`<div class="fd-pill${cFilterQ===it.v?' active':''}" onclick="compFilterFn('${it.v}',this)">${it.l}</div>`).join('');
+}
+
+function openFilterDrawer(){
+  document.getElementById('filterDrawer').classList.add('open');
+  document.getElementById('fdBackdrop').classList.add('open');
+}
+function closeFilterDrawer(){
+  document.getElementById('filterDrawer').classList.remove('open');
+  document.getElementById('fdBackdrop').classList.remove('open');
+}
+function updateFilterBadge(){
+  const count=[cFilterQ!=='',cTypeFilterQ!=='',cClassFilterQ!==''].filter(Boolean).length;
+  const btn=document.getElementById('compFilterBtn');
+  const badge=document.getElementById('cfbBadge');
+  if(btn)btn.classList.toggle('active-filters',count>0);
+  if(badge){badge.textContent=count;badge.style.display=count?'flex':'none';}
+}
+function clearAllFilters(){
+  cFilterQ='';cTypeFilterQ='';cClassFilterQ='';
+  buildCompFilter();renderCompGrid();updateFilterBadge();
 }
 
 function compTypeFn(v,el){
   cTypeFilterQ=v;
-  if(el){document.querySelectorAll('#compTypePills .comp-pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');}
-  renderCompGrid();
+  if(el){document.querySelectorAll('#compTypePills .fd-pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');}
+  renderCompGrid();updateFilterBadge();
 }
 
 async function compClassFn(v,el){
   cClassFilterQ=v;
-  if(el){document.querySelectorAll('#compTypePills .comp-pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');}
+  if(el){document.querySelectorAll('#compTypePills .fd-pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');}
   if(v&&!_classSpellSets[v]){
     try{
       const r=await fetch(`${DND_API}/classes/${v}/spells`);
@@ -4350,7 +4424,7 @@ async function compClassFn(v,el){
       _classSpellSets[v]=new Set((j.results||[]).map(s=>s.index));
     }catch(e){_classSpellSets[v]=new Set();}
   }
-  renderCompGrid();
+  renderCompGrid();updateFilterBadge();
 }
 
 /* ══ SPELL SLOT TRACKER ══ */
