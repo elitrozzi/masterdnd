@@ -1,7 +1,12 @@
 {
-  "version": "2.7.6",
+  "version": "2.7.7",
   "date": "2026-05-06",
   "history": [
+    {
+      "version": "2.7.7",
+      "date": "2026-05-06",
+      "note": "Grimorio: 4 columnas en lugar de 5, cards más grandes, nombre en español primero con inglés como subtítulo en todas las tabs"
+    },
     {
       "version": "2.7.6",
       "date": "2026-05-06",
