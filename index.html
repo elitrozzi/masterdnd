@@ -399,6 +399,10 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .cs-dbd-name-input:focus{border-bottom-color:var(--lol-gold);}
 .cs-dbd-name-input::placeholder{color:rgba(200,170,110,.2);}
 .cs-dbd-meta{font-size:16px;color:var(--lol-gray);margin-top:5px;letter-spacing:.04em;}
+.cs-gender-row{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px;}
+.cs-gender-pill{padding:3px 10px;border-radius:20px;font-size:11px;border:1px solid rgba(200,170,110,.22);color:var(--lol-gray);cursor:pointer;transition:border-color .15s,color .15s,background .15s;}
+.cs-gender-pill:hover{border-color:rgba(200,170,110,.5);color:var(--text);}
+.cs-gender-pill.active{border-color:var(--lol-gold);color:var(--lol-gold);background:rgba(200,170,110,.1);}
 /* HP block */
 .cs-dbd-hp-block{display:flex;align-items:center;gap:10px;background:rgba(0,0,0,.35);border:1px solid rgba(120,90,40,.4);padding:10px 16px;flex-shrink:0;}
 .cs-dbd-hp-nums{font:700 20px/1 'Cinzel',serif;color:var(--lol-gold-bright);white-space:nowrap;min-width:80px;text-align:center;letter-spacing:.02em;}
@@ -2117,9 +2121,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.7.4</span>
+    <span class="ver-badge">v2.7.5</span>
     <span class="ver-sep">·</span>
-    <span class="ver-date">05 May 2026</span>
+    <span class="ver-date">06 May 2026</span>
   </div>
   <div class="lang-toggle">
     <button class="lang-btn active" onclick="setLang('es')">ES</button>
@@ -2635,9 +2639,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.7.4</span>
+          <span class="ver-badge">v2.7.5</span>
           <span>·</span>
-          <span class="ver-date">05 May 2026</span>
+          <span class="ver-date">06 May 2026</span>
         </div>
       </div>
       <!-- RIGHT: scene -->
@@ -2853,6 +2857,12 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
                   <div class="cs-dbd-identity">
                     <input class="cs-dbd-name-input" id="csNameInput" placeholder="Nombre del personaje..." autocomplete="off" spellcheck="false">
                     <div class="cs-dbd-meta" id="csMeta">Raza · Clase · Nivel 1</div>
+                    <div class="cs-gender-row" id="csGenderRow">
+                      <div class="cs-gender-pill" onclick="selectGender('masculino',this)">♂ Masc.</div>
+                      <div class="cs-gender-pill" onclick="selectGender('femenino',this)">♀ Fem.</div>
+                      <div class="cs-gender-pill" onclick="selectGender('no-binario',this)">⚧ No binario</div>
+                      <div class="cs-gender-pill" onclick="selectGender('indistinto',this)">✦ Indistinto</div>
+                    </div>
                   </div>
                   <div class="cs-dbd-hp-block">
                     <div class="cs-dbd-hp-nums"><span id="sheetHpCur">—</span><span class="cs-dbd-hp-sep">/</span><span class="cs-dbd-hp-max-val" id="sheetHpMax">—</span></div>
@@ -4469,9 +4479,16 @@ function renderMonsterCard(m){
   </div>`;
 }
 
+const _GRIMORIO_RACE_ES={human:'Humano',elf:'Elfo',dwarf:'Enano',halfling:'Mediano',dragonborn:'Dragonborn',tiefling:'Tiefling','half-orc':'Semiorco','half-elf':'Semielfo',gnome:'Gnomo',aasimar:'Aasimar',tabaxi:'Tabaxi',firbolg:'Firbolg',kenku:'Kenku'};
 function renderSimpleCard(item){
+  let displayName=item.name;
+  if(currentLang==='es'){
+    if(cActiveTab==='classes') displayName=CLASS_NAMES_ES[item.index]||cDetailCache[`classes/${item.index}`]?._name_es||item.name;
+    else if(cActiveTab==='races') displayName=_GRIMORIO_RACE_ES[item.index]||cDetailCache[`races/${item.index}`]?._name_es||item.name;
+    else displayName=cDetailCache[`${cActiveTab}/${item.index}`]?._name_es||item.name;
+  }
   return`<div class="comp-card" onclick="openCompDetail('${cActiveTab}','${item.index}')">
-    <div class="cc-name">${(currentLang==='es'&&cDetailCache[`${cActiveTab}/${item.index}`]?._name_es)||item.name}</div>
+    <div class="cc-name">${displayName}</div>
   </div>`;
 }
 const _MI_CAT_ICON={'wondrous-items':'✨',weapon:'⚔️',armor:'🛡️',ring:'💍',rod:'🔱',staff:'🪄',wand:'🪄',scroll:'📜',potion:'🧪'};
@@ -5023,7 +5040,7 @@ function rollStats(){
   },done);
 }
 function buildSheet(){
-  _loadedCharId=null;_saveProfs=new Set();_skillProfs=new Set();
+  _loadedCharId=null;_saveProfs=new Set();_skillProfs=new Set();_restoreGenderUI(null);
   if(selections.mode==='random'){
     if(!selections.class)selections.class=CLASS_KEYS[Math.floor(Math.random()*CLASS_KEYS.length)];
     if(!rolledStats){rolledStats={};['str','dex','con','int','wis','cha'].forEach(s=>{const r=[1,2,3,4].map(()=>Math.ceil(Math.random()*6));rolledStats[s]=r.sort((a,b)=>b-a).slice(0,3).reduce((a,b)=>a+b,0);});}
@@ -5138,7 +5155,7 @@ function saveCharacter(btn){
   const chars=_loadSavedChars();
   const maxHp=hpBase+conMod;
   const existingIdx=_loadedCharId?chars.findIndex(c=>c.id===_loadedCharId):-1;
-  const charObj={id:_loadedCharId||Date.now().toString(),name,race:rk,class:ck,stats:st,hp:maxHp,currentHp:maxHp,ca:10+dexMod,level:_currentLevel||1,conditions:[..._activeConditions],skillProfs:[..._skillProfs],saveProfs:[..._saveProfs],savedAt:Date.now(),portrait:_pendingPortrait||null};
+  const charObj={id:_loadedCharId||Date.now().toString(),name,race:rk,class:ck,gender:_csGender||null,stats:st,hp:maxHp,currentHp:maxHp,ca:10+dexMod,level:_currentLevel||1,conditions:[..._activeConditions],skillProfs:[..._skillProfs],saveProfs:[..._saveProfs],savedAt:Date.now(),portrait:_pendingPortrait||null};
   if(existingIdx>=0){charObj.hp=chars[existingIdx].hp;charObj.currentHp=chars[existingIdx].currentHp;charObj.portrait=_pendingPortrait||chars[existingIdx].portrait||null;chars.splice(existingIdx,1,charObj);}
   else chars.unshift(charObj);
   localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));
@@ -5238,6 +5255,7 @@ function loadChar(id,fromPop){
   _updateSheetHp(cur,c.hp);
   _activeConditions=new Set(c.conditions||[]);
   _renderConditions();
+  _restoreGenderUI(c.gender||null);
   // Inventory, spells, notes, actions
   _loadedCharClass=c.class||'';
   _csSpellSlots=null;
@@ -5268,6 +5286,10 @@ function deleteChar(id){
 }
 let _loadedCharId=null;
 let _currentLevel=1;
+let _csGender=null;
+function selectGender(g,el){_csGender=g;document.querySelectorAll('.cs-gender-pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');}
+function _restoreGenderUI(g){_csGender=g||null;document.querySelectorAll('.cs-gender-pill').forEach(p=>p.classList.toggle('active',p.getAttribute('onclick')?.includes(`'${g}'`)));}
+
 const HIT_DICE={fighter:10,paladin:10,barbarian:12,wizard:6,sorcerer:6,warlock:8,rogue:8,ranger:8,druid:8,bard:8,cleric:8,monk:8};
 /* ── DnD Beyond sheet extras ── */
 const CLASS_SAVES={fighter:['str','con'],wizard:['int','wis'],rogue:['dex','int'],cleric:['wis','cha'],ranger:['str','dex'],paladin:['wis','cha'],barbarian:['str','con'],bard:['dex','cha'],druid:['int','wis'],monk:['str','dex'],sorcerer:['con','cha'],warlock:['wis','cha']};

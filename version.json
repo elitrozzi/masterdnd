@@ -1,7 +1,12 @@
 {
-  "version": "2.7.4",
-  "date": "2026-05-05",
+  "version": "2.7.5",
+  "date": "2026-05-06",
   "history": [
+    {
+      "version": "2.7.5",
+      "date": "2026-05-06",
+      "note": "Feature: selector de género en creación de personaje (Masc./Fem./No binario/Indistinto); fix Grimorio: clases y razas ahora en español sin necesitar abrir el detalle"
+    },
     {
       "version": "2.7.4",
       "date": "2026-05-05",
