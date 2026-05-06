@@ -1,7 +1,12 @@
 {
-  "version": "2.8.3",
+  "version": "2.8.4",
   "date": "2026-05-06",
   "history": [
+    {
+      "version": "2.8.4",
+      "date": "2026-05-06",
+      "note": "Fix Grimorio: panel de detalle mostraba UNDEFINED — cDetailCache stub del batch translate bloqueaba el fetch real de la API"
+    },
     {
       "version": "2.8.3",
       "date": "2026-05-06",
