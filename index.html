@@ -399,10 +399,11 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .cs-dbd-name-input:focus{border-bottom-color:var(--lol-gold);}
 .cs-dbd-name-input::placeholder{color:rgba(200,170,110,.2);}
 .cs-dbd-meta{font-size:16px;color:var(--lol-gray);margin-top:5px;letter-spacing:.04em;}
-.cs-gender-row{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px;}
-.cs-gender-pill{padding:3px 10px;border-radius:20px;font-size:11px;border:1px solid rgba(200,170,110,.22);color:var(--lol-gray);cursor:pointer;transition:border-color .15s,color .15s,background .15s;}
-.cs-gender-pill:hover{border-color:rgba(200,170,110,.5);color:var(--text);}
-.cs-gender-pill.active{border-color:var(--lol-gold);color:var(--lol-gold);background:rgba(200,170,110,.1);}
+.cs-gender-options{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:360px;}
+.cs-gender-opt{padding:10px 22px;border-radius:24px;font-size:14px;font-weight:600;border:1px solid rgba(200,170,110,.25);color:var(--lol-gray);cursor:pointer;transition:border-color .15s,color .15s,background .15s;letter-spacing:.04em;}
+.cs-gender-opt:hover{border-color:rgba(200,170,110,.55);color:var(--text);}
+.cs-gender-opt.active{border-color:var(--lol-gold);color:var(--lol-gold);background:rgba(200,170,110,.12);}
+.cs-gender-display{font-size:12px;color:var(--lol-gray);margin-top:4px;}
 /* HP block */
 .cs-dbd-hp-block{display:flex;align-items:center;gap:10px;background:rgba(0,0,0,.35);border:1px solid rgba(120,90,40,.4);padding:10px 16px;flex-shrink:0;}
 .cs-dbd-hp-nums{font:700 20px/1 'Cinzel',serif;color:var(--lol-gold-bright);white-space:nowrap;min-width:80px;text-align:center;letter-spacing:.02em;}
@@ -2121,7 +2122,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.7.5</span>
+    <span class="ver-badge">v2.7.6</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">06 May 2026</span>
   </div>
@@ -2639,7 +2640,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.7.5</span>
+          <span class="ver-badge">v2.7.6</span>
           <span>·</span>
           <span class="ver-date">06 May 2026</span>
         </div>
@@ -2771,7 +2772,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 
     <!-- Panel 1: Race carousel -->
     <div class="cs-panel cs-right" id="csPanelRace">
-      <span class="cs-step-label">Paso 1 de 2 · Elige tu raza</span>
+      <span class="cs-step-label">Paso 1 de 3 · Elige tu raza</span>
       <div class="race-carousel-section">
         <button class="race-arrow" onclick="carouselMove(-1)">&#8249;</button>
         <div class="race-carousel-track" id="raceCarouselTrack"></div>
@@ -2791,7 +2792,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 
     <!-- Panel 2: Class carousel -->
     <div class="cs-panel cs-right" id="csPanelClass">
-      <span class="cs-step-label">Paso 2 de 2 · Elige tu clase</span>
+      <span class="cs-step-label">Paso 2 de 3 · Elige tu clase</span>
       <div class="race-carousel-section">
         <button class="race-arrow" onclick="classCarouselMove(-1)">&#8249;</button>
         <div class="race-carousel-track" id="classCarouselTrack"></div>
@@ -2807,6 +2808,23 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         </div>
       </div>
       <div class="cs-chips-wrap" id="classChips"></div>
+    </div>
+
+    <!-- Panel 3: Gender -->
+    <div class="cs-panel cs-right" id="csPanelGender">
+      <span class="cs-step-label">Paso 3 de 3 · Tu personaje</span>
+      <div class="race-info-name" style="font-size:26px;margin-bottom:6px;">¿Cuál es tu género?</div>
+      <div class="race-info-tag" style="margin-bottom:22px;">Opcional — podés dejarlo sin especificar</div>
+      <div class="cs-gender-options" id="csGenderOptions">
+        <div class="cs-gender-opt" onclick="selectGenderPanel('masculino',this)">♂ Masculino</div>
+        <div class="cs-gender-opt" onclick="selectGenderPanel('femenino',this)">♀ Femenino</div>
+        <div class="cs-gender-opt" onclick="selectGenderPanel('no-binario',this)">⚧ No binario</div>
+        <div class="cs-gender-opt" onclick="selectGenderPanel('indistinto',this)">✦ Indistinto</div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:center;margin-top:24px;">
+        <button class="char-drawer-back" onclick="csGoTo('csPanelClass','back')" style="cursor:none;">← Clase</button>
+        <button class="char-confirm-btn" onclick="confirmGender()">CREAR PERSONAJE →</button>
+      </div>
     </div>
 
     <!-- Creator drawer (stats + sheet) -->
@@ -2857,12 +2875,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
                   <div class="cs-dbd-identity">
                     <input class="cs-dbd-name-input" id="csNameInput" placeholder="Nombre del personaje..." autocomplete="off" spellcheck="false">
                     <div class="cs-dbd-meta" id="csMeta">Raza · Clase · Nivel 1</div>
-                    <div class="cs-gender-row" id="csGenderRow">
-                      <div class="cs-gender-pill" onclick="selectGender('masculino',this)">♂ Masc.</div>
-                      <div class="cs-gender-pill" onclick="selectGender('femenino',this)">♀ Fem.</div>
-                      <div class="cs-gender-pill" onclick="selectGender('no-binario',this)">⚧ No binario</div>
-                      <div class="cs-gender-pill" onclick="selectGender('indistinto',this)">✦ Indistinto</div>
-                    </div>
+                    <div class="cs-gender-display" id="csGenderDisplay"></div>
                   </div>
                   <div class="cs-dbd-hp-block">
                     <div class="cs-dbd-hp-nums"><span id="sheetHpCur">—</span><span class="cs-dbd-hp-sep">/</span><span class="cs-dbd-hp-max-val" id="sheetHpMax">—</span></div>
@@ -5066,6 +5079,7 @@ function buildSheet(){
   _updateLevelBadges();
   // Meta line
   document.getElementById('csMeta').textContent=`${RACE_NAMES[currentLang][rk]||rk} · ${CLASS_NAMES[currentLang][ck]||ck} · ${currentLang==='es'?'Nivel':'Level'} 1`;
+  const _gDisp1=document.getElementById('csGenderDisplay');if(_gDisp1)_gDisp1.textContent=_csGender?(_GENDER_LABELS[_csGender]||''):'';
 
   // Stats
   ['str','dex','con','int','wis','cha'].forEach(s=>{const v=st[s],m=Math.floor((v-10)/2);document.getElementById('c'+s).textContent=v;document.getElementById('cm'+s).textContent=(m>=0?'+':'')+m;});
@@ -5250,6 +5264,7 @@ function loadChar(id,fromPop){
   _saveProfs=new Set(c.saveProfs||(CLASS_SAVES[c.class]||[]));
   _updateLevelBadges();
   document.getElementById('csMeta').textContent=`${RACE_NAMES[currentLang][c.race]||c.race} · ${CLASS_NAMES[currentLang][c.class]||c.class} · ${currentLang==='es'?'Nivel':'Level'} ${_currentLevel}`;
+  const _gDispL=document.getElementById('csGenderDisplay');if(_gDispL)_gDispL.textContent=c.gender?(_GENDER_LABELS[c.gender]||''):'';
   // Restore HP
   const cur=c.currentHp!=null?c.currentHp:c.hp;
   _updateSheetHp(cur,c.hp);
@@ -5287,8 +5302,14 @@ function deleteChar(id){
 let _loadedCharId=null;
 let _currentLevel=1;
 let _csGender=null;
-function selectGender(g,el){_csGender=g;document.querySelectorAll('.cs-gender-pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');}
-function _restoreGenderUI(g){_csGender=g||null;document.querySelectorAll('.cs-gender-pill').forEach(p=>p.classList.toggle('active',p.getAttribute('onclick')?.includes(`'${g}'`)));}
+const _GENDER_LABELS={masculino:'♂ Masculino',femenino:'♀ Femenino','no-binario':'⚧ No binario',indistinto:'✦ Indistinto'};
+function selectGenderPanel(g,el){_csGender=g;document.querySelectorAll('#csGenderOptions .cs-gender-opt').forEach(p=>p.classList.remove('active'));el.classList.add('active');}
+function _restoreGenderUI(g){
+  _csGender=g||null;
+  document.querySelectorAll('#csGenderOptions .cs-gender-opt').forEach(p=>p.classList.toggle('active',p.getAttribute('onclick')?.includes(`'${g}'`)));
+  const disp=document.getElementById('csGenderDisplay');
+  if(disp)disp.textContent=g?_GENDER_LABELS[g]||'':'';
+}
 
 const HIT_DICE={fighter:10,paladin:10,barbarian:12,wizard:6,sorcerer:6,warlock:8,rogue:8,ranger:8,druid:8,bard:8,cleric:8,monk:8};
 /* ── DnD Beyond sheet extras ── */
@@ -5655,6 +5676,7 @@ function confirmLevelUp(){
 
   const rk=selections.race||'human';
   document.getElementById('csMeta').textContent=`${RACE_NAMES[currentLang][rk]||rk} · ${CLASS_NAMES[currentLang][ck]||ck} · ${currentLang==='es'?'Nivel':'Level'} ${_currentLevel}`;
+  const _gDispU=document.getElementById('csGenderDisplay');if(_gDispU)_gDispU.textContent=_csGender?(_GENDER_LABELS[_csGender]||''):'';
 
   if(_loadedCharId){
     const chars=_loadSavedChars();
@@ -6613,6 +6635,11 @@ function confirmCharClass(){
   iconEl.innerHTML='';
   const cd=CLASS_DATA[selections.class]||{};
   document.getElementById('charDrawerRaceName').textContent=`${currentLang==='es'?d.nameEs:d.nameEn} · ${currentLang==='es'?cd.nameEs:cd.nameEn}`;
+  // Reset gender selection and go to gender panel
+  _restoreGenderUI(null);
+  csGoTo('csPanelGender','forward');
+}
+function confirmGender(){
   document.getElementById('charCreatorDrawer').classList.add('open');
   resetCreator();
   selections.race=_selectedRace;

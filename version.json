@@ -1,7 +1,12 @@
 {
-  "version": "2.7.5",
+  "version": "2.7.6",
   "date": "2026-05-06",
   "history": [
+    {
+      "version": "2.7.6",
+      "date": "2026-05-06",
+      "note": "Refactor género: mueve la selección al paso 3 del flujo de creación (nuevo panel entre clase y ficha); en la ficha se muestra como dato estático ya definido"
+    },
     {
       "version": "2.7.5",
       "date": "2026-05-06",
