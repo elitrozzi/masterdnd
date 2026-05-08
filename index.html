@@ -2152,7 +2152,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.8.5</span>
+    <span class="ver-badge">v2.8.6</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">08 May 2026</span>
   </div>
@@ -2670,7 +2670,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.8.5</span>
+          <span class="ver-badge">v2.8.6</span>
           <span>·</span>
           <span class="ver-date">08 May 2026</span>
         </div>
@@ -3256,6 +3256,11 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
       <hr class="fd-divider">
       <div class="fd-section-label" id="fdLabelClass">CLASE</div>
       <div class="fd-pills" id="compTypePills"></div>
+    </div>
+    <div class="fd-section" id="fdSectionEdition" style="display:none;">
+      <hr class="fd-divider">
+      <div class="fd-section-label" data-es="EDICIÓN" data-en="EDITION">EDICIÓN</div>
+      <div class="fd-pills" id="compEditionPills"></div>
     </div>
     <hr class="fd-divider" id="fdSlotDivider" style="display:none;">
     <div id="spellSlotTracker" style="display:none;">
@@ -4221,6 +4226,7 @@ let cSearchQ='';
 let cFilterQ='';
 let cTypeFilterQ='';
 let cClassFilterQ='';
+let cEditionFilterQ='';
 let _classSpellSets={};  // {className: Set<spellIndex>}
 let _spellClassMap={};   // {spellIndex: [className,...]}
 let _spellClassMapReady=false;
@@ -4237,9 +4243,20 @@ async function initCompendium(){
   if(!cCacheLoaded[cActiveTab]){
     document.getElementById('compGrid').innerHTML='<div class="comp-state"><div class="comp-spinner"></div></div>';
     try{
-      const r=await fetch(`${DND_API}/${cActiveTab}?limit=500`);
-      const j=await r.json();
-      cCache[cActiveTab]=j.results||[];
+      if(cActiveTab==='magic-items'){
+        const [r14,r24]=await Promise.all([fetch(`${DND_API}/magic-items?limit=500`),fetch('https://www.dnd5eapi.co/api/2024/magic-items?limit=500')]);
+        const [j14,j24]=await Promise.all([r14.json(),r24.json()]);
+        const items14=j14.results||[],items24=j24.results||[];
+        const set24=new Set(items24.map(i=>i.index)),set14=new Set(items14.map(i=>i.index));
+        cCache['magic-items']=[
+          ...items14.map(i=>({...i,_edition:set24.has(i.index)?'both':'2014',_apiYear:2014})),
+          ...items24.filter(i=>!set14.has(i.index)).map(i=>({...i,_edition:'2024',_apiYear:2024}))
+        ];
+      } else {
+        const r=await fetch(`${DND_API}/${cActiveTab}?limit=500`);
+        const j=await r.json();
+        cCache[cActiveTab]=j.results||[];
+      }
       cCacheLoaded[cActiveTab]=true;
     }catch(e){
       document.getElementById('compGrid').innerHTML='<div class="comp-state">Error al cargar / Error loading</div>';
@@ -4304,7 +4321,7 @@ async function _batchTranslateTab(tab){
 }
 
 function compTab(type,el){
-  cActiveTab=type;cSearchQ='';cFilterQ='';cTypeFilterQ='';cClassFilterQ='';
+  cActiveTab=type;cSearchQ='';cFilterQ='';cTypeFilterQ='';cClassFilterQ='';cEditionFilterQ='';
   const si=document.getElementById('compSearchInput');
   if(si)si.value='';
   document.querySelectorAll('.comp-tab').forEach(t=>t.classList.remove('active'));
@@ -4353,6 +4370,7 @@ function buildCompFilter(){
     if(st){st.style.display='block';initSlotTracker();}
     if(slotDiv)slotDiv.style.display='block';
     if(filterBtn)filterBtn.style.display='flex';
+    const _secEd1=document.getElementById('fdSectionEdition');if(_secEd1)_secEd1.style.display='none';
 
   } else if(cActiveTab==='monsters'){
     if(lblMain)lblMain.textContent=es?'DIFICULTAD':'DIFFICULTY';
@@ -4367,6 +4385,7 @@ function buildCompFilter(){
     if(st)st.style.display='none';
     if(slotDiv)slotDiv.style.display='none';
     if(filterBtn)filterBtn.style.display='flex';
+    const _secEd2=document.getElementById('fdSectionEdition');if(_secEd2)_secEd2.style.display='none';
 
   } else if(cActiveTab==='magic-items'){
     if(lblMain)lblMain.textContent=es?'RAREZA':'RARITY';
@@ -4377,11 +4396,16 @@ function buildCompFilter(){
     if(st)st.style.display='none';
     if(slotDiv)slotDiv.style.display='none';
     if(filterBtn)filterBtn.style.display='flex';
+    const secEd=document.getElementById('fdSectionEdition');
+    const edPills=document.getElementById('compEditionPills');
+    if(secEd)secEd.style.display='block';
+    if(edPills){const edItems=[{v:'',l:es?'Todas':'All'},{v:'2014',l:'5e 2014'},{v:'2024',l:'5e 2024 ✦'}];edPills.innerHTML=edItems.map(it=>`<div class="fd-pill${cEditionFilterQ===it.v?' active':''}" onclick="compEditionFn('${it.v}',this)">${it.l}</div>`).join('');}
 
   } else {
     if(st)st.style.display='none';
     if(slotDiv)slotDiv.style.display='none';
     if(secClass)secClass.style.display='none';
+    const secEd=document.getElementById('fdSectionEdition');if(secEd)secEd.style.display='none';
     if(filterBtn)filterBtn.style.display='none';
     items=[];
   }
@@ -4397,20 +4421,25 @@ function closeFilterDrawer(){
   document.getElementById('fdBackdrop').classList.remove('open');
 }
 function updateFilterBadge(){
-  const count=[cFilterQ!=='',cTypeFilterQ!=='',cClassFilterQ!==''].filter(Boolean).length;
+  const count=[cFilterQ!=='',cTypeFilterQ!=='',cClassFilterQ!=='',cEditionFilterQ!==''].filter(Boolean).length;
   const btn=document.getElementById('compFilterBtn');
   const badge=document.getElementById('cfbBadge');
   if(btn)btn.classList.toggle('active-filters',count>0);
   if(badge){badge.textContent=count;badge.style.display=count?'flex':'none';}
 }
 function clearAllFilters(){
-  cFilterQ='';cTypeFilterQ='';cClassFilterQ='';
+  cFilterQ='';cTypeFilterQ='';cClassFilterQ='';cEditionFilterQ='';
   buildCompFilter();renderCompGrid();updateFilterBadge();
 }
 
 function compTypeFn(v,el){
   cTypeFilterQ=v;
   if(el){document.querySelectorAll('#compTypePills .fd-pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');}
+  renderCompGrid();updateFilterBadge();
+}
+function compEditionFn(v,el){
+  cEditionFilterQ=v;
+  if(el){document.querySelectorAll('#compEditionPills .fd-pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');}
   renderCompGrid();updateFilterBadge();
 }
 
@@ -4512,6 +4541,9 @@ function renderCompGrid(){
   }
   if(cFilterQ&&cActiveTab==='magic-items'){
     list=list.filter(i=>(i.rarity?.name||i.rarity||'').toLowerCase()===cFilterQ.toLowerCase());
+  }
+  if(cEditionFilterQ&&cActiveTab==='magic-items'){
+    list=list.filter(i=>i._edition===cEditionFilterQ||i._edition==='both');
   }
   if(cClassFilterQ&&cActiveTab==='spells'&&_classSpellSets[cClassFilterQ]){
     list=list.filter(i=>_classSpellSets[cClassFilterQ].has(i.index));
@@ -4671,12 +4703,13 @@ function renderMagicItemCard(item){
   const catLabel=catKey?(currentLang==='es'?(_MI_CAT_ES[catKey]||item.equipment_category?.name||''):(item.equipment_category?.name||'')):'';
   const catBadge=catLabel?`<span class="cc-badge cb-teal">${catLabel}</span>`:'';
   const esMiName=currentLang==='es'?cDetailCache[`magic-items/${item.index}`]?._name_es:null;
+  const edBadge=item._edition==='2024'?`<span class="cc-badge cb-teal" style="font-size:10px;padding:2px 7px;">2024 ✦</span>`:item._edition==='2014'?`<span class="cc-badge cb-gray" style="font-size:10px;padding:2px 7px;">2014</span>`:'';
   return`<div class="comp-card spell-card" onclick="openCompDetail('magic-items','${item.index}')">
     <div class="mc-avatar" style="background:rgba(200,160,255,.08);border:1px solid rgba(192,132,224,.25);display:flex;align-items:center;justify-content:center;font-size:22px;">${icon}</div>
     <div class="mc-info">
       <div class="cc-name">${_esc(esMiName||item.name)}</div>
       ${esMiName?`<div class="cc-name-en">${_esc(item.name)}</div>`:''}
-      <div style="display:flex;gap:6px;flex-wrap:wrap;">${rarityBadge}${catBadge}</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">${rarityBadge}${catBadge}${edBadge}</div>
     </div>
   </div>`;
 }
@@ -4713,7 +4746,8 @@ async function openCompDetail(type,index){
   const cKey=`${type}/${index}`;
   if(!cDetailCache[cKey]?.name){
     try{
-      const r=await fetch(`${DND_API}/${type}/${index}`);
+      const _detailBase=(type==='magic-items'&&cCache['magic-items']?.find(i=>i.index===index)?._apiYear===2024)?'https://www.dnd5eapi.co/api/2024':DND_API;
+      const r=await fetch(`${_detailBase}/${type}/${index}`);
       const data=await r.json();
       cDetailCache[cKey]=Object.assign(cDetailCache[cKey]||{},data);
     }catch(e){

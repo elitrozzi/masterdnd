@@ -1,7 +1,12 @@
 {
-  "version": "2.8.5",
+  "version": "2.8.6",
   "date": "2026-05-08",
   "history": [
+    {
+      "version": "2.8.6",
+      "date": "2026-05-08",
+      "note": "Grimorio magic items: filtro por edición 5e 2014 / 5e 2024 con badge en cards y detalle desde la API correcta"
+    },
     {
       "version": "2.8.5",
       "date": "2026-05-08",
