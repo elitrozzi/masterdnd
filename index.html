@@ -477,6 +477,13 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .cs-trait-item.open .cs-trait-name::before{transform:rotate(90deg);}
 .cs-trait-desc{font-size:16px;color:var(--lol-gray-dim);line-height:1.5;margin-top:4px;display:none;padding-top:3px;border-top:1px solid rgba(11,196,227,.1);}
 .cs-trait-item.open .cs-trait-desc{display:block;}
+.bg-picker-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-height:320px;overflow-y:auto;padding:2px 2px 4px;}
+.bg-picker-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 12px;cursor:pointer;transition:border-color .15s ease-out,background .15s ease-out;}
+.bg-picker-card:hover{border-color:var(--brand-400);}
+.bg-picker-card.active{border-color:var(--gold);background:rgba(248,198,98,.08);}
+.bg-card-icon{font-size:20px;margin-bottom:3px;}
+.bg-card-name{font-size:12px;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:3px;}
+.bg-card-skills{font-size:10px;color:var(--text-d);line-height:1.4;}
 /* ── Combat turn tracker ── */
 .ct-wrap{display:flex;flex-direction:column;height:100%;overflow-y:auto;}
 /* Header del turno */
@@ -2152,7 +2159,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.8.6</span>
+    <span class="ver-badge">v2.8.7</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">08 May 2026</span>
   </div>
@@ -2670,7 +2677,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.8.6</span>
+          <span class="ver-badge">v2.8.7</span>
           <span>·</span>
           <span class="ver-date">08 May 2026</span>
         </div>
@@ -2802,7 +2809,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 
     <!-- Panel 1: Race carousel -->
     <div class="cs-panel cs-right" id="csPanelRace">
-      <span class="cs-step-label">Paso 1 de 3 · Elige tu raza</span>
+      <span class="cs-step-label">Paso 1 de 4 · Elige tu raza</span>
       <div class="race-carousel-section">
         <button class="race-arrow" onclick="carouselMove(-1)">&#8249;</button>
         <div class="race-carousel-track" id="raceCarouselTrack"></div>
@@ -2822,7 +2829,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 
     <!-- Panel 2: Class carousel -->
     <div class="cs-panel cs-right" id="csPanelClass">
-      <span class="cs-step-label">Paso 2 de 3 · Elige tu clase</span>
+      <span class="cs-step-label">Paso 2 de 4 · Elige tu clase</span>
       <div class="race-carousel-section">
         <button class="race-arrow" onclick="classCarouselMove(-1)">&#8249;</button>
         <div class="race-carousel-track" id="classCarouselTrack"></div>
@@ -2840,9 +2847,21 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
       <div class="cs-chips-wrap" id="classChips"></div>
     </div>
 
-    <!-- Panel 3: Gender -->
+    <!-- Panel 3: Background -->
+    <div class="cs-panel cs-right" id="csPanelBackground">
+      <span class="cs-step-label">Paso 3 de 4 · Elige tu trasfondo</span>
+      <div class="race-info-name" id="bgInfoName" style="font-size:22px;margin-bottom:2px;">ERMITAÑO</div>
+      <div class="race-info-tag" id="bgInfoTag" style="margin-bottom:14px;">Sabiduría en la soledad</div>
+      <div class="bg-picker-grid" id="bgPickerGrid"></div>
+      <div style="display:flex;gap:12px;align-items:center;margin-top:16px;">
+        <button class="char-drawer-back" onclick="csGoTo('csPanelClass','back')" style="cursor:none;">← Clase</button>
+        <button class="char-confirm-btn" onclick="confirmBackground()">ELEGIR TRASFONDO →</button>
+      </div>
+    </div>
+
+    <!-- Panel 4: Gender -->
     <div class="cs-panel cs-right" id="csPanelGender">
-      <span class="cs-step-label">Paso 3 de 3 · Tu personaje</span>
+      <span class="cs-step-label">Paso 4 de 4 · Tu personaje</span>
       <div class="race-info-name" style="font-size:26px;margin-bottom:6px;">¿Cuál es tu género?</div>
       <div class="race-info-tag" style="margin-bottom:22px;">Opcional — podés dejarlo sin especificar</div>
       <div class="cs-gender-options" id="csGenderOptions">
@@ -2852,7 +2871,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <div class="cs-gender-opt" onclick="selectGenderPanel('indistinto',this)">✦ Indistinto</div>
       </div>
       <div style="display:flex;gap:12px;align-items:center;margin-top:24px;">
-        <button class="char-drawer-back" onclick="csGoTo('csPanelClass','back')" style="cursor:none;">← Clase</button>
+        <button class="char-drawer-back" onclick="csGoTo('csPanelBackground','back')" style="cursor:none;">← Trasfondo</button>
         <button class="char-confirm-btn" onclick="confirmGender()">CREAR PERSONAJE →</button>
       </div>
     </div>
@@ -2906,6 +2925,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
                     <input class="cs-dbd-name-input" id="csNameInput" placeholder="Nombre del personaje..." autocomplete="off" spellcheck="false">
                     <div class="cs-dbd-meta" id="csMeta">Raza · Clase · Nivel 1</div>
                     <div class="cs-gender-display" id="csGenderDisplay"></div>
+                    <div class="cs-gender-display" id="csBackgroundDisplay" style="color:var(--brand-400);"></div>
                   </div>
                   <div class="cs-dbd-hp-block">
                     <div class="cs-dbd-hp-nums"><span id="sheetHpCur">—</span><span class="cs-dbd-hp-sep">/</span><span class="cs-dbd-hp-max-val" id="sheetHpMax">—</span></div>
@@ -2957,6 +2977,12 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
                       <div class="cs-race-flavor" id="csRaceFlavor"></div>
                       <div class="cs-race-bonuses" id="csRaceBonuses"></div>
                       <div class="cs-race-traits" id="csRaceTraits"></div>
+                    </div>
+                    <div class="cs-dbd-col-panel" id="csBgPanel" style="display:none;">
+                      <div class="cs-dbd-section-title" data-es="Trasfondo" data-en="Background">Trasfondo</div>
+                      <div class="cs-race-flavor" id="csBgFlavor"></div>
+                      <div class="cs-race-bonuses" id="csBgSkills"></div>
+                      <div class="cs-race-traits" id="csBgFeature"></div>
                     </div>
                   </div>
                   <!-- Col 2: Habilidades -->
@@ -5297,6 +5323,10 @@ function buildSheet(){
 
   // Set class-based save proficiencies
   _saveProfs=new Set(CLASS_SAVES[ck]||[]);
+  // Background skills
+  const bk=selections.background||'';
+  const bgd=BG_DATA[bk];
+  if(bgd)(bgd.skills||[]).forEach(s=>_skillProfs.add(s));
 
   // Race info
   const flavorEl=document.getElementById('csRaceFlavor');
@@ -5305,6 +5335,8 @@ function buildSheet(){
   if(flavorEl) flavorEl.textContent=currentLang==='es'?(rd.tagEs||''):(rd.tagEn||'');
   if(bonusEl) bonusEl.innerHTML=(rd.bonus||[]).map(b=>`<div class="race-bonus-pill">${b}</div>`).join('');
   if(traitsEl) traitsEl.innerHTML=(rd.traits||[]).map(t=>{const desc=RACE_TRAIT_DETAILS[t]||'';return`<div class="cs-trait-item" onclick="this.classList.toggle('open')"><div class="cs-trait-name">${t}</div>${desc?`<div class="cs-trait-desc">${desc}</div>`:''}</div>`;}).join('');
+  // Background section
+  _renderBgSection(bk);
   _renderCombatActions(ck);
   _renderSavingThrows();
   _renderSkillsList();
@@ -5312,6 +5344,21 @@ function buildSheet(){
   _renderSkillPanel();
   _activeConditions=new Set();
   _renderConditions();
+}
+function _renderBgSection(bk){
+  const panel=document.getElementById('csBgPanel');
+  const flavorEl=document.getElementById('csBgFlavor');
+  const skillsEl=document.getElementById('csBgSkills');
+  const featureEl=document.getElementById('csBgFeature');
+  const dispEl=document.getElementById('csBackgroundDisplay');
+  const bgd=BG_DATA[bk];
+  if(!bgd){if(panel)panel.style.display='none';if(dispEl)dispEl.textContent='';return;}
+  if(panel)panel.style.display='';
+  const name=currentLang==='es'?bgd.nameEs:bgd.nameEn;
+  if(dispEl)dispEl.textContent=`${bgd.icon} ${name}`;
+  if(flavorEl)flavorEl.textContent=currentLang==='es'?bgd.tagEs:bgd.tagEn;
+  if(skillsEl){const labels=bgd.skills.map(s=>{const sk=SKILLS_LIST.find(x=>x.key===s);return currentLang==='es'?(sk?.es||s):(sk?.en||s);});skillsEl.innerHTML=labels.map(l=>`<div class="race-bonus-pill">+${l}</div>`).join('');}
+  if(featureEl){const feat=currentLang==='es'?bgd.featureEs:bgd.featureEn;const desc=currentLang==='es'?bgd.descEs:bgd.descEn;featureEl.innerHTML=`<div class="cs-trait-item" onclick="this.classList.toggle('open')"><div class="cs-trait-name">${feat}</div><div class="cs-trait-desc">${desc}</div></div>`;}
 }
 /* ══ XSS HELPER ══ */
 function _esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
@@ -5365,7 +5412,7 @@ function saveCharacter(btn){
   const chars=_loadSavedChars();
   const maxHp=hpBase+conMod;
   const existingIdx=_loadedCharId?chars.findIndex(c=>c.id===_loadedCharId):-1;
-  const charObj={id:_loadedCharId||Date.now().toString(),name,race:rk,class:ck,gender:_csGender||null,stats:st,hp:maxHp,currentHp:maxHp,ca:10+dexMod,level:_currentLevel||1,conditions:[..._activeConditions],skillProfs:[..._skillProfs],saveProfs:[..._saveProfs],savedAt:Date.now(),portrait:_pendingPortrait||null};
+  const charObj={id:_loadedCharId||Date.now().toString(),name,race:rk,class:ck,background:selections.background||'',gender:_csGender||null,stats:st,hp:maxHp,currentHp:maxHp,ca:10+dexMod,level:_currentLevel||1,conditions:[..._activeConditions],skillProfs:[..._skillProfs],saveProfs:[..._saveProfs],savedAt:Date.now(),portrait:_pendingPortrait||null};
   if(existingIdx>=0){charObj.hp=chars[existingIdx].hp;charObj.currentHp=chars[existingIdx].currentHp;charObj.portrait=_pendingPortrait||chars[existingIdx].portrait||null;chars.splice(existingIdx,1,charObj);}
   else chars.unshift(charObj);
   localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));
@@ -5425,7 +5472,7 @@ function loadChar(id,fromPop){
   const c=chars.find(x=>x.id===id);
   if(!c)return;
   _suppressSavedChars=true;
-  selections={mode:'manual',race:c.race,class:c.class};
+  selections={mode:'manual',race:c.race,class:c.class,background:c.background||''};
   rolledStats={...c.stats};
   _selectedRace=c.race;
   _carouselIdx=RACE_KEYS.indexOf(c.race);
@@ -5530,6 +5577,23 @@ const SKILLS_LIST=[
   {key:'performance',stat:'cha',es:'Actuación',en:'Performance'},
   {key:'persuasion',stat:'cha',es:'Persuasión',en:'Persuasion'},
 ];
+const BG_DATA={
+  acolyte:{nameEs:'Acólito',nameEn:'Acolyte',icon:'⛩️',tagEs:'Servidor de lo divino',tagEn:'Servant of the divine',skills:['insight','religion'],featureEs:'Refugio de los fieles',featureEn:'Shelter of the Faithful',descEs:'Los templos y santuarios te ofrecen refugio y apoyo mientras sirvas a tu deidad.',descEn:'Temples and shrines offer you shelter and support as long as you serve your deity.'},
+  charlatan:{nameEs:'Charlatán',nameEn:'Charlatan',icon:'🎭',tagEs:'Maestro del engaño',tagEn:'Master of deception',skills:['deception','sleight'],featureEs:'Identidad falsa',featureEn:'False Identity',descEs:'Posees una segunda identidad con documentación y disfraz preparado.',descEn:'You have a second identity with documentation and a prepared disguise.'},
+  criminal:{nameEs:'Criminal',nameEn:'Criminal',icon:'🗡️',tagEs:'Fuera de la ley',tagEn:'Outside the law',skills:['deception','stealth'],featureEs:'Contacto criminal',featureEn:'Criminal Contact',descEs:'Tienes contacto con una red criminal que puede conseguirte información y recursos.',descEn:'You have contact with a criminal network that can get you information and resources.'},
+  entertainer:{nameEs:'Artista',nameEn:'Entertainer',icon:'🎪',tagEs:'Hecho para el escenario',tagEn:'Born for the stage',skills:['acrobatics','performance'],featureEs:'Por aclamación popular',featureEn:'By Popular Demand',descEs:'Puedes actuar gratis en posadas y tabernas a cambio de alojamiento y comida.',descEn:'You can perform for free lodging and food at inns and taverns.'},
+  folkHero:{nameEs:'Héroe del pueblo',nameEn:'Folk Hero',icon:'🌾',tagEs:'Defensor de los humildes',tagEn:'Defender of the humble',skills:['animal','survival'],featureEs:'Hospitalidad rústica',featureEn:'Rustic Hospitality',descEs:'La gente común te ofrece alojamiento y protección sin esperar nada a cambio.',descEn:'Common folk will shelter and protect you without expecting anything in return.'},
+  guildArtisan:{nameEs:'Artesano de gremio',nameEn:'Guild Artisan',icon:'⚒️',tagEs:'Maestro de un oficio',tagEn:'Master of a trade',skills:['insight','persuasion'],featureEs:'Miembro de gremio',featureEn:'Guild Membership',descEs:'Tu gremio te provee alojamiento, asesoría legal y acceso a sus recursos.',descEn:'Your guild provides lodging, legal aid, and access to resources.'},
+  hermit:{nameEs:'Ermitaño',nameEn:'Hermit',icon:'🏔️',tagEs:'Sabiduría en la soledad',tagEn:'Wisdom in solitude',skills:['medicine','religion'],featureEs:'Descubrimiento',featureEn:'Discovery',descEs:'Tu vida de reclusión te llevó a descubrir una verdad única y poderosa sobre el cosmos.',descEn:'Your seclusion led you to a unique and powerful truth about the cosmos.'},
+  noble:{nameEs:'Noble',nameEn:'Noble',icon:'👑',tagEs:'Nacido entre privilegios',tagEn:'Born among privilege',skills:['history','persuasion'],featureEs:'Posición de privilegio',featureEn:'Position of Privilege',descEs:'La nobleza te recibe con respeto y te facilita acceso a lugares y personas de poder.',descEn:'Nobles and courtiers receive you with respect and grant you access to powerful places.'},
+  outlander:{nameEs:'Forastero',nameEn:'Outlander',icon:'🌲',tagEs:'Hijo de la naturaleza salvaje',tagEn:'Child of the wild',skills:['athletics','survival'],featureEs:'Viajero de tierras salvajes',featureEn:'Wanderer',descEs:'Tienes memoria excelente para mapas y terrenos, y puedes encontrar comida para ti y hasta 5 personas.',descEn:'Excellent memory for maps and terrain; can find food for yourself and up to 5 others.'},
+  sage:{nameEs:'Sabio',nameEn:'Sage',icon:'📚',tagEs:'Buscador del conocimiento',tagEn:'Seeker of knowledge',skills:['arcana','history'],featureEs:'Investigador',featureEn:'Researcher',descEs:'Sabes exactamente dónde encontrar información que desconoces, aunque no la conozcas tú mismo.',descEn:'You know exactly where to find information you don\'t have, even if you don\'t know it yourself.'},
+  sailor:{nameEs:'Marinero',nameEn:'Sailor',icon:'⚓',tagEs:'Curtido por los mares',tagEn:'Hardened by the seas',skills:['athletics','perception'],featureEs:'Pasaje en barco',featureEn:"Ship's Passage",descEs:'Puedes conseguir pasaje gratuito en barcos de vela para ti y tu grupo.',descEn:'You can secure free passage on sailing ships for yourself and your companions.'},
+  soldier:{nameEs:'Soldado',nameEn:'Soldier',icon:'⚔️',tagEs:'Forjado en la batalla',tagEn:'Forged in battle',skills:['athletics','intimidation'],featureEs:'Rango militar',featureEn:'Military Rank',descEs:'Los soldados te reconocen como superior y acatan tus órdenes en situaciones militares.',descEn:'Soldiers recognize your rank and defer to your orders in military situations.'},
+  urchin:{nameEs:'Pícaro callejero',nameEn:'Urchin',icon:'🏙️',tagEs:'Criado en las calles',tagEn:'Raised in the streets',skills:['sleight','stealth'],featureEs:'Ciudad laberíntica',featureEn:'City Secrets',descEs:'Conoces pasajes y atajos secretos que te permiten moverte el doble de rápido por las ciudades.',descEn:'You know secret passages and shortcuts that let you move twice as fast through cities.'}
+};
+const BG_KEYS=Object.keys(BG_DATA);
+let _selectedBackground='hermit';
 const RACE_SPEED={human:30,elf:30,dwarf:25,halfling:25,gnome:25,'half-elf':30,'half-orc':30,tiefling:30,dragonborn:30,aasimar:30,tabaxi:30,firbolg:30,kenku:30};
 let _saveProfs=new Set();
 let _skillProfs=new Set();
@@ -6802,6 +6866,8 @@ function initCharSelect(){
   document.getElementById('csPanelMode').className='cs-panel active';
   document.getElementById('csPanelRace').className='cs-panel cs-right';
   document.getElementById('csPanelClass').className='cs-panel cs-right';
+  document.getElementById('csPanelBackground').className='cs-panel cs-right';
+  document.getElementById('csPanelGender').className='cs-panel cs-right';
   document.getElementById('charCreatorDrawer').classList.remove('open');
   resetCreator();
   renderSavedChars();
@@ -6823,15 +6889,46 @@ function confirmCharRace(){
   setTimeout(()=>renderClassCarousel(),30);
 }
 
+function renderBgPicker(){
+  const grid=document.getElementById('bgPickerGrid');
+  if(!grid)return;
+  grid.innerHTML=BG_KEYS.map(k=>{
+    const b=BG_DATA[k];
+    const skillLabels=b.skills.map(s=>{const sk=SKILLS_LIST.find(x=>x.key===s);return currentLang==='es'?(sk?.es||s):(sk?.en||s);}).join(', ');
+    return`<div class="bg-picker-card${_selectedBackground===k?' active':''}" onclick="selectBg('${k}',this)">
+      <div class="bg-card-icon">${b.icon}</div>
+      <div class="bg-card-name">${currentLang==='es'?b.nameEs:b.nameEn}</div>
+      <div class="bg-card-skills">${skillLabels}</div>
+    </div>`;
+  }).join('');
+  _updateBgInfo(_selectedBackground);
+}
+function selectBg(key,el){
+  _selectedBackground=key;
+  document.querySelectorAll('.bg-picker-card').forEach(c=>c.classList.remove('active'));
+  if(el)el.classList.add('active');
+  _updateBgInfo(key);
+}
+function _updateBgInfo(key){
+  const b=BG_DATA[key];if(!b)return;
+  const nameEl=document.getElementById('bgInfoName');
+  const tagEl=document.getElementById('bgInfoTag');
+  if(nameEl)nameEl.textContent=currentLang==='es'?b.nameEs.toUpperCase():b.nameEn.toUpperCase();
+  if(tagEl)tagEl.textContent=currentLang==='es'?b.tagEs:b.tagEn;
+}
 function confirmCharClass(){
   selections.class=CLASS_KEYS[_classCarouselIdx];
+  renderBgPicker();
+  csGoTo('csPanelBackground','forward');
+}
+function confirmBackground(){
+  selections.background=_selectedBackground;
   const d=RACE_DATA[_selectedRace]||{};
   const iconEl=document.getElementById('charDrawerRaceIcon');
   iconEl.style.cssText=`width:36px;height:36px;border-radius:6px;overflow:hidden;flex-shrink:0;${raceBg(_selectedRace)};background-repeat:no-repeat;`;
   iconEl.innerHTML='';
   const cd=CLASS_DATA[selections.class]||{};
   document.getElementById('charDrawerRaceName').textContent=`${currentLang==='es'?d.nameEs:d.nameEn} · ${currentLang==='es'?cd.nameEs:cd.nameEn}`;
-  // Reset gender selection and go to gender panel
   _restoreGenderUI(null);
   csGoTo('csPanelGender','forward');
 }
@@ -6840,6 +6937,7 @@ function confirmGender(){
   resetCreator();
   selections.race=_selectedRace;
   selections.class=CLASS_KEYS[_classCarouselIdx];
+  selections.background=_selectedBackground;
 }
 
 function backToRaceSelect(){
