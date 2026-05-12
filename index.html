@@ -2160,7 +2160,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.8.12</span>
+    <span class="ver-badge">v2.8.13</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">12 May 2026</span>
   </div>
@@ -2678,7 +2678,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.8.12</span>
+          <span class="ver-badge">v2.8.13</span>
           <span>·</span>
           <span class="ver-date">12 May 2026</span>
         </div>
@@ -4246,10 +4246,10 @@ let cCache={spells:[],monsters:[],'magic-items':[],classes:[],races:[]};
 let cDetailCache={};
 let cActiveTab='spells';
 let cSearchQ='';
-let cFilterQ='';
-let cTypeFilterQ='';
-let cClassFilterQ='';
-let cEditionFilterQ='';
+let cFilterQ=new Set();
+let cTypeFilterQ=new Set();
+let cClassFilterQ=new Set();
+let cEditionFilterQ=new Set();
 let _classSpellSets={};  // {className: Set<spellIndex>}
 let _spellClassMap={};   // {spellIndex: [className,...]}
 let _spellClassMapReady=false;
@@ -4363,7 +4363,7 @@ async function _batchTranslateTab(tab){
 }
 
 function compTab(type,el){
-  cActiveTab=type;cSearchQ='';cFilterQ='';cTypeFilterQ='';cClassFilterQ='';cEditionFilterQ='';
+  cActiveTab=type;cSearchQ='';cFilterQ=new Set();cTypeFilterQ=new Set();cClassFilterQ=new Set();cEditionFilterQ=new Set();
   const si=document.getElementById('compSearchInput');
   if(si)si.value='';
   document.querySelectorAll('.comp-tab').forEach(t=>t.classList.remove('active'));
@@ -4374,8 +4374,8 @@ function compTab(type,el){
 
 function compSearchFn(v){cSearchQ=v;renderCompGrid();}
 function compFilterFn(v,el){
-  cFilterQ=v;
-  if(el){document.querySelectorAll('#compPills .fd-pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');}
+  if(cFilterQ.has(v))cFilterQ.delete(v);else cFilterQ.add(v);
+  if(el)el.classList.toggle('active');
   renderCompGrid();updateFilterBadge();
 }
 
@@ -4398,15 +4398,14 @@ function buildCompFilter(){
   if(cActiveTab==='spells'){
     if(lblMain)lblMain.textContent=es?'NIVEL':'LEVEL';
     if(lblClass)lblClass.textContent=es?'CLASE':'CLASS';
-    items=[{v:'',l:es?'Todos':'All'}];
     for(let i=0;i<=9;i++){
       items.push({v:String(i),l:i===0?(es?'Truco':'Cantrip'):(es?`Niv. ${i}`:`Lv. ${i}`)});
     }
     if(tpills){
       const classes=['bard','cleric','druid','paladin','ranger','sorcerer','warlock','wizard'];
       const classNames={es:{bard:'Bardo',cleric:'Clérigo',druid:'Druida',paladin:'Paladín',ranger:'Explorador',sorcerer:'Hechicero',warlock:'Brujo',wizard:'Mago'},en:{bard:'Bard',cleric:'Cleric',druid:'Druid',paladin:'Paladin',ranger:'Ranger',sorcerer:'Sorcerer',warlock:'Warlock',wizard:'Wizard'}};
-      const classItems=[{v:'',l:es?'Todas las clases':'All classes'},...classes.map(c=>({v:c,l:es?classNames.es[c]:classNames.en[c]}))];
-      tpills.innerHTML=classItems.map(it=>`<div class="fd-pill${cClassFilterQ===it.v?' active':''}" onclick="compClassFn('${it.v}',this)">${it.l}</div>`).join('');
+      const classItems=classes.map(c=>({v:c,l:es?classNames.es[c]:classNames.en[c]}));
+      tpills.innerHTML=classItems.map(it=>`<div class="fd-pill${cClassFilterQ.has(it.v)?' active':''}" onclick="compClassFn('${it.v}',this)">${it.l}</div>`).join('');
     }
     if(secClass)secClass.style.display='block';
     if(st){st.style.display='block';initSlotTracker();}
@@ -4417,11 +4416,11 @@ function buildCompFilter(){
   } else if(cActiveTab==='monsters'){
     if(lblMain)lblMain.textContent=es?'DIFICULTAD':'DIFFICULTY';
     if(lblClass)lblClass.textContent=es?'TIPO':'TYPE';
-    items=[{v:'',l:es?'Todos':'All'},{v:'low',l:'CR 0–4'},{v:'mid',l:'CR 5–9'},{v:'high',l:'CR 10–19'},{v:'epic',l:'CR 20+'}];
+    items=[{v:'low',l:'CR 0–4'},{v:'mid',l:'CR 5–9'},{v:'high',l:'CR 10–19'},{v:'epic',l:'CR 20+'}];
     if(tpills){
       const types=[...new Set(cCache.monsters.map(m=>m.type).filter(Boolean))].sort();
-      const typeItems=[{v:'',l:es?'Todos los tipos':'All types'},...types.map(t=>({v:t,l:(es?MONSTER_TYPE_LABELS.es[t]:MONSTER_TYPE_LABELS.en[t])||t}))];
-      tpills.innerHTML=typeItems.map(it=>`<div class="fd-pill${cTypeFilterQ===it.v?' active':''}" onclick="compTypeFn('${it.v}',this)">${it.l}</div>`).join('');
+      const typeItems=types.map(t=>({v:t,l:(es?MONSTER_TYPE_LABELS.es[t]:MONSTER_TYPE_LABELS.en[t])||t}));
+      tpills.innerHTML=typeItems.map(it=>`<div class="fd-pill${cTypeFilterQ.has(it.v)?' active':''}" onclick="compTypeFn('${it.v}',this)">${it.l}</div>`).join('');
     }
     if(secClass)secClass.style.display='block';
     if(st)st.style.display='none';
@@ -4433,7 +4432,7 @@ function buildCompFilter(){
     if(lblMain)lblMain.textContent=es?'RAREZA':'RARITY';
     const rarities=['common','uncommon','rare','very rare','legendary','artifact'];
     const rarityLabels={es:{common:'Común',uncommon:'Infrecuente',rare:'Raro','very rare':'Muy Raro',legendary:'Legendario',artifact:'Artefacto'},en:{common:'Common',uncommon:'Uncommon',rare:'Rare','very rare':'Very Rare',legendary:'Legendary',artifact:'Artifact'}};
-    items=[{v:'',l:es?'Todas':'All'},...rarities.map(r=>({v:r,l:es?rarityLabels.es[r]:rarityLabels.en[r]}))];
+    items=rarities.map(r=>({v:r,l:es?rarityLabels.es[r]:rarityLabels.en[r]}));
     if(secClass)secClass.style.display='none';
     if(st)st.style.display='none';
     if(slotDiv)slotDiv.style.display='none';
@@ -4441,7 +4440,7 @@ function buildCompFilter(){
     const secEd=document.getElementById('fdSectionEdition');
     const edPills=document.getElementById('compEditionPills');
     if(secEd)secEd.style.display='block';
-    if(edPills){const edItems=[{v:'',l:es?'Todas':'All'},{v:'2014',l:es?'Solo 2014':'2014 only'},{v:'2024',l:'5e 2024 ✦'}];edPills.innerHTML=edItems.map(it=>`<div class="fd-pill${cEditionFilterQ===it.v?' active':''}" onclick="compEditionFn('${it.v}',this)">${it.l}</div>`).join('');}
+    if(edPills){const edItems=[{v:'2014',l:es?'Solo 2014':'2014 only'},{v:'2024',l:'5e 2024 ✦'}];edPills.innerHTML=edItems.map(it=>`<div class="fd-pill${cEditionFilterQ.has(it.v)?' active':''}" onclick="compEditionFn('${it.v}',this)">${it.l}</div>`).join('');}
 
   } else {
     if(st)st.style.display='none';
@@ -4451,7 +4450,7 @@ function buildCompFilter(){
     if(filterBtn)filterBtn.style.display='none';
     items=[];
   }
-  pills.innerHTML=items.map(it=>`<div class="fd-pill${cFilterQ===it.v?' active':''}" onclick="compFilterFn('${it.v}',this)">${it.l}</div>`).join('');
+  pills.innerHTML=items.map(it=>`<div class="fd-pill${cFilterQ.has(it.v)?' active':''}" onclick="compFilterFn('${it.v}',this)">${it.l}</div>`).join('');
 }
 
 function openFilterDrawer(){
@@ -4463,31 +4462,31 @@ function closeFilterDrawer(){
   document.getElementById('fdBackdrop').classList.remove('open');
 }
 function updateFilterBadge(){
-  const count=[cFilterQ!=='',cTypeFilterQ!=='',cClassFilterQ!=='',cEditionFilterQ!==''].filter(Boolean).length;
+  const count=cFilterQ.size+cTypeFilterQ.size+cClassFilterQ.size+cEditionFilterQ.size;
   const btn=document.getElementById('compFilterBtn');
   const badge=document.getElementById('cfbBadge');
   if(btn)btn.classList.toggle('active-filters',count>0);
   if(badge){badge.textContent=count;badge.style.display=count?'flex':'none';}
 }
 function clearAllFilters(){
-  cFilterQ='';cTypeFilterQ='';cClassFilterQ='';cEditionFilterQ='';
+  cFilterQ=new Set();cTypeFilterQ=new Set();cClassFilterQ=new Set();cEditionFilterQ=new Set();
   buildCompFilter();renderCompGrid();updateFilterBadge();
 }
 
 function compTypeFn(v,el){
-  cTypeFilterQ=v;
-  if(el){document.querySelectorAll('#compTypePills .fd-pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');}
+  if(cTypeFilterQ.has(v))cTypeFilterQ.delete(v);else cTypeFilterQ.add(v);
+  if(el)el.classList.toggle('active');
   renderCompGrid();updateFilterBadge();
 }
 function compEditionFn(v,el){
-  cEditionFilterQ=v;
-  if(el){document.querySelectorAll('#compEditionPills .fd-pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');}
+  if(cEditionFilterQ.has(v))cEditionFilterQ.delete(v);else cEditionFilterQ.add(v);
+  if(el)el.classList.toggle('active');
   renderCompGrid();updateFilterBadge();
 }
 
 async function compClassFn(v,el){
-  cClassFilterQ=v;
-  if(el){document.querySelectorAll('#compTypePills .fd-pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');}
+  if(cClassFilterQ.has(v))cClassFilterQ.delete(v);else cClassFilterQ.add(v);
+  if(el)el.classList.toggle('active');
   if(v&&!_classSpellSets[v]){
     try{
       const r=await fetch(`${DND_API}/classes/${v}/spells`);
@@ -4567,29 +4566,24 @@ function _setupCompObserver(){
 function renderCompGrid(){
   let list=cCache[cActiveTab];
   if(cSearchQ){const _q=cSearchQ.toLowerCase();list=list.filter(i=>{const _es=(cDetailCache[`${cActiveTab}/${i.index}`]?._name_es||'').toLowerCase();return i.name.toLowerCase().includes(_q)||_es.includes(_q);});}
-  if(cFilterQ){
+  if(cFilterQ.size){
     if(cActiveTab==='spells'){
-      list=list.filter(i=>(i.level||0).toString()===cFilterQ);
+      list=list.filter(i=>cFilterQ.has((i.level||0).toString()));
     } else if(cActiveTab==='monsters'){
       const cr=i=>parseFloat(i.challenge_rating)||0;
-      if(cFilterQ==='low')list=list.filter(i=>cr(i)<5);
-      else if(cFilterQ==='mid')list=list.filter(i=>cr(i)>=5&&cr(i)<10);
-      else if(cFilterQ==='high')list=list.filter(i=>cr(i)>=10&&cr(i)<20);
-      else if(cFilterQ==='epic')list=list.filter(i=>cr(i)>=20);
+      list=list.filter(i=>(cFilterQ.has('low')&&cr(i)<5)||(cFilterQ.has('mid')&&cr(i)>=5&&cr(i)<10)||(cFilterQ.has('high')&&cr(i)>=10&&cr(i)<20)||(cFilterQ.has('epic')&&cr(i)>=20));
+    } else if(cActiveTab==='magic-items'){
+      list=list.filter(i=>cFilterQ.has(i._rarity!==undefined?i._rarity:(i.rarity?.name||i.rarity||'').toLowerCase()));
     }
   }
-  if(cTypeFilterQ&&cActiveTab==='monsters'){
-    list=list.filter(i=>(i.type||'').toLowerCase()===cTypeFilterQ.toLowerCase());
+  if(cTypeFilterQ.size&&cActiveTab==='monsters'){
+    list=list.filter(i=>cTypeFilterQ.has((i.type||'').toLowerCase()));
   }
-  if(cFilterQ&&cActiveTab==='magic-items'){
-    list=list.filter(i=>(i._rarity!==undefined?i._rarity:(i.rarity?.name||i.rarity||'').toLowerCase())===cFilterQ.toLowerCase());
+  if(cEditionFilterQ.size&&cActiveTab==='magic-items'){
+    list=list.filter(i=>(cEditionFilterQ.has('2014')&&i._edition==='2014')||(cEditionFilterQ.has('2024')&&(i._edition==='2024'||i._edition==='both')));
   }
-  if(cEditionFilterQ&&cActiveTab==='magic-items'){
-    if(cEditionFilterQ==='2014')list=list.filter(i=>i._edition==='2014');
-    else if(cEditionFilterQ==='2024')list=list.filter(i=>i._edition==='2024'||i._edition==='both');
-  }
-  if(cClassFilterQ&&cActiveTab==='spells'&&_classSpellSets[cClassFilterQ]){
-    list=list.filter(i=>_classSpellSets[cClassFilterQ].has(i.index));
+  if(cClassFilterQ.size&&cActiveTab==='spells'){
+    list=list.filter(i=>Array.from(cClassFilterQ).some(cls=>_classSpellSets[cls]?.has(i.index)));
   }
   if(_compObserver){_compObserver.disconnect();_compObserver=null;}
   _compList=list;
