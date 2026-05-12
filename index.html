@@ -2159,7 +2159,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.8.9</span>
+    <span class="ver-badge">v2.8.10</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">12 May 2026</span>
   </div>
@@ -2677,7 +2677,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.8.9</span>
+          <span class="ver-badge">v2.8.10</span>
           <span>·</span>
           <span class="ver-date">12 May 2026</span>
         </div>
@@ -4426,7 +4426,7 @@ function buildCompFilter(){
     const secEd=document.getElementById('fdSectionEdition');
     const edPills=document.getElementById('compEditionPills');
     if(secEd)secEd.style.display='block';
-    if(edPills){const edItems=[{v:'',l:es?'Todas':'All'},{v:'2014',l:'5e 2014'},{v:'2024',l:'5e 2024 ✦'}];edPills.innerHTML=edItems.map(it=>`<div class="fd-pill${cEditionFilterQ===it.v?' active':''}" onclick="compEditionFn('${it.v}',this)">${it.l}</div>`).join('');}
+    if(edPills){const edItems=[{v:'',l:es?'Todas':'All'},{v:'2014',l:es?'Solo 2014':'2014 only'},{v:'2024',l:'5e 2024 ✦'}];edPills.innerHTML=edItems.map(it=>`<div class="fd-pill${cEditionFilterQ===it.v?' active':''}" onclick="compEditionFn('${it.v}',this)">${it.l}</div>`).join('');}
 
   } else {
     if(st)st.style.display='none';
@@ -4570,7 +4570,8 @@ function renderCompGrid(){
     list=list.filter(i=>(i.rarity?.name||i.rarity||'').toLowerCase()===cFilterQ.toLowerCase());
   }
   if(cEditionFilterQ&&cActiveTab==='magic-items'){
-    list=list.filter(i=>i._edition===cEditionFilterQ||i._edition==='both');
+    if(cEditionFilterQ==='2014')list=list.filter(i=>i._edition==='2014');
+    else if(cEditionFilterQ==='2024')list=list.filter(i=>i._edition==='2024'||i._edition==='both');
   }
   if(cClassFilterQ&&cActiveTab==='spells'&&_classSpellSets[cClassFilterQ]){
     list=list.filter(i=>_classSpellSets[cClassFilterQ].has(i.index));

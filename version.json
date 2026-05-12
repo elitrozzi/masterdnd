@@ -1,7 +1,12 @@
 {
-  "version": "2.8.9",
+  "version": "2.8.10",
   "date": "2026-05-12",
   "history": [
+    {
+      "version": "2.8.10",
+      "date": "2026-05-12",
+      "note": "Fix filtro edición Grimorio: \"Solo 2014\" muestra ítems exclusivos de 2014 (no incluidos en 2024), \"5e 2024 ✦\" muestra ítems disponibles en 2024"
+    },
     {
       "version": "2.8.9",
       "date": "2026-05-12",
@@ -85,7 +90,7 @@
     {
       "version": "2.7.3",
       "date": "2026-05-05",
-      "note": "Fix Google OAuth redirect: el router borraba el ?code= de la URL antes de que Supabase pudiera leerlo; fix "Mis personajes" oculto cuando no hay sesión"
+      "note": "Fix Google OAuth redirect: el router borraba el ?code= de la URL antes de que Supabase pudiera leerlo; fix \"Mis personajes\" oculto cuando no hay sesión"
     },
     {
       "version": "2.7.2",
