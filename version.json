@@ -1,7 +1,12 @@
 {
-  "version": "2.8.8",
-  "date": "2026-05-11",
+  "version": "2.8.9",
+  "date": "2026-05-12",
   "history": [
+    {
+      "version": "2.8.9",
+      "date": "2026-05-12",
+      "note": "Security: SRI en scripts CDN, onclick injection via data attributes, Bearer token redundante eliminado"
+    },
     {
       "version": "2.8.8",
       "date": "2026-05-11",
