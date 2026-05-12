@@ -1,7 +1,12 @@
 {
-  "version": "2.8.13",
+  "version": "2.8.14",
   "date": "2026-05-12",
   "history": [
+    {
+      "version": "2.8.14",
+      "date": "2026-05-12",
+      "note": "Rediseño menú mobile: full-screen, fondo negro, secciones PERSONAJE/MESA/RECURSOS con items grandes sans-serif, sin \"Más funciones en desktop\""
+    },
     {
       "version": "2.8.13",
       "date": "2026-05-12",
