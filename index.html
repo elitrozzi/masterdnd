@@ -1040,13 +1040,14 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 /* Filter drawer */
 .fd-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:240;opacity:0;pointer-events:none;transition:opacity .25s;}
 .fd-backdrop.open{opacity:1;pointer-events:auto;}
-.fd-drawer{position:fixed;top:0;right:0;bottom:0;width:300px;max-width:88vw;background:var(--surface);border-left:1px solid var(--border);z-index:241;transform:translateX(100%);transition:transform .3s var(--ease-drawer);overflow-y:auto;display:flex;flex-direction:column;}
+.fd-drawer{position:fixed;top:0;right:0;bottom:0;width:300px;max-width:88vw;background:var(--surface);border-left:1px solid var(--border);z-index:241;transform:translateX(100%);transition:transform .3s var(--ease-drawer);display:flex;flex-direction:column;overflow:hidden;}
 .fd-drawer.open{transform:translateX(0);}
-.fd-head{display:flex;align-items:center;justify-content:space-between;padding:20px 20px 16px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);z-index:2;}
+.fd-head{display:flex;align-items:center;justify-content:space-between;padding:20px 20px 16px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--surface);z-index:2;}
 .fd-head-title{font-size:16px;font-weight:700;color:var(--text);}
 .fd-head-close{background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:50%;width:32px;height:32px;color:var(--text-m);font-size:14px;cursor:none;display:flex;align-items:center;justify-content:center;transition:background .15s ease-out,border-color .15s ease-out;}
 .fd-head-close:hover{background:rgba(255,255,255,.13);}
-.fd-body{padding:20px;flex:1;}
+.fd-body{padding:20px;flex:1;overflow-y:auto;}
+.fd-footer{padding:12px 20px 20px;border-top:1px solid var(--border);flex-shrink:0;background:var(--surface);display:flex;flex-direction:column;gap:8px;}
 .fd-section{margin-bottom:22px;}
 .fd-section-label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-d);margin-bottom:10px;font-weight:700;}
 .fd-pills{display:flex;flex-wrap:wrap;gap:7px;}
@@ -1590,8 +1591,8 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   .camp-tab-content{padding:12px;}
 
   /* ── Feedback widget: smaller on mobile ── */
-  .fb-btn{bottom:16px;right:16px;width:44px;height:44px;font-size:20px;}
-  .fb-panel{bottom:72px;right:12px;left:12px;width:auto!important;max-width:none!important;}
+  .fb-btn{bottom:16px;left:16px;width:44px;height:44px;font-size:20px;}
+  .fb-panel{bottom:72px;left:12px;right:12px;width:auto!important;max-width:none!important;}
 
   /* ── General: bigger touch targets for inline buttons ── */
   .inv-item-equip,.inv-item-del{width:30px;height:30px;display:flex;align-items:center;justify-content:center;}
@@ -2049,9 +2050,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 .dr-multi-sum{font-size:60px;font-weight:700;color:#fff;font-family:'Cinzel',serif;line-height:1;text-shadow:0 0 24px rgba(248,198,98,.4);}
 @media(max-width:640px){.dados-type-grid{grid-template-columns:repeat(4,1fr);}.dados-roll-btn{width:100%;}}
 /* ── FEEDBACK WIDGET ── */
-.fb-btn{position:fixed;bottom:24px;right:24px;z-index:2500;background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;border:none;border-radius:50px;padding:9px 16px 9px 13px;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 4px 20px rgba(124,58,237,.45);transition:.2s;display:flex;align-items:center;gap:6px;font-family:'Roboto',sans-serif;letter-spacing:.3px;}
+.fb-btn{position:fixed;bottom:24px;left:24px;z-index:2500;background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;border:none;border-radius:50px;padding:9px 16px 9px 13px;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 4px 20px rgba(124,58,237,.45);transition:.2s;display:flex;align-items:center;gap:6px;font-family:'Roboto',sans-serif;letter-spacing:.3px;}
 .fb-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(124,58,237,.6);}
-.fb-panel{position:fixed;bottom:70px;right:24px;z-index:2500;width:296px;background:#0e0c1e;border:1px solid rgba(124,58,237,.4);border-radius:14px;padding:18px 20px 16px;box-shadow:0 16px 48px rgba(0,0,0,.7);display:none;flex-direction:column;gap:13px;font-family:'Roboto',sans-serif;animation:fbSlideUp .18s ease;}
+.fb-panel{position:fixed;bottom:70px;left:24px;z-index:2500;width:296px;background:#0e0c1e;border:1px solid rgba(124,58,237,.4);border-radius:14px;padding:18px 20px 16px;box-shadow:0 16px 48px rgba(0,0,0,.7);display:none;flex-direction:column;gap:13px;font-family:'Roboto',sans-serif;animation:fbSlideUp .18s ease;}
 .fb-panel.open{display:flex;}
 @keyframes fbSlideUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
 .fb-header{display:flex;justify-content:space-between;align-items:center;}
@@ -2159,7 +2160,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.8.11</span>
+    <span class="ver-badge">v2.8.12</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">12 May 2026</span>
   </div>
@@ -2677,7 +2678,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.8.11</span>
+          <span class="ver-badge">v2.8.12</span>
           <span>·</span>
           <span class="ver-date">12 May 2026</span>
         </div>
@@ -3288,7 +3289,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
       <div class="fd-section-label" data-es="EDICIÓN" data-en="EDITION">EDICIÓN</div>
       <div class="fd-pills" id="compEditionPills"></div>
     </div>
-    <button onclick="closeFilterDrawer()" style="width:100%;padding:11px;border-radius:10px;background:var(--gold);border:none;color:#1a1408;font-size:13px;font-weight:700;cursor:none;margin-top:8px;font-family:'Roboto',sans-serif;letter-spacing:.05em;transition:opacity .15s ease-out;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'" data-es="Listo" data-en="Done">Listo</button>
+  </div>
+  <div class="fd-footer">
+    <button onclick="closeFilterDrawer()" style="width:100%;padding:11px;border-radius:10px;background:var(--gold);border:none;color:#1a1408;font-size:13px;font-weight:700;cursor:none;font-family:'Roboto',sans-serif;letter-spacing:.05em;transition:opacity .15s ease-out;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'" data-es="Listo" data-en="Done">Listo</button>
     <button class="fd-clear" id="fdClearBtn" onclick="clearAllFilters()" data-es="Limpiar filtros" data-en="Clear filters">Limpiar filtros</button>
   </div>
 </div>
@@ -4290,6 +4293,25 @@ async function initCompendium(){
     _batchTranslateSpellNames();
   } else if(cActiveTab==='monsters'||cActiveTab==='magic-items'){
     _batchTranslateTab(cActiveTab);
+    if(cActiveTab==='magic-items')_batchFetchMiRarities();
+  }
+}
+
+async function _batchFetchMiRarities(){
+  const list=cCache['magic-items']||[];
+  const unfetched=list.filter(i=>i._rarity===undefined);
+  if(!unfetched.length)return;
+  const BATCH=25;
+  for(let i=0;i<unfetched.length;i+=BATCH){
+    await Promise.all(unfetched.slice(i,i+BATCH).map(async item=>{
+      try{
+        const base=item._apiYear===2024?'https://www.dnd5eapi.co/api/2024':DND_API;
+        const r=await fetch(`${base}/magic-items/${item.index}`);
+        const j=await r.json();
+        item._rarity=(j.rarity?.name||j.rarity||'').toLowerCase();
+      }catch(e){item._rarity='';}
+    }));
+    if(cActiveTab==='magic-items'&&cFilterQ)renderCompGrid();
   }
 }
 
@@ -4560,7 +4582,7 @@ function renderCompGrid(){
     list=list.filter(i=>(i.type||'').toLowerCase()===cTypeFilterQ.toLowerCase());
   }
   if(cFilterQ&&cActiveTab==='magic-items'){
-    list=list.filter(i=>(i.rarity?.name||i.rarity||'').toLowerCase()===cFilterQ.toLowerCase());
+    list=list.filter(i=>(i._rarity!==undefined?i._rarity:(i.rarity?.name||i.rarity||'').toLowerCase())===cFilterQ.toLowerCase());
   }
   if(cEditionFilterQ&&cActiveTab==='magic-items'){
     if(cEditionFilterQ==='2014')list=list.filter(i=>i._edition==='2014');

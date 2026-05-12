@@ -1,7 +1,12 @@
 {
-  "version": "2.8.11",
+  "version": "2.8.12",
   "date": "2026-05-12",
   "history": [
+    {
+      "version": "2.8.12",
+      "date": "2026-05-12",
+      "note": "Grimorio: fix filtro rareza (batch fetch detalles en background), FAB feedback a la izquierda, botones Listo/Limpiar en footer fijo del drawer"
+    },
     {
       "version": "2.8.11",
       "date": "2026-05-12",
