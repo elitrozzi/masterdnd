@@ -1,7 +1,12 @@
 {
-  "version": "2.8.15",
+  "version": "2.8.16",
   "date": "2026-05-13",
   "history": [
+    {
+      "version": "2.8.16",
+      "date": "2026-05-13",
+      "note": "Grimorio mobile: 1 columna full-width con margen 16px en lugar de 4 columnas rotas"
+    },
     {
       "version": "2.8.15",
       "date": "2026-05-13",
