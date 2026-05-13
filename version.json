@@ -1,7 +1,12 @@
 {
-  "version": "2.8.14",
-  "date": "2026-05-12",
+  "version": "2.8.15",
+  "date": "2026-05-13",
   "history": [
+    {
+      "version": "2.8.15",
+      "date": "2026-05-13",
+      "note": "Menú mobile: items de 28px a 16px"
+    },
     {
       "version": "2.8.14",
       "date": "2026-05-12",
