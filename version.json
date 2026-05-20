@@ -1,7 +1,12 @@
 {
-  "version": "2.8.18",
+  "version": "2.8.19",
   "date": "2026-05-20",
   "history": [
+    {
+      "version": "2.8.19",
+      "date": "2026-05-20",
+      "note": "Importar desde PDF: tab \"Por PDF\" con PDF.js que extrae texto del PDF exportado desde DnD Beyond y pre-llena el formulario del personaje"
+    },
     {
       "version": "2.8.18",
       "date": "2026-05-20",

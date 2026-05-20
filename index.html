@@ -2121,6 +2121,12 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 .ddb-stats-6{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;}
 .char-picker-import{margin-top:12px;font:700 12px/1 'Cinzel',serif;padding:10px 24px;background:transparent;border:1px solid rgba(196,30,58,.3);color:rgba(210,50,70,.85);cursor:pointer;letter-spacing:.08em;transition:all .15s;border-radius:8px;}
 .char-picker-import:hover{background:rgba(196,30,58,.1);border-color:rgba(196,30,58,.65);color:#e63950;}
+.ddb-pdf-drop{background:rgba(255,255,255,.03);border:2px dashed rgba(196,30,58,.3);border-radius:10px;min-height:120px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .15s,background .15s;}
+.ddb-pdf-drop:hover,.ddb-pdf-drop.drag{border-color:rgba(196,30,58,.7);background:rgba(196,30,58,.06);}
+.ddb-pdf-placeholder{text-align:center;color:var(--text-m);font-size:13px;pointer-events:none;}
+.ddb-pdf-status{font-size:13px;color:var(--text-m);text-align:center;padding:4px 0;}
+.ddb-pdf-ok{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);border-radius:8px;padding:10px 14px;font-size:12px;color:#86efac;display:none;}
+.ddb-pdf-ok.show{display:block;}
 .char-picker-import:active{transform:scale(.97);}
 @media(max-width:580px){.ddb-preview-stats,.ddb-stats-6{grid-template-columns:repeat(3,1fr);}.ddb-ss-form{grid-template-columns:1fr;}}
 .cs-dbd-btn:active,.ct-next-btn:active,.ct-roll-btn:active,.ct-dmg-btn:active,.btn-dmg:active,.btn-heal:active,.char-picker-new:active,.combat-active-btn:active,.cmb-attack-btn:active,.cmb-dice-btn:active,.cmb-session-btn:active,.dr-stat-btn:active,.lu-hp-option:active,.lu-asi-btn:active,.lu-btn-cancel:active,.lu-btn-confirm:active,.cnotes-cat-btn:active,.cmap-zoom-btn:active,.camp-gate-btn:active,.camp-action-btn:active,.camp-back-btn:active,.camp-tab:active,.item-gift-btn:active,.gift-chip:active,.gift-send-btn:active,.camp-role-btn:active,.camp-modal-submit:active,.cmb-cond-badge:active,.cmb-cond-picker-badge:active,.cs-chip:active,.ct-token:active,.char-picker-card:active,.ct-card:active,.camp-card:active,.cmap-sidebar-item:active,.cmap-pin-type-opt:active,.cs-dbd-stat-box:active,.mob-block-btn:active,.fb-send:active{transform:scale(0.97);}
@@ -2226,7 +2232,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.8.18</span>
+    <span class="ver-badge">v2.8.19</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">20 May 2026</span>
   </div>
@@ -2744,7 +2750,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.8.18</span>
+          <span class="ver-badge">v2.8.19</span>
           <span>·</span>
           <span class="ver-date">20 May 2026</span>
         </div>
@@ -3212,7 +3218,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     </div>
     <div class="ddb-tabs">
       <button class="ddb-tab active" id="ddbTabUrl" onclick="ddbSwitchTab('url')">🔗 Por URL</button>
-      <button class="ddb-tab" id="ddbTabJson" onclick="ddbSwitchTab('json')">📋 Pegar JSON</button>
+      <button class="ddb-tab" id="ddbTabPdf" onclick="ddbSwitchTab('pdf')">📄 Por PDF</button>
       <button class="ddb-tab" id="ddbTabSS" onclick="ddbSwitchTab('ss')">📸 Por captura</button>
     </div>
     <!-- URL pane -->
@@ -3227,20 +3233,28 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
       </div>
       <div class="ddb-err" id="ddbErr"></div>
     </div>
-    <!-- JSON paste pane -->
-    <div class="ddb-pane" id="ddbPaneJson" style="display:none">
-      <div class="ddb-hint">
-        <strong>¿Cómo obtener el JSON?</strong><br>
-        <strong>Opción A (personaje privado):</strong> En tu personaje de DnD Beyond → menú <strong>⋯</strong> → <strong>Export</strong> → descargá el archivo <code>.json</code> → abrilo con un editor de texto → copiá todo el contenido y pegalo acá.<br>
-        <strong>Opción B (personaje público):</strong> Entrá a <code>character-service.dndbeyond.com/character/v5/character/TU_ID</code> en el navegador → copiá todo el texto → pegalo acá.
+    <!-- PDF pane -->
+    <div class="ddb-pane" id="ddbPanePdf" style="display:none">
+      <div class="ddb-hint">En DnD Beyond, en la página de tu personaje hacé clic en <strong>⋯</strong> → <strong>Export PDF</strong>. Luego subí ese archivo acá. Los datos se extraen automáticamente — revisalos antes de crear el personaje.</div>
+      <div class="ddb-pdf-drop" id="ddbPdfDrop"
+           onclick="document.getElementById('ddbPdfIn').click()"
+           ondragover="event.preventDefault();this.classList.add('drag')"
+           ondragleave="this.classList.remove('drag')"
+           ondrop="ddbOnPdfDrop(event)">
+        <input type="file" id="ddbPdfIn" accept=".pdf,application/pdf" style="display:none" onchange="ddbOnPdfFile(event)">
+        <div class="ddb-pdf-placeholder" id="ddbPdfPlaceholder">
+          <div style="font-size:2rem;margin-bottom:6px">📄</div>
+          <div>Hacé clic o arrastrá el PDF aquí</div>
+          <div style="font-size:11px;opacity:.4;margin-top:4px">Archivo .pdf exportado desde DnD Beyond</div>
+        </div>
       </div>
-      <textarea id="ddbJsonIn" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#f0ead0;font-size:12px;padding:10px 12px;width:100%;box-sizing:border-box;resize:vertical;min-height:130px;outline:none;font-family:monospace;line-height:1.5;" placeholder='Pegá acá el JSON completo de tu personaje...' oninput="document.getElementById('ddbJsonErr').classList.remove('show')"></textarea>
-      <div class="ddb-err" id="ddbJsonErr"></div>
-      <button class="ddb-go-btn" style="width:100%;padding:12px;" onclick="ddbImportJson()">Procesar JSON</button>
+      <div class="ddb-pdf-status" id="ddbPdfStatus" style="display:none">⏳ Procesando PDF…</div>
+      <div class="ddb-err" id="ddbPdfErr"></div>
     </div>
     <!-- Screenshot pane -->
     <div class="ddb-pane" id="ddbPaneSS" style="display:none">
-      <div class="ddb-hint">Subí una captura de pantalla de tu personaje y completá los campos. Usá la imagen como referencia visual.</div>
+      <div class="ddb-pdf-ok" id="ddbPdfParsedNotice">✓ Datos extraídos del PDF. Revisá y corregí si hace falta antes de crear el personaje.</div>
+      <div class="ddb-hint" id="ddbSSHint">Subí una captura de pantalla de tu personaje y completá los campos. Usá la imagen como referencia visual.</div>
       <div class="ddb-ss-dropzone" id="ddbDropzone"
            onclick="document.getElementById('ddbFileIn').click()"
            ondragover="event.preventDefault()"
@@ -10175,6 +10189,12 @@ function openDdbImport(){
   document.getElementById('ddbOverlay').classList.add('open');
   document.getElementById('ddbUrlIn').value='';
   document.getElementById('ddbErr').classList.remove('show');
+  document.getElementById('ddbPdfErr').classList.remove('show');
+  document.getElementById('ddbPdfStatus').style.display='none';
+  document.getElementById('ddbPdfIn').value='';
+  document.getElementById('ddbPdfPlaceholder').style.display='';
+  document.getElementById('ddbPdfParsedNotice').classList.remove('show');
+  document.getElementById('ddbSSHint').style.display='';
   document.getElementById('ddbPanePreview').style.display='none';
   ddbSwitchTab('url');
   _ddbChar=null;
@@ -10182,7 +10202,7 @@ function openDdbImport(){
 function closeDdbImport(){document.getElementById('ddbOverlay').classList.remove('open');}
 
 function ddbSwitchTab(t){
-  const TABS={url:'Url',json:'Json',ss:'SS'};
+  const TABS={url:'Url',pdf:'Pdf',ss:'SS'};
   Object.entries(TABS).forEach(([key,suffix])=>{
     document.getElementById('ddbTab'+suffix)?.classList.toggle('active',key===t);
     const pane=document.getElementById('ddbPane'+suffix);
@@ -10258,29 +10278,147 @@ function _ddbRenderPreview(c){
   document.getElementById('ddbPanePreview').style.display='flex';
 }
 
-async function ddbImportJson(){
-  const raw=(document.getElementById('ddbJsonIn').value||'').trim();
-  if(!raw){_ddbShowJsonErr('Pegá el JSON de tu personaje primero.');return;}
-  let parsed;
-  try{parsed=JSON.parse(raw);}catch(e){_ddbShowJsonErr('JSON inválido — revisá que hayas copiado el contenido completo.');return;}
-  const btn=event.currentTarget||document.activeElement;
-  if(btn){btn.disabled=true;btn.textContent='Procesando…';}
-  try{
-    const r=await fetch('/api/import-json',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(parsed),
-    });
-    const json=await r.json();
-    if(!r.ok||!json.success){_ddbShowJsonErr(json.error||'Error al procesar. Verificá el JSON.');return;}
-    _ddbChar=json.character;
-    _ddbRenderPreview(json.character);
-  }catch(e){_ddbShowJsonErr('Error de conexión. Intentá de nuevo.');}
-  finally{if(btn){btn.disabled=false;btn.textContent='Procesar JSON';}}
+function ddbOnPdfDrop(e){
+  e.preventDefault();
+  document.getElementById('ddbPdfDrop').classList.remove('drag');
+  const f=e.dataTransfer.files[0];
+  if(f&&(f.type==='application/pdf'||f.name.endsWith('.pdf'))){
+    _ddbProcessPdf(f);
+  }else{
+    const el=document.getElementById('ddbPdfErr');
+    el.textContent='Solo se aceptan archivos PDF (.pdf).';el.classList.add('show');
+  }
 }
-function _ddbShowJsonErr(msg){
-  const el=document.getElementById('ddbJsonErr');
-  el.textContent=msg;el.classList.add('show');
+function ddbOnPdfFile(e){const f=e.target.files[0];if(f)_ddbProcessPdf(f);}
+
+async function _ddbLoadPdfJs(){
+  if(window.pdfjsLib)return;
+  await new Promise((res,rej)=>{
+    const s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+    s.onload=res;s.onerror=rej;document.head.appendChild(s);
+  });
+  window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
+
+async function _ddbProcessPdf(file){
+  const statusEl=document.getElementById('ddbPdfStatus');
+  const errEl=document.getElementById('ddbPdfErr');
+  statusEl.style.display='block';errEl.classList.remove('show');
+  document.getElementById('ddbPdfPlaceholder').innerHTML=`<div style="font-size:2rem;margin-bottom:6px">📄</div><div style="font-size:13px;color:var(--text-m)">${file.name}</div>`;
+  try{
+    await _ddbLoadPdfJs();
+    const buf=await file.arrayBuffer();
+    const pdf=await window.pdfjsLib.getDocument({data:buf}).promise;
+    const items=[];
+    for(let i=1;i<=Math.min(pdf.numPages,3);i++){
+      const page=await pdf.getPage(i);
+      const vp=page.getViewport({scale:1});
+      const tc=await page.getTextContent();
+      for(const item of tc.items){
+        if(item.str&&item.str.trim()){
+          items.push({
+            str:item.str.trim(),
+            x:Math.round(item.transform[4]),
+            y:Math.round(vp.height-item.transform[5]),
+            page:i
+          });
+        }
+      }
+    }
+    const parsed=_parseDdbPdf(items);
+    _fillSsFormFromPdf(parsed);
+    statusEl.style.display='none';
+    document.getElementById('ddbPdfParsedNotice').classList.add('show');
+    document.getElementById('ddbSSHint').style.display='none';
+    ddbSwitchTab('ss');
+  }catch(e){
+    statusEl.style.display='none';
+    errEl.textContent='No se pudo leer el PDF. Asegurate de subir el PDF exportado desde DnD Beyond.';
+    errEl.classList.add('show');
+  }
+}
+
+function _parseDdbPdf(items){
+  // Sort top-to-bottom (y asc after flipping), then left-to-right
+  const sorted=[...items].sort((a,b)=>{
+    if(a.page!==b.page)return a.page-b.page;
+    if(Math.abs(a.y-b.y)>4)return a.y-b.y;
+    return a.x-b.x;
+  });
+
+  // Find the value appearing after a label keyword (within next N items)
+  const SKIP_LABELS=/^(CHARACTER|CLASS|BACKGROUND|PLAYER|RACE|ALIGNMENT|EXPERIENCE|INSPIRATION|PROFICIENCY|SAVING|PASSIVE|SKILLS?|SENSES?|ARMOR|INITIATIVE|SPEED|HIT|DEATH|ATTACKS|FEATURES|OTHER|PERSONALITY|IDEALS|BONDS|FLAWS|EQUIPMENT|LANGUAGES|ADDITIONAL|TOTAL|CURRENT|TEMPORARY)/i;
+  const nextAfter=(label,maxLook=8)=>{
+    const lup=label.toUpperCase();
+    for(let i=0;i<sorted.length;i++){
+      if(sorted[i].str.toUpperCase().includes(lup)){
+        for(let j=i+1;j<Math.min(i+maxLook+1,sorted.length);j++){
+          const v=sorted[j].str.trim();
+          if(v&&!SKIP_LABELS.test(v))return v;
+        }
+      }
+    }
+    return '';
+  };
+
+  const name=nextAfter('CHARACTER NAME')||'';
+  const classLevel=nextAfter('CLASS & LEVEL')||nextAfter('CLASS')||'';
+  const bg=nextAfter('BACKGROUND')||'';
+  const race=nextAfter('RACE')||'';
+
+  const clm=classLevel.match(/^(.+?)\s+(\d+)\s*$/);
+  const charClass=clm?clm[1].trim():'';
+  const level=clm?parseInt(clm[2]):1;
+
+  // Ability scores: find label then look at nearby numeric items
+  const getScore=(fullName,abbr)=>{
+    const label=sorted.find(i=>{const s=i.str.toUpperCase();return s===fullName||s===abbr;});
+    if(!label)return 10;
+    const cands=sorted.filter(i=>{
+      if(i===label||i.page!==label.page)return false;
+      const n=parseInt(i.str);
+      if(isNaN(n)||n<1||n>30)return false;
+      return Math.abs(i.x-label.x)<55&&Math.abs(i.y-label.y)<90;
+    }).map(i=>parseInt(i.str));
+    return cands.length?Math.max(...cands):10;
+  };
+
+  const stats={
+    str:getScore('STRENGTH','STR'),
+    dex:getScore('DEXTERITY','DEX'),
+    con:getScore('CONSTITUTION','CON'),
+    int:getScore('INTELLIGENCE','INT'),
+    wis:getScore('WISDOM','WIS'),
+    cha:getScore('CHARISMA','CHA'),
+  };
+
+  const acRaw=nextAfter('ARMOR CLASS')||'';
+  const ca=parseInt(acRaw)||10;
+  const hpRaw=nextAfter('HIT POINT MAXIMUM')||nextAfter('MAXIMUM')||'';
+  const hp=parseInt(hpRaw)||0;
+
+  return{name,charClass,level,race,bg,stats,ca,hp};
+}
+
+const _PDF_RACE_MAP={'human':'human','elf':'elf','high elf':'elf','wood elf':'elf','dark elf':'elf','drow':'elf','dwarf':'dwarf','hill dwarf':'dwarf','mountain dwarf':'dwarf','halfling':'halfling','lightfoot halfling':'halfling','stout halfling':'halfling','dragonborn':'dragonborn','tiefling':'tiefling','half-orc':'half-orc','half orc':'half-orc','gnome':'gnome','rock gnome':'gnome','forest gnome':'gnome','aasimar':'aasimar','tabaxi':'tabaxi','firbolg':'firbolg','kenku':'kenku'};
+const _PDF_CLASS_MAP={'fighter':'fighter','ranger':'ranger','rogue':'rogue','wizard':'wizard','cleric':'cleric','paladin':'paladin','barbarian':'barbarian','bard':'bard','druid':'druid','monk':'monk','sorcerer':'sorcerer','warlock':'warlock'};
+const _PDF_BG_MAP={'acolyte':'acolyte','charlatan':'charlatan','criminal':'criminal','entertainer':'entertainer','folk hero':'folk-hero','guild artisan':'guild-artisan','hermit':'hermit','noble':'noble','outlander':'outlander','sage':'sage','sailor':'sailor','soldier':'soldier','urchin':'urchin'};
+
+function _fillSsFormFromPdf(p){
+  if(p.name)document.getElementById('ssName').value=p.name;
+  const setSelect=(id,map,raw)=>{
+    const key=map[(raw||'').toLowerCase()];
+    if(key){const s=document.getElementById(id);if([...s.options].some(o=>o.value===key))s.value=key;}
+  };
+  setSelect('ssRace',_PDF_RACE_MAP,p.race);
+  setSelect('ssClass',_PDF_CLASS_MAP,p.charClass);
+  setSelect('ssBg',_PDF_BG_MAP,p.bg);
+  if(p.level>=1&&p.level<=20)document.getElementById('ssLvl').value=p.level;
+  if(p.ca>=1)document.getElementById('ssCa').value=p.ca;
+  if(p.hp>=1)document.getElementById('ssHp').value=p.hp;
+  const sv={str:'ssStr',dex:'ssDex',con:'ssCon',int:'ssInt',wis:'ssWis',cha:'ssCha'};
+  Object.entries(sv).forEach(([k,id])=>{if(p.stats[k]>=1&&p.stats[k]<=30)document.getElementById(id).value=p.stats[k];});
 }
 
 function ddbCreateFromImport(){
