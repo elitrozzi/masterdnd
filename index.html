@@ -2226,7 +2226,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.8.17</span>
+    <span class="ver-badge">v2.8.18</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">20 May 2026</span>
   </div>
@@ -2744,7 +2744,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.8.17</span>
+          <span class="ver-badge">v2.8.18</span>
           <span>·</span>
           <span class="ver-date">20 May 2026</span>
         </div>
@@ -3212,6 +3212,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     </div>
     <div class="ddb-tabs">
       <button class="ddb-tab active" id="ddbTabUrl" onclick="ddbSwitchTab('url')">🔗 Por URL</button>
+      <button class="ddb-tab" id="ddbTabJson" onclick="ddbSwitchTab('json')">📋 Pegar JSON</button>
       <button class="ddb-tab" id="ddbTabSS" onclick="ddbSwitchTab('ss')">📸 Por captura</button>
     </div>
     <!-- URL pane -->
@@ -3225,6 +3226,17 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ddb-go-btn" id="ddbGoBtn" onclick="ddbImportUrl()">Importar</button>
       </div>
       <div class="ddb-err" id="ddbErr"></div>
+    </div>
+    <!-- JSON paste pane -->
+    <div class="ddb-pane" id="ddbPaneJson" style="display:none">
+      <div class="ddb-hint">
+        <strong>¿Cómo obtener el JSON?</strong><br>
+        <strong>Opción A (personaje privado):</strong> En tu personaje de DnD Beyond → menú <strong>⋯</strong> → <strong>Export</strong> → descargá el archivo <code>.json</code> → abrilo con un editor de texto → copiá todo el contenido y pegalo acá.<br>
+        <strong>Opción B (personaje público):</strong> Entrá a <code>character-service.dndbeyond.com/character/v5/character/TU_ID</code> en el navegador → copiá todo el texto → pegalo acá.
+      </div>
+      <textarea id="ddbJsonIn" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#f0ead0;font-size:12px;padding:10px 12px;width:100%;box-sizing:border-box;resize:vertical;min-height:130px;outline:none;font-family:monospace;line-height:1.5;" placeholder='Pegá acá el JSON completo de tu personaje...' oninput="document.getElementById('ddbJsonErr').classList.remove('show')"></textarea>
+      <div class="ddb-err" id="ddbJsonErr"></div>
+      <button class="ddb-go-btn" style="width:100%;padding:12px;" onclick="ddbImportJson()">Procesar JSON</button>
     </div>
     <!-- Screenshot pane -->
     <div class="ddb-pane" id="ddbPaneSS" style="display:none">
@@ -10164,20 +10176,18 @@ function openDdbImport(){
   document.getElementById('ddbUrlIn').value='';
   document.getElementById('ddbErr').classList.remove('show');
   document.getElementById('ddbPanePreview').style.display='none';
-  document.getElementById('ddbPaneUrl').style.display='flex';
-  document.getElementById('ddbPaneSS').style.display='none';
-  document.getElementById('ddbTabUrl').classList.add('active');
-  document.getElementById('ddbTabSS').classList.remove('active');
+  ddbSwitchTab('url');
   _ddbChar=null;
 }
 function closeDdbImport(){document.getElementById('ddbOverlay').classList.remove('open');}
 
 function ddbSwitchTab(t){
-  const isUrl=t==='url';
-  document.getElementById('ddbTabUrl').classList.toggle('active',isUrl);
-  document.getElementById('ddbTabSS').classList.toggle('active',!isUrl);
-  document.getElementById('ddbPaneUrl').style.display=isUrl?'flex':'none';
-  document.getElementById('ddbPaneSS').style.display=isUrl?'none':'flex';
+  const TABS={url:'Url',json:'Json',ss:'SS'};
+  Object.entries(TABS).forEach(([key,suffix])=>{
+    document.getElementById('ddbTab'+suffix)?.classList.toggle('active',key===t);
+    const pane=document.getElementById('ddbPane'+suffix);
+    if(pane)pane.style.display=key===t?'flex':'none';
+  });
   document.getElementById('ddbPanePreview').style.display='none';
 }
 
@@ -10246,6 +10256,31 @@ function _ddbRenderPreview(c){
   `;
   document.getElementById('ddbPaneUrl').style.display='none';
   document.getElementById('ddbPanePreview').style.display='flex';
+}
+
+async function ddbImportJson(){
+  const raw=(document.getElementById('ddbJsonIn').value||'').trim();
+  if(!raw){_ddbShowJsonErr('Pegá el JSON de tu personaje primero.');return;}
+  let parsed;
+  try{parsed=JSON.parse(raw);}catch(e){_ddbShowJsonErr('JSON inválido — revisá que hayas copiado el contenido completo.');return;}
+  const btn=event.currentTarget||document.activeElement;
+  if(btn){btn.disabled=true;btn.textContent='Procesando…';}
+  try{
+    const r=await fetch('/api/import-json',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(parsed),
+    });
+    const json=await r.json();
+    if(!r.ok||!json.success){_ddbShowJsonErr(json.error||'Error al procesar. Verificá el JSON.');return;}
+    _ddbChar=json.character;
+    _ddbRenderPreview(json.character);
+  }catch(e){_ddbShowJsonErr('Error de conexión. Intentá de nuevo.');}
+  finally{if(btn){btn.disabled=false;btn.textContent='Procesar JSON';}}
+}
+function _ddbShowJsonErr(msg){
+  const el=document.getElementById('ddbJsonErr');
+  el.textContent=msg;el.classList.add('show');
 }
 
 function ddbCreateFromImport(){
