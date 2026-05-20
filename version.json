@@ -1,7 +1,12 @@
 {
-  "version": "2.8.16",
-  "date": "2026-05-13",
+  "version": "2.8.17",
+  "date": "2026-05-20",
   "history": [
+    {
+      "version": "2.8.17",
+      "date": "2026-05-20",
+      "note": "Feature: Importar personaje desde D&D Beyond — modal con tab URL (API Vercel proxy) y tab captura (formulario guiado), traducción automática de ~200 hechizos e ítems al español, fix saveCharacter preserva inventario/hechizos/notas"
+    },
     {
       "version": "2.8.16",
       "date": "2026-05-13",

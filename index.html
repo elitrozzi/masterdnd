@@ -2072,6 +2072,57 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 .fb-send:hover{filter:brightness(1.15);}
 .fb-send:disabled{opacity:.45;cursor:not-allowed;}
 .fb-ok{text-align:center;padding:8px 0;font-size:14px;color:var(--gold);}
+/* DnD Beyond Import Modal */
+.ddb-overlay{position:fixed;inset:0;background:rgba(0,0,0,.78);backdrop-filter:blur(5px);z-index:1300;display:none;align-items:center;justify-content:center;padding:20px;}
+.ddb-overlay.open{display:flex;}
+.ddb-modal{background:#12101a;border:1px solid rgba(196,30,58,.3);border-radius:14px;width:100%;max-width:640px;max-height:90vh;overflow-y:auto;display:flex;flex-direction:column;box-shadow:0 24px 80px rgba(0,0,0,.7);}
+.ddb-modal-hdr{padding:20px 24px 0;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
+.ddb-modal-title{font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:#e63950;}
+.ddb-modal-sub{font-size:12px;color:var(--text-m);margin-top:3px;}
+.ddb-modal-x{background:none;border:none;color:rgba(180,160,220,.4);font-size:22px;cursor:pointer;padding:0;line-height:1;flex-shrink:0;transition:color .15s;}
+.ddb-modal-x:hover{color:#fff;}
+.ddb-tabs{display:flex;gap:8px;padding:16px 24px 0;}
+.ddb-tab{flex:1;padding:9px 12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:var(--text-m);font-size:13px;cursor:pointer;transition:all .15s;font-family:'Roboto',sans-serif;}
+.ddb-tab.active{background:rgba(196,30,58,.15);border-color:rgba(196,30,58,.5);color:#fff;}
+.ddb-pane{padding:16px 24px 24px;display:flex;flex-direction:column;gap:14px;}
+.ddb-hint{background:rgba(248,198,98,.05);border:1px solid rgba(248,198,98,.15);border-radius:8px;padding:11px 14px;font-size:12px;color:rgba(248,198,98,.7);line-height:1.5;}
+.ddb-url-row{display:flex;gap:8px;}
+.ddb-url-input{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#f0ead0;font-size:14px;padding:10px 14px;outline:none;font-family:'Roboto',sans-serif;}
+.ddb-url-input:focus{border-color:rgba(196,30,58,.55);}
+.ddb-url-input::placeholder{color:rgba(255,255,255,.22);}
+.ddb-go-btn{background:#c41e3a;border:none;color:#fff;border-radius:8px;padding:10px 18px;font:700 13px/1 'Cinzel',serif;cursor:pointer;white-space:nowrap;transition:filter .15s;}
+.ddb-go-btn:hover{filter:brightness(1.15);}
+.ddb-go-btn:disabled{opacity:.45;cursor:not-allowed;}
+.ddb-err{background:rgba(220,53,69,.1);border:1px solid rgba(220,53,69,.3);border-radius:8px;padding:10px 14px;font-size:13px;color:#ff8a99;display:none;}
+.ddb-err.show{display:block;}
+.ddb-preview-box{background:rgba(255,255,255,.03);border:1px solid rgba(248,198,98,.15);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:12px;}
+.ddb-preview-name{font-family:'Cinzel',serif;font-size:20px;font-weight:700;color:var(--gold);}
+.ddb-preview-meta{font-size:13px;color:var(--text-m);}
+.ddb-preview-stats{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;}
+.ddb-stat-box{background:rgba(255,255,255,.06);border-radius:8px;padding:8px 4px;text-align:center;}
+.ddb-stat-val{font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:#f0ead0;}
+.ddb-stat-mod{font-size:11px;color:rgba(255,255,255,.45);margin-top:1px;}
+.ddb-stat-lbl{font-size:9px;color:var(--text-m);letter-spacing:.08em;text-transform:uppercase;margin-top:2px;}
+.ddb-preview-chip{font-size:11px;color:rgba(255,255,255,.45);padding:4px 0;}
+.ddb-create-btn{background:linear-gradient(135deg,#c41e3a,#8b0000);border:none;color:#fff;border-radius:10px;padding:14px;font:700 14px/1 'Cinzel',serif;cursor:pointer;letter-spacing:.05em;transition:filter .15s;width:100%;}
+.ddb-create-btn:hover{filter:brightness(1.15);}
+.ddb-create-btn:active{transform:scale(.97);}
+.ddb-ss-dropzone{background:rgba(255,255,255,.03);border:2px dashed rgba(255,255,255,.15);border-radius:10px;min-height:140px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .15s;overflow:hidden;}
+.ddb-ss-dropzone:hover{border-color:rgba(196,30,58,.55);}
+.ddb-ss-placeholder{text-align:center;color:var(--text-m);font-size:13px;pointer-events:none;}
+.ddb-ss-img{width:100%;max-height:260px;object-fit:contain;display:none;border-radius:8px;}
+.ddb-ss-form{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.ddb-form-field{display:flex;flex-direction:column;gap:4px;}
+.ddb-form-field label{font-size:11px;color:var(--text-m);letter-spacing:.05em;text-transform:uppercase;}
+.ddb-form-field input,.ddb-form-field select{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:7px;color:#f0ead0;font-size:14px;padding:8px 10px;outline:none;font-family:'Roboto',sans-serif;width:100%;box-sizing:border-box;}
+.ddb-form-field input:focus,.ddb-form-field select:focus{border-color:rgba(196,30,58,.45);}
+.ddb-form-field select option{background:#1a1828;}
+.ddb-form-full{grid-column:1/-1;}
+.ddb-stats-6{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;}
+.char-picker-import{margin-top:12px;font:700 12px/1 'Cinzel',serif;padding:10px 24px;background:transparent;border:1px solid rgba(196,30,58,.3);color:rgba(210,50,70,.85);cursor:pointer;letter-spacing:.08em;transition:all .15s;border-radius:8px;}
+.char-picker-import:hover{background:rgba(196,30,58,.1);border-color:rgba(196,30,58,.65);color:#e63950;}
+.char-picker-import:active{transform:scale(.97);}
+@media(max-width:580px){.ddb-preview-stats,.ddb-stats-6{grid-template-columns:repeat(3,1fr);}.ddb-ss-form{grid-template-columns:1fr;}}
 .cs-dbd-btn:active,.ct-next-btn:active,.ct-roll-btn:active,.ct-dmg-btn:active,.btn-dmg:active,.btn-heal:active,.char-picker-new:active,.combat-active-btn:active,.cmb-attack-btn:active,.cmb-dice-btn:active,.cmb-session-btn:active,.dr-stat-btn:active,.lu-hp-option:active,.lu-asi-btn:active,.lu-btn-cancel:active,.lu-btn-confirm:active,.cnotes-cat-btn:active,.cmap-zoom-btn:active,.camp-gate-btn:active,.camp-action-btn:active,.camp-back-btn:active,.camp-tab:active,.item-gift-btn:active,.gift-chip:active,.gift-send-btn:active,.camp-role-btn:active,.camp-modal-submit:active,.cmb-cond-badge:active,.cmb-cond-picker-badge:active,.cs-chip:active,.ct-token:active,.char-picker-card:active,.ct-card:active,.camp-card:active,.cmap-sidebar-item:active,.cmap-pin-type-opt:active,.cs-dbd-stat-box:active,.mob-block-btn:active,.fb-send:active{transform:scale(0.97);}
 @media(hover:none){.lbtn-ghost:hover,.lbtn-gold:hover,.hook-roll-btn:hover,.ls-feat-card:hover,.ls-guide-card:hover,.ls-camp-cta:hover,.ls-cta-btn-start:hover,.option-card:hover,.char-picker-card:hover,.btn-cta-primary:hover,.btn-cta-secondary:hover,.char-confirm-btn:hover,.cs-mode-card:hover,.gen-card:hover,.comm-card:hover,.sound-card:hover,.sfx-card:hover,.comp-card:hover,.dado-btn:hover,.dados-roll-btn:hover,.fb-btn:hover{transform:none;filter:none;box-shadow:none;}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;}}
@@ -2175,9 +2226,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.8.16</span>
+    <span class="ver-badge">v2.8.17</span>
     <span class="ver-sep">·</span>
-    <span class="ver-date">12 May 2026</span>
+    <span class="ver-date">20 May 2026</span>
   </div>
   <div class="lang-toggle">
     <button class="lang-btn active" onclick="setLang('es')">ES</button>
@@ -2693,9 +2744,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.8.16</span>
+          <span class="ver-badge">v2.8.17</span>
           <span>·</span>
-          <span class="ver-date">12 May 2026</span>
+          <span class="ver-date">20 May 2026</span>
         </div>
       </div>
       <!-- RIGHT: scene -->
@@ -3145,6 +3196,103 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     </div>
     <div class="char-picker-grid" id="charPickerGrid"></div>
     <button class="char-picker-new" onclick="goToCreateChar()">+ Crear personaje</button>
+    <button class="char-picker-import" onclick="openDdbImport()">⚔ Importar desde D&amp;D Beyond</button>
+  </div>
+</div>
+
+<!-- ── DnD Beyond Import Modal ── -->
+<div class="ddb-overlay" id="ddbOverlay" onclick="if(event.target===this)closeDdbImport()">
+  <div class="ddb-modal">
+    <div class="ddb-modal-hdr">
+      <div>
+        <div class="ddb-modal-title">⚔️ Importar desde D&amp;D Beyond</div>
+        <div class="ddb-modal-sub">Traé tu personaje a MasterDnD en español</div>
+      </div>
+      <button class="ddb-modal-x" onclick="closeDdbImport()">✕</button>
+    </div>
+    <div class="ddb-tabs">
+      <button class="ddb-tab active" id="ddbTabUrl" onclick="ddbSwitchTab('url')">🔗 Por URL</button>
+      <button class="ddb-tab" id="ddbTabSS" onclick="ddbSwitchTab('ss')">📸 Por captura</button>
+    </div>
+    <!-- URL pane -->
+    <div class="ddb-pane" id="ddbPaneUrl">
+      <div class="ddb-hint">El personaje debe ser <strong>público</strong> en DnD Beyond: en la página de tu personaje → Configuración (ícono engranaje) → Privacidad → <strong>Público</strong>.</div>
+      <div class="ddb-url-row">
+        <input id="ddbUrlIn" class="ddb-url-input" type="url" autocomplete="off"
+               placeholder="https://www.dndbeyond.com/characters/12345678"
+               oninput="document.getElementById('ddbErr').classList.remove('show')"
+               onkeydown="if(event.key==='Enter')ddbImportUrl()">
+        <button class="ddb-go-btn" id="ddbGoBtn" onclick="ddbImportUrl()">Importar</button>
+      </div>
+      <div class="ddb-err" id="ddbErr"></div>
+    </div>
+    <!-- Screenshot pane -->
+    <div class="ddb-pane" id="ddbPaneSS" style="display:none">
+      <div class="ddb-hint">Subí una captura de pantalla de tu personaje y completá los campos. Usá la imagen como referencia visual.</div>
+      <div class="ddb-ss-dropzone" id="ddbDropzone"
+           onclick="document.getElementById('ddbFileIn').click()"
+           ondragover="event.preventDefault()"
+           ondrop="ddbOnDrop(event)">
+        <input type="file" id="ddbFileIn" accept="image/*" style="display:none" onchange="ddbOnFile(event)">
+        <div class="ddb-ss-placeholder" id="ddbSSPlaceholder">
+          <div style="font-size:2rem;margin-bottom:6px">📸</div>
+          <div>Hacé clic o arrastrá una imagen aquí</div>
+          <div style="font-size:11px;opacity:.4;margin-top:4px">PNG · JPG · WEBP</div>
+        </div>
+        <img id="ddbSSImg" class="ddb-ss-img" alt="captura de pantalla">
+      </div>
+      <div class="ddb-ss-form">
+        <div class="ddb-form-field ddb-form-full"><label>Nombre del personaje</label><input id="ssName" type="text" placeholder="Nombre"></div>
+        <div class="ddb-form-field"><label>Raza</label>
+          <select id="ssRace">
+            <option value="human">Humano</option><option value="elf">Elfo</option>
+            <option value="dwarf">Enano</option><option value="halfling">Mediano</option>
+            <option value="dragonborn">Draconiano</option><option value="tiefling">Tiefling</option>
+            <option value="half-orc">Semiorco</option><option value="gnome">Gnomo</option>
+            <option value="aasimar">Aasimar</option><option value="tabaxi">Tabaxi</option>
+            <option value="firbolg">Firbolg</option><option value="kenku">Kenku</option>
+          </select>
+        </div>
+        <div class="ddb-form-field"><label>Clase</label>
+          <select id="ssClass">
+            <option value="fighter">Guerrero</option><option value="wizard">Mago</option>
+            <option value="rogue">Pícaro</option><option value="cleric">Clérigo</option>
+            <option value="ranger">Explorador</option><option value="paladin">Paladín</option>
+            <option value="barbarian">Bárbaro</option><option value="bard">Bardo</option>
+            <option value="druid">Druida</option><option value="monk">Monje</option>
+            <option value="sorcerer">Hechicero</option><option value="warlock">Brujo</option>
+          </select>
+        </div>
+        <div class="ddb-form-field"><label>Trasfondo</label>
+          <select id="ssBg">
+            <option value="acolyte">Acólito</option><option value="charlatan">Charlatán</option>
+            <option value="criminal">Criminal</option><option value="entertainer">Artista</option>
+            <option value="folk-hero">Héroe del Pueblo</option><option value="guild-artisan">Artesano Gremial</option>
+            <option value="hermit">Ermitaño</option><option value="noble">Noble</option>
+            <option value="outlander">Forastero</option><option value="sage">Sabio</option>
+            <option value="sailor">Marinero</option><option value="soldier">Soldado</option>
+            <option value="urchin">Golfo</option>
+          </select>
+        </div>
+        <div class="ddb-form-field"><label>Nivel</label><input id="ssLvl" type="number" min="1" max="20" value="1"></div>
+        <div class="ddb-form-field"><label>CA</label><input id="ssCa" type="number" min="1" max="30" value="10"></div>
+        <div class="ddb-form-field"><label>HP máximo</label><input id="ssHp" type="number" min="1" max="999" value="8"></div>
+      </div>
+      <div class="ddb-stats-6">
+        <div class="ddb-form-field"><label>FUE</label><input id="ssStr" type="number" min="1" max="30" value="10"></div>
+        <div class="ddb-form-field"><label>DES</label><input id="ssDex" type="number" min="1" max="30" value="10"></div>
+        <div class="ddb-form-field"><label>CON</label><input id="ssCon" type="number" min="1" max="30" value="10"></div>
+        <div class="ddb-form-field"><label>INT</label><input id="ssInt" type="number" min="1" max="30" value="10"></div>
+        <div class="ddb-form-field"><label>SAB</label><input id="ssWis" type="number" min="1" max="30" value="10"></div>
+        <div class="ddb-form-field"><label>CAR</label><input id="ssCha" type="number" min="1" max="30" value="10"></div>
+      </div>
+      <button class="ddb-create-btn" onclick="ddbCreateFromSS()">⚔️ Crear personaje con estos datos</button>
+    </div>
+    <!-- Preview pane (after successful URL import) -->
+    <div class="ddb-pane" id="ddbPanePreview" style="display:none">
+      <div class="ddb-preview-box" id="ddbPreviewBox"></div>
+      <button class="ddb-create-btn" onclick="ddbCreateFromImport()">⚔️ Crear este personaje en MasterDnD</button>
+    </div>
   </div>
 </div>
 
@@ -5439,7 +5587,7 @@ function saveCharacter(btn){
   const maxHp=hpBase+conMod;
   const existingIdx=_loadedCharId?chars.findIndex(c=>c.id===_loadedCharId):-1;
   const charObj={id:_loadedCharId||Date.now().toString(),name,race:rk,class:ck,background:selections.background||'',gender:_csGender||null,stats:st,hp:maxHp,currentHp:maxHp,ca:10+dexMod,level:_currentLevel||1,conditions:[..._activeConditions],skillProfs:[..._skillProfs],saveProfs:[..._saveProfs],savedAt:Date.now(),portrait:_pendingPortrait||null};
-  if(existingIdx>=0){charObj.hp=chars[existingIdx].hp;charObj.currentHp=chars[existingIdx].currentHp;charObj.portrait=_pendingPortrait||chars[existingIdx].portrait||null;chars.splice(existingIdx,1,charObj);}
+  if(existingIdx>=0){charObj.hp=chars[existingIdx].hp;charObj.currentHp=chars[existingIdx].currentHp;charObj.portrait=_pendingPortrait||chars[existingIdx].portrait||null;charObj.inventory=_charInventory;charObj.knownSpells=_csKnownSpells;charObj.charNotes=_charNotes;chars.splice(existingIdx,1,charObj);}
   else chars.unshift(charObj);
   localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));
   _cloudSyncChar(charObj.id);
@@ -10006,6 +10154,144 @@ function _drShowMultiResult(diceList){
     resEl.innerHTML=`<div class="dr-multi-cards">${cards}</div><div class="dr-multi-total"><div class="dr-multi-eq">TOTAL</div><div class="dr-multi-sum">${total}</div></div>`;
   }
   requestAnimationFrame(()=>{resEl.classList.add('show');document.getElementById('drHint').style.display='block';});
+}
+
+/* ══ DnD BEYOND IMPORT ══ */
+let _ddbChar=null;
+
+function openDdbImport(){
+  document.getElementById('ddbOverlay').classList.add('open');
+  document.getElementById('ddbUrlIn').value='';
+  document.getElementById('ddbErr').classList.remove('show');
+  document.getElementById('ddbPanePreview').style.display='none';
+  document.getElementById('ddbPaneUrl').style.display='flex';
+  document.getElementById('ddbPaneSS').style.display='none';
+  document.getElementById('ddbTabUrl').classList.add('active');
+  document.getElementById('ddbTabSS').classList.remove('active');
+  _ddbChar=null;
+}
+function closeDdbImport(){document.getElementById('ddbOverlay').classList.remove('open');}
+
+function ddbSwitchTab(t){
+  const isUrl=t==='url';
+  document.getElementById('ddbTabUrl').classList.toggle('active',isUrl);
+  document.getElementById('ddbTabSS').classList.toggle('active',!isUrl);
+  document.getElementById('ddbPaneUrl').style.display=isUrl?'flex':'none';
+  document.getElementById('ddbPaneSS').style.display=isUrl?'none':'flex';
+  document.getElementById('ddbPanePreview').style.display='none';
+}
+
+function ddbOnDrop(e){
+  e.preventDefault();
+  const f=e.dataTransfer.files[0];
+  if(f&&f.type.startsWith('image/'))_ddbLoadImage(f);
+}
+function ddbOnFile(e){const f=e.target.files[0];if(f)_ddbLoadImage(f);}
+function _ddbLoadImage(f){
+  const r=new FileReader();
+  r.onload=ev=>{
+    const img=document.getElementById('ddbSSImg');
+    img.src=ev.target.result;
+    img.style.display='block';
+    document.getElementById('ddbSSPlaceholder').style.display='none';
+  };
+  r.readAsDataURL(f);
+}
+
+async function ddbImportUrl(){
+  const raw=(document.getElementById('ddbUrlIn').value||'').trim();
+  if(!raw){_ddbShowErr('Pegá la URL del personaje de DnD Beyond.');return;}
+  const m=raw.match(/\/characters?\/(\d+)/i)||raw.match(/^(\d+)$/);
+  if(!m){_ddbShowErr('URL inválida. Ejemplo: https://www.dndbeyond.com/characters/12345678');return;}
+  const charId=m[1];
+  const btn=document.getElementById('ddbGoBtn');
+  btn.disabled=true;btn.textContent='Cargando…';
+  try{
+    const r=await fetch(`/api/import-dndbeyond?id=${charId}`);
+    const json=await r.json();
+    if(!r.ok||!json.success){_ddbShowErr(json.error||'Error al importar. Intentá de nuevo.');return;}
+    _ddbChar=json.character;
+    _ddbRenderPreview(json.character);
+  }catch(e){_ddbShowErr('Error de conexión. Revisá tu internet e intentá de nuevo.');}
+  finally{btn.disabled=false;btn.textContent='Importar';}
+}
+
+function _ddbShowErr(msg){
+  const el=document.getElementById('ddbErr');
+  el.textContent=msg;el.classList.add('show');
+}
+
+function _ddbRenderPreview(c){
+  const STAT_LABELS={str:'FUE',dex:'DES',con:'CON',int:'INT',wis:'SAB',cha:'CAR'};
+  const rd=typeof RACE_DATA!=='undefined'?RACE_DATA[c.race]||{}:{};
+  const cd=typeof CLASS_DATA!=='undefined'?CLASS_DATA[c.class]||{}:{};
+  const raceName=currentLang==='es'?(rd.nameEs||c.raceFull||c.race):(rd.nameEn||c.raceFull||c.race);
+  const className=currentLang==='es'?(cd.nameEs||c.classFull||c.class):(cd.nameEn||c.classFull||c.class);
+  const statsHtml=Object.entries(c.stats).map(([k,v])=>{
+    const mod=Math.floor((v-10)/2);
+    return `<div class="ddb-stat-box"><div class="ddb-stat-val">${v}</div><div class="ddb-stat-mod">${mod>=0?'+':''}${mod}</div><div class="ddb-stat-lbl">${STAT_LABELS[k]||k}</div></div>`;
+  }).join('');
+  const spCount=c.knownSpells?.length||0;
+  const itCount=c.inventory?.length||0;
+  const chips=[];
+  if(c.skillProfs?.length)chips.push(`${c.skillProfs.length} habilidad${c.skillProfs.length!==1?'es':''} con competencia`);
+  if(spCount)chips.push(`${spCount} hechizo${spCount!==1?'s':''}`);
+  if(itCount)chips.push(`${itCount} objeto${itCount!==1?'s':''} en inventario`);
+  if(c.charNotes)chips.push('Notas de personaje incluidas');
+  document.getElementById('ddbPreviewBox').innerHTML=`
+    <div class="ddb-preview-name">${_esc(c.name)}</div>
+    <div class="ddb-preview-meta">${_esc(raceName)} · ${_esc(className)} · Nivel ${c.level} · CA ${c.ca} · HP ${c.hp}</div>
+    <div class="ddb-preview-stats">${statsHtml}</div>
+    ${chips.map(ch=>`<div class="ddb-preview-chip">✓ ${ch}</div>`).join('')}
+  `;
+  document.getElementById('ddbPaneUrl').style.display='none';
+  document.getElementById('ddbPanePreview').style.display='flex';
+}
+
+function ddbCreateFromImport(){
+  if(!_ddbChar)return;
+  _ddbSaveAndLoad(_ddbChar);
+  _ddbChar=null;
+}
+
+function ddbCreateFromSS(){
+  const name=(document.getElementById('ssName').value||'').trim()||'Personaje importado';
+  const race=document.getElementById('ssRace').value||'human';
+  const cls=document.getElementById('ssClass').value||'fighter';
+  const bg=document.getElementById('ssBg').value||'sage';
+  const level=Math.max(1,Math.min(20,parseInt(document.getElementById('ssLvl').value)||1));
+  const ca=Math.max(1,Math.min(30,parseInt(document.getElementById('ssCa').value)||10));
+  const hp=Math.max(1,parseInt(document.getElementById('ssHp').value)||8);
+  const stats={
+    str:Math.max(1,Math.min(30,parseInt(document.getElementById('ssStr').value)||10)),
+    dex:Math.max(1,Math.min(30,parseInt(document.getElementById('ssDex').value)||10)),
+    con:Math.max(1,Math.min(30,parseInt(document.getElementById('ssCon').value)||10)),
+    int:Math.max(1,Math.min(30,parseInt(document.getElementById('ssInt').value)||10)),
+    wis:Math.max(1,Math.min(30,parseInt(document.getElementById('ssWis').value)||10)),
+    cha:Math.max(1,Math.min(30,parseInt(document.getElementById('ssCha').value)||10)),
+  };
+  _ddbSaveAndLoad({name,race,class:cls,background:bg,level,stats,hp,ca,
+    skillProfs:[],saveProfs:[],inventory:[],knownSpells:[],charNotes:''});
+}
+
+function _ddbSaveAndLoad(c){
+  const charId=Date.now().toString();
+  const charObj={
+    id:charId,name:c.name||'Personaje importado',
+    race:c.race||'human',class:c.class||'fighter',
+    background:c.background||'sage',gender:null,
+    level:c.level||1,stats:c.stats||{str:10,dex:10,con:10,int:10,wis:10,cha:10},
+    hp:c.hp||8,currentHp:c.hp||8,ca:c.ca||10,
+    conditions:[],skillProfs:c.skillProfs||[],saveProfs:c.saveProfs||[],
+    inventory:c.inventory||[],knownSpells:c.knownSpells||[],
+    charNotes:c.charNotes||'',portrait:null,savedAt:Date.now(),
+  };
+  const chars=_loadSavedChars();
+  chars.unshift(charObj);
+  localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));
+  _cloudSyncChar(charId);
+  closeDdbImport();
+  loadChar(charId);
 }
 </script>
 
