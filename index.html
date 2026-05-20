@@ -18,7 +18,7 @@
 <meta name="twitter:description" content="Ficha de personaje, combate en tiempo real, grimorio con 600+ monstruos y modo campaña. Gratis y en español."/>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230e0c1e'/%3E%3Cpolygon points='16,3 29,10.5 29,21.5 16,29 3,21.5 3,10.5' fill='none' stroke='%23d4a843' stroke-width='1.5'/%3E%3Cpolygon points='16,3 29,10.5 16,16' fill='%23d4a843' opacity='.18'/%3E%3Cpolygon points='16,3 3,10.5 16,16' fill='%23d4a843' opacity='.10'/%3E%3Cpolygon points='16,16 29,10.5 29,21.5' fill='%23d4a843' opacity='.13'/%3E%3Cpolygon points='16,16 3,10.5 3,21.5' fill='%23d4a843' opacity='.08'/%3E%3Cpolygon points='16,16 29,21.5 16,29' fill='%23d4a843' opacity='.15'/%3E%3Cpolygon points='16,16 3,21.5 16,29' fill='%23d4a843' opacity='.11'/%3E%3Cline x1='16' y1='3' x2='16' y2='16' stroke='%23d4a843' stroke-width='1' opacity='.5'/%3E%3Cline x1='29' y1='10.5' x2='16' y2='16' stroke='%23d4a843' stroke-width='1' opacity='.5'/%3E%3Cline x1='3' y1='10.5' x2='16' y2='16' stroke='%23d4a843' stroke-width='1' opacity='.5'/%3E%3Cline x1='29' y1='21.5' x2='16' y2='16' stroke='%23d4a843' stroke-width='1' opacity='.5'/%3E%3Cline x1='3' y1='21.5' x2='16' y2='16' stroke='%23d4a843' stroke-width='1' opacity='.5'/%3E%3Cline x1='16' y1='29' x2='16' y2='16' stroke='%23d4a843' stroke-width='1' opacity='.5'/%3E%3C/svg%3E"/>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" integrity="sha384-4eCDoMN/7A46qQ5Tj0rZ/D2VEolFGNIINDTLAcWZcvhkRSsvTfqNfaBMlRRoGEZ5" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" integrity="sha384-zfshMiFERdyezN/WZXzHe9g53pOZCrLPBj/qC0ohHnxQ20c3zXwFqbtRAwvZMacA" crossorigin="anonymous"></script>
 <style>
 /* ── VARIABLES ── */
 :root {
@@ -5258,9 +5258,10 @@ _SB.auth.onAuthStateChange((event,session)=>{
   _currentUser=session?.user||null;
   _updateAuthUI();
   if(event==='SIGNED_IN'){closeModal();_loadCharsFromCloud();if(document.getElementById('page-campaign')?.classList.contains('active'))initCampaignPage();}
+  if(event==='INITIAL_SESSION'&&session){_loadCharsFromCloud();}
   if(event==='SIGNED_OUT'){localStorage.removeItem('masterdnd_chars');renderSavedChars();}
 });
-_SB.auth.getSession().then(({data:{session}})=>{_currentUser=session?.user||null;_updateAuthUI();});
+_SB.auth.getSession().then(({data:{session}})=>{_currentUser=session?.user||null;_updateAuthUI();updateCharsNavDropdown();});
 function _updateAuthUI(){
   const navUser=document.getElementById('navUser');
   const btnE=document.getElementById('btnEntrar');
@@ -9203,7 +9204,7 @@ function initCombat(){
 }
 
 function updateCharsNavDropdown(){
-  const show=_currentUser&&_loadSavedChars().length>0;
+  const show=_loadSavedChars().length>0;
   const dd=document.getElementById('dd-my-chars');
   if(dd)dd.style.display=show?'flex':'none';
   const mm=document.getElementById('mm-my-chars');
