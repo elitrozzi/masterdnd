@@ -2232,9 +2232,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.8.19</span>
+    <span class="ver-badge">v2.8.20</span>
     <span class="ver-sep">·</span>
-    <span class="ver-date">20 May 2026</span>
+    <span class="ver-date">22 May 2026</span>
   </div>
   <div class="lang-toggle">
     <button class="lang-btn active" onclick="setLang('es')">ES</button>
@@ -2750,9 +2750,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.8.19</span>
+          <span class="ver-badge">v2.8.20</span>
           <span>·</span>
-          <span class="ver-date">20 May 2026</span>
+          <span class="ver-date">22 May 2026</span>
         </div>
       </div>
       <!-- RIGHT: scene -->
@@ -10185,6 +10185,7 @@ function _drShowMultiResult(diceList){
 
 /* ══ DnD BEYOND IMPORT ══ */
 let _ddbChar=null;
+let _ddbPdfParsed=null;
 
 function openDdbImport(){
   document.getElementById('ddbOverlay').classList.add('open');
@@ -10199,6 +10200,7 @@ function openDdbImport(){
   document.getElementById('ddbPanePreview').style.display='none';
   ddbSwitchTab('url');
   _ddbChar=null;
+  _ddbPdfParsed=null;
 }
 function closeDdbImport(){document.getElementById('ddbOverlay').classList.remove('open');}
 
@@ -10312,7 +10314,7 @@ async function _ddbProcessPdf(file){
     const buf=await file.arrayBuffer();
     const pdf=await window.pdfjsLib.getDocument({data:buf}).promise;
     const items=[];
-    for(let i=1;i<=Math.min(pdf.numPages,3);i++){
+    for(let i=1;i<=pdf.numPages;i++){
       const page=await pdf.getPage(i);
       const vp=page.getViewport({scale:1});
       const tc=await page.getTextContent();
@@ -10328,9 +10330,16 @@ async function _ddbProcessPdf(file){
       }
     }
     const parsed=_parseDdbPdf(items);
+    _ddbPdfParsed=parsed;
     _fillSsFormFromPdf(parsed);
     statusEl.style.display='none';
-    document.getElementById('ddbPdfParsedNotice').classList.add('show');
+    const noticeEl=document.getElementById('ddbPdfParsedNotice');
+    const noticeParts=['✓ Datos extraídos del PDF'];
+    if(parsed.knownSpells.length)noticeParts.push(`${parsed.knownSpells.length} hechizo${parsed.knownSpells.length===1?'':'s'}`);
+    if(parsed.inventory.length)noticeParts.push(`${parsed.inventory.length} objeto${parsed.inventory.length===1?'':'s'}`);
+    if(parsed.charNotes)noticeParts.push('notas incluidas');
+    noticeEl.textContent=noticeParts.join(' · ');
+    noticeEl.classList.add('show');
     document.getElementById('ddbSSHint').style.display='none';
     ddbSwitchTab('ss');
   }catch(e){
@@ -10341,14 +10350,12 @@ async function _ddbProcessPdf(file){
 }
 
 function _parseDdbPdf(items){
-  // Sort top-to-bottom (y asc after flipping), then left-to-right
   const sorted=[...items].sort((a,b)=>{
     if(a.page!==b.page)return a.page-b.page;
     if(Math.abs(a.y-b.y)>4)return a.y-b.y;
     return a.x-b.x;
   });
 
-  // Find the value appearing after a label keyword (within next N items)
   const SKIP_LABELS=/^(CHARACTER|CLASS|BACKGROUND|PLAYER|RACE|ALIGNMENT|EXPERIENCE|INSPIRATION|PROFICIENCY|SAVING|PASSIVE|SKILLS?|SENSES?|ARMOR|INITIATIVE|SPEED|HIT|DEATH|ATTACKS|FEATURES|OTHER|PERSONALITY|IDEALS|BONDS|FLAWS|EQUIPMENT|LANGUAGES|ADDITIONAL|TOTAL|CURRENT|TEMPORARY)/i;
   const nextAfter=(label,maxLook=8)=>{
     const lup=label.toUpperCase();
@@ -10372,7 +10379,6 @@ function _parseDdbPdf(items){
   const charClass=clm?clm[1].trim():'';
   const level=clm?parseInt(clm[2]):1;
 
-  // Ability scores: find label then look at nearby numeric items
   const getScore=(fullName,abbr)=>{
     const label=sorted.find(i=>{const s=i.str.toUpperCase();return s===fullName||s===abbr;});
     if(!label)return 10;
@@ -10399,12 +10405,98 @@ function _parseDdbPdf(items){
   const hpRaw=nextAfter('HIT POINT MAXIMUM')||nextAfter('MAXIMUM')||'';
   const hp=parseInt(hpRaw)||0;
 
-  return{name,charClass,level,race,bg,stats,ca,hp};
+  const inventory=_extractPdfEquipment(sorted);
+  const knownSpells=_extractPdfSpells(sorted);
+  const charNotes=_extractPdfNotes(sorted);
+
+  return{name,charClass,level,race,bg,stats,ca,hp,inventory,knownSpells,charNotes};
 }
 
-const _PDF_RACE_MAP={'human':'human','elf':'elf','high elf':'elf','wood elf':'elf','dark elf':'elf','drow':'elf','dwarf':'dwarf','hill dwarf':'dwarf','mountain dwarf':'dwarf','halfling':'halfling','lightfoot halfling':'halfling','stout halfling':'halfling','dragonborn':'dragonborn','tiefling':'tiefling','half-orc':'half-orc','half orc':'half-orc','gnome':'gnome','rock gnome':'gnome','forest gnome':'gnome','aasimar':'aasimar','tabaxi':'tabaxi','firbolg':'firbolg','kenku':'kenku'};
-const _PDF_CLASS_MAP={'fighter':'fighter','ranger':'ranger','rogue':'rogue','wizard':'wizard','cleric':'cleric','paladin':'paladin','barbarian':'barbarian','bard':'bard','druid':'druid','monk':'monk','sorcerer':'sorcerer','warlock':'warlock'};
-const _PDF_BG_MAP={'acolyte':'acolyte','charlatan':'charlatan','criminal':'criminal','entertainer':'entertainer','folk hero':'folk-hero','guild artisan':'guild-artisan','hermit':'hermit','noble':'noble','outlander':'outlander','sage':'sage','sailor':'sailor','soldier':'soldier','urchin':'urchin'};
+function _extractPdfEquipment(sorted){
+  const pg1=sorted.filter(i=>i.page===1);
+  const eqLabel=pg1.find(i=>/^EQUIPMENT$/i.test(i.str));
+  if(!eqLabel)return[];
+  const STOP=/^(PERSONALITY|IDEALS?|BONDS?|FLAWS?|FEATURES?|CHARACTER\s+BACKSTORY|ADDITIONAL|ALLIES|ORGANIZATIONS|SYMBOL|TREASURE|ATTACK|PROF)/i;
+  const SKIP=/^(CP|SP|EP|GP|PP|EQUIPMENT|\d+\s*(CP|SP|EP|GP|PP)|COINS?|CURRENCY|TREASURE)$/i;
+  const stopY=pg1.filter(i=>i.y>eqLabel.y&&STOP.test(i.str)).map(i=>i.y).sort((a,b)=>a-b)[0]||99999;
+  const rawLines=pg1.filter(i=>{
+    if(i.y<=eqLabel.y||i.y>=stopY)return false;
+    if(STOP.test(i.str)||SKIP.test(i.str))return false;
+    if(/^\d+$/.test(i.str)&&i.str.length<=3)return false;
+    if(i.str.length<2)return false;
+    return Math.abs(i.x-eqLabel.x)<280;
+  });
+  return rawLines.map((it,idx)=>{
+    const m=it.str.match(/^(\d+)\s+(.+)$/);
+    const qty=m?parseInt(m[1]):1;
+    const rawName=m?m[2].trim():it.str;
+    const name=_PDF_ITEM_ES[rawName]||rawName;
+    return{id:`pdf_item_${Date.now()}_${idx}`,name,qty,weight:0,type:'misc',equipped:false};
+  });
+}
+
+function _extractPdfSpells(sorted){
+  const LEVEL_HEADERS=[
+    {re:/^CANTRIPS?\s*(KNOWN)?$/i,level:0},
+    {re:/^1\s*ST[\s-]*LEVEL/i,level:1},{re:/^2\s*ND[\s-]*LEVEL/i,level:2},
+    {re:/^3\s*RD[\s-]*LEVEL/i,level:3},{re:/^4\s*TH[\s-]*LEVEL/i,level:4},
+    {re:/^5\s*TH[\s-]*LEVEL/i,level:5},{re:/^6\s*TH[\s-]*LEVEL/i,level:6},
+    {re:/^7\s*TH[\s-]*LEVEL/i,level:7},{re:/^8\s*TH[\s-]*LEVEL/i,level:8},
+    {re:/^9\s*TH[\s-]*LEVEL/i,level:9},
+  ];
+  const SKIP=/^(SPELLCASTING|SPELL\s+SAVE|SPELL\s+ATTACK|TOTAL|EXPENDED|SLOTS?|DC\s*\d*|\+?\d+$|[A-Z]{1,3}$|CLASS|ABILITY|BONUS|PREPARED|RITUAL|CONCENTRATION|V|S|M|VS|VSM)$/i;
+  const spells=[];
+  let currentLevel=-1;
+  const seen=new Set();
+  for(const item of sorted.filter(i=>i.page>=2)){
+    let matched=null;
+    for(const h of LEVEL_HEADERS){if(h.re.test(item.str)){matched=h.level;break;}}
+    if(matched!==null){currentLevel=matched;continue;}
+    if(currentLevel<0)continue;
+    const s=item.str;
+    if(s.length<3||SKIP.test(s))continue;
+    if(/^\d+$/.test(s))continue;
+    if(!(/[a-z]/.test(s)||s.length>5))continue;
+    const key=s.toLowerCase();
+    if(seen.has(key))continue;
+    seen.add(key);
+    const name=_PDF_SPELL_ES[s]||s;
+    spells.push({id:`pdf_sp_${Date.now()}_${spells.length}`,name,level:currentLevel});
+  }
+  return spells;
+}
+
+function _extractPdfNotes(sorted){
+  const pg1=sorted.filter(i=>i.page===1);
+  const SECTIONS=[
+    {re:/^PERSONALITY\s+TRAITS?$/i,title:'Rasgos de personalidad'},
+    {re:/^IDEALS?$/i,title:'Ideales'},
+    {re:/^BONDS?$/i,title:'Vínculos'},
+    {re:/^FLAWS?$/i,title:'Defectos'},
+  ];
+  const parts=[];
+  const allSectionYs=pg1.filter(i=>SECTIONS.some(s=>s.re.test(i.str))).map(i=>i.y).sort((a,b)=>a-b);
+  for(const sec of SECTIONS){
+    const labelItem=pg1.find(i=>sec.re.test(i.str));
+    if(!labelItem)continue;
+    const nextY=allSectionYs.filter(y=>y>labelItem.y)[0]||99999;
+    const texts=pg1.filter(i=>
+      i.y>labelItem.y&&i.y<nextY&&
+      Math.abs(i.x-labelItem.x)<300&&
+      !SECTIONS.some(s=>s.re.test(i.str))&&
+      i.str.length>2
+    ).map(i=>i.str);
+    if(texts.length)parts.push(`${sec.title}:\n${texts.join(' ')}`);
+  }
+  return parts.join('\n\n');
+}
+
+const _PDF_SPELL_ES={'Acid Splash':'Salpicadura Ácida','Blade Ward':'Guardia de Espada','Chill Touch':'Toque Gélido','Dancing Lights':'Luces Danzantes','Druidcraft':'Arte Druídico','Eldritch Blast':'Proyección Sobrenatural','Fire Bolt':'Rayo de Fuego','Friends':'Amigos','Frostbite':'Quemadura de Frío','Guidance':'Orientación','Light':'Luz','Mage Hand':'Mano de Mago','Mending':'Reparar','Message':'Mensaje','Minor Illusion':'Ilusión Menor','Poison Spray':'Rociada de Veneno','Prestidigitation':'Prestidigitación','Produce Flame':'Producir Llama','Ray of Frost':'Rayo de Frío','Resistance':'Resistencia','Sacred Flame':'Llama Sagrada','Shocking Grasp':'Agarre Eléctrico','Spare the Dying':'Salvar al Moribundo','Thaumaturgy':'Taumaturgia','Thornwhip':'Látigo Espinoso','Toll the Dead':'Doblar las Campanas','True Strike':'Golpe Certero','Vicious Mockery':'Burla Despiadada','Green-Flame Blade':'Hoja de Llama Verde','Mind Sliver':'Fragmento Mental','Sword Burst':'Estallido de Espadas','Thunderclap':'Chasquido de Trueno','Shillelagh':'Clava Druídica','Word of Radiance':'Palabra de Radiancia','Infestation':'Infestación','Absorb Elements':'Absorber Elementos','Alarm':'Alarma','Animal Friendship':'Amistad con Animales','Armor of Agathys':'Armadura de Agathys','Arms of Hadar':'Brazos de Hadar','Bane':'Maldecir','Bless':'Bendición','Burning Hands':'Manos Ardientes','Charm Person':'Encantar Persona','Chromatic Orb':'Orbe Cromático','Color Spray':'Rociada de Colores','Command':'Orden','Comprehend Languages':'Entender Idiomas','Cure Wounds':'Curar Heridas','Detect Magic':'Detectar Magia','Detect Evil and Good':'Detectar el Bien y el Mal','Disguise Self':'Disfrazarse','Divine Favor':'Favor Divino','Entangle':'Enredar','Expeditious Retreat':'Retirada Expeditiva','Faerie Fire':'Luz de las Hadas','False Life':'Vida Falsa','Feather Fall':'Caída de Pluma','Find Familiar':'Encontrar Familiar','Fog Cloud':'Nube de Niebla','Goodberry':'Baya Benéfica','Grease':'Grasa','Guiding Bolt':'Rayo Guía','Healing Word':'Palabra Sanadora','Hellish Rebuke':'Represalia Infernal','Heroism':'Heroísmo','Hex':'Maldición',"Hunter's Mark":'Marca del Cazador','Ice Knife':'Cuchillo de Hielo','Identify':'Identificar','Inflict Wounds':'Infligir Heridas','Jump':'Saltar','Longstrider':'Paso Largo','Mage Armor':'Armadura del Mago','Magic Missile':'Misil Mágico','Protection from Evil and Good':'Protección contra el Bien y el Mal','Ray of Sickness':'Rayo de Enfermedad','Sanctuary':'Santuario','Shield':'Escudo','Shield of Faith':'Escudo de Fe','Silent Image':'Imagen Silenciosa','Sleep':'Dormir','Speak with Animals':'Hablar con Animales',"Tasha's Hideous Laughter":'Risa Horrenda de Tasha',"Tenser's Floating Disk":'Disco Flotante de Tenser','Thunderwave':'Ola de Trueno','Unseen Servant':'Sirviente Invisible','Witch Bolt':'Rayo Brujo','Wrathful Smite':'Golpe Iracundo','Searing Smite':'Golpe Abrasador','Thunderous Smite':'Golpe Atronador','Aid':'Auxilio','Alter Self':'Alteración Personal','Arcane Lock':'Cerrojo Arcano','Augury':'Augurio','Barkskin':'Corteza','Blindness/Deafness':'Ceguera/Sordera','Blur':'Imagen Borrosa','Calm Emotions':'Calmar Emociones','Cloud of Daggers':'Nube de Dagas','Continual Flame':'Llama Continua','Crown of Madness':'Corona de Locura','Darkness':'Oscuridad','Darkvision':'Visión en la Oscuridad','Detect Thoughts':'Detectar Pensamientos','Enhance Ability':'Mejorar Habilidad','Enlarge/Reduce':'Agrandar/Reducir','Enthrall':'Embelesar','Find Steed':'Encontrar Montura','Flame Blade':'Hoja de Llamas','Flaming Sphere':'Esfera de Llamas','Gust of Wind':'Ráfaga de Viento','Heat Metal':'Metal Incandescente','Hold Person':'Paralizar Persona','Invisibility':'Invisibilidad','Knock':'Abrir','Lesser Restoration':'Restauración Menor','Levitate':'Levitar','Magic Weapon':'Arma Mágica',"Melf's Acid Arrow":'Flecha Ácida de Melf','Mirror Image':'Imagen Especular','Misty Step':'Paso Nublado','Moonbeam':'Haz de Luna','Pass Without Trace':'Pasar Sin Rastro','Prayer of Healing':'Oración Sanadora','Protection from Poison':'Protección contra el Veneno','Ray of Enfeeblement':'Rayo de Debilitamiento','Rope Trick':'Truco de la Cuerda','Scorching Ray':'Rayo Abrasador','See Invisibility':'Ver Invisibilidad','Shadow Blade':'Hoja de Sombra','Shatter':'Añicos','Silence':'Silencio','Spider Climb':'Trepar Paredes','Spike Growth':'Espinas','Spiritual Weapon':'Arma Espiritual','Suggestion':'Sugestión','Warding Bond':'Vínculo Guardián','Web':'Telaraña','Zone of Truth':'Zona de la Verdad',"Tasha's Mind Whip":'Látigo Mental de Tasha','Animate Dead':'Animar Muertos','Aura of Vitality':'Aura de Vitalidad','Beacon of Hope':'Faro de Esperanza','Bestow Curse':'Impartir Maldición','Blink':'Parpadeo','Call Lightning':'Convocar Rayo','Clairvoyance':'Clarividencia','Conjure Animals':'Convocar Animales','Counterspell':'Contrahechizo','Create Food and Water':'Crear Alimento y Agua','Daylight':'Luz del Día','Dispel Magic':'Disipar Magia','Elemental Weapon':'Arma Elemental','Fear':'Miedo','Fireball':'Bola de Fuego','Fly':'Volar','Gaseous Form':'Forma Gaseosa','Glyph of Warding':'Glifo de Protección','Haste':'Celeridad','Hunger of Hadar':'Hambre de Hadar','Hypnotic Pattern':'Patrón Hipnótico',"Leomund's Tiny Hut":'Refugio de Leomund','Lightning Bolt':'Rayo','Magic Circle':'Círculo Mágico','Major Image':'Imagen Mayor','Mass Healing Word':'Palabra Sanadora Masiva','Nondetection':'No Detección','Plant Growth':'Crecimiento Vegetal','Protection from Energy':'Protección contra Energía','Remove Curse':'Retirar Maldición','Revivify':'Revivificar','Sending':'Envío de Mensajes','Sleet Storm':'Aguanieve','Slow':'Ralentizar','Speak with Dead':'Hablar con Muertos','Speak with Plants':'Hablar con Plantas','Spirit Guardians':'Guardianes Espirituales','Spirit Shroud':'Mortaja Espiritual','Stinking Cloud':'Nube Hedionda','Thunder Step':'Paso Atronador','Tongues':'Lenguajes','Vampiric Touch':'Toque Vampírico','Water Breathing':'Respirar Bajo el Agua','Water Walk':'Caminar sobre el Agua','Wind Wall':'Muro de Viento','Life Transference':'Transferencia de Vida','Arcane Eye':'Ojo Arcano','Aura of Life':'Aura de Vida','Aura of Purity':'Aura de Pureza','Banishment':'Destierro','Blight':'Plaga','Compulsion':'Compulsión','Confusion':'Confusión','Control Water':'Controlar el Agua','Death Ward':'Resguardo de la Muerte','Dimension Door':'Puerta Dimensional','Divination':'Adivinación','Dominate Beast':'Dominar Bestia',"Evard's Black Tentacles":'Tentáculos Negros de Evard','Fabricate':'Fabricar','Fire Shield':'Escudo de Fuego','Freedom of Movement':'Libertad de Movimiento','Greater Invisibility':'Invisibilidad Mayor','Guardian of Faith':'Guardián de la Fe','Ice Storm':'Tormenta de Hielo','Locate Creature':'Localizar Criatura','Phantasmal Killer':'Asesino Fantasmal','Polymorph':'Polimorfismo','Stone Shape':'Conformar Piedra','Stoneskin':'Piel Pétrea','Wall of Fire':'Muro de Fuego','Animate Objects':'Animar Objetos','Antilife Shell':'Escudo Antivida',"Bigby's Hand":'Mano de Bigby','Circle of Power':'Círculo de Poder','Cloudkill':'Nube Mortal','Commune':'Comunión','Commune with Nature':'Comunión con la Naturaleza','Cone of Cold':'Cono de Frío','Conjure Elemental':'Convocar Elemental','Contact Other Plane':'Contactar Otro Plano','Contagion':'Contagio','Control Winds':'Controlar Vientos','Creation':'Creación','Destructive Wave':'Ola Destructiva','Dispel Evil and Good':'Disipar el Bien y el Mal','Dominate Person':'Dominar Persona','Dream':'Sueño','Flame Strike':'Columna de Llamas','Geas':'Geas','Greater Restoration':'Restauración Mayor','Hallow':'Consagrar','Hold Monster':'Paralizar Monstruo','Holy Weapon':'Arma Sagrada','Insect Plague':'Plaga de Insectos','Legend Lore':'Leyendas','Mass Cure Wounds':'Curar Heridas Masivo','Mislead':'Engañar','Modify Memory':'Modificar Memoria','Passwall':'Pasomuros','Raise Dead':'Resucitar','Reincarnate':'Reencarnación','Scrying':'Escrutinio','Steel Wind Strike':'Golpe del Viento de Acero','Synaptic Static':'Estática Sináptica','Telekinesis':'Telequinesis','Teleportation Circle':'Círculo de Teletransporte','Wall of Force':'Muro de Fuerza','Wall of Stone':'Muro de Piedra','Enervation':'Enervación','Blade Barrier':'Barrera de Espadas','Chain Lightning':'Cadena de Rayos','Circle of Death':'Círculo de Muerte','Contingency':'Contingencia','Create Undead':'Crear No Muerto','Disintegrate':'Desintegrar','Eyebite':'Mirada Maléfica','Flesh to Stone':'Carne a Piedra','Globe of Invulnerability':'Globo de Invulnerabilidad','Harm':'Dañar','Heal':'Curar',"Heroes' Feast":'Festín de los Héroes','Magic Jar':'Frasco Mágico','Mass Suggestion':'Sugestión Masiva','Mental Prison':'Prisión Mental','Move Earth':'Mover Tierra',"Otiluke's Freezing Sphere":'Esfera Helada de Otiluke',"Otto's Irresistible Dance":'Danza Irresistible de Otto','Planar Ally':'Aliado Planar','Soul Cage':'Jaula del Alma','Sunbeam':'Rayo Solar','True Seeing':'Visión Verdadera','Wall of Ice':'Muro de Hielo','Wall of Thorns':'Muro de Espinas','Word of Recall':'Palabra de Regreso','Delayed Blast Fireball':'Bola de Fuego de Explosión Retardada','Divine Word':'Palabra Divina','Etherealness':'Etereidad','Finger of Death':'Dedo de la Muerte','Fire Storm':'Tormenta de Fuego','Forcecage':'Jaula de Fuerza','Mirage Arcane':'Espejismo Arcano',"Mordenkainen's Magnificent Mansion":'Magnífica Mansión de Mordenkainen',"Mordenkainen's Sword":'Espada de Mordenkainen','Plane Shift':'Cambio de Plano','Prismatic Spray':'Rociada Prismática','Project Image':'Proyectar Imagen','Regenerate':'Regenerar','Resurrection':'Resurrección','Reverse Gravity':'Invertir la Gravedad','Simulacrum':'Simulacro','Symbol':'Símbolo','Teleport':'Teletransporte','Whirlwind':'Torbellino','Antimagic Field':'Campo Antimágico','Clone':'Clon','Control Weather':'Controlar el Clima','Demiplane':'Semiplano','Dominate Monster':'Dominar Monstruo','Earthquake':'Terremoto','Feeblemind':'Debilitar Mente','Glibness':'Locuacidad','Holy Aura':'Aura Sagrada','Incendiary Cloud':'Nube Incendiaria','Maze':'Laberinto','Mind Blank':'Mente en Blanco','Power Word Stun':'Palabra de Poder: Aturdir','Sunburst':'Estallido Solar','Telepathy':'Telepatía','Tsunami':'Tsunami','Astral Projection':'Proyección Astral','Foresight':'Presciencia','Gate':'Portal','Imprisonment':'Encarcelamiento','Mass Heal':'Curación Masiva','Mass Polymorph':'Polimorfismo Masivo','Meteor Swarm':'Lluvia de Meteoritos','Power Word Heal':'Palabra de Poder: Curar','Power Word Kill':'Palabra de Poder: Matar','Prismatic Wall':'Muro Prismático','Shapechange':'Cambio de Forma','Storm of Vengeance':'Tormenta de Venganza','Time Stop':'Detener el Tiempo','True Polymorph':'Polimorfismo Verdadero','True Resurrection':'Resurrección Verdadera','Wish':'Deseo'};
+const _PDF_ITEM_ES={'Longsword':'Espada Larga','Shortsword':'Espada Corta','Dagger':'Daga','Handaxe':'Hacha de Mano','Battleaxe':'Hacha de Batalla','Greataxe':'Hacha Grande','Greatsword':'Mandoble','Rapier':'Estoque','Mace':'Maza','Flail':'Mangual','Quarterstaff':'Bastón','Longbow':'Arco Largo','Shortbow':'Arco Corto','Javelin':'Jabalina','Spear':'Lanza','Trident':'Tridente','War Pick':'Pico de Guerra','Warhammer':'Martillo de Guerra','Maul':'Mazo Grande','Halberd':'Alabarda','Glaive':'Glaive','Pike':'Pica','Club':'Porra','Light Hammer':'Martillo Ligero','Sickle':'Hoz','Whip':'Látigo','Net':'Red','Sling':'Honda','Dart':'Dardo','Crossbow, Heavy':'Ballesta Pesada','Crossbow, Light':'Ballesta Ligera','Crossbow, Hand':'Ballesta de Mano','Hand Crossbow':'Ballesta de Mano','Shield':'Escudo','Padded Armor':'Armadura Acolchada','Leather Armor':'Armadura de Cuero','Studded Leather Armor':'Cuero Tachonado','Hide Armor':'Armadura de Pieles','Chain Shirt':'Camisa de Malla','Scale Mail':'Cota de Escamas','Breastplate':'Peto','Half Plate Armor':'Media Armadura de Placas','Ring Mail':'Cota de Anillos','Chain Mail':'Cota de Malla','Splint Armor':'Armadura de Bandas','Plate Armor':'Armadura de Placas','Backpack':'Mochila','Torch':'Antorcha','Waterskin':'Odre','Bedroll':'Petate','Blanket':'Manta','Crowbar':'Palanca','Tinderbox':'Yesca','Holy Symbol':'Símbolo Sagrado','Component Pouch':'Bolsa de Componentes','Arcane Focus':'Foco Arcano','Druidic Focus':'Foco Druídico',"Thieves' Tools":'Herramientas de Ladrón',"Healer's Kit":'Kit de Curación',"Herbalism Kit":'Kit de Herboristería','Potion of Healing':'Poción de Curación','Potion of Greater Healing':'Poción de Curación Superior','Potion of Superior Healing':'Poción de Curación Excelente','Potion of Supreme Healing':'Poción de Curación Suprema','Ring of Protection':'Anillo de Protección','Cloak of Protection':'Capa de Protección','Bag of Holding':'Bolsa Contenedora','Boots of Speed':'Botas de Velocidad','Ring of Feather Falling':'Anillo de Caída de Pluma','Wand of Magic Missiles':'Varita de Misiles Mágicos','Staff of Healing':'Bastón de Curación'};
+
+const _PDF_RACE_MAP={'human':'human','elf':'elf','high elf':'elf','wood elf':'elf','dark elf':'elf','drow':'elf','dwarf':'dwarf','hill dwarf':'dwarf','mountain dwarf':'dwarf','halfling':'halfling','lightfoot halfling':'halfling','stout halfling':'halfling','dragonborn':'dragonborn','tiefling':'tiefling','half-orc':'half-orc','half orc':'half-orc','gnome':'gnome','rock gnome':'gnome','forest gnome':'gnome','aasimar':'aasimar','tabaxi':'tabaxi','firbolg':'firbolg','kenku':'kenku','half-elf':'elf','aasimar':'aasimar'};
+const _PDF_CLASS_MAP={'fighter':'fighter','ranger':'ranger','rogue':'rogue','wizard':'wizard','cleric':'cleric','paladin':'paladin','barbarian':'barbarian','bard':'bard','druid':'druid','monk':'monk','sorcerer':'sorcerer','warlock':'warlock','artificer':'fighter','blood hunter':'ranger'};
+const _PDF_BG_MAP={'acolyte':'acolyte','charlatan':'charlatan','criminal':'criminal','entertainer':'entertainer','folk hero':'folk-hero','guild artisan':'guild-artisan','hermit':'hermit','noble':'noble','outlander':'outlander','sage':'sage','sailor':'sailor','soldier':'soldier','urchin':'urchin','spy':'criminal','gladiator':'entertainer','knight':'noble','pirate':'sailor'};
 
 function _fillSsFormFromPdf(p){
   if(p.name)document.getElementById('ssName').value=p.name;
@@ -10444,8 +10536,11 @@ function ddbCreateFromSS(){
     wis:Math.max(1,Math.min(30,parseInt(document.getElementById('ssWis').value)||10)),
     cha:Math.max(1,Math.min(30,parseInt(document.getElementById('ssCha').value)||10)),
   };
+  const pdf=_ddbPdfParsed||{};
   _ddbSaveAndLoad({name,race,class:cls,background:bg,level,stats,hp,ca,
-    skillProfs:[],saveProfs:[],inventory:[],knownSpells:[],charNotes:''});
+    skillProfs:pdf.skillProfs||[],saveProfs:pdf.saveProfs||[],
+    inventory:pdf.inventory||[],knownSpells:pdf.knownSpells||[],
+    charNotes:pdf.charNotes||''});
 }
 
 function _ddbSaveAndLoad(c){
