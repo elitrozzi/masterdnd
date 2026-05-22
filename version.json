@@ -1,7 +1,12 @@
 {
-  "version": "2.8.20",
+  "version": "2.8.21",
   "date": "2026-05-22",
   "history": [
+    {
+      "version": "2.8.21",
+      "date": "2026-05-22",
+      "note": "Fix PDF upload: CSP worker-src para PDF.js, blob worker fallback; botón Cargar personaje existente en crear-personaje"
+    },
     {
       "version": "2.8.20",
       "date": "2026-05-22",

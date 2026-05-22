@@ -2232,7 +2232,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.8.20</span>
+    <span class="ver-badge">v2.8.21</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">22 May 2026</span>
   </div>
@@ -2750,7 +2750,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.8.20</span>
+          <span class="ver-badge">v2.8.21</span>
           <span>·</span>
           <span class="ver-date">22 May 2026</span>
         </div>
@@ -2970,6 +2970,10 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
           </div>
           <!-- Step 1: Stats -->
           <div class="creator-step active" id="step1">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding:10px 14px;background:rgba(196,30,58,.08);border:1px solid rgba(196,30,58,.25);border-radius:8px;">
+              <span style="font-size:13px;color:var(--text-m);">¿Ya tenés un personaje en D&amp;D Beyond?</span>
+              <button class="btn-nav btn-ghost" style="padding:6px 14px;font-size:12px;white-space:nowrap;margin-left:10px;" onclick="openDdbImport()">⚔ Cargar personaje existente</button>
+            </div>
             <div class="step-title" data-es="Tirar estadísticas" data-en="Roll your stats">Tirar estadísticas</div>
             <div class="step-desc" data-es="4d6, descartás el menor." data-en="4d6, drop the lowest.">4d6, descartás el menor. Presioná el botón para tirar.</div>
             <div class="stats-grid" id="statsGrid">
@@ -10301,7 +10305,14 @@ async function _ddbLoadPdfJs(){
     s.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
     s.onload=res;s.onerror=rej;document.head.appendChild(s);
   });
-  window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  // Use blob worker to avoid CSP worker-src issues in some environments
+  try{
+    const workerUrl='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    const blob=new Blob([`importScripts('${workerUrl}');`],{type:'application/javascript'});
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc=URL.createObjectURL(blob);
+  }catch(e){
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  }
 }
 
 async function _ddbProcessPdf(file){
