@@ -2232,7 +2232,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.8.21</span>
+    <span class="ver-badge">v2.8.22</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">22 May 2026</span>
   </div>
@@ -2750,7 +2750,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.8.21</span>
+          <span class="ver-badge">v2.8.22</span>
           <span>·</span>
           <span class="ver-date">22 May 2026</span>
         </div>
@@ -2877,6 +2877,18 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
             <div class="cs-mode-desc" data-es="Los dados deciden tu destino." data-en="The dice decide your fate.">Los dados deciden tu destino.</div>
           </div>
         </div>
+        <div style="margin-top:18px;display:flex;align-items:center;gap:10px;max-width:340px;width:100%;">
+          <div style="flex:1;height:1px;background:rgba(255,255,255,.12);"></div>
+          <span style="color:var(--text-m);font-size:11px;letter-spacing:.08em;">o</span>
+          <div style="flex:1;height:1px;background:rgba(255,255,255,.12);"></div>
+        </div>
+        <button class="cs-mode-card" style="margin-top:10px;max-width:340px;width:100%;display:flex;align-items:center;gap:14px;padding:18px 22px;text-align:left;" onclick="openDdbImport()">
+          <div style="font-size:1.6rem;flex-shrink:0;">⚔️</div>
+          <div>
+            <div class="cs-mode-name" style="font-size:14px;" data-es="Desde D&D Beyond" data-en="From D&D Beyond">Desde D&amp;D Beyond</div>
+            <div class="cs-mode-desc" style="font-size:12px;" data-es="Importá un personaje existente." data-en="Import an existing character.">Importá un personaje existente.</div>
+          </div>
+        </button>
       </div>
     </div>
 
@@ -5190,7 +5202,7 @@ function closeCompPanel(){
 /* ══ NAV ══ */
 const PAGE_URLS={home:'/',characters:'/personajes','my-chars':'/personajes/mis-personajes',maps:'/mapas',sounds:'/efectos-sonidos',compendium:'/grimorio',notes:'/notas',combat:'/combate',campaign:'/campana',dados:'/dados'};
 const URL_PAGES={'/personajes':'characters','/mapas':'maps','/efectos-sonidos':'sounds','/grimorio':'compendium','/notas':'notes','/combate':'combat'};
-const _MOBILE_BLOCKED=['characters','maps','campaign','combat','notes','my-chars'];
+const _MOBILE_BLOCKED=['maps','campaign','combat','notes','my-chars'];
 function _isMobile(){return window.matchMedia('(max-width:700px)').matches;}
 function goTo(page,fromPop){
   if(_isMobile()&&_MOBILE_BLOCKED.includes(page)){
