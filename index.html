@@ -2232,9 +2232,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.8.22</span>
+    <span class="ver-badge">v2.8.23</span>
     <span class="ver-sep">·</span>
-    <span class="ver-date">22 May 2026</span>
+    <span class="ver-date">23 May 2026</span>
   </div>
   <div class="lang-toggle">
     <button class="lang-btn active" onclick="setLang('es')">ES</button>
@@ -2750,9 +2750,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.8.22</span>
+          <span class="ver-badge">v2.8.23</span>
           <span>·</span>
-          <span class="ver-date">22 May 2026</span>
+          <span class="ver-date">23 May 2026</span>
         </div>
       </div>
       <!-- RIGHT: scene -->
@@ -10379,24 +10379,30 @@ function _parseDdbPdf(items){
     return a.x-b.x;
   });
 
-  const SKIP_LABELS=/^(CHARACTER|CLASS|BACKGROUND|PLAYER|RACE|ALIGNMENT|EXPERIENCE|INSPIRATION|PROFICIENCY|SAVING|PASSIVE|SKILLS?|SENSES?|ARMOR|INITIATIVE|SPEED|HIT|DEATH|ATTACKS|FEATURES|OTHER|PERSONALITY|IDEALS|BONDS|FLAWS|EQUIPMENT|LANGUAGES|ADDITIONAL|TOTAL|CURRENT|TEMPORARY)/i;
-  const nextAfter=(label,maxLook=8)=>{
-    const lup=label.toUpperCase();
-    for(let i=0;i<sorted.length;i++){
-      if(sorted[i].str.toUpperCase().includes(lup)){
-        for(let j=i+1;j<Math.min(i+maxLook+1,sorted.length);j++){
-          const v=sorted[j].str.trim();
-          if(v&&!SKIP_LABELS.test(v))return v;
-        }
-      }
-    }
-    return '';
+  // In DnD Beyond PDFs, field values are often ABOVE their labels (smaller Y).
+  // This function searches in a 2D window around the label in both directions.
+  const LSKIP=/^(CHARACTER NAME|CLASS\s*&?\s*LEVEL|BACKGROUND|PLAYER NAME?|SPECIES|RACE|ALIGNMENT|EXPERIENCE|MILESTONE|PROFICIENCY BONUS|PROFICIENCY|SAVING THROWS?|PASSIVE PERCEPTION|PASSIVE INSIGHT|PASSIVE INVESTIGATION|PASSIVE|SKILLS?|SENSES?|ARMOR CLASS|INITIATIVE|SPEED|HIT POINTS?|HIT POINT MAXIMUM|HIT DICE|DEATH SAVES?|FEATURES?\s*&?\s*TRAITS?|LANGUAGES?|TOOLS?|WEAPONS?|ARMOR|EQUIPMENT|ADDITIONAL|TOTAL|CURRENT|TEMPORARY|INSPIRATION|LEVEL|BONUS|POINTS?|MAXIMUM|DICE|SIZE|WEIGHT|HEIGHT|AGE|EYES|HAIR|SKIN|GENDER|FAITH|NOTES?|ATTACKS?\s*&?\s*SPELLCASTING|SPELLCASTING|SPELL SAVE DC|SPELL ATTACK BONUS|ACTIONS?|PERSONALITY TRAITS?|IDEALS?|BONDS?|FLAWS?|BACKSTORY|CHARACTER BACKSTORY|ORGANIZATIONS?|ALLIES?|APPEARANCE|SYMBOL|TREASURE|CARRYING CAPACITY|ENCUMBERED|PUSH|DRAG|LIFT|ATTUNED|CURRENCY|NAME|QTY|WEIGHT)$/i;
+
+  const pg1=sorted.filter(i=>i.page===1);
+
+  const nearVal=(labelRe,pool,dx,dy)=>{
+    const label=pool.find(i=>labelRe.test(i.str.trim()));
+    if(!label)return'';
+    const cands=pool.filter(i=>{
+      if(i===label)return false;
+      if(LSKIP.test(i.str.trim()))return false;
+      const ddx=Math.abs(i.x-label.x),ddy=Math.abs(i.y-label.y);
+      return ddx<dx&&ddy<dy&&i.str.trim().length>0;
+    });
+    cands.sort((a,b)=>Math.hypot(a.x-label.x,a.y-label.y)-Math.hypot(b.x-label.x,b.y-label.y));
+    return cands[0]?.str.trim()||'';
   };
 
-  const name=nextAfter('CHARACTER NAME')||'';
-  const classLevel=nextAfter('CLASS & LEVEL')||nextAfter('CLASS')||'';
-  const bg=nextAfter('BACKGROUND')||'';
-  const race=nextAfter('RACE')||'';
+  const name=nearVal(/^CHARACTER NAME$/i,pg1,160,60)||'';
+  const classLevel=nearVal(/^CLASS\s*&\s*LEVEL$/i,pg1,120,50)||nearVal(/^CLASS$/i,pg1,120,50)||'';
+  const bgRaw=nearVal(/^BACKGROUND$/i,pg1,120,50)||'';
+  // DnD Beyond 2024 uses SPECIES; older versions use RACE
+  const raceRaw=nearVal(/^SPECIES$/i,pg1,120,50)||nearVal(/^RACE$/i,pg1,120,50)||'';
 
   const clm=classLevel.match(/^(.+?)\s+(\d+)\s*$/);
   const charClass=clm?clm[1].trim():'';
@@ -10409,7 +10415,7 @@ function _parseDdbPdf(items){
       if(i===label||i.page!==label.page)return false;
       const n=parseInt(i.str);
       if(isNaN(n)||n<1||n>30)return false;
-      return Math.abs(i.x-label.x)<55&&Math.abs(i.y-label.y)<90;
+      return Math.abs(i.x-label.x)<60&&Math.abs(i.y-label.y)<100;
     }).map(i=>parseInt(i.str));
     return cands.length?Math.max(...cands):10;
   };
@@ -10423,63 +10429,94 @@ function _parseDdbPdf(items){
     cha:getScore('CHARISMA','CHA'),
   };
 
-  const acRaw=nextAfter('ARMOR CLASS')||'';
-  const ca=parseInt(acRaw)||10;
-  const hpRaw=nextAfter('HIT POINT MAXIMUM')||nextAfter('MAXIMUM')||'';
+  const caRaw=nearVal(/^ARMOR CLASS$/i,pg1,80,60)||'';
+  const ca=parseInt(caRaw)||10;
+  // HP max: try several label variants
+  const hpRaw=nearVal(/^HIT POINTS?$/i,pg1,180,120)||nearVal(/^HIT POINT MAXIMUM$/i,pg1,180,80)||'';
   const hp=parseInt(hpRaw)||0;
 
   const inventory=_extractPdfEquipment(sorted);
   const knownSpells=_extractPdfSpells(sorted);
   const charNotes=_extractPdfNotes(sorted);
 
-  return{name,charClass,level,race,bg,stats,ca,hp,inventory,knownSpells,charNotes};
+  return{name,charClass,level,race:raceRaw,bg:bgRaw,stats,ca,hp,inventory,knownSpells,charNotes};
 }
 
 function _extractPdfEquipment(sorted){
-  const pg1=sorted.filter(i=>i.page===1);
-  const eqLabel=pg1.find(i=>/^EQUIPMENT$/i.test(i.str));
-  if(!eqLabel)return[];
-  const STOP=/^(PERSONALITY|IDEALS?|BONDS?|FLAWS?|FEATURES?|CHARACTER\s+BACKSTORY|ADDITIONAL|ALLIES|ORGANIZATIONS|SYMBOL|TREASURE|ATTACK|PROF)/i;
-  const SKIP=/^(CP|SP|EP|GP|PP|EQUIPMENT|\d+\s*(CP|SP|EP|GP|PP)|COINS?|CURRENCY|TREASURE)$/i;
-  const stopY=pg1.filter(i=>i.y>eqLabel.y&&STOP.test(i.str)).map(i=>i.y).sort((a,b)=>a-b)[0]||99999;
-  const rawLines=pg1.filter(i=>{
-    if(i.y<=eqLabel.y||i.y>=stopY)return false;
-    if(STOP.test(i.str)||SKIP.test(i.str))return false;
-    if(/^\d+$/.test(i.str)&&i.str.length<=3)return false;
-    if(i.str.length<2)return false;
-    return Math.abs(i.x-eqLabel.x)<280;
-  });
-  return rawLines.map((it,idx)=>{
-    const m=it.str.match(/^(\d+)\s+(.+)$/);
-    const qty=m?parseInt(m[1]):1;
-    const rawName=m?m[2].trim():it.str;
-    const name=_PDF_ITEM_ES[rawName]||rawName;
-    return{id:`pdf_item_${Date.now()}_${idx}`,name,qty,weight:0,type:'misc',equipped:false};
-  });
+  // DnD Beyond 2024: equipment is on page 2 in a two-column table.
+  // Older format may have it on page 1.
+  for(const pgNum of [2,1,3]){
+    const pg=sorted.filter(i=>i.page===pgNum);
+    const eqLabel=pg.find(i=>/^EQUIPMENT$/i.test(i.str.trim()));
+    if(!eqLabel)continue;
+    // Name column header (below EQUIPMENT section header)
+    const nameHdr=pg.find(i=>/^NAME$/i.test(i.str.trim())&&i.y>eqLabel.y-5);
+    const startY=(nameHdr?.y??eqLabel.y)+6;
+    const STOP=/^(TOTAL WEIGHT|CARRYING CAPACITY|ENCUMBERED|PUSH|DRAG|LIFT|ATTUNED MAGIC|WEIGHT CARRIED|TREASURE|CHARACTER BACKSTORY|PERSONALITY|FEATURES)$/i;
+    const stopY=pg.filter(i=>i.y>startY&&STOP.test(i.str.trim())).map(i=>i.y).sort((a,b)=>a-b)[0]||99999;
+    const SKIPSTR=/^(QTY|WEIGHT|NAME|--|CP|SP|EP|GP|PP|CURRENCY|COINS?|TOTAL|\d+\s*(lb\.?|lbs\.?))$/i;
+    // Collect item names — they appear at leftmost X in each row (~114 left col, ~351 right col)
+    const result=[];const seen=new Set();
+    const nameItems=pg.filter(i=>{
+      if(i.y<startY||i.y>stopY)return false;
+      if(SKIPSTR.test(i.str.trim()))return false;
+      if(/^\d+$/.test(i.str.trim()))return false;
+      if(/^--$/.test(i.str.trim()))return false;
+      if(i.str.trim().length<2)return false;
+      // Must be in the name column X range (left ~50-200, right ~290-450)
+      return(i.x<220||( i.x>280&&i.x<470));
+    });
+    for(const item of nameItems){
+      const raw=item.str.trim();
+      const key=raw.toLowerCase();
+      if(seen.has(key))continue;
+      seen.add(key);
+      // QTY: nearest number to the right on the same row
+      const qty=pg.filter(i=>Math.abs(i.y-item.y)<10&&i.x>item.x+20&&/^\d+$/.test(i.str.trim()))
+        .sort((a,b)=>a.x-b.x).map(i=>parseInt(i.str))[0]||1;
+      const name=_PDF_ITEM_ES[raw]||raw;
+      result.push({id:`pdf_item_${Date.now()}_${result.length}`,name,qty,weight:0,type:'misc',equipped:false});
+    }
+    if(result.length>0)return result;
+  }
+  return[];
 }
 
 function _extractPdfSpells(sorted){
-  const LEVEL_HEADERS=[
-    {re:/^CANTRIPS?\s*(KNOWN)?$/i,level:0},
-    {re:/^1\s*ST[\s-]*LEVEL/i,level:1},{re:/^2\s*ND[\s-]*LEVEL/i,level:2},
-    {re:/^3\s*RD[\s-]*LEVEL/i,level:3},{re:/^4\s*TH[\s-]*LEVEL/i,level:4},
-    {re:/^5\s*TH[\s-]*LEVEL/i,level:5},{re:/^6\s*TH[\s-]*LEVEL/i,level:6},
-    {re:/^7\s*TH[\s-]*LEVEL/i,level:7},{re:/^8\s*TH[\s-]*LEVEL/i,level:8},
-    {re:/^9\s*TH[\s-]*LEVEL/i,level:9},
+  // DnD Beyond 2024 PDFs have spell sheets on a dedicated page.
+  // Level headers look like "=== CANTRIPS === (At Will)" or "=== 1st LEVEL === 4 Slots OOOO"
+  // The text may arrive as one item or split; match liberally.
+  const LEVEL_RE=[
+    {re:/CANTRIP/i,level:0},
+    {re:/\b1\s*st\b.*level/i,level:1},{re:/\b2\s*nd\b.*level/i,level:2},
+    {re:/\b3\s*rd\b.*level/i,level:3},{re:/\b4\s*th\b.*level/i,level:4},
+    {re:/\b5\s*th\b.*level/i,level:5},{re:/\b6\s*th\b.*level/i,level:6},
+    {re:/\b7\s*th\b.*level/i,level:7},{re:/\b8\s*th\b.*level/i,level:8},
+    {re:/\b9\s*th\b.*level/i,level:9},
+    // Fallback: plain "1ST LEVEL" without full text (item may be split)
+    {re:/^1\s*(ST|st)[\s\-]*LEVEL$/i,level:1},{re:/^2\s*(ND|nd)[\s\-]*LEVEL$/i,level:2},
+    {re:/^3\s*(RD|rd)[\s\-]*LEVEL$/i,level:3},{re:/^4\s*(TH|th)[\s\-]*LEVEL$/i,level:4},
+    {re:/^5\s*(TH|th)[\s\-]*LEVEL$/i,level:5},{re:/^6\s*(TH|th)[\s\-]*LEVEL$/i,level:6},
+    {re:/^7\s*(TH|th)[\s\-]*LEVEL$/i,level:7},{re:/^8\s*(TH|th)[\s\-]*LEVEL$/i,level:8},
+    {re:/^9\s*(TH|th)[\s\-]*LEVEL$/i,level:9},
   ];
-  const SKIP=/^(SPELLCASTING|SPELL\s+SAVE|SPELL\s+ATTACK|TOTAL|EXPENDED|SLOTS?|DC\s*\d*|\+?\d+$|[A-Z]{1,3}$|CLASS|ABILITY|BONUS|PREPARED|RITUAL|CONCENTRATION|V|S|M|VS|VSM)$/i;
-  const spells=[];
-  let currentLevel=-1;
-  const seen=new Set();
-  for(const item of sorted.filter(i=>i.page>=2)){
+  const SKIP=/^(SPELLCASTING|SPELL\s+SAVE|SPELL\s+ATTACK|TOTAL|EXPENDED|SLOTS?|DC\s*\d*|PREP|SPELL NAME|SOURCE|SAVE\/?ATK|TIME|RANGE|COMP\.?|DURATION|PAGE REF|NOTES?|PHB|DMG|TCE|XGTE|FTOD|SCOC|AT WILL|ALWAYS PREPARED|CLASS|ABILITY|BONUS|PREPARED|RITUAL|CONCENTRATION|V|S|M|VS|VSM|\+?\-?\d+$|[A-Z]{1,3}$|[O●◯P•×=\-]+$|\d+\s*(SLOTS?|ft\.|A|R|BA|M|min|hr|LR|SR)\.?)$/i;
+  // Only scan pages that have a SPELLCASTING header (or pages 3+ as fallback)
+  const spellPages=new Set(sorted.filter(i=>/SPELLCASTING/i.test(i.str)).map(i=>i.page));
+  const maxPg=Math.max(...sorted.map(i=>i.page));
+  if(spellPages.size===0)for(let p=3;p<=maxPg;p++)spellPages.add(p);
+  const pool=sorted.filter(i=>spellPages.has(i.page));
+  const spells=[];let currentLevel=-1;const seen=new Set();
+  for(const item of pool){
+    const s=item.str.trim();
     let matched=null;
-    for(const h of LEVEL_HEADERS){if(h.re.test(item.str)){matched=h.level;break;}}
+    for(const h of LEVEL_RE){if(h.re.test(s)){matched=h.level;break;}}
     if(matched!==null){currentLevel=matched;continue;}
     if(currentLevel<0)continue;
-    const s=item.str;
     if(s.length<3||SKIP.test(s))continue;
     if(/^\d+$/.test(s))continue;
-    if(!(/[a-z]/.test(s)||s.length>5))continue;
+    if(/^[^a-zA-Z]+$/.test(s))continue; // no letters at all
+    if(!/[a-z]/.test(s)&&s.length<=8)continue; // short all-caps that aren't spell names
     const key=s.toLowerCase();
     if(seen.has(key))continue;
     seen.add(key);
@@ -10490,32 +10527,41 @@ function _extractPdfSpells(sorted){
 }
 
 function _extractPdfNotes(sorted){
-  const pg1=sorted.filter(i=>i.page===1);
+  // DnD Beyond 2024: personality/backstory/notes are on the character appearance page (usually page 4).
+  // Older format has them on page 1. Find whichever page has these section labels.
   const SECTIONS=[
     {re:/^PERSONALITY\s+TRAITS?$/i,title:'Rasgos de personalidad'},
     {re:/^IDEALS?$/i,title:'Ideales'},
     {re:/^BONDS?$/i,title:'Vínculos'},
     {re:/^FLAWS?$/i,title:'Defectos'},
+    {re:/^ALLIES?\s*(&\s*ORGANIZATIONS?)?$/i,title:'Aliados y notas'},
+    {re:/^ADDITIONAL\s+NOTES?$/i,title:'Notas adicionales'},
   ];
+  // Find the page that contains the first PERSONALITY TRAITS or similar label
+  let notesPgNum=1;
+  for(const item of sorted){
+    if(SECTIONS.some(s=>s.re.test(item.str.trim()))){notesPgNum=item.page;break;}
+  }
+  const pg=sorted.filter(i=>i.page===notesPgNum);
   const parts=[];
-  const allSectionYs=pg1.filter(i=>SECTIONS.some(s=>s.re.test(i.str))).map(i=>i.y).sort((a,b)=>a-b);
+  const allSectionItems=pg.filter(i=>SECTIONS.some(s=>s.re.test(i.str.trim())));
+  const allSectionYs=allSectionItems.map(i=>i.y).sort((a,b)=>a-b);
   for(const sec of SECTIONS){
-    const labelItem=pg1.find(i=>sec.re.test(i.str));
+    const labelItem=pg.find(i=>sec.re.test(i.str.trim()));
     if(!labelItem)continue;
     const nextY=allSectionYs.filter(y=>y>labelItem.y)[0]||99999;
-    const texts=pg1.filter(i=>
+    const texts=pg.filter(i=>
       i.y>labelItem.y&&i.y<nextY&&
-      Math.abs(i.x-labelItem.x)<300&&
-      !SECTIONS.some(s=>s.re.test(i.str))&&
-      i.str.length>2
-    ).map(i=>i.str);
+      !SECTIONS.some(s=>s.re.test(i.str.trim()))&&
+      i.str.trim().length>2
+    ).map(i=>i.str.trim());
     if(texts.length)parts.push(`${sec.title}:\n${texts.join(' ')}`);
   }
   return parts.join('\n\n');
 }
 
-const _PDF_SPELL_ES={'Acid Splash':'Salpicadura Ácida','Blade Ward':'Guardia de Espada','Chill Touch':'Toque Gélido','Dancing Lights':'Luces Danzantes','Druidcraft':'Arte Druídico','Eldritch Blast':'Proyección Sobrenatural','Fire Bolt':'Rayo de Fuego','Friends':'Amigos','Frostbite':'Quemadura de Frío','Guidance':'Orientación','Light':'Luz','Mage Hand':'Mano de Mago','Mending':'Reparar','Message':'Mensaje','Minor Illusion':'Ilusión Menor','Poison Spray':'Rociada de Veneno','Prestidigitation':'Prestidigitación','Produce Flame':'Producir Llama','Ray of Frost':'Rayo de Frío','Resistance':'Resistencia','Sacred Flame':'Llama Sagrada','Shocking Grasp':'Agarre Eléctrico','Spare the Dying':'Salvar al Moribundo','Thaumaturgy':'Taumaturgia','Thornwhip':'Látigo Espinoso','Toll the Dead':'Doblar las Campanas','True Strike':'Golpe Certero','Vicious Mockery':'Burla Despiadada','Green-Flame Blade':'Hoja de Llama Verde','Mind Sliver':'Fragmento Mental','Sword Burst':'Estallido de Espadas','Thunderclap':'Chasquido de Trueno','Shillelagh':'Clava Druídica','Word of Radiance':'Palabra de Radiancia','Infestation':'Infestación','Absorb Elements':'Absorber Elementos','Alarm':'Alarma','Animal Friendship':'Amistad con Animales','Armor of Agathys':'Armadura de Agathys','Arms of Hadar':'Brazos de Hadar','Bane':'Maldecir','Bless':'Bendición','Burning Hands':'Manos Ardientes','Charm Person':'Encantar Persona','Chromatic Orb':'Orbe Cromático','Color Spray':'Rociada de Colores','Command':'Orden','Comprehend Languages':'Entender Idiomas','Cure Wounds':'Curar Heridas','Detect Magic':'Detectar Magia','Detect Evil and Good':'Detectar el Bien y el Mal','Disguise Self':'Disfrazarse','Divine Favor':'Favor Divino','Entangle':'Enredar','Expeditious Retreat':'Retirada Expeditiva','Faerie Fire':'Luz de las Hadas','False Life':'Vida Falsa','Feather Fall':'Caída de Pluma','Find Familiar':'Encontrar Familiar','Fog Cloud':'Nube de Niebla','Goodberry':'Baya Benéfica','Grease':'Grasa','Guiding Bolt':'Rayo Guía','Healing Word':'Palabra Sanadora','Hellish Rebuke':'Represalia Infernal','Heroism':'Heroísmo','Hex':'Maldición',"Hunter's Mark":'Marca del Cazador','Ice Knife':'Cuchillo de Hielo','Identify':'Identificar','Inflict Wounds':'Infligir Heridas','Jump':'Saltar','Longstrider':'Paso Largo','Mage Armor':'Armadura del Mago','Magic Missile':'Misil Mágico','Protection from Evil and Good':'Protección contra el Bien y el Mal','Ray of Sickness':'Rayo de Enfermedad','Sanctuary':'Santuario','Shield':'Escudo','Shield of Faith':'Escudo de Fe','Silent Image':'Imagen Silenciosa','Sleep':'Dormir','Speak with Animals':'Hablar con Animales',"Tasha's Hideous Laughter":'Risa Horrenda de Tasha',"Tenser's Floating Disk":'Disco Flotante de Tenser','Thunderwave':'Ola de Trueno','Unseen Servant':'Sirviente Invisible','Witch Bolt':'Rayo Brujo','Wrathful Smite':'Golpe Iracundo','Searing Smite':'Golpe Abrasador','Thunderous Smite':'Golpe Atronador','Aid':'Auxilio','Alter Self':'Alteración Personal','Arcane Lock':'Cerrojo Arcano','Augury':'Augurio','Barkskin':'Corteza','Blindness/Deafness':'Ceguera/Sordera','Blur':'Imagen Borrosa','Calm Emotions':'Calmar Emociones','Cloud of Daggers':'Nube de Dagas','Continual Flame':'Llama Continua','Crown of Madness':'Corona de Locura','Darkness':'Oscuridad','Darkvision':'Visión en la Oscuridad','Detect Thoughts':'Detectar Pensamientos','Enhance Ability':'Mejorar Habilidad','Enlarge/Reduce':'Agrandar/Reducir','Enthrall':'Embelesar','Find Steed':'Encontrar Montura','Flame Blade':'Hoja de Llamas','Flaming Sphere':'Esfera de Llamas','Gust of Wind':'Ráfaga de Viento','Heat Metal':'Metal Incandescente','Hold Person':'Paralizar Persona','Invisibility':'Invisibilidad','Knock':'Abrir','Lesser Restoration':'Restauración Menor','Levitate':'Levitar','Magic Weapon':'Arma Mágica',"Melf's Acid Arrow":'Flecha Ácida de Melf','Mirror Image':'Imagen Especular','Misty Step':'Paso Nublado','Moonbeam':'Haz de Luna','Pass Without Trace':'Pasar Sin Rastro','Prayer of Healing':'Oración Sanadora','Protection from Poison':'Protección contra el Veneno','Ray of Enfeeblement':'Rayo de Debilitamiento','Rope Trick':'Truco de la Cuerda','Scorching Ray':'Rayo Abrasador','See Invisibility':'Ver Invisibilidad','Shadow Blade':'Hoja de Sombra','Shatter':'Añicos','Silence':'Silencio','Spider Climb':'Trepar Paredes','Spike Growth':'Espinas','Spiritual Weapon':'Arma Espiritual','Suggestion':'Sugestión','Warding Bond':'Vínculo Guardián','Web':'Telaraña','Zone of Truth':'Zona de la Verdad',"Tasha's Mind Whip":'Látigo Mental de Tasha','Animate Dead':'Animar Muertos','Aura of Vitality':'Aura de Vitalidad','Beacon of Hope':'Faro de Esperanza','Bestow Curse':'Impartir Maldición','Blink':'Parpadeo','Call Lightning':'Convocar Rayo','Clairvoyance':'Clarividencia','Conjure Animals':'Convocar Animales','Counterspell':'Contrahechizo','Create Food and Water':'Crear Alimento y Agua','Daylight':'Luz del Día','Dispel Magic':'Disipar Magia','Elemental Weapon':'Arma Elemental','Fear':'Miedo','Fireball':'Bola de Fuego','Fly':'Volar','Gaseous Form':'Forma Gaseosa','Glyph of Warding':'Glifo de Protección','Haste':'Celeridad','Hunger of Hadar':'Hambre de Hadar','Hypnotic Pattern':'Patrón Hipnótico',"Leomund's Tiny Hut":'Refugio de Leomund','Lightning Bolt':'Rayo','Magic Circle':'Círculo Mágico','Major Image':'Imagen Mayor','Mass Healing Word':'Palabra Sanadora Masiva','Nondetection':'No Detección','Plant Growth':'Crecimiento Vegetal','Protection from Energy':'Protección contra Energía','Remove Curse':'Retirar Maldición','Revivify':'Revivificar','Sending':'Envío de Mensajes','Sleet Storm':'Aguanieve','Slow':'Ralentizar','Speak with Dead':'Hablar con Muertos','Speak with Plants':'Hablar con Plantas','Spirit Guardians':'Guardianes Espirituales','Spirit Shroud':'Mortaja Espiritual','Stinking Cloud':'Nube Hedionda','Thunder Step':'Paso Atronador','Tongues':'Lenguajes','Vampiric Touch':'Toque Vampírico','Water Breathing':'Respirar Bajo el Agua','Water Walk':'Caminar sobre el Agua','Wind Wall':'Muro de Viento','Life Transference':'Transferencia de Vida','Arcane Eye':'Ojo Arcano','Aura of Life':'Aura de Vida','Aura of Purity':'Aura de Pureza','Banishment':'Destierro','Blight':'Plaga','Compulsion':'Compulsión','Confusion':'Confusión','Control Water':'Controlar el Agua','Death Ward':'Resguardo de la Muerte','Dimension Door':'Puerta Dimensional','Divination':'Adivinación','Dominate Beast':'Dominar Bestia',"Evard's Black Tentacles":'Tentáculos Negros de Evard','Fabricate':'Fabricar','Fire Shield':'Escudo de Fuego','Freedom of Movement':'Libertad de Movimiento','Greater Invisibility':'Invisibilidad Mayor','Guardian of Faith':'Guardián de la Fe','Ice Storm':'Tormenta de Hielo','Locate Creature':'Localizar Criatura','Phantasmal Killer':'Asesino Fantasmal','Polymorph':'Polimorfismo','Stone Shape':'Conformar Piedra','Stoneskin':'Piel Pétrea','Wall of Fire':'Muro de Fuego','Animate Objects':'Animar Objetos','Antilife Shell':'Escudo Antivida',"Bigby's Hand":'Mano de Bigby','Circle of Power':'Círculo de Poder','Cloudkill':'Nube Mortal','Commune':'Comunión','Commune with Nature':'Comunión con la Naturaleza','Cone of Cold':'Cono de Frío','Conjure Elemental':'Convocar Elemental','Contact Other Plane':'Contactar Otro Plano','Contagion':'Contagio','Control Winds':'Controlar Vientos','Creation':'Creación','Destructive Wave':'Ola Destructiva','Dispel Evil and Good':'Disipar el Bien y el Mal','Dominate Person':'Dominar Persona','Dream':'Sueño','Flame Strike':'Columna de Llamas','Geas':'Geas','Greater Restoration':'Restauración Mayor','Hallow':'Consagrar','Hold Monster':'Paralizar Monstruo','Holy Weapon':'Arma Sagrada','Insect Plague':'Plaga de Insectos','Legend Lore':'Leyendas','Mass Cure Wounds':'Curar Heridas Masivo','Mislead':'Engañar','Modify Memory':'Modificar Memoria','Passwall':'Pasomuros','Raise Dead':'Resucitar','Reincarnate':'Reencarnación','Scrying':'Escrutinio','Steel Wind Strike':'Golpe del Viento de Acero','Synaptic Static':'Estática Sináptica','Telekinesis':'Telequinesis','Teleportation Circle':'Círculo de Teletransporte','Wall of Force':'Muro de Fuerza','Wall of Stone':'Muro de Piedra','Enervation':'Enervación','Blade Barrier':'Barrera de Espadas','Chain Lightning':'Cadena de Rayos','Circle of Death':'Círculo de Muerte','Contingency':'Contingencia','Create Undead':'Crear No Muerto','Disintegrate':'Desintegrar','Eyebite':'Mirada Maléfica','Flesh to Stone':'Carne a Piedra','Globe of Invulnerability':'Globo de Invulnerabilidad','Harm':'Dañar','Heal':'Curar',"Heroes' Feast":'Festín de los Héroes','Magic Jar':'Frasco Mágico','Mass Suggestion':'Sugestión Masiva','Mental Prison':'Prisión Mental','Move Earth':'Mover Tierra',"Otiluke's Freezing Sphere":'Esfera Helada de Otiluke',"Otto's Irresistible Dance":'Danza Irresistible de Otto','Planar Ally':'Aliado Planar','Soul Cage':'Jaula del Alma','Sunbeam':'Rayo Solar','True Seeing':'Visión Verdadera','Wall of Ice':'Muro de Hielo','Wall of Thorns':'Muro de Espinas','Word of Recall':'Palabra de Regreso','Delayed Blast Fireball':'Bola de Fuego de Explosión Retardada','Divine Word':'Palabra Divina','Etherealness':'Etereidad','Finger of Death':'Dedo de la Muerte','Fire Storm':'Tormenta de Fuego','Forcecage':'Jaula de Fuerza','Mirage Arcane':'Espejismo Arcano',"Mordenkainen's Magnificent Mansion":'Magnífica Mansión de Mordenkainen',"Mordenkainen's Sword":'Espada de Mordenkainen','Plane Shift':'Cambio de Plano','Prismatic Spray':'Rociada Prismática','Project Image':'Proyectar Imagen','Regenerate':'Regenerar','Resurrection':'Resurrección','Reverse Gravity':'Invertir la Gravedad','Simulacrum':'Simulacro','Symbol':'Símbolo','Teleport':'Teletransporte','Whirlwind':'Torbellino','Antimagic Field':'Campo Antimágico','Clone':'Clon','Control Weather':'Controlar el Clima','Demiplane':'Semiplano','Dominate Monster':'Dominar Monstruo','Earthquake':'Terremoto','Feeblemind':'Debilitar Mente','Glibness':'Locuacidad','Holy Aura':'Aura Sagrada','Incendiary Cloud':'Nube Incendiaria','Maze':'Laberinto','Mind Blank':'Mente en Blanco','Power Word Stun':'Palabra de Poder: Aturdir','Sunburst':'Estallido Solar','Telepathy':'Telepatía','Tsunami':'Tsunami','Astral Projection':'Proyección Astral','Foresight':'Presciencia','Gate':'Portal','Imprisonment':'Encarcelamiento','Mass Heal':'Curación Masiva','Mass Polymorph':'Polimorfismo Masivo','Meteor Swarm':'Lluvia de Meteoritos','Power Word Heal':'Palabra de Poder: Curar','Power Word Kill':'Palabra de Poder: Matar','Prismatic Wall':'Muro Prismático','Shapechange':'Cambio de Forma','Storm of Vengeance':'Tormenta de Venganza','Time Stop':'Detener el Tiempo','True Polymorph':'Polimorfismo Verdadero','True Resurrection':'Resurrección Verdadera','Wish':'Deseo'};
-const _PDF_ITEM_ES={'Longsword':'Espada Larga','Shortsword':'Espada Corta','Dagger':'Daga','Handaxe':'Hacha de Mano','Battleaxe':'Hacha de Batalla','Greataxe':'Hacha Grande','Greatsword':'Mandoble','Rapier':'Estoque','Mace':'Maza','Flail':'Mangual','Quarterstaff':'Bastón','Longbow':'Arco Largo','Shortbow':'Arco Corto','Javelin':'Jabalina','Spear':'Lanza','Trident':'Tridente','War Pick':'Pico de Guerra','Warhammer':'Martillo de Guerra','Maul':'Mazo Grande','Halberd':'Alabarda','Glaive':'Glaive','Pike':'Pica','Club':'Porra','Light Hammer':'Martillo Ligero','Sickle':'Hoz','Whip':'Látigo','Net':'Red','Sling':'Honda','Dart':'Dardo','Crossbow, Heavy':'Ballesta Pesada','Crossbow, Light':'Ballesta Ligera','Crossbow, Hand':'Ballesta de Mano','Hand Crossbow':'Ballesta de Mano','Shield':'Escudo','Padded Armor':'Armadura Acolchada','Leather Armor':'Armadura de Cuero','Studded Leather Armor':'Cuero Tachonado','Hide Armor':'Armadura de Pieles','Chain Shirt':'Camisa de Malla','Scale Mail':'Cota de Escamas','Breastplate':'Peto','Half Plate Armor':'Media Armadura de Placas','Ring Mail':'Cota de Anillos','Chain Mail':'Cota de Malla','Splint Armor':'Armadura de Bandas','Plate Armor':'Armadura de Placas','Backpack':'Mochila','Torch':'Antorcha','Waterskin':'Odre','Bedroll':'Petate','Blanket':'Manta','Crowbar':'Palanca','Tinderbox':'Yesca','Holy Symbol':'Símbolo Sagrado','Component Pouch':'Bolsa de Componentes','Arcane Focus':'Foco Arcano','Druidic Focus':'Foco Druídico',"Thieves' Tools":'Herramientas de Ladrón',"Healer's Kit":'Kit de Curación',"Herbalism Kit":'Kit de Herboristería','Potion of Healing':'Poción de Curación','Potion of Greater Healing':'Poción de Curación Superior','Potion of Superior Healing':'Poción de Curación Excelente','Potion of Supreme Healing':'Poción de Curación Suprema','Ring of Protection':'Anillo de Protección','Cloak of Protection':'Capa de Protección','Bag of Holding':'Bolsa Contenedora','Boots of Speed':'Botas de Velocidad','Ring of Feather Falling':'Anillo de Caída de Pluma','Wand of Magic Missiles':'Varita de Misiles Mágicos','Staff of Healing':'Bastón de Curación'};
+const _PDF_SPELL_ES={'Acid Splash':'Salpicadura Ácida','Blade Ward':'Guardia de Espada','Chill Touch':'Toque Gélido','Dancing Lights':'Luces Danzantes','Druidcraft':'Arte Druídico','Eldritch Blast':'Proyección Sobrenatural','Fire Bolt':'Rayo de Fuego','Friends':'Amigos','Frostbite':'Quemadura de Frío','Guidance':'Orientación','Light':'Luz','Mage Hand':'Mano de Mago','Mending':'Reparar','Message':'Mensaje','Minor Illusion':'Ilusión Menor','Poison Spray':'Rociada de Veneno','Prestidigitation':'Prestidigitación','Produce Flame':'Producir Llama','Ray of Frost':'Rayo de Frío','Resistance':'Resistencia','Sacred Flame':'Llama Sagrada','Shocking Grasp':'Agarre Eléctrico','Spare the Dying':'Salvar al Moribundo','Thaumaturgy':'Taumaturgia','Thornwhip':'Látigo Espinoso','Toll the Dead':'Doblar las Campanas','True Strike':'Golpe Certero','Vicious Mockery':'Burla Despiadada','Green-Flame Blade':'Hoja de Llama Verde','Mind Sliver':'Fragmento Mental','Sword Burst':'Estallido de Espadas','Thunderclap':'Chasquido de Trueno','Shillelagh':'Clava Druídica','Word of Radiance':'Palabra de Radiancia','Infestation':'Infestación','Absorb Elements':'Absorber Elementos','Alarm':'Alarma','Animal Friendship':'Amistad con Animales','Armor of Agathys':'Armadura de Agathys','Arms of Hadar':'Brazos de Hadar','Bane':'Maldecir','Bless':'Bendición','Burning Hands':'Manos Ardientes','Charm Person':'Encantar Persona','Chromatic Orb':'Orbe Cromático','Color Spray':'Rociada de Colores','Command':'Orden','Comprehend Languages':'Entender Idiomas','Cure Wounds':'Curar Heridas','Detect Magic':'Detectar Magia','Detect Evil and Good':'Detectar el Bien y el Mal','Disguise Self':'Disfrazarse','Divine Favor':'Favor Divino','Entangle':'Enredar','Expeditious Retreat':'Retirada Expeditiva','Faerie Fire':'Luz de las Hadas','False Life':'Vida Falsa','Feather Fall':'Caída de Pluma','Find Familiar':'Encontrar Familiar','Fog Cloud':'Nube de Niebla','Goodberry':'Baya Benéfica','Grease':'Grasa','Guiding Bolt':'Rayo Guía','Healing Word':'Palabra Sanadora','Hellish Rebuke':'Represalia Infernal','Heroism':'Heroísmo','Hex':'Maldición',"Hunter's Mark":'Marca del Cazador','Ice Knife':'Cuchillo de Hielo','Identify':'Identificar','Inflict Wounds':'Infligir Heridas','Jump':'Saltar','Longstrider':'Paso Largo','Mage Armor':'Armadura del Mago','Magic Missile':'Misil Mágico','Protection from Evil and Good':'Protección contra el Bien y el Mal','Ray of Sickness':'Rayo de Enfermedad','Sanctuary':'Santuario','Shield':'Escudo','Shield of Faith':'Escudo de Fe','Silent Image':'Imagen Silenciosa','Sleep':'Dormir','Speak with Animals':'Hablar con Animales',"Tasha's Hideous Laughter":'Risa Horrenda de Tasha',"Tenser's Floating Disk":'Disco Flotante de Tenser','Thunderwave':'Ola de Trueno','Unseen Servant':'Sirviente Invisible','Witch Bolt':'Rayo Brujo','Wrathful Smite':'Golpe Iracundo','Searing Smite':'Golpe Abrasador','Thunderous Smite':'Golpe Atronador','Aid':'Auxilio','Alter Self':'Alteración Personal','Arcane Lock':'Cerrojo Arcano','Augury':'Augurio','Barkskin':'Corteza','Blindness/Deafness':'Ceguera/Sordera','Blur':'Imagen Borrosa','Calm Emotions':'Calmar Emociones','Cloud of Daggers':'Nube de Dagas','Continual Flame':'Llama Continua','Crown of Madness':'Corona de Locura','Darkness':'Oscuridad','Darkvision':'Visión en la Oscuridad','Detect Thoughts':'Detectar Pensamientos','Enhance Ability':'Mejorar Habilidad','Enlarge/Reduce':'Agrandar/Reducir','Enthrall':'Embelesar','Find Steed':'Encontrar Montura','Flame Blade':'Hoja de Llamas','Flaming Sphere':'Esfera de Llamas','Gust of Wind':'Ráfaga de Viento','Heat Metal':'Metal Incandescente','Hold Person':'Paralizar Persona','Invisibility':'Invisibilidad','Knock':'Abrir','Lesser Restoration':'Restauración Menor','Levitate':'Levitar','Magic Weapon':'Arma Mágica',"Melf's Acid Arrow":'Flecha Ácida de Melf','Mirror Image':'Imagen Especular','Misty Step':'Paso Nublado','Moonbeam':'Haz de Luna','Pass Without Trace':'Pasar Sin Rastro','Pass without Trace':'Pasar Sin Rastro','Find Traps':'Encontrar Trampas','Prayer of Healing':'Oración Sanadora','Protection from Poison':'Protección contra el Veneno','Ray of Enfeeblement':'Rayo de Debilitamiento','Rope Trick':'Truco de la Cuerda','Scorching Ray':'Rayo Abrasador','See Invisibility':'Ver Invisibilidad','Shadow Blade':'Hoja de Sombra','Shatter':'Añicos','Silence':'Silencio','Spider Climb':'Trepar Paredes','Spike Growth':'Espinas','Spiritual Weapon':'Arma Espiritual','Suggestion':'Sugestión','Warding Bond':'Vínculo Guardián','Web':'Telaraña','Zone of Truth':'Zona de la Verdad',"Tasha's Mind Whip":'Látigo Mental de Tasha','Animate Dead':'Animar Muertos','Aura of Vitality':'Aura de Vitalidad','Beacon of Hope':'Faro de Esperanza','Bestow Curse':'Impartir Maldición','Blink':'Parpadeo','Call Lightning':'Convocar Rayo','Clairvoyance':'Clarividencia','Conjure Animals':'Convocar Animales','Counterspell':'Contrahechizo','Create Food and Water':'Crear Alimento y Agua','Daylight':'Luz del Día','Dispel Magic':'Disipar Magia','Elemental Weapon':'Arma Elemental','Fear':'Miedo','Fireball':'Bola de Fuego','Fly':'Volar','Gaseous Form':'Forma Gaseosa','Glyph of Warding':'Glifo de Protección','Haste':'Celeridad','Hunger of Hadar':'Hambre de Hadar','Hypnotic Pattern':'Patrón Hipnótico',"Leomund's Tiny Hut":'Refugio de Leomund','Lightning Bolt':'Rayo','Magic Circle':'Círculo Mágico','Major Image':'Imagen Mayor','Mass Healing Word':'Palabra Sanadora Masiva','Nondetection':'No Detección','Plant Growth':'Crecimiento Vegetal','Protection from Energy':'Protección contra Energía','Remove Curse':'Retirar Maldición','Revivify':'Revivificar','Sending':'Envío de Mensajes','Sleet Storm':'Aguanieve','Slow':'Ralentizar','Speak with Dead':'Hablar con Muertos','Speak with Plants':'Hablar con Plantas','Spirit Guardians':'Guardianes Espirituales','Spirit Shroud':'Mortaja Espiritual','Stinking Cloud':'Nube Hedionda','Thunder Step':'Paso Atronador','Tongues':'Lenguajes','Vampiric Touch':'Toque Vampírico','Water Breathing':'Respirar Bajo el Agua','Water Walk':'Caminar sobre el Agua','Wind Wall':'Muro de Viento','Life Transference':'Transferencia de Vida','Arcane Eye':'Ojo Arcano','Aura of Life':'Aura de Vida','Aura of Purity':'Aura de Pureza','Banishment':'Destierro','Blight':'Plaga','Compulsion':'Compulsión','Confusion':'Confusión','Control Water':'Controlar el Agua','Death Ward':'Resguardo de la Muerte','Dimension Door':'Puerta Dimensional','Divination':'Adivinación','Dominate Beast':'Dominar Bestia',"Evard's Black Tentacles":'Tentáculos Negros de Evard','Fabricate':'Fabricar','Fire Shield':'Escudo de Fuego','Freedom of Movement':'Libertad de Movimiento','Greater Invisibility':'Invisibilidad Mayor','Guardian of Faith':'Guardián de la Fe','Ice Storm':'Tormenta de Hielo','Locate Creature':'Localizar Criatura','Phantasmal Killer':'Asesino Fantasmal','Polymorph':'Polimorfismo','Stone Shape':'Conformar Piedra','Stoneskin':'Piel Pétrea','Wall of Fire':'Muro de Fuego','Animate Objects':'Animar Objetos','Antilife Shell':'Escudo Antivida',"Bigby's Hand":'Mano de Bigby','Circle of Power':'Círculo de Poder','Cloudkill':'Nube Mortal','Commune':'Comunión','Commune with Nature':'Comunión con la Naturaleza','Cone of Cold':'Cono de Frío','Conjure Elemental':'Convocar Elemental','Contact Other Plane':'Contactar Otro Plano','Contagion':'Contagio','Control Winds':'Controlar Vientos','Creation':'Creación','Destructive Wave':'Ola Destructiva','Dispel Evil and Good':'Disipar el Bien y el Mal','Dominate Person':'Dominar Persona','Dream':'Sueño','Flame Strike':'Columna de Llamas','Geas':'Geas','Greater Restoration':'Restauración Mayor','Hallow':'Consagrar','Hold Monster':'Paralizar Monstruo','Holy Weapon':'Arma Sagrada','Insect Plague':'Plaga de Insectos','Legend Lore':'Leyendas','Mass Cure Wounds':'Curar Heridas Masivo','Mislead':'Engañar','Modify Memory':'Modificar Memoria','Passwall':'Pasomuros','Raise Dead':'Resucitar','Reincarnate':'Reencarnación','Scrying':'Escrutinio','Steel Wind Strike':'Golpe del Viento de Acero','Synaptic Static':'Estática Sináptica','Telekinesis':'Telequinesis','Teleportation Circle':'Círculo de Teletransporte','Wall of Force':'Muro de Fuerza','Wall of Stone':'Muro de Piedra','Enervation':'Enervación','Blade Barrier':'Barrera de Espadas','Chain Lightning':'Cadena de Rayos','Circle of Death':'Círculo de Muerte','Contingency':'Contingencia','Create Undead':'Crear No Muerto','Disintegrate':'Desintegrar','Eyebite':'Mirada Maléfica','Flesh to Stone':'Carne a Piedra','Globe of Invulnerability':'Globo de Invulnerabilidad','Harm':'Dañar','Heal':'Curar',"Heroes' Feast":'Festín de los Héroes','Magic Jar':'Frasco Mágico','Mass Suggestion':'Sugestión Masiva','Mental Prison':'Prisión Mental','Move Earth':'Mover Tierra',"Otiluke's Freezing Sphere":'Esfera Helada de Otiluke',"Otto's Irresistible Dance":'Danza Irresistible de Otto','Planar Ally':'Aliado Planar','Soul Cage':'Jaula del Alma','Sunbeam':'Rayo Solar','True Seeing':'Visión Verdadera','Wall of Ice':'Muro de Hielo','Wall of Thorns':'Muro de Espinas','Word of Recall':'Palabra de Regreso','Delayed Blast Fireball':'Bola de Fuego de Explosión Retardada','Divine Word':'Palabra Divina','Etherealness':'Etereidad','Finger of Death':'Dedo de la Muerte','Fire Storm':'Tormenta de Fuego','Forcecage':'Jaula de Fuerza','Mirage Arcane':'Espejismo Arcano',"Mordenkainen's Magnificent Mansion":'Magnífica Mansión de Mordenkainen',"Mordenkainen's Sword":'Espada de Mordenkainen','Plane Shift':'Cambio de Plano','Prismatic Spray':'Rociada Prismática','Project Image':'Proyectar Imagen','Regenerate':'Regenerar','Resurrection':'Resurrección','Reverse Gravity':'Invertir la Gravedad','Simulacrum':'Simulacro','Symbol':'Símbolo','Teleport':'Teletransporte','Whirlwind':'Torbellino','Antimagic Field':'Campo Antimágico','Clone':'Clon','Control Weather':'Controlar el Clima','Demiplane':'Semiplano','Dominate Monster':'Dominar Monstruo','Earthquake':'Terremoto','Feeblemind':'Debilitar Mente','Glibness':'Locuacidad','Holy Aura':'Aura Sagrada','Incendiary Cloud':'Nube Incendiaria','Maze':'Laberinto','Mind Blank':'Mente en Blanco','Power Word Stun':'Palabra de Poder: Aturdir','Sunburst':'Estallido Solar','Telepathy':'Telepatía','Tsunami':'Tsunami','Astral Projection':'Proyección Astral','Foresight':'Presciencia','Gate':'Portal','Imprisonment':'Encarcelamiento','Mass Heal':'Curación Masiva','Mass Polymorph':'Polimorfismo Masivo','Meteor Swarm':'Lluvia de Meteoritos','Power Word Heal':'Palabra de Poder: Curar','Power Word Kill':'Palabra de Poder: Matar','Prismatic Wall':'Muro Prismático','Shapechange':'Cambio de Forma','Storm of Vengeance':'Tormenta de Venganza','Time Stop':'Detener el Tiempo','True Polymorph':'Polimorfismo Verdadero','True Resurrection':'Resurrección Verdadera','Wish':'Deseo'};
+const _PDF_ITEM_ES={'Longsword':'Espada Larga','Shortsword':'Espada Corta','Dagger':'Daga','Handaxe':'Hacha de Mano','Battleaxe':'Hacha de Batalla','Greataxe':'Hacha Grande','Greatsword':'Mandoble','Rapier':'Estoque','Mace':'Maza','Flail':'Mangual','Quarterstaff':'Bastón','Longbow':'Arco Largo','Shortbow':'Arco Corto','Javelin':'Jabalina','Spear':'Lanza','Trident':'Tridente','War Pick':'Pico de Guerra','Warhammer':'Martillo de Guerra','Maul':'Mazo Grande','Halberd':'Alabarda','Glaive':'Glaive','Pike':'Pica','Club':'Porra','Light Hammer':'Martillo Ligero','Sickle':'Hoz','Whip':'Látigo','Net':'Red','Sling':'Honda','Dart':'Dardo','Crossbow, Heavy':'Ballesta Pesada','Crossbow, Light':'Ballesta Ligera','Crossbow, Hand':'Ballesta de Mano','Hand Crossbow':'Ballesta de Mano','Shield':'Escudo','Padded Armor':'Armadura Acolchada','Leather Armor':'Armadura de Cuero','Studded Leather Armor':'Cuero Tachonado','Hide Armor':'Armadura de Pieles','Chain Shirt':'Camisa de Malla','Scale Mail':'Cota de Escamas','Breastplate':'Peto','Half Plate Armor':'Media Armadura de Placas','Ring Mail':'Cota de Anillos','Chain Mail':'Cota de Malla','Splint Armor':'Armadura de Bandas','Plate Armor':'Armadura de Placas','Backpack':'Mochila','Torch':'Antorcha','Waterskin':'Odre','Bedroll':'Petate','Blanket':'Manta','Crowbar':'Palanca','Tinderbox':'Yesca','Holy Symbol':'Símbolo Sagrado','Component Pouch':'Bolsa de Componentes','Arcane Focus':'Foco Arcano','Druidic Focus':'Foco Druídico',"Thieves' Tools":'Herramientas de Ladrón',"Healer's Kit":'Kit de Curación',"Herbalism Kit":'Kit de Herboristería','Potion of Healing':'Poción de Curación','Potion of Greater Healing':'Poción de Curación Superior','Potion of Superior Healing':'Poción de Curación Excelente','Potion of Supreme Healing':'Poción de Curación Suprema','Ring of Protection':'Anillo de Protección','Cloak of Protection':'Capa de Protección','Bag of Holding':'Bolsa Contenedora','Boots of Speed':'Botas de Velocidad','Ring of Feather Falling':'Anillo de Caída de Pluma','Wand of Magic Missiles':'Varita de Misiles Mágicos','Staff of Healing':'Bastón de Curación','Boots of Elvenkind':'Botas de los Elfos del Bosque','Bracers of Archery':'Brazaletes de Arquería','Longbow, +2':'Arco Largo +2','Studded Leather':'Cuero Tachonado','Studded Leather Armor':'Cuero Tachonado','Scimitar':'Cimitarra','Shortsword':'Espada Corta','Longbow':'Arco Largo','Clothes, Fine':'Ropa Fina','Signet Ring':'Anillo de Sello','Quiver':'Carcaj','Arrows':'Flechas','Sprig of Mistletoe':'Ramita de Muérdago','Sovereign Glue':'Pegamento Soberano','Oil':'Aceite','Rations':'Raciones','Rope':'Cuerda','Torch':'Antorcha','Torches':'Antorchas','Waterskin':'Odre','Pocion de pasos silencios':'Poción de Pasos Silenciosos','Arrow':'Flecha','Arrows (20)':'Flechas (20)'};
 
 const _PDF_RACE_MAP={'human':'human','elf':'elf','high elf':'elf','wood elf':'elf','dark elf':'elf','drow':'elf','dwarf':'dwarf','hill dwarf':'dwarf','mountain dwarf':'dwarf','halfling':'halfling','lightfoot halfling':'halfling','stout halfling':'halfling','dragonborn':'dragonborn','tiefling':'tiefling','half-orc':'half-orc','half orc':'half-orc','gnome':'gnome','rock gnome':'gnome','forest gnome':'gnome','aasimar':'aasimar','tabaxi':'tabaxi','firbolg':'firbolg','kenku':'kenku','half-elf':'elf','aasimar':'aasimar'};
 const _PDF_CLASS_MAP={'fighter':'fighter','ranger':'ranger','rogue':'rogue','wizard':'wizard','cleric':'cleric','paladin':'paladin','barbarian':'barbarian','bard':'bard','druid':'druid','monk':'monk','sorcerer':'sorcerer','warlock':'warlock','artificer':'fighter','blood hunter':'ranger'};

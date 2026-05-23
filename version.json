@@ -1,7 +1,12 @@
 {
-  "version": "2.8.22",
-  "date": "2026-05-22",
+  "version": "2.8.23",
+  "date": "2026-05-23",
   "history": [
+    {
+      "version": "2.8.23",
+      "date": "2026-05-23",
+      "note": "Fix parser PDF DnD Beyond 2024: valores están ARRIBA de las etiquetas, SPECIES en vez de RACE, equipamiento en página 2, hechizos en página 5, notas en página 4"
+    },
     {
       "version": "2.8.22",
       "date": "2026-05-22",
