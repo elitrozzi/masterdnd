@@ -2232,7 +2232,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.8.24</span>
+    <span class="ver-badge">v2.8.25</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">26 May 2026</span>
   </div>
@@ -2750,7 +2750,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.8.24</span>
+          <span class="ver-badge">v2.8.25</span>
           <span>·</span>
           <span class="ver-date">26 May 2026</span>
         </div>
@@ -3228,30 +3228,13 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     <div class="ddb-modal-hdr">
       <div>
         <div class="ddb-modal-title">⚔️ Importar desde D&amp;D Beyond</div>
-        <div class="ddb-modal-sub">Traé tu personaje a MasterDnD en español</div>
+        <div class="ddb-modal-sub">Subí el PDF exportado desde DnD Beyond para importar tu personaje</div>
       </div>
       <button class="ddb-modal-x" onclick="closeDdbImport()">✕</button>
     </div>
-    <div class="ddb-tabs">
-      <button class="ddb-tab active" id="ddbTabUrl" onclick="ddbSwitchTab('url')">🔗 Por URL</button>
-      <button class="ddb-tab" id="ddbTabPdf" onclick="ddbSwitchTab('pdf')">📄 Por PDF</button>
-      <button class="ddb-tab" id="ddbTabSS" onclick="ddbSwitchTab('ss')">📸 Por captura</button>
-    </div>
-    <!-- URL pane -->
-    <div class="ddb-pane" id="ddbPaneUrl">
-      <div class="ddb-hint">El personaje debe ser <strong>público</strong> en DnD Beyond: en la página de tu personaje → Configuración (ícono engranaje) → Privacidad → <strong>Público</strong>.</div>
-      <div class="ddb-url-row">
-        <input id="ddbUrlIn" class="ddb-url-input" type="url" autocomplete="off"
-               placeholder="https://www.dndbeyond.com/characters/12345678"
-               oninput="document.getElementById('ddbErr').classList.remove('show')"
-               onkeydown="if(event.key==='Enter')ddbImportUrl()">
-        <button class="ddb-go-btn" id="ddbGoBtn" onclick="ddbImportUrl()">Importar</button>
-      </div>
-      <div class="ddb-err" id="ddbErr"></div>
-    </div>
     <!-- PDF pane -->
-    <div class="ddb-pane" id="ddbPanePdf" style="display:none">
-      <div class="ddb-hint">En DnD Beyond, en la página de tu personaje hacé clic en <strong>⋯</strong> → <strong>Export PDF</strong>. Luego subí ese archivo acá. Los datos se extraen automáticamente — revisalos antes de crear el personaje.</div>
+    <div class="ddb-pane" id="ddbPanePdf">
+      <div class="ddb-hint">En DnD Beyond, en la página de tu personaje hacé clic en <strong>⋯</strong> → <strong>Export PDF</strong>. Luego subí ese archivo acá.</div>
       <div class="ddb-pdf-drop" id="ddbPdfDrop"
            onclick="document.getElementById('ddbPdfIn').click()"
            ondragover="event.preventDefault();this.classList.add('drag')"
@@ -3266,69 +3249,56 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
       </div>
       <div class="ddb-pdf-status" id="ddbPdfStatus" style="display:none">⏳ Procesando PDF…</div>
       <div class="ddb-err" id="ddbPdfErr"></div>
-    </div>
-    <!-- Screenshot pane -->
-    <div class="ddb-pane" id="ddbPaneSS" style="display:none">
-      <div class="ddb-pdf-ok" id="ddbPdfParsedNotice">✓ Datos extraídos del PDF. Revisá y corregí si hace falta antes de crear el personaje.</div>
-      <div class="ddb-hint" id="ddbSSHint">Subí una captura de pantalla de tu personaje y completá los campos. Usá la imagen como referencia visual.</div>
-      <div class="ddb-ss-dropzone" id="ddbDropzone"
-           onclick="document.getElementById('ddbFileIn').click()"
-           ondragover="event.preventDefault()"
-           ondrop="ddbOnDrop(event)">
-        <input type="file" id="ddbFileIn" accept="image/*" style="display:none" onchange="ddbOnFile(event)">
-        <div class="ddb-ss-placeholder" id="ddbSSPlaceholder">
-          <div style="font-size:2rem;margin-bottom:6px">📸</div>
-          <div>Hacé clic o arrastrá una imagen aquí</div>
-          <div style="font-size:11px;opacity:.4;margin-top:4px">PNG · JPG · WEBP</div>
+      <!-- Review section: shown after parsing -->
+      <div id="ddbPdfReview" style="display:none">
+        <div class="ddb-pdf-ok show" id="ddbPdfParsedNotice"></div>
+        <div class="ddb-ss-form">
+          <div class="ddb-form-field ddb-form-full"><label>Nombre del personaje</label><input id="ssName" type="text" placeholder="Nombre"></div>
+          <div class="ddb-form-field"><label>Raza</label>
+            <select id="ssRace">
+              <option value="human">Humano</option><option value="elf">Elfo</option>
+              <option value="dwarf">Enano</option><option value="halfling">Mediano</option>
+              <option value="dragonborn">Draconiano</option><option value="tiefling">Tiefling</option>
+              <option value="half-orc">Semiorco</option><option value="gnome">Gnomo</option>
+              <option value="aasimar">Aasimar</option><option value="tabaxi">Tabaxi</option>
+              <option value="firbolg">Firbolg</option><option value="kenku">Kenku</option>
+            </select>
+          </div>
+          <div class="ddb-form-field"><label>Clase</label>
+            <select id="ssClass">
+              <option value="fighter">Guerrero</option><option value="wizard">Mago</option>
+              <option value="rogue">Pícaro</option><option value="cleric">Clérigo</option>
+              <option value="ranger">Explorador</option><option value="paladin">Paladín</option>
+              <option value="barbarian">Bárbaro</option><option value="bard">Bardo</option>
+              <option value="druid">Druida</option><option value="monk">Monje</option>
+              <option value="sorcerer">Hechicero</option><option value="warlock">Brujo</option>
+            </select>
+          </div>
+          <div class="ddb-form-field"><label>Trasfondo</label>
+            <select id="ssBg">
+              <option value="acolyte">Acólito</option><option value="charlatan">Charlatán</option>
+              <option value="criminal">Criminal</option><option value="entertainer">Artista</option>
+              <option value="folk-hero">Héroe del Pueblo</option><option value="guild-artisan">Artesano Gremial</option>
+              <option value="hermit">Ermitaño</option><option value="noble">Noble</option>
+              <option value="outlander">Forastero</option><option value="sage">Sabio</option>
+              <option value="sailor">Marinero</option><option value="soldier">Soldado</option>
+              <option value="urchin">Golfo</option>
+            </select>
+          </div>
+          <div class="ddb-form-field"><label>Nivel</label><input id="ssLvl" type="number" min="1" max="20" value="1"></div>
+          <div class="ddb-form-field"><label>CA</label><input id="ssCa" type="number" min="1" max="30" value="10"></div>
+          <div class="ddb-form-field"><label>HP máximo</label><input id="ssHp" type="number" min="1" max="999" value="8"></div>
         </div>
-        <img id="ddbSSImg" class="ddb-ss-img" alt="captura de pantalla">
+        <div class="ddb-stats-6">
+          <div class="ddb-form-field"><label>FUE</label><input id="ssStr" type="number" min="1" max="30" value="10"></div>
+          <div class="ddb-form-field"><label>DES</label><input id="ssDex" type="number" min="1" max="30" value="10"></div>
+          <div class="ddb-form-field"><label>CON</label><input id="ssCon" type="number" min="1" max="30" value="10"></div>
+          <div class="ddb-form-field"><label>INT</label><input id="ssInt" type="number" min="1" max="30" value="10"></div>
+          <div class="ddb-form-field"><label>SAB</label><input id="ssWis" type="number" min="1" max="30" value="10"></div>
+          <div class="ddb-form-field"><label>CAR</label><input id="ssCha" type="number" min="1" max="30" value="10"></div>
+        </div>
+        <button class="ddb-create-btn" onclick="ddbCreateFromSS()">⚔️ Crear personaje con estos datos</button>
       </div>
-      <div class="ddb-ss-form">
-        <div class="ddb-form-field ddb-form-full"><label>Nombre del personaje</label><input id="ssName" type="text" placeholder="Nombre"></div>
-        <div class="ddb-form-field"><label>Raza</label>
-          <select id="ssRace">
-            <option value="human">Humano</option><option value="elf">Elfo</option>
-            <option value="dwarf">Enano</option><option value="halfling">Mediano</option>
-            <option value="dragonborn">Draconiano</option><option value="tiefling">Tiefling</option>
-            <option value="half-orc">Semiorco</option><option value="gnome">Gnomo</option>
-            <option value="aasimar">Aasimar</option><option value="tabaxi">Tabaxi</option>
-            <option value="firbolg">Firbolg</option><option value="kenku">Kenku</option>
-          </select>
-        </div>
-        <div class="ddb-form-field"><label>Clase</label>
-          <select id="ssClass">
-            <option value="fighter">Guerrero</option><option value="wizard">Mago</option>
-            <option value="rogue">Pícaro</option><option value="cleric">Clérigo</option>
-            <option value="ranger">Explorador</option><option value="paladin">Paladín</option>
-            <option value="barbarian">Bárbaro</option><option value="bard">Bardo</option>
-            <option value="druid">Druida</option><option value="monk">Monje</option>
-            <option value="sorcerer">Hechicero</option><option value="warlock">Brujo</option>
-          </select>
-        </div>
-        <div class="ddb-form-field"><label>Trasfondo</label>
-          <select id="ssBg">
-            <option value="acolyte">Acólito</option><option value="charlatan">Charlatán</option>
-            <option value="criminal">Criminal</option><option value="entertainer">Artista</option>
-            <option value="folk-hero">Héroe del Pueblo</option><option value="guild-artisan">Artesano Gremial</option>
-            <option value="hermit">Ermitaño</option><option value="noble">Noble</option>
-            <option value="outlander">Forastero</option><option value="sage">Sabio</option>
-            <option value="sailor">Marinero</option><option value="soldier">Soldado</option>
-            <option value="urchin">Golfo</option>
-          </select>
-        </div>
-        <div class="ddb-form-field"><label>Nivel</label><input id="ssLvl" type="number" min="1" max="20" value="1"></div>
-        <div class="ddb-form-field"><label>CA</label><input id="ssCa" type="number" min="1" max="30" value="10"></div>
-        <div class="ddb-form-field"><label>HP máximo</label><input id="ssHp" type="number" min="1" max="999" value="8"></div>
-      </div>
-      <div class="ddb-stats-6">
-        <div class="ddb-form-field"><label>FUE</label><input id="ssStr" type="number" min="1" max="30" value="10"></div>
-        <div class="ddb-form-field"><label>DES</label><input id="ssDex" type="number" min="1" max="30" value="10"></div>
-        <div class="ddb-form-field"><label>CON</label><input id="ssCon" type="number" min="1" max="30" value="10"></div>
-        <div class="ddb-form-field"><label>INT</label><input id="ssInt" type="number" min="1" max="30" value="10"></div>
-        <div class="ddb-form-field"><label>SAB</label><input id="ssWis" type="number" min="1" max="30" value="10"></div>
-        <div class="ddb-form-field"><label>CAR</label><input id="ssCha" type="number" min="1" max="30" value="10"></div>
-      </div>
-      <button class="ddb-create-btn" onclick="ddbCreateFromSS()">⚔️ Crear personaje con estos datos</button>
     </div>
     <!-- Preview pane (after successful URL import) -->
     <div class="ddb-pane" id="ddbPanePreview" style="display:none">
@@ -10205,70 +10175,17 @@ let _ddbPdfParsed=null;
 
 function openDdbImport(){
   document.getElementById('ddbOverlay').classList.add('open');
-  document.getElementById('ddbUrlIn').value='';
-  document.getElementById('ddbErr').classList.remove('show');
   document.getElementById('ddbPdfErr').classList.remove('show');
   document.getElementById('ddbPdfStatus').style.display='none';
   document.getElementById('ddbPdfIn').value='';
-  document.getElementById('ddbPdfPlaceholder').style.display='';
-  document.getElementById('ddbPdfParsedNotice').classList.remove('show');
-  document.getElementById('ddbSSHint').style.display='';
+  document.getElementById('ddbPdfPlaceholder').innerHTML='<div style="font-size:2rem;margin-bottom:6px">📄</div><div>Hacé clic o arrastrá el PDF aquí</div><div style="font-size:11px;opacity:.4;margin-top:4px">Archivo .pdf exportado desde DnD Beyond</div>';
+  document.getElementById('ddbPdfReview').style.display='none';
   document.getElementById('ddbPanePreview').style.display='none';
-  ddbSwitchTab('url');
   _ddbChar=null;
   _ddbPdfParsed=null;
 }
 function closeDdbImport(){document.getElementById('ddbOverlay').classList.remove('open');}
 
-function ddbSwitchTab(t){
-  const TABS={url:'Url',pdf:'Pdf',ss:'SS'};
-  Object.entries(TABS).forEach(([key,suffix])=>{
-    document.getElementById('ddbTab'+suffix)?.classList.toggle('active',key===t);
-    const pane=document.getElementById('ddbPane'+suffix);
-    if(pane)pane.style.display=key===t?'flex':'none';
-  });
-  document.getElementById('ddbPanePreview').style.display='none';
-}
-
-function ddbOnDrop(e){
-  e.preventDefault();
-  const f=e.dataTransfer.files[0];
-  if(f&&f.type.startsWith('image/'))_ddbLoadImage(f);
-}
-function ddbOnFile(e){const f=e.target.files[0];if(f)_ddbLoadImage(f);}
-function _ddbLoadImage(f){
-  const r=new FileReader();
-  r.onload=ev=>{
-    const img=document.getElementById('ddbSSImg');
-    img.src=ev.target.result;
-    img.style.display='block';
-    document.getElementById('ddbSSPlaceholder').style.display='none';
-  };
-  r.readAsDataURL(f);
-}
-
-async function ddbImportUrl(){
-  const raw=(document.getElementById('ddbUrlIn').value||'').trim();
-  if(!raw){_ddbShowErr('Pegá la URL del personaje de DnD Beyond.');return;}
-  const m=raw.match(/\/characters?\/(\d+)/i)||raw.match(/^(\d+)$/);
-  if(!m){_ddbShowErr('URL inválida. Ejemplo: https://www.dndbeyond.com/characters/12345678');return;}
-  const charId=m[1];
-  const btn=document.getElementById('ddbGoBtn');
-  btn.disabled=true;btn.textContent='Cargando…';
-  try{
-    const r=await fetch(`/api/import-dndbeyond?id=${charId}`);
-    const json=await r.json();
-    if(!r.ok||!json.success){_ddbShowErr(json.error||'Error al importar. Intentá de nuevo.');return;}
-    _ddbChar=json.character;
-    _ddbRenderPreview(json.character);
-  }catch(e){_ddbShowErr('Error de conexión. Revisá tu internet e intentá de nuevo.');}
-  finally{btn.disabled=false;btn.textContent='Importar';}
-}
-
-function _ddbShowErr(msg){
-  const el=document.getElementById('ddbErr');
-  el.textContent=msg;el.classList.add('show');
-}
 
 function _ddbRenderPreview(c){
   const STAT_LABELS={str:'FUE',dex:'DES',con:'CON',int:'INT',wis:'SAB',cha:'CAR'};
@@ -10293,7 +10210,6 @@ function _ddbRenderPreview(c){
     <div class="ddb-preview-stats">${statsHtml}</div>
     ${chips.map(ch=>`<div class="ddb-preview-chip">✓ ${ch}</div>`).join('')}
   `;
-  document.getElementById('ddbPaneUrl').style.display='none';
   document.getElementById('ddbPanePreview').style.display='flex';
 }
 
@@ -10371,9 +10287,7 @@ async function _ddbProcessPdf(file){
     if(parsed.inventory.length)noticeParts.push(`${parsed.inventory.length} objeto${parsed.inventory.length===1?'':'s'}`);
     if(parsed.charNotes)noticeParts.push('notas incluidas');
     noticeEl.textContent=noticeParts.join(' · ');
-    noticeEl.classList.add('show');
-    document.getElementById('ddbSSHint').style.display='none';
-    ddbSwitchTab('ss');
+    document.getElementById('ddbPdfReview').style.display='';
   }catch(e){
     statusEl.style.display='none';
     errEl.textContent='No se pudo leer el PDF. Asegurate de subir el PDF exportado desde DnD Beyond.';
