@@ -2232,7 +2232,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.8.25</span>
+    <span class="ver-badge">v2.8.26</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">26 May 2026</span>
   </div>
@@ -2750,7 +2750,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.8.25</span>
+          <span class="ver-badge">v2.8.26</span>
           <span>·</span>
           <span class="ver-date">26 May 2026</span>
         </div>
@@ -10283,6 +10283,7 @@ async function _ddbProcessPdf(file){
     statusEl.style.display='none';
     const noticeEl=document.getElementById('ddbPdfParsedNotice');
     const noticeParts=['✓ Datos extraídos del PDF'];
+    if(parsed.skillProfs?.length)noticeParts.push(`${parsed.skillProfs.length} skills`);
     if(parsed.knownSpells.length)noticeParts.push(`${parsed.knownSpells.length} hechizo${parsed.knownSpells.length===1?'':'s'}`);
     if(parsed.inventory.length)noticeParts.push(`${parsed.inventory.length} objeto${parsed.inventory.length===1?'':'s'}`);
     if(parsed.charNotes)noticeParts.push('notas incluidas');
@@ -10383,7 +10384,46 @@ function _parseDdbPdfFields(f, allAnns){
   const n2=get('AdditionalNotes2');if(n2&&n2!=='--')noteParts.push(n2);
   const charNotes=noteParts.join('\n\n');
 
-  return{name,charClass,level,race:raceRaw,bg:bgRaw,stats,ca,hp,inventory,knownSpells,charNotes};
+  // Skill proficiency extraction
+  // Method 1: WotC standard ChB* checkbox fields (value truthy = proficient)
+  // Method 2: back-calculate from total skill bonus vs ability modifier
+  const profBonus=level<=4?2:level<=8?3:level<=12?4:level<=16?5:6;
+  const abilMod=s=>Math.floor((stats[s]-10)/2);
+  const SKILL_PDF=[
+    {key:'athletics',stat:'str',pdf:'Athletics',chb:'ChBathletics'},
+    {key:'acrobatics',stat:'dex',pdf:'Acrobatics',chb:'ChBacrobatics'},
+    {key:'sleight',stat:'dex',pdf:'SleightofHand',chb:'ChBsleightofhand'},
+    {key:'stealth',stat:'dex',pdf:'Stealth',chb:'ChBstealth'},
+    {key:'arcana',stat:'int',pdf:'Arcana',chb:'ChBarcana'},
+    {key:'history',stat:'int',pdf:'History',chb:'ChBhistory'},
+    {key:'investigation',stat:'int',pdf:'Investigation',chb:'ChBinvestigation'},
+    {key:'nature',stat:'int',pdf:'Nature',chb:'ChBnature'},
+    {key:'religion',stat:'int',pdf:'Religion',chb:'ChBreligion'},
+    {key:'animal',stat:'wis',pdf:'AnimalHandling',chb:'ChBanimalhandling'},
+    {key:'insight',stat:'wis',pdf:'Insight',chb:'ChBinsight'},
+    {key:'medicine',stat:'wis',pdf:'Medicine',chb:'ChBmedicine'},
+    {key:'perception',stat:'wis',pdf:'Perception',chb:'ChBperception'},
+    {key:'survival',stat:'wis',pdf:'Survival',chb:'ChBsurvival'},
+    {key:'deception',stat:'cha',pdf:'Deception',chb:'ChBdeception'},
+    {key:'intimidation',stat:'cha',pdf:'Intimidation',chb:'ChBintimidation'},
+    {key:'performance',stat:'cha',pdf:'Performance',chb:'ChBperformance'},
+    {key:'persuasion',stat:'cha',pdf:'Persuasion',chb:'ChBpersuasion'},
+  ];
+  const skillProfs=[];
+  console.log('[DDB PDF] All field names:',Object.keys(f).sort().join(', '));
+  for(const sk of SKILL_PDF){
+    const chbVal=get(sk.chb);
+    if(chbVal&&chbVal!=='0'&&chbVal.toLowerCase()!=='off'&&chbVal.toLowerCase()!=='no'){
+      skillProfs.push(sk.key);continue;
+    }
+    const totalStr=get(sk.pdf);
+    if(totalStr){
+      const n=parseInt(totalStr.replace(/[^-\d]/g,''));
+      if(!isNaN(n)&&(n-abilMod(sk.stat))>=profBonus)skillProfs.push(sk.key);
+    }
+  }
+
+  return{name,charClass,level,race:raceRaw,bg:bgRaw,stats,ca,hp,skillProfs,inventory,knownSpells,charNotes};
 }
 
 function _parseDdbPdf(items){
