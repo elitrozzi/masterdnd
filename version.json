@@ -1,7 +1,12 @@
 {
-  "version": "2.8.26",
+  "version": "2.8.27",
   "date": "2026-05-26",
   "history": [
+    {
+      "version": "2.8.27",
+      "date": "2026-05-26",
+      "note": "Mis personajes: eliminar botones crear/importar, agregar trash button en card con modal de confirmacion"
+    },
     {
       "version": "2.8.26",
       "date": "2026-05-26",
