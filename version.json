@@ -1,7 +1,12 @@
 {
-  "version": "2.8.29",
+  "version": "2.8.30",
   "date": "2026-05-26",
   "history": [
+    {
+      "version": "2.8.30",
+      "date": "2026-05-26",
+      "note": "Fix skill proficiency: variantes de nombre con espacio (Animal Handling, Sleight of Hand) para lookup en PDF"
+    },
     {
       "version": "2.8.29",
       "date": "2026-05-26",
