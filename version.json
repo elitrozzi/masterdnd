@@ -1,7 +1,12 @@
 {
-  "version": "2.8.30",
+  "version": "2.8.31",
   "date": "2026-05-26",
   "history": [
+    {
+      "version": "2.8.31",
+      "date": "2026-05-26",
+      "note": "Fix secciones landing invisibles: scroll listener + IntersectionObserver threshold 0 + rootMargin + fallback setTimeout"
+    },
     {
       "version": "2.8.30",
       "date": "2026-05-26",
