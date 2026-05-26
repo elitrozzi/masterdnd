@@ -206,9 +206,10 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .land-section{position:relative;z-index:12;padding:150px 8vw;}
 .land-section-hero-spacer{height:100vh;pointer-events:none;}
 /* Scroll fade-in animation */
-.fiu{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease;}
-.fiu.vis{opacity:1;transform:none;}
-.fiu-d1{transition-delay:.08s;}.fiu-d2{transition-delay:.17s;}.fiu-d3{transition-delay:.26s;}.fiu-d4{transition-delay:.35s;}.fiu-d5{transition-delay:.44s;}
+@keyframes fiuFallback{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:none;}}
+.fiu{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease;animation:fiuFallback .65s ease-out 1.2s both;}
+.fiu.vis{opacity:1;transform:none;animation:none;}
+.fiu-d1{transition-delay:.08s;animation-delay:1.28s;}.fiu-d2{transition-delay:.17s;animation-delay:1.37s;}.fiu-d3{transition-delay:.26s;animation-delay:1.46s;}.fiu-d4{transition-delay:.35s;animation-delay:1.55s;}.fiu-d5{transition-delay:.44s;animation-delay:1.64s;}
 /* Section header */
 .ls-eyebrow{font-size:12px;letter-spacing:.4em;color:var(--gold);font-weight:700;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px;}
 .ls-eyebrow::before{content:'';display:inline-block;width:28px;height:1px;background:var(--gold);opacity:.5;}
@@ -2245,7 +2246,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.8.31</span>
+    <span class="ver-badge">v2.8.32</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">26 May 2026</span>
   </div>
@@ -2763,7 +2764,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.8.31</span>
+          <span class="ver-badge">v2.8.32</span>
           <span>·</span>
           <span class="ver-date">26 May 2026</span>
         </div>
