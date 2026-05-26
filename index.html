@@ -2232,9 +2232,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.8.23</span>
+    <span class="ver-badge">v2.8.24</span>
     <span class="ver-sep">·</span>
-    <span class="ver-date">23 May 2026</span>
+    <span class="ver-date">26 May 2026</span>
   </div>
   <div class="lang-toggle">
     <button class="lang-btn active" onclick="setLang('es')">ES</button>
@@ -2750,9 +2750,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.8.23</span>
+          <span class="ver-badge">v2.8.24</span>
           <span>·</span>
-          <span class="ver-date">23 May 2026</span>
+          <span class="ver-date">26 May 2026</span>
         </div>
       </div>
       <!-- RIGHT: scene -->
@@ -10336,23 +10336,32 @@ async function _ddbProcessPdf(file){
     await _ddbLoadPdfJs();
     const buf=await file.arrayBuffer();
     const pdf=await window.pdfjsLib.getDocument({data:buf}).promise;
-    const items=[];
-    for(let i=1;i<=pdf.numPages;i++){
-      const page=await pdf.getPage(i);
+
+    // DnD Beyond PDFs store all character data in AcroForm fields.
+    // We extract annotations (form fields) with their Y-positions for level-aware spell parsing.
+    const allAnns=[];
+    const fields={};
+    for(let pgNum=1;pgNum<=pdf.numPages;pgNum++){
+      const page=await pdf.getPage(pgNum);
       const vp=page.getViewport({scale:1});
-      const tc=await page.getTextContent();
-      for(const item of tc.items){
-        if(item.str&&item.str.trim()){
-          items.push({
-            str:item.str.trim(),
-            x:Math.round(item.transform[4]),
-            y:Math.round(vp.height-item.transform[5]),
-            page:i
-          });
-        }
+      let annotations=[];
+      try{annotations=await page.getAnnotations();}catch(e){}
+      for(const ann of annotations){
+        if(ann.subtype!=='Widget'||!ann.fieldName)continue;
+        const raw=ann.fieldValue;
+        const val=Array.isArray(raw)?raw[0]:raw;
+        const s=val!=null?String(val).trim():'';
+        const key=ann.fieldName.trim();
+        const yTop=ann.rect?vp.height-ann.rect[3]:0;
+        allAnns.push({page:pgNum,fieldName:key,fieldValue:s,y:yTop});
+        if(s)fields[key]=s;
       }
     }
-    const parsed=_parseDdbPdf(items);
+    allAnns.sort((a,b)=>a.page!==b.page?a.page-b.page:a.y-b.y);
+
+    const hasForm=!!(fields['CharacterName']||fields['MaxHP']||fields['AC']);
+    const parsed=hasForm?_parseDdbPdfFields(fields,allAnns):_parseDdbPdf(await _extractTextItems(pdf));
+
     _ddbPdfParsed=parsed;
     _fillSsFormFromPdf(parsed);
     statusEl.style.display='none';
@@ -10370,6 +10379,97 @@ async function _ddbProcessPdf(file){
     errEl.textContent='No se pudo leer el PDF. Asegurate de subir el PDF exportado desde DnD Beyond.';
     errEl.classList.add('show');
   }
+}
+
+async function _extractTextItems(pdf){
+  const items=[];
+  for(let i=1;i<=pdf.numPages;i++){
+    const page=await pdf.getPage(i);
+    const vp=page.getViewport({scale:1});
+    const tc=await page.getTextContent();
+    for(const item of tc.items){
+      if(item.str&&item.str.trim())items.push({str:item.str.trim(),x:Math.round(item.transform[4]),y:Math.round(vp.height-item.transform[5]),page:i});
+    }
+  }
+  return items;
+}
+
+function _parseDdbPdfFields(f, allAnns){
+  // Flexible field lookup: tries exact key, trimmed, and case-insensitive normalized
+  const fnorm={};
+  for(const [k,v] of Object.entries(f))fnorm[k.trim().replace(/\s+/g,' ').toLowerCase()]=v;
+  const get=(...keys)=>{
+    for(const k of keys){
+      const v=f[k]||f[k.trim()]||fnorm[k.trim().replace(/\s+/g,' ').toLowerCase()];
+      if(v&&String(v).trim())return String(v).trim();
+    }
+    return'';
+  };
+
+  const name=get('CharacterName');
+  const classLevel=get('CLASS  LEVEL','CLASS & LEVEL','Class & Level');
+  const clm=classLevel.match(/^(.+?)\s+(\d+)\s*$/);
+  const charClass=clm?clm[1].trim():'';
+  const level=clm?parseInt(clm[2]):1;
+  const raceRaw=get('RACE','Race');
+  const bgRaw=get('BACKGROUND','Background');
+
+  const stats={
+    str:parseInt(get('STR'))||10,
+    dex:parseInt(get('DEX'))||10,
+    con:parseInt(get('CON'))||10,
+    int:parseInt(get('INT'))||10,
+    wis:parseInt(get('WIS'))||10,
+    cha:parseInt(get('CHA'))||10,
+  };
+  const ca=parseInt(get('AC'))||10;
+  const hp=parseInt(get('MaxHP'))||0;
+
+  // Inventory from Eq Name0..Eq Name29
+  const inventory=[];
+  for(let i=0;i<30;i++){
+    const raw=get(`Eq Name${i}`);
+    if(!raw||raw==='--')continue;
+    const qty=parseInt(get(`Eq Qty${i}`))||1;
+    const name=_PDF_ITEM_ES[raw]||raw;
+    inventory.push({id:`pdf_item_${Date.now()}_${i}`,name,qty,weight:0,type:'misc',equipped:false});
+  }
+
+  // Spells — use Y-sorted annotations to correlate spellHeader (level markers) with spellName rows
+  const knownSpells=[];const seen=new Set();let currentLevel=-1;
+  const LEVEL_RE=[
+    {re:/CANTRIP/i,level:0},{re:/1\s*ST/i,level:1},{re:/2\s*ND/i,level:2},
+    {re:/3\s*RD/i,level:3},{re:/4\s*TH/i,level:4},{re:/5\s*TH/i,level:5},
+    {re:/6\s*TH/i,level:6},{re:/7\s*TH/i,level:7},{re:/8\s*TH/i,level:8},{re:/9\s*TH/i,level:9},
+  ];
+  for(const ann of allAnns){
+    const fn=ann.fieldName,fv=ann.fieldValue;
+    if(!fv)continue;
+    if(/^spellHeader\d/i.test(fn)){
+      for(const h of LEVEL_RE){if(h.re.test(fv)){currentLevel=h.level;break;}}
+      continue;
+    }
+    if(/^spellName\d/i.test(fn)&&currentLevel>=0){
+      const key=fv.toLowerCase();
+      if(!seen.has(key)){
+        seen.add(key);
+        knownSpells.push({id:`pdf_sp_${Date.now()}_${knownSpells.length}`,name:_PDF_SPELL_ES[fv]||fv,level:currentLevel});
+      }
+    }
+  }
+
+  // Notes
+  const noteParts=[];
+  const addNote=(label,...keys)=>{const v=get(...keys);if(v&&v!=='--')noteParts.push(`${label}:\n${v}`);};
+  addNote('Rasgos de personalidad','PersonalityTraits ','PersonalityTraits');
+  addNote('Ideales','Ideals');
+  addNote('Vínculos','Bonds');
+  addNote('Defectos','Flaws');
+  addNote('Notas adicionales','AdditionalNotes1');
+  const n2=get('AdditionalNotes2');if(n2&&n2!=='--')noteParts.push(n2);
+  const charNotes=noteParts.join('\n\n');
+
+  return{name,charClass,level,race:raceRaw,bg:bgRaw,stats,ca,hp,inventory,knownSpells,charNotes};
 }
 
 function _parseDdbPdf(items){

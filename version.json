@@ -1,7 +1,12 @@
 {
-  "version": "2.8.23",
-  "date": "2026-05-23",
+  "version": "2.8.24",
+  "date": "2026-05-26",
   "history": [
+    {
+      "version": "2.8.24",
+      "date": "2026-05-26",
+      "note": "Fix importar PDF DnD Beyond: usar AcroForm (getAnnotations) en lugar de getTextContent para leer campos reales del personaje"
+    },
     {
       "version": "2.8.23",
       "date": "2026-05-23",
