@@ -1,7 +1,12 @@
 {
-  "version": "2.8.27",
+  "version": "2.8.28",
   "date": "2026-05-26",
   "history": [
+    {
+      "version": "2.8.28",
+      "date": "2026-05-26",
+      "note": "Crear personaje: tres cards identicas en grid 3 columnas (Manual, Aleatorio, Desde DnD Beyond)"
+    },
     {
       "version": "2.8.27",
       "date": "2026-05-26",

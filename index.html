@@ -760,10 +760,10 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 /* ── Mode panel ── */
 .cs-mode-bg{position:absolute;inset:0;z-index:0;background:linear-gradient(160deg,#09070f 0%,#141025 50%,#0d0b1a 100%);}
 .cs-mode-bg::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(89,80,130,.25) 0%,transparent 65%);}
-.cs-mode-content{position:relative;z-index:1;text-align:center;max-width:520px;padding:0 24px;width:100%;}
+.cs-mode-content{position:relative;z-index:1;text-align:center;max-width:760px;padding:0 24px;width:100%;}
 .cs-mode-title{font-family:'Cinzel',serif;font-size:34px;font-weight:900;color:var(--gold);letter-spacing:.1em;margin-bottom:8px;text-shadow:0 0 40px rgba(248,198,98,.4);}
 .cs-mode-sub{font-size:13px;color:var(--text-m);margin-bottom:40px;letter-spacing:.06em;}
-.cs-mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.cs-mode-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;}
 .cs-mode-card{background:rgba(89,80,130,.07);border:1px solid rgba(89,80,130,.2);border-radius:14px;padding:32px 24px;cursor:none;transition:.2s;text-align:center;}
 .cs-mode-card:hover{background:rgba(89,80,130,.14);border-color:var(--brand-500);transform:translateY(-3px);}
 .cs-mode-card.selected{border-color:var(--gold);background:rgba(248,198,98,.07);}
@@ -2245,7 +2245,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.8.27</span>
+    <span class="ver-badge">v2.8.28</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">26 May 2026</span>
   </div>
@@ -2763,7 +2763,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.8.27</span>
+          <span class="ver-badge">v2.8.28</span>
           <span>·</span>
           <span class="ver-date">26 May 2026</span>
         </div>
@@ -2889,19 +2889,12 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
             <div class="cs-mode-name" data-es="Aleatorio" data-en="Random">Aleatorio</div>
             <div class="cs-mode-desc" data-es="Los dados deciden tu destino." data-en="The dice decide your fate.">Los dados deciden tu destino.</div>
           </div>
-        </div>
-        <div style="margin-top:18px;display:flex;align-items:center;gap:10px;max-width:340px;width:100%;">
-          <div style="flex:1;height:1px;background:rgba(255,255,255,.12);"></div>
-          <span style="color:var(--text-m);font-size:11px;letter-spacing:.08em;">o</span>
-          <div style="flex:1;height:1px;background:rgba(255,255,255,.12);"></div>
-        </div>
-        <button class="cs-mode-card" style="margin-top:10px;max-width:340px;width:100%;display:flex;align-items:center;gap:14px;padding:18px 22px;text-align:left;" onclick="openDdbImport()">
-          <div style="font-size:1.6rem;flex-shrink:0;">⚔️</div>
-          <div>
-            <div class="cs-mode-name" style="font-size:14px;" data-es="Desde D&D Beyond" data-en="From D&D Beyond">Desde D&amp;D Beyond</div>
-            <div class="cs-mode-desc" style="font-size:12px;" data-es="Importá un personaje existente." data-en="Import an existing character.">Importá un personaje existente.</div>
+          <div class="cs-mode-card" id="modeDdb" onclick="openDdbImport()">
+            <div class="cs-mode-icon">⚔️</div>
+            <div class="cs-mode-name" data-es="Desde D&amp;D Beyond" data-en="From D&amp;D Beyond">Desde D&amp;D Beyond</div>
+            <div class="cs-mode-desc" data-es="Importá un personaje existente." data-en="Import an existing character.">Importá un personaje existente.</div>
           </div>
-        </button>
+        </div>
       </div>
     </div>
 
