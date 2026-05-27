@@ -188,7 +188,8 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .feat-card-title{font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--gold);margin-bottom:7px;}
 .feat-card-desc{font-size:13px;color:var(--text-m);line-height:1.65;}
 .hook-intro-cats{display:flex;flex-wrap:wrap;gap:7px;}
-.hook-intro-cat{padding:4px 13px;border-radius:20px;font-size:12px;font-weight:600;letter-spacing:.14em;border:1px solid rgba(255,255,255,.18);color:var(--text);text-transform:uppercase;background:rgba(0,0,0,.45);backdrop-filter:blur(6px);}
+.hook-intro-cat{padding:4px 13px;border-radius:20px;font-size:12px;font-weight:600;letter-spacing:.14em;border:1px solid rgba(255,255,255,.18);color:var(--text);text-transform:uppercase;background:rgba(0,0,0,.45);backdrop-filter:blur(6px);cursor:pointer;transition:border-color .15s,background .15s;}
+.hook-intro-cat:hover{border-color:var(--gold);background:rgba(248,198,98,.1);}
 .hook-card{background:rgba(9,7,18,.94);border:1px solid rgba(248,198,98,.22);border-radius:12px;padding:36px 38px;width:100%;max-width:520px;backdrop-filter:blur(20px);box-shadow:0 0 80px rgba(248,198,98,.07),0 24px 64px rgba(0,0,0,.8);text-align:center;position:relative;overflow:hidden;}
 .hook-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(248,198,98,.07) 0%,transparent 65%);pointer-events:none;}
 .hook-cat{display:inline-flex;align-items:center;gap:6px;padding:4px 14px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;border:1px solid;margin-bottom:20px;transition:background .2s ease-out,border-color .2s ease-out,color .2s ease-out;}
@@ -2246,9 +2247,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.8.32</span>
+    <span class="ver-badge">v2.8.33</span>
     <span class="ver-sep">·</span>
-    <span class="ver-date">26 May 2026</span>
+    <span class="ver-date">27 May 2026</span>
   </div>
   <div class="lang-toggle">
     <button class="lang-btn active" onclick="setLang('es')">ES</button>
@@ -2602,7 +2603,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <section class="land-section ls-features">
     <div class="ls-feat-header">
       <div class="ls-eyebrow fiu">01 — HERRAMIENTAS</div>
-      <div class="ls-title fiu fiu-d1">Todo en <span class="ls-title-em">una sola</span> pantalla</div>
+      <div class="ls-title fiu fiu-d1">Todo en <span class="ls-title-em">un sólo</span> lugar</div>
       <p class="ls-sub fiu fiu-d2" style="margin:0 auto;">Sin hojas de cálculo. Sin múltiples apps. Fichas, combate, mapas y más — listo para tu próxima sesión.</p>
     </div>
     <div class="ls-feat-grid">
@@ -2652,7 +2653,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <div class="ls-camp-badge fiu">✨ NUEVO — MODO CAMPAÑA</div>
         <div class="ls-camp-title fiu fiu-d1">Jugá con<br>tu grupo.<br><span class="ls-camp-em">Real.</span></div>
         <p class="ls-camp-desc fiu fiu-d2">Creá o unite a una campaña con un código único. El DM tiene control total — los jugadores ven su ficha, el mapa y las notas compartidas en tiempo real.</p>
-        <button class="ls-camp-cta fiu fiu-d3" onclick="goTo('campaign')">⚔️ Explorar Modo Campaña</button>
+        <button class="ls-camp-cta fiu fiu-d3" onclick="goToCampaign()">⚔️ Explorar Modo Campaña</button>
       </div>
       <div class="ls-camp-right">
         <div class="ls-camp-feat fiu fiu-d1">
@@ -2697,12 +2698,13 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <div class="ls-camp-title fiu fiu-d1" style="font-size:clamp(26px,3.5vw,44px);">Genera tu<br><span class="ls-camp-em">próxima aventura</span></div>
         <p class="ls-camp-desc fiu fiu-d2">42 hooks únicos en 6 categorías — desde mazmorras oscuras hasta intrigas políticas. Cada sesión empieza con una historia.</p>
         <div class="hook-intro-cats fiu fiu-d3">
-          <span class="hook-intro-cat">🗡️ Mazmorra</span>
-          <span class="hook-intro-cat">🌲 Naturaleza</span>
-          <span class="hook-intro-cat">🏰 Ciudad</span>
-          <span class="hook-intro-cat">🐉 Dragón</span>
-          <span class="hook-intro-cat">🔮 Magia</span>
-          <span class="hook-intro-cat">⚔️ Intriga</span>
+          <span class="hook-intro-cat" onclick="rollHookByCat('Mazmorra')">🗡️ Mazmorra</span>
+          <span class="hook-intro-cat" onclick="rollHookByCat('Naturaleza')">🌲 Naturaleza</span>
+          <span class="hook-intro-cat" onclick="rollHookByCat('Ciudad')">🏙️ Ciudad</span>
+          <span class="hook-intro-cat" onclick="rollHookByCat('Dragón')">🐉 Dragón</span>
+          <span class="hook-intro-cat" onclick="rollHookByCat('Horror')">💀 Horror</span>
+          <span class="hook-intro-cat" onclick="rollHookByCat('Misterio')">🔍 Misterio</span>
+          <span class="hook-intro-cat" onclick="rollHookByCat('Político')">🏛️ Político</span>
         </div>
       </div>
       <div class="ls-hook-right fiu fiu-d2">
@@ -2764,9 +2766,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.8.32</span>
+          <span class="ver-badge">v2.8.33</span>
           <span>·</span>
-          <span class="ver-date">26 May 2026</span>
+          <span class="ver-date">27 May 2026</span>
         </div>
       </div>
       <!-- RIGHT: scene -->
@@ -9694,6 +9696,27 @@ function rollHook(animate=true){
   }
 }
 
+function rollHookByCat(cat){
+  const pool=HOOKS.filter(h=>h.cat===cat);
+  if(!pool.length)return;
+  let h;
+  do{h=pool[Math.floor(Math.random()*pool.length)];}while(h===_currentHook&&pool.length>1);
+  _currentHook=h;
+  const textEl=document.getElementById('hookText');
+  const catEl=document.getElementById('hookCat');
+  const iconEl=document.getElementById('hookIcon');
+  const catNameEl=document.getElementById('hookCatName');
+  if(!textEl)return;
+  textEl.classList.add('fading');
+  setTimeout(()=>{
+    textEl.textContent=currentLang==='es'?h.es:h.en;
+    catNameEl.textContent=currentLang==='es'?h.cat:h.catEn;
+    iconEl.textContent=h.icon;
+    catEl.style.color=h.color;catEl.style.borderColor=h.color;
+    textEl.classList.remove('fading');
+  },300);
+}
+
 /* ══ MOBILE MENU ══ */
 function openMobileMenu(){
   document.getElementById('mobileMenu').classList.add('open');
@@ -9711,6 +9734,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   setLang('es');
   updateCharsNavDropdown();
   renderSounds('all');
+  rollHook(false);
   const landNav=document.querySelector('.land-nav');
   if(landNav){
     window.addEventListener('scroll',()=>landNav.classList.toggle('scrolled',window.scrollY>40),{passive:true});
