@@ -1,7 +1,12 @@
 {
-  "version": "2.8.33",
-  "date": "2026-05-27",
+  "version": "2.8.34",
+  "date": "2026-05-31",
   "history": [
+    {
+      "version": "2.8.34",
+      "date": "2026-05-31",
+      "note": "Fix nav \"Crear personaje\": SRI hash desactualizado de Supabase CDN bloqueaba el script y dejaba _suppressSavedChars en TDZ — pin a @2.106.2 sin integrity, var en lugar de let"
+    },
     {
       "version": "2.8.33",
       "date": "2026-05-27",

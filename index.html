@@ -18,7 +18,7 @@
 <meta name="twitter:description" content="Ficha de personaje, combate en tiempo real, grimorio con 600+ monstruos y modo campaña. Gratis y en español."/>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230e0c1e'/%3E%3Cpolygon points='16,3 29,10.5 29,21.5 16,29 3,21.5 3,10.5' fill='none' stroke='%23d4a843' stroke-width='1.5'/%3E%3Cpolygon points='16,3 29,10.5 16,16' fill='%23d4a843' opacity='.18'/%3E%3Cpolygon points='16,3 3,10.5 16,16' fill='%23d4a843' opacity='.10'/%3E%3Cpolygon points='16,16 29,10.5 29,21.5' fill='%23d4a843' opacity='.13'/%3E%3Cpolygon points='16,16 3,10.5 3,21.5' fill='%23d4a843' opacity='.08'/%3E%3Cpolygon points='16,16 29,21.5 16,29' fill='%23d4a843' opacity='.15'/%3E%3Cpolygon points='16,16 3,21.5 16,29' fill='%23d4a843' opacity='.11'/%3E%3Cline x1='16' y1='3' x2='16' y2='16' stroke='%23d4a843' stroke-width='1' opacity='.5'/%3E%3Cline x1='29' y1='10.5' x2='16' y2='16' stroke='%23d4a843' stroke-width='1' opacity='.5'/%3E%3Cline x1='3' y1='10.5' x2='16' y2='16' stroke='%23d4a843' stroke-width='1' opacity='.5'/%3E%3Cline x1='29' y1='21.5' x2='16' y2='16' stroke='%23d4a843' stroke-width='1' opacity='.5'/%3E%3Cline x1='3' y1='21.5' x2='16' y2='16' stroke='%23d4a843' stroke-width='1' opacity='.5'/%3E%3Cline x1='16' y1='29' x2='16' y2='16' stroke='%23d4a843' stroke-width='1' opacity='.5'/%3E%3C/svg%3E"/>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" integrity="sha384-zfshMiFERdyezN/WZXzHe9g53pOZCrLPBj/qC0ohHnxQ20c3zXwFqbtRAwvZMacA" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.106.2/dist/umd/supabase.min.js" crossorigin="anonymous"></script>
 <style>
 /* ── VARIABLES ── */
 :root {
@@ -2247,9 +2247,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.8.33</span>
+    <span class="ver-badge">v2.8.34</span>
     <span class="ver-sep">·</span>
-    <span class="ver-date">27 May 2026</span>
+    <span class="ver-date">31 May 2026</span>
   </div>
   <div class="lang-toggle">
     <button class="lang-btn active" onclick="setLang('es')">ES</button>
@@ -2766,9 +2766,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.8.33</span>
+          <span class="ver-badge">v2.8.34</span>
           <span>·</span>
-          <span class="ver-date">27 May 2026</span>
+          <span class="ver-date">31 May 2026</span>
         </div>
       </div>
       <!-- RIGHT: scene -->
@@ -7438,7 +7438,7 @@ function loadTemplate(type){
 function toggleNavDropdown(id,e){e.stopPropagation();const el=document.getElementById(id);const isOpen=el.classList.contains('open');closeNavDropdowns();if(!isOpen)el.classList.add('open');}
 function closeNavDropdowns(){document.querySelectorAll('.nav-dropdown.open').forEach(d=>d.classList.remove('open'));}
 document.addEventListener('click',closeNavDropdowns);
-let _suppressSavedChars=true;
+var _suppressSavedChars=true;
 function goToMyChars(){
   const chars=_loadSavedChars();
   if(chars.length===0){goToCreateChar();return;}
