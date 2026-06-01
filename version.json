@@ -1,7 +1,12 @@
 {
-  "version": "2.8.34",
-  "date": "2026-05-31",
+  "version": "2.8.35",
+  "date": "2026-06-01",
   "history": [
+    {
+      "version": "2.8.35",
+      "date": "2026-06-01",
+      "note": "GitHub Actions cron semanal para mantener Supabase activo (ping /auth/v1/health cada lunes)"
+    },
     {
       "version": "2.8.34",
       "date": "2026-05-31",
