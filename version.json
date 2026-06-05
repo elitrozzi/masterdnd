@@ -1,7 +1,12 @@
 {
-  "version": "2.8.37",
+  "version": "2.8.38",
   "date": "2026-06-05",
   "history": [
+    {
+      "version": "2.8.38",
+      "date": "2026-06-05",
+      "note": "Ficha UX media: header con zonas claras (identidad | acciones), condiciones en combat bar, panel Competencias en col 1 (armaduras/armas/herramientas/idiomas)"
+    },
     {
       "version": "2.8.37",
       "date": "2026-06-05",

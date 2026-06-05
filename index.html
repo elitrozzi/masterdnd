@@ -396,7 +396,7 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .cs-dbd-portrait-img{width:100%;height:100%;background-repeat:no-repeat;background-size:300% 400%;}
 .cs-portrait-overlay{position:absolute;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;font-size:20px;border-radius:50%;}
 .cs-dbd-portrait:hover .cs-portrait-overlay{display:flex;}
-.cs-dbd-identity{flex:1;min-width:140px;}
+.cs-dbd-identity{flex:1;min-width:140px;padding-left:4px;}
 .cs-dbd-name-input{font-family:'Cinzel',serif;font-size:20px;font-weight:700;color:var(--lol-gold-bright);background:transparent;border:none;border-bottom:1px solid rgba(200,170,110,.3);width:100%;padding:3px 0;outline:none;letter-spacing:.05em;}
 .cs-dbd-name-input:focus{border-bottom-color:var(--lol-gold);}
 .cs-dbd-name-input::placeholder{color:rgba(200,170,110,.2);}
@@ -417,7 +417,7 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .cs-dbd-hp-input::-webkit-inner-spin-button,.cs-dbd-hp-input::-webkit-outer-spin-button{-webkit-appearance:none;}
 .cs-dbd-hp-input:focus{border-color:var(--lol-gold);}
 /* Action buttons */
-.cs-dbd-actions{display:flex;flex-shrink:0;}
+.cs-dbd-actions{display:flex;flex-shrink:0;margin-left:auto;align-items:center;padding-left:16px;border-left:1px solid rgba(120,90,40,.25);}
 .cs-dbd-action-row{display:flex;gap:6px;flex-wrap:wrap;}
 .cs-dbd-btn{padding:7px 13px;font-size:14px;font-weight:700;cursor:pointer;border:1px solid transparent;transition:background .15s ease-out,border-color .15s ease-out,color .15s ease-out,transform .15s ease-out,opacity .15s ease-out;font-family:'Cinzel',serif;white-space:nowrap;letter-spacing:.06em;text-transform:uppercase;}
 .cs-dbd-btn-save{background:rgba(200,170,110,.12);border-color:var(--lol-border);color:var(--lol-gold);}
@@ -483,6 +483,11 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .cs-speed-pill{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:60px;padding:8px 10px;background:rgba(200,170,110,.04);border:1px solid rgba(120,90,40,.35);border-radius:8px;gap:2px;}
 .cs-speed-val{font:700 18px/1 'Cinzel',serif;color:var(--lol-gold-bright);}
 .cs-speed-lbl{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(200,170,110,.45);}
+/* Proficiencies panel */
+.cs-prof-list{display:flex;flex-direction:column;gap:7px;}
+.cs-prof-row{display:flex;flex-direction:column;gap:2px;}
+.cs-prof-cat{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--lol-gold);margin-bottom:1px;}
+.cs-prof-val{font-size:12px;color:var(--lol-gray);line-height:1.4;}
 /* ── Content 3 cols ── */
 .cs-dbd-content{display:flex;flex:1;gap:12px;min-height:220px;}
 .cs-dbd-col-saves{flex:0 0 19%;min-width:160px;display:flex;flex-direction:column;gap:12px;overflow-y:auto;}
@@ -657,7 +662,11 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .sheet-hp-input::-webkit-inner-spin-button,.sheet-hp-input::-webkit-outer-spin-button{-webkit-appearance:none;}
 /* ── Bottom row: Conditions + Extra panel ── */
 .cs-bottom-row{display:flex;gap:12px;flex:1;min-height:0;}
-.cs-conditions{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden;}
+/* Conditions inline in combat bar */
+.cs-cond-inline{display:flex;flex-direction:column;gap:5px;min-width:120px;max-width:200px;flex-shrink:0;}
+.cs-cond-inline-header{display:flex;align-items:center;justify-content:space-between;gap:6px;}
+.cs-cond-inline-lbl{font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(200,170,110,.5);}
+.cs-cond-grid-inline{display:flex;flex-wrap:wrap;gap:4px;}
 /* ── Extra tabbed panel ── */
 .cs-extra-panel{flex:1;display:flex;flex-direction:column;min-width:0;}
 .cs-tabs{display:flex;gap:0;border-bottom:1px solid rgba(120,90,40,.35);margin-bottom:10px;flex-shrink:0;}
@@ -2291,7 +2300,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.8.37</span>
+    <span class="ver-badge">v2.8.38</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">05 Jun 2026</span>
   </div>
@@ -2810,7 +2819,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.8.37</span>
+          <span class="ver-badge">v2.8.38</span>
           <span>·</span>
           <span class="ver-date">05 Jun 2026</span>
         </div>
@@ -3140,6 +3149,15 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
                       </div>
                     </div>
                   </div>
+                  <div class="cs-combat-bar-sep"></div>
+                  <!-- Condiciones inline -->
+                  <div class="cs-cond-inline">
+                    <div class="cs-cond-inline-header">
+                      <span class="cs-cond-inline-lbl">Condiciones</span>
+                      <span class="cs-cond-count" id="csCondCount">ninguna</span>
+                    </div>
+                    <div class="cs-cond-grid cs-cond-grid-inline" id="csCondGrid"></div>
+                  </div>
                 </div>
                 <!-- Contenido 3 columnas -->
                 <div class="cs-dbd-content">
@@ -3165,6 +3183,10 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
                       <div class="cs-race-bonuses" id="csBgSkills"></div>
                       <div class="cs-race-traits" id="csBgFeature"></div>
                     </div>
+                    <div class="cs-dbd-col-panel" id="csProfPanel">
+                      <div class="cs-dbd-section-title">Competencias</div>
+                      <div id="csProfList" class="cs-prof-list"></div>
+                    </div>
                   </div>
                   <!-- Col 2: Habilidades -->
                   <div class="cs-dbd-col-skills">
@@ -3173,16 +3195,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
                       <div id="csSkillList"></div>
                     </div>
                   </div>
-                  <!-- Col 3: Condiciones + Extra panel + Dados -->
+                  <!-- Col 3: Extra panel + Dados -->
                   <div class="cs-dbd-col-main">
                     <div class="cs-bottom-row">
-                      <div class="cs-dbd-col-panel cs-conditions" id="csConditions">
-                        <div class="cs-cond-header">
-                          <span class="cs-cond-label" data-es="Condiciones" data-en="Conditions">Condiciones</span>
-                          <span class="cs-cond-count" id="csCondCount">ninguna</span>
-                        </div>
-                        <div class="cs-cond-grid" id="csCondGrid"></div>
-                      </div>
                       <!-- Extra tabbed panel -->
                       <div class="cs-dbd-col-panel cs-extra-panel" id="csExtraPanel">
                         <div class="cs-tabs">
@@ -5632,8 +5647,20 @@ function buildSheet(){
   _renderSkillsList();
   _renderPassives();
   _renderSkillPanel();
+  _renderProficiencies(ck,rk);
   _activeConditions=new Set();
   _renderConditions();
+}
+function _renderProficiencies(cls,race){
+  const el=document.getElementById('csProfList');if(!el)return;
+  const p=CLASS_PROFS[cls]||{armor:'—',weapons:'—',tools:'—'};
+  const lang=RACE_LANGS[race]||'Común';
+  el.innerHTML=[
+    {cat:'Armaduras',val:p.armor},
+    {cat:'Armas',val:p.weapons},
+    {cat:'Herramientas',val:p.tools},
+    {cat:'Idiomas',val:lang},
+  ].map(r=>`<div class="cs-prof-row"><div class="cs-prof-cat">${r.cat}</div><div class="cs-prof-val">${r.val}</div></div>`).join('');
 }
 function _renderBgSection(bk){
   const panel=document.getElementById('csBgPanel');
@@ -5812,6 +5839,9 @@ function loadChar(id,fromPop){
   _charNotes=c.charNotes||'';
   _renderInventory();
   _renderCombatActions(c.class||'fighter');
+  _renderProficiencies(c.class||'fighter',c.race||'human');
+  _renderBgSection(c.background||'');
+  _renderSavingThrows();_renderSkillsList();_renderPassives();_renderSkillPanel();
   // Restore portrait
   const avatarEl2=document.getElementById('csAvatar');
   if(avatarEl2){
@@ -7060,6 +7090,25 @@ function selectCarouselRace(raceKey){
 
 /* ── Class carousel ── */
 const CLASS_KEYS=Object.keys(CLASS_SPRITE);
+const CLASS_PROFS={
+  fighter:{armor:'Todas las armaduras, escudos',weapons:'Armas simples, armas marciales',tools:'—'},
+  wizard:{armor:'—',weapons:'Dagas, dardos, hondas, bastones, ballestas de mano',tools:'—'},
+  rogue:{armor:'Armadura ligera',weapons:'Armas simples, ballestas de mano, espadas largas, espadas cortas, estoque',tools:'Herramientas de ladrón'},
+  cleric:{armor:'Armadura ligera, media, escudos',weapons:'Armas simples',tools:'—'},
+  ranger:{armor:'Armadura ligera, media, escudos',weapons:'Armas simples, armas marciales',tools:'—'},
+  paladin:{armor:'Todas las armaduras, escudos',weapons:'Armas simples, armas marciales',tools:'—'},
+  barbarian:{armor:'Armadura ligera, media, escudos',weapons:'Armas simples, armas marciales',tools:'—'},
+  bard:{armor:'Armadura ligera',weapons:'Armas simples, ballestas de mano, espadas largas, rapieras, espadas cortas',tools:'3 instrumentos musicales'},
+  druid:{armor:'Armadura ligera, media, escudos (sin metal)',weapons:'Bastones, dagas, dardos, jabalinas, mazas, lanzas, hoces, hondas',tools:'—'},
+  monk:{armor:'—',weapons:'Armas simples, espadas cortas',tools:'1 tipo de herramienta artesanal o instrumento musical'},
+  sorcerer:{armor:'—',weapons:'Dagas, dardos, hondas, bastones, ballestas de mano',tools:'—'},
+  warlock:{armor:'Armadura ligera',weapons:'Armas simples',tools:'—'},
+};
+const RACE_LANGS={
+  human:'Común + 1 idioma extra',elf:'Común, Élfico',dwarf:'Común, Enano',halfling:'Común, Mediano',
+  dragonborn:'Común, Dracónico',tiefling:'Común, Infernal',halforc:'Común, Orco',gnome:'Común, Gnomo',
+  aasimar:'Común, Celestial',tabaxi:'Común, Élfico',firbolg:'Élfico, Gigante, Común',kenku:'Común + 2 idiomas'
+};
 const CLASS_DATA={
   fighter:{color:'#c8a060',nameEs:'GUERRERO',nameEn:'FIGHTER',tagEs:'Maestro del combate y las armas',tagEn:'Master of combat and weapons',role:['Combate','Armas','Armadura']},
   wizard:{color:'#6080c8',nameEs:'MAGO',nameEn:'WIZARD',tagEs:'Domina el poder arcano',tagEn:'Commands arcane power',role:['Magia','Conocimiento','Hechizos']},
