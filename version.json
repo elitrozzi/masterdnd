@@ -1,7 +1,12 @@
 {
-  "version": "2.8.41",
+  "version": "2.8.42",
   "date": "2026-06-05",
   "history": [
+    {
+      "version": "2.8.42",
+      "date": "2026-06-05",
+      "note": "Fix crítico ficha: condiciones movidas al col 3 (no en combat bar), combat bar align-items:center — evita que las 14 condiciones inflen el alto de toda la barra"
+    },
     {
       "version": "2.8.41",
       "date": "2026-06-05",

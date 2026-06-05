@@ -432,7 +432,7 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .cs-dbd-stat-val{font-size:16px;color:rgba(169,180,194,.6);font-weight:600;font-family:'Cinzel',serif;}
 .cs-dbd-combat-sep{display:none;}
 /* ── Combat bar ── */
-.cs-combat-bar{display:flex;align-items:stretch;gap:10px;background:var(--lol-panel2);border:1px solid rgba(120,90,40,.45);border-radius:8px;padding:12px 16px;flex-shrink:0;flex-wrap:wrap;}
+.cs-combat-bar{display:flex;align-items:center;gap:10px;background:var(--lol-panel2);border:1px solid rgba(120,90,40,.45);border-radius:8px;padding:12px 16px;flex-shrink:0;flex-wrap:wrap;}
 .cs-combat-pills{display:flex;gap:8px;align-items:center;flex-shrink:0;}
 .cs-combat-pill{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:72px;padding:8px 12px;background:rgba(11,196,227,.05);border:1px solid rgba(11,196,227,.22);border-radius:8px;gap:2px;}
 .cs-combat-pill-val{font:700 22px/1 'Cinzel',serif;color:var(--lol-teal);}
@@ -662,11 +662,9 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .sheet-hp-input::-webkit-inner-spin-button,.sheet-hp-input::-webkit-outer-spin-button{-webkit-appearance:none;}
 /* ── Bottom row: Conditions + Extra panel ── */
 .cs-bottom-row{display:flex;gap:12px;flex:1;min-height:0;}
-/* Conditions inline in combat bar */
-.cs-cond-inline{display:flex;flex-direction:column;gap:5px;min-width:120px;max-width:200px;flex-shrink:0;}
-.cs-cond-inline-header{display:flex;align-items:center;justify-content:space-between;gap:6px;}
-.cs-cond-inline-lbl{font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(200,170,110,.5);}
-.cs-cond-grid-inline{display:flex;flex-wrap:wrap;gap:4px;}
+/* Conditions panel in col 3 */
+.cs-conditions-panel{flex-shrink:0;}
+.cs-cond-panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
 /* ── Extra tabbed panel ── */
 .cs-extra-panel{flex:1;display:flex;flex-direction:column;min-width:0;}
 .cs-tabs{display:flex;gap:0;border-bottom:1px solid rgba(120,90,40,.35);margin-bottom:10px;flex-shrink:0;}
@@ -2298,7 +2296,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.8.41</span>
+    <span class="ver-badge">v2.8.42</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">05 Jun 2026</span>
   </div>
@@ -2817,7 +2815,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.8.41</span>
+          <span class="ver-badge">v2.8.42</span>
           <span>·</span>
           <span class="ver-date">05 Jun 2026</span>
         </div>
@@ -3147,15 +3145,6 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
                       </div>
                     </div>
                   </div>
-                  <div class="cs-combat-bar-sep"></div>
-                  <!-- Condiciones inline -->
-                  <div class="cs-cond-inline">
-                    <div class="cs-cond-inline-header">
-                      <span class="cs-cond-inline-lbl">Condiciones</span>
-                      <span class="cs-cond-count" id="csCondCount">ninguna</span>
-                    </div>
-                    <div class="cs-cond-grid cs-cond-grid-inline" id="csCondGrid"></div>
-                  </div>
                 </div>
                 <!-- Contenido 3 columnas -->
                 <div class="cs-dbd-content">
@@ -3193,6 +3182,14 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
                   </div>
                   <!-- Col 3: Extra panel + Dados -->
                   <div class="cs-dbd-col-main">
+                      <!-- Condiciones -->
+                      <div class="cs-dbd-col-panel cs-conditions-panel">
+                        <div class="cs-cond-panel-header">
+                          <span class="cs-dbd-section-title" style="margin-bottom:0;">Condiciones</span>
+                          <span class="cs-cond-count" id="csCondCount">ninguna</span>
+                        </div>
+                        <div class="cs-cond-grid" id="csCondGrid"></div>
+                      </div>
                       <!-- Extra tabbed panel -->
                       <div class="cs-dbd-col-panel cs-extra-panel" id="csExtraPanel">
                         <div class="cs-tabs">
