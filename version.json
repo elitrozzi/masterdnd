@@ -1,7 +1,12 @@
 {
-  "version": "2.8.40",
+  "version": "2.8.41",
   "date": "2026-06-05",
   "history": [
+    {
+      "version": "2.8.41",
+      "date": "2026-06-05",
+      "note": "Ficha cleanup: elimina wrapper innecesario cs-bottom-row, separadores ocultos en mobile, col 1 sin rasgos duplicados, font sizes compactos (14/13/12px), CSS muerto eliminado"
+    },
     {
       "version": "2.8.40",
       "date": "2026-06-05",
