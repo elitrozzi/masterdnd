@@ -428,7 +428,7 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .cs-stats-band{display:flex;align-items:stretch;gap:0;background:var(--lol-panel2);border:1px solid rgba(120,90,40,.45);border-radius:8px;padding:0;flex-shrink:0;overflow:hidden;}
 .cs-dbd-stats-row{display:flex;gap:0;align-items:stretch;flex-shrink:0;}
 .cs-stats-band-sep{width:1px;background:rgba(120,90,40,.35);flex-shrink:0;align-self:stretch;}
-.cs-stats-right{display:flex;align-items:center;gap:10px;padding:10px 14px;flex:1;min-width:0;}
+.cs-stats-right{display:flex;align-items:center;gap:10px;padding:10px 16px;flex:0 0 auto;min-width:0;border-left:1px solid rgba(120,90,40,.35);}
 .cs-stats-band-sep-inner{height:100%;align-self:stretch;}
 /* Combat band: Iniciativa + CA + misc + condiciones */
 .cs-combat-band{display:flex;align-items:center;gap:0;background:var(--lol-panel2);border:1px solid rgba(120,90,40,.45);border-radius:8px;flex-shrink:0;overflow:hidden;padding:10px 14px;}
@@ -445,12 +445,12 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .cs-hp-btns-row{display:flex;align-items:center;gap:5px;margin-bottom:4px;}
 .cs-hp-temp-inline{display:flex;flex-direction:column;align-items:center;gap:2px;margin-left:8px;flex-shrink:0;}
 .cs-hp-values-row{display:flex;align-items:baseline;gap:3px;}
-.cs-dbd-stat-box{flex:1;background:transparent;border-right:1px solid rgba(120,90,40,.3);padding:12px 8px 10px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0;position:relative;transition:background .15s ease-out,border-color .15s ease-out,color .15s ease-out,transform .15s ease-out,opacity .15s ease-out;cursor:pointer;}
+.cs-dbd-stat-box{flex:1;background:transparent;border-right:1px solid rgba(120,90,40,.3);padding:14px 6px 12px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:80px;position:relative;transition:background .15s ease-out,border-color .15s ease-out,color .15s ease-out,transform .15s ease-out,opacity .15s ease-out;cursor:pointer;}
 .cs-dbd-stat-box:last-child{border-right:none;}
 .cs-dbd-stat-box:hover{background:rgba(200,170,110,.06);}
-.cs-dbd-stat-abbr{font-size:9px;font-weight:700;color:var(--lol-gray-dim);letter-spacing:.14em;text-transform:uppercase;line-height:1;}
-.cs-dbd-stat-mod{font-size:22px;font-weight:700;color:var(--lol-gold);font-family:'Cinzel',serif;line-height:1;margin:2px 0;}
-.cs-dbd-stat-val{font-size:12px;color:rgba(169,180,194,.65);font-weight:600;font-family:'Cinzel',serif;background:rgba(0,0,0,.25);border:1px solid rgba(120,90,40,.3);border-radius:10px;padding:1px 8px;min-width:28px;}
+.cs-dbd-stat-abbr{font-size:8px;font-weight:700;color:var(--lol-gray-dim);letter-spacing:.18em;text-transform:uppercase;line-height:1;}
+.cs-dbd-stat-mod{font-size:26px;font-weight:700;color:var(--lol-gold);font-family:'Cinzel',serif;line-height:1;}
+.cs-dbd-stat-val{font-size:13px;color:rgba(169,180,194,.7);font-weight:600;font-family:'Cinzel',serif;background:rgba(0,0,0,.3);border:1px solid rgba(120,90,40,.35);border-radius:12px;padding:2px 10px;min-width:30px;}
 .cs-dbd-combat-sep{display:none;}
 /* ── Pills: Prof + Speed ── */
 .cs-combat-pill{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:70px;padding:6px 10px;background:rgba(11,196,227,.05);border:1px solid rgba(11,196,227,.2);border-radius:8px;gap:2px;flex-shrink:0;}
@@ -458,7 +458,7 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .cs-combat-pill-lbl{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(11,196,227,.5);text-align:center;white-space:nowrap;}
 .cs-combat-bar-sep{display:none;}
 /* HP block inside combat bar */
-.cs-hp-block{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;min-width:180px;}
+.cs-hp-block{display:flex;flex-direction:column;align-items:center;gap:4px;flex:0 0 auto;min-width:200px;}
 .cs-hp-values-row{display:flex;align-items:baseline;gap:4px;}
 .cs-hp-cur{font:700 28px/1 'Cinzel',serif;color:var(--lol-gold-bright);}
 .cs-hp-cur.hp-low{color:#e84d4d;}
@@ -3107,14 +3107,13 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
                 <!-- Banda stats + prof + speed + HP (una sola fila) -->
                 <div class="cs-stats-band">
                   <div class="cs-dbd-stats-row">
-                    <div class="cs-dbd-stat-box" onclick="rollStatFromBox('str','FUE')"><div class="cs-dbd-stat-abbr">FUE</div><div class="cs-dbd-stat-mod" id="cmstr">—</div><div class="cs-dbd-stat-val" id="cstr">—</div></div>
-                    <div class="cs-dbd-stat-box" onclick="rollStatFromBox('dex','DES')"><div class="cs-dbd-stat-abbr">DES</div><div class="cs-dbd-stat-mod" id="cmdex">—</div><div class="cs-dbd-stat-val" id="cdex">—</div></div>
-                    <div class="cs-dbd-stat-box" onclick="rollStatFromBox('con','CON')"><div class="cs-dbd-stat-abbr">CON</div><div class="cs-dbd-stat-mod" id="cmcon">—</div><div class="cs-dbd-stat-val" id="ccon">—</div></div>
-                    <div class="cs-dbd-stat-box" onclick="rollStatFromBox('int','INT')"><div class="cs-dbd-stat-abbr">INT</div><div class="cs-dbd-stat-mod" id="cmint">—</div><div class="cs-dbd-stat-val" id="cint">—</div></div>
-                    <div class="cs-dbd-stat-box" onclick="rollStatFromBox('wis','SAB')"><div class="cs-dbd-stat-abbr">SAB</div><div class="cs-dbd-stat-mod" id="cmwis">—</div><div class="cs-dbd-stat-val" id="cwis">—</div></div>
-                    <div class="cs-dbd-stat-box" onclick="rollStatFromBox('cha','CAR')"><div class="cs-dbd-stat-abbr">CAR</div><div class="cs-dbd-stat-mod" id="cmcha">—</div><div class="cs-dbd-stat-val" id="ccha">—</div></div>
+                    <div class="cs-dbd-stat-box" onclick="rollStatFromBox('str','FUE')"><div class="cs-dbd-stat-abbr">FUERZA</div><div class="cs-dbd-stat-mod" id="cmstr">—</div><div class="cs-dbd-stat-val" id="cstr">—</div></div>
+                    <div class="cs-dbd-stat-box" onclick="rollStatFromBox('dex','DES')"><div class="cs-dbd-stat-abbr">DESTREZA</div><div class="cs-dbd-stat-mod" id="cmdex">—</div><div class="cs-dbd-stat-val" id="cdex">—</div></div>
+                    <div class="cs-dbd-stat-box" onclick="rollStatFromBox('con','CON')"><div class="cs-dbd-stat-abbr">CONSTIT.</div><div class="cs-dbd-stat-mod" id="cmcon">—</div><div class="cs-dbd-stat-val" id="ccon">—</div></div>
+                    <div class="cs-dbd-stat-box" onclick="rollStatFromBox('int','INT')"><div class="cs-dbd-stat-abbr">INTELIG.</div><div class="cs-dbd-stat-mod" id="cmint">—</div><div class="cs-dbd-stat-val" id="cint">—</div></div>
+                    <div class="cs-dbd-stat-box" onclick="rollStatFromBox('wis','SAB')"><div class="cs-dbd-stat-abbr">SABIDURÍA</div><div class="cs-dbd-stat-mod" id="cmwis">—</div><div class="cs-dbd-stat-val" id="cwis">—</div></div>
+                    <div class="cs-dbd-stat-box" onclick="rollStatFromBox('cha','CAR')"><div class="cs-dbd-stat-abbr">CARISMA</div><div class="cs-dbd-stat-mod" id="cmcha">—</div><div class="cs-dbd-stat-val" id="ccha">—</div></div>
                   </div>
-                  <div class="cs-stats-band-sep"></div>
                   <div class="cs-stats-right">
                     <div class="cs-combat-pill">
                       <div class="cs-combat-pill-val" id="csProf">+2</div>
