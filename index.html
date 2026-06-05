@@ -439,10 +439,50 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .cs-dbd-stat-mod{font-size:20px;font-weight:700;color:var(--lol-gold);font-family:'Cinzel',serif;line-height:1;}
 .cs-dbd-stat-abbr{font-size:16px;color:var(--lol-gray-dim);font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-top:3px;}
 .cs-dbd-stat-val{font-size:16px;color:rgba(169,180,194,.6);font-weight:600;font-family:'Cinzel',serif;}
-.cs-dbd-combat-sep{width:1px;background:rgba(120,90,40,.4);margin:0 2px;align-self:stretch;}
-.cs-dbd-combat-stat{flex:1;background:rgba(11,196,227,.04);border:1px solid rgba(11,196,227,.2);padding:10px 6px 9px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:0;}
-.cs-dbd-combat-val{font-size:20px;font-weight:700;color:var(--lol-teal);font-family:'Cinzel',serif;line-height:1;}
-.cs-dbd-combat-lbl{font-size:16px;color:rgba(11,196,227,.6);letter-spacing:.08em;font-weight:700;text-transform:uppercase;margin-top:3px;}
+.cs-dbd-combat-sep{display:none;}
+/* ── Combat bar ── */
+.cs-combat-bar{display:flex;align-items:stretch;gap:10px;background:var(--lol-panel2);border:1px solid rgba(120,90,40,.45);border-radius:8px;padding:12px 16px;flex-shrink:0;flex-wrap:wrap;}
+.cs-combat-pills{display:flex;gap:8px;align-items:center;flex-shrink:0;}
+.cs-combat-pill{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:72px;padding:8px 12px;background:rgba(11,196,227,.05);border:1px solid rgba(11,196,227,.22);border-radius:8px;gap:2px;}
+.cs-combat-pill-val{font:700 22px/1 'Cinzel',serif;color:var(--lol-teal);}
+.cs-combat-pill-lbl{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(11,196,227,.55);margin-top:3px;text-align:center;white-space:nowrap;}
+.cs-combat-bar-sep{width:1px;background:rgba(120,90,40,.3);align-self:stretch;flex-shrink:0;}
+/* HP block inside combat bar */
+.cs-hp-block{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;min-width:180px;}
+.cs-hp-values-row{display:flex;align-items:baseline;gap:4px;}
+.cs-hp-cur{font:700 28px/1 'Cinzel',serif;color:var(--lol-gold-bright);}
+.cs-hp-cur.hp-low{color:#e84d4d;}
+.cs-hp-sep{font:400 18px/1 'Cinzel',serif;color:rgba(200,170,110,.35);margin:0 2px;}
+.cs-hp-max{font:700 18px/1 'Cinzel',serif;color:rgba(169,180,194,.5);}
+.cs-hp-lbl{font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(200,170,110,.45);}
+.cs-hp-actions{display:flex;align-items:center;gap:6px;width:100%;}
+.cs-hp-btn{padding:5px 10px;font:700 10px/1 'Cinzel',serif;letter-spacing:.1em;text-transform:uppercase;border:1px solid transparent;cursor:pointer;border-radius:6px;transition:background .15s ease-out,border-color .15s ease-out,color .15s ease-out,transform .15s ease-out,opacity .15s ease-out;white-space:nowrap;flex-shrink:0;}
+.cs-hp-btn-heal{background:rgba(60,160,80,.12);border-color:rgba(60,160,80,.4);color:#6edba0;}
+.cs-hp-btn-heal:hover{background:rgba(60,160,80,.28);box-shadow:0 0 6px rgba(60,160,80,.2);}
+.cs-hp-btn-dmg{background:rgba(200,60,60,.12);border-color:rgba(200,60,60,.4);color:#e08080;}
+.cs-hp-btn-dmg:hover{background:rgba(200,60,60,.28);box-shadow:0 0 6px rgba(200,60,60,.2);}
+.cs-hp-input{flex:1;min-width:0;background:rgba(0,0,0,.4);border:1px solid rgba(120,90,40,.5);color:var(--lol-gold-bright);font:700 14px/1 'Cinzel',serif;text-align:center;padding:5px 4px;outline:none;border-radius:6px;}
+.cs-hp-input:focus{border-color:var(--lol-gold);}
+.cs-hp-input::-webkit-inner-spin-button,.cs-hp-input::-webkit-outer-spin-button{-webkit-appearance:none;}
+.cs-hp-temp{display:flex;flex-direction:column;align-items:center;gap:2px;flex-shrink:0;}
+.cs-hp-temp-input{width:44px;background:rgba(0,0,0,.35);border:1px solid rgba(100,140,250,.3);color:#a0b8f8;font:700 14px/1 'Cinzel',serif;text-align:center;padding:4px;outline:none;border-radius:6px;}
+.cs-hp-temp-input:focus{border-color:rgba(100,140,250,.7);}
+.cs-hp-temp-input::-webkit-inner-spin-button,.cs-hp-temp-input::-webkit-outer-spin-button{-webkit-appearance:none;}
+.cs-hp-temp-lbl{font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(100,140,250,.5);}
+/* Hex badges: CA + Initiative */
+.cs-hex-badges{display:flex;gap:10px;align-items:center;flex-shrink:0;}
+.cs-hex-badge{display:flex;flex-direction:column;align-items:center;justify-content:center;width:68px;height:76px;position:relative;cursor:default;}
+.cs-hex-badge::before{content:'';position:absolute;inset:0;clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);background:var(--lol-panel);border:1px solid rgba(120,90,40,.5);}
+.cs-hex-badge-inner{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;}
+.cs-hex-val{font:700 22px/1 'Cinzel',serif;color:var(--lol-gold);}
+.cs-hex-lbl{font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(200,170,110,.5);}
+.cs-hex-badge.cs-hex-ac::before{clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);background:rgba(11,196,227,.05);border-color:rgba(11,196,227,.3);}
+.cs-hex-badge.cs-hex-ac .cs-hex-val{color:var(--lol-teal);}
+.cs-hex-badge.cs-hex-ac .cs-hex-lbl{color:rgba(11,196,227,.5);}
+/* Speed pill */
+.cs-speed-pill{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:60px;padding:8px 10px;background:rgba(200,170,110,.04);border:1px solid rgba(120,90,40,.35);border-radius:8px;gap:2px;}
+.cs-speed-val{font:700 18px/1 'Cinzel',serif;color:var(--lol-gold-bright);}
+.cs-speed-lbl{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(200,170,110,.45);}
 /* ── Content 3 cols ── */
 .cs-dbd-content{display:flex;flex:1;gap:12px;min-height:220px;}
 .cs-dbd-col-saves{flex:0 0 19%;min-width:160px;display:flex;flex-direction:column;gap:12px;overflow-y:auto;}
@@ -979,6 +1019,7 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .form-group{margin-bottom:14px;}
 .form-label{display:block;font-size:12px;font-weight:600;color:var(--text-m);margin-bottom:6px;letter-spacing:.05em;}
 .form-input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:14px;color:var(--text);font-family:'Roboto',sans-serif;outline:none;transition:background .15s ease-out,border-color .15s ease-out,color .15s ease-out,transform .15s ease-out,opacity .15s ease-out;}
+.input-wrapper{position:relative;}.input-wrapper .form-input{padding-right:40px;}.btn-eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;padding:4px;color:var(--text-m);display:flex;align-items:center;line-height:1;}.btn-eye:hover{color:var(--text);}.btn-eye svg{width:18px;height:18px;}
 .form-input:focus{border-color:var(--brand-500);}
 .btn-full{width:100%;padding:13px;border-radius:8px;font-size:14px;font-weight:600;cursor:none;}
 
@@ -1345,12 +1386,12 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   .char-drawer-header,.creator-progress,.creator-steps>div:not(#step2),.cs-dbd-actions,.cs-dbd-btn-new,.dr-sheet-panel{display:none!important;}
   .cs-dbd{background:#fff;color:#111;gap:8px;padding:12px;}
   .cs-dbd-name-input,.cs-dbd-meta,.cs-dbd-save-name,.cs-dbd-skill-name,.cs-dbd-section-title{color:#111!important;}
-  .cs-dbd-stat-mod,.cs-dbd-save-val,.cs-dbd-skill-val,.cs-dbd-combat-val,.cs-dbd-hp-nums{color:#222!important;}
-  .cs-dbd-stat-abbr,.cs-dbd-stat-val,.cs-dbd-combat-lbl{color:#555!important;}
-  .cs-dbd-stat-box,.cs-dbd-combat-stat{border-color:#ccc;background:#f9f9f9;}
+  .cs-dbd-stat-mod,.cs-dbd-save-val,.cs-dbd-skill-val,.cs-hp-cur,.cs-hex-val,.cs-combat-pill-val,.cs-speed-val{color:#222!important;}
+  .cs-dbd-stat-abbr,.cs-dbd-stat-val,.cs-combat-pill-lbl,.cs-hex-lbl,.cs-hp-lbl,.cs-speed-lbl{color:#555!important;}
+  .cs-dbd-stat-box,.cs-combat-pill,.cs-speed-pill{border-color:#ccc;background:#f9f9f9;}
   .cs-dbd-header{border-bottom:1px solid #ccc;}
-  .cs-dbd-hp-block{background:#f2f2f2;}
-  .cs-dbd-hp-controls{display:none;}
+  .cs-combat-bar{background:#f2f2f2;}
+  .cs-hp-actions{display:none;}
   .cs-dbd-dot{border-color:#999;}
   .cs-dbd-dot.proficient{background:#555;border-color:#555;}
   .cs-cond-pill{border-color:#ccc;background:#f9f9f9;}
@@ -1454,12 +1495,15 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   .cs-dbd-header{gap:10px;}
   .cs-dbd-portrait{width:60px;height:60px;}
   .cs-dbd-name-input{font-size:16px;}
-  .cs-dbd-hp-block{padding:6px 10px;gap:6px;}
-  .cs-dbd-hp-nums{font-size:15px;min-width:56px;}
   .cs-dbd-stats-row{flex-wrap:wrap;gap:4px;}
-  .cs-dbd-stat-box,.cs-dbd-combat-stat{min-width:44px;}
+  .cs-dbd-stat-box{min-width:44px;}
   .cs-dbd-stat-mod{font-size:16px;}
-  .cs-dbd-combat-sep{display:none;}
+  .cs-combat-bar{flex-direction:column;gap:8px;padding:10px 12px;}
+  .cs-combat-pills{flex-wrap:wrap;}
+  .cs-hex-badge{width:56px;height:64px;}
+  .cs-hex-val{font-size:18px;}
+  .cs-hp-cur{font-size:22px;}
+  .cs-hp-btn{padding:4px 7px;font-size:9px;}
   .cs-dbd-content{flex-direction:column;min-height:unset;}
   .cs-dbd-col-saves,.cs-dbd-col-skills{flex:unset;}
   .cs-cond-grid{grid-template-columns:repeat(auto-fill,minmax(64px,1fr));}
@@ -2247,9 +2291,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.8.35</span>
+    <span class="ver-badge">v2.8.37</span>
     <span class="ver-sep">·</span>
-    <span class="ver-date">01 Jun 2026</span>
+    <span class="ver-date">05 Jun 2026</span>
   </div>
   <div class="lang-toggle">
     <button class="lang-btn active" onclick="setLang('es')">ES</button>
@@ -2766,9 +2810,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.8.35</span>
+          <span class="ver-badge">v2.8.37</span>
           <span>·</span>
-          <span class="ver-date">01 Jun 2026</span>
+          <span class="ver-date">05 Jun 2026</span>
         </div>
       </div>
       <!-- RIGHT: scene -->
@@ -3025,14 +3069,6 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
                     <div class="cs-gender-display" id="csGenderDisplay"></div>
                     <div class="cs-gender-display" id="csBackgroundDisplay" style="color:var(--brand-400);"></div>
                   </div>
-                  <div class="cs-dbd-hp-block">
-                    <div class="cs-dbd-hp-nums"><span id="sheetHpCur">—</span><span class="cs-dbd-hp-sep">/</span><span class="cs-dbd-hp-max-val" id="sheetHpMax">—</span></div>
-                    <div class="cs-dbd-hp-controls">
-                      <input type="number" class="cs-dbd-hp-input" id="sheetHpInput" min="0" placeholder="0">
-                      <button class="btn-dmg" onclick="applySheetHp('dmg')">💔</button>
-                      <button class="btn-heal" onclick="applySheetHp('heal')">💚</button>
-                    </div>
-                  </div>
                   <div class="cs-dbd-actions">
                     <div class="cs-dbd-action-row">
                       <button class="cs-dbd-btn cs-dbd-btn-save" onclick="saveCharacter(this)">💾 Guardar</button>
@@ -3051,12 +3087,59 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
                   <div class="cs-dbd-stat-box" onclick="rollStatFromBox('int','INT')"><div class="cs-dbd-stat-mod" id="cmint">—</div><div class="cs-dbd-stat-abbr">INT</div><div class="cs-dbd-stat-val" id="cint">—</div></div>
                   <div class="cs-dbd-stat-box" onclick="rollStatFromBox('wis','SAB')"><div class="cs-dbd-stat-mod" id="cmwis">—</div><div class="cs-dbd-stat-abbr">SAB</div><div class="cs-dbd-stat-val" id="cwis">—</div></div>
                   <div class="cs-dbd-stat-box" onclick="rollStatFromBox('cha','CAR')"><div class="cs-dbd-stat-mod" id="cmcha">—</div><div class="cs-dbd-stat-abbr">CAR</div><div class="cs-dbd-stat-val" id="ccha">—</div></div>
-                  <div class="cs-dbd-combat-sep"></div>
-                  <div class="cs-dbd-combat-stat"><div class="cs-dbd-combat-val" id="csProf">+2</div><div class="cs-dbd-combat-lbl">Prof</div></div>
-                  <div class="cs-dbd-combat-stat"><div class="cs-dbd-combat-val" id="csCA">—</div><div class="cs-dbd-combat-lbl">CA</div></div>
-                  <div class="cs-dbd-combat-stat"><div class="cs-dbd-combat-val" id="csInitiative">—</div><div class="cs-dbd-combat-lbl">Iniciativa</div></div>
-                  <div class="cs-dbd-combat-stat"><div class="cs-dbd-combat-val" id="csSpeed">30</div><div class="cs-dbd-combat-lbl">Velocidad</div></div>
-                  <div class="cs-dbd-combat-stat"><div class="cs-dbd-combat-val" id="csLevel">1</div><div class="cs-dbd-combat-lbl">Nivel</div></div>
+                </div>
+                <!-- Combat bar: Prof + Speed | HP | CA + Initiative -->
+                <div class="cs-combat-bar">
+                  <!-- Proficiency + Speed + Level -->
+                  <div class="cs-combat-pills">
+                    <div class="cs-combat-pill">
+                      <div class="cs-combat-pill-val" id="csProf">+2</div>
+                      <div class="cs-combat-pill-lbl">Bono de Competencia</div>
+                    </div>
+                    <div class="cs-speed-pill">
+                      <div class="cs-speed-val"><span id="csSpeed">30</span> ft.</div>
+                      <div class="cs-speed-lbl">Velocidad</div>
+                    </div>
+                    <div class="cs-speed-pill">
+                      <div class="cs-speed-val" id="csLevel">1</div>
+                      <div class="cs-speed-lbl">Nivel</div>
+                    </div>
+                  </div>
+                  <div class="cs-combat-bar-sep"></div>
+                  <!-- HP -->
+                  <div class="cs-hp-block">
+                    <div class="cs-hp-values-row">
+                      <span class="cs-hp-cur" id="sheetHpCur">—</span>
+                      <span class="cs-hp-sep">/</span>
+                      <span class="cs-hp-max" id="sheetHpMax">—</span>
+                    </div>
+                    <div class="cs-hp-lbl">Puntos de Golpe</div>
+                    <div class="cs-hp-actions">
+                      <button class="cs-hp-btn cs-hp-btn-heal" onclick="applySheetHp('heal')">Sanar</button>
+                      <input type="number" class="cs-hp-input" id="sheetHpInput" min="0" placeholder="0">
+                      <button class="cs-hp-btn cs-hp-btn-dmg" onclick="applySheetHp('dmg')">Daño</button>
+                      <div class="cs-hp-temp">
+                        <input type="number" class="cs-hp-temp-input" id="sheetHpTemp" min="0" placeholder="0">
+                        <div class="cs-hp-temp-lbl">PG Temp</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="cs-combat-bar-sep"></div>
+                  <!-- CA + Iniciativa -->
+                  <div class="cs-hex-badges">
+                    <div class="cs-hex-badge">
+                      <div class="cs-hex-badge-inner">
+                        <div class="cs-hex-val" id="csInitiative">—</div>
+                        <div class="cs-hex-lbl">Iniciativa</div>
+                      </div>
+                    </div>
+                    <div class="cs-hex-badge cs-hex-ac">
+                      <div class="cs-hex-badge-inner">
+                        <div class="cs-hex-val" id="csCA">—</div>
+                        <div class="cs-hex-lbl">Armadura</div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <!-- Contenido 3 columnas -->
                 <div class="cs-dbd-content">
@@ -3103,13 +3186,13 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
                       <!-- Extra tabbed panel -->
                       <div class="cs-dbd-col-panel cs-extra-panel" id="csExtraPanel">
                         <div class="cs-tabs">
-                          <div class="cs-tab active" onclick="switchCsTab('inv',this)">⚔️ Inventario</div>
-                          <div class="cs-tab" onclick="switchCsTab('spells',this)">🔮 Hechizos</div>
-                          <div class="cs-tab" onclick="switchCsTab('actions',this)">🗡️ Acciones</div>
-                          <div class="cs-tab" onclick="switchCsTab('notes',this)">📝 Notas</div>
+                          <div class="cs-tab active" onclick="switchCsTab('actions',this)">Acciones</div>
+                          <div class="cs-tab" onclick="switchCsTab('inv',this)">Inventario</div>
+                          <div class="cs-tab" onclick="switchCsTab('spells',this)">Hechizos</div>
+                          <div class="cs-tab" onclick="switchCsTab('notes',this)">Notas</div>
                         </div>
                         <!-- Inventario -->
-                        <div class="cs-tab-content active" id="cstab-inv">
+                        <div class="cs-tab-content" id="cstab-inv">
                           <div class="inv-toolbar">
                             <div class="inv-weight-info">Peso: <strong id="invTotalWeight">0</strong> lb</div>
                             <button class="inv-add-btn" onclick="toggleInvForm()">+ Añadir</button>
@@ -3155,7 +3238,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
                           <div id="csSpellsKnown" class="cs-spells-known-section"></div>
                         </div>
                         <!-- Acciones -->
-                        <div class="cs-tab-content" id="cstab-actions"></div>
+                        <div class="cs-tab-content active" id="cstab-actions"></div>
                         <!-- Notas -->
                         <div class="cs-tab-content" id="cstab-notes">
                           <textarea id="csNotesArea" class="cs-notes-area" placeholder="Notas del personaje: aliados, misiones, equipamiento especial..." oninput="saveCharNotes()"></textarea>
@@ -3749,7 +3832,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     <div class="divider-or"><span data-es="o con email" data-en="or with email">o con email</span></div>
     <div id="registerFields" style="display:none;"><div class="form-group"><label class="form-label" data-es="Nombre de usuario" data-en="Username">Nombre de usuario</label><input class="form-input" id="modalUsername" type="text" placeholder="aventurero_123"/></div></div>
     <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="modalEmail" type="email" placeholder="tu@email.com"/></div>
-    <div class="form-group"><label class="form-label" data-es="Contraseña" data-en="Password">Contraseña</label><input class="form-input" id="modalPassword" type="password" placeholder="••••••••"/></div>
+    <div class="form-group"><label class="form-label" data-es="Contraseña" data-en="Password">Contraseña</label><div class="input-wrapper"><input class="form-input" id="modalPassword" type="password" placeholder="••••••••"/><button class="btn-eye" type="button" onclick="togglePasswordVisibility()" id="btnEyePassword" aria-label="Mostrar contraseña"><svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><svg id="eyeOffIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button></div></div>
     <div id="modalMsg"></div>
     <button class="btn-full btn-primary" id="modalSubmitBtn" style="margin-top:8px;" onclick="authSubmit()">Iniciar sesión</button>
   </div>
@@ -5329,6 +5412,7 @@ function goToChars(){
   else if(chars.length>1)openCharPicker();
   else goToCreateChar();
 }
+function togglePasswordVisibility(){const inp=document.getElementById('modalPassword');const eyeOn=document.getElementById('eyeIcon');const eyeOff=document.getElementById('eyeOffIcon');if(inp.type==='password'){inp.type='text';eyeOn.style.display='none';eyeOff.style.display='block';}else{inp.type='password';eyeOn.style.display='block';eyeOff.style.display='none';}}
 async function authSubmit(){
   const email=(document.getElementById('modalEmail')?.value||'').trim();
   const password=document.getElementById('modalPassword')?.value||'';
@@ -5735,9 +5819,11 @@ function loadChar(id,fromPop){
     else{avatarEl2.style.cssText=`${raceBg(c.race)};background-repeat:no-repeat;`;}
   }
   _pendingPortrait=null;
-  // Reset tabs to Inventario
-  document.querySelectorAll('.cs-tab').forEach((t,i)=>t.classList.toggle('active',i===0));
-  document.querySelectorAll('.cs-tab-content').forEach((c,i)=>c.classList.toggle('active',i===0));
+  // Reset tabs to Acciones
+  document.querySelectorAll('.cs-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.cs-tab-content').forEach(c=>c.classList.remove('active'));
+  const firstTab=document.querySelector('.cs-tab');if(firstTab)firstTab.classList.add('active');
+  const actionsTab=document.getElementById('cstab-actions');if(actionsTab)actionsTab.classList.add('active');
   // Update URL
   if(!fromPop)history.pushState({page:'characters',charId:id},'','/personajes/'+_charSlug(c));
 }
@@ -5852,7 +5938,7 @@ function _renderPassives(){
 }
 function _updateSheetHp(cur,max){
   const curEl=document.getElementById('sheetHpCur'),maxEl=document.getElementById('sheetHpMax');
-  if(curEl){curEl.textContent=cur;curEl.className=cur<=Math.floor(max/2)?'hp-low':'';}
+  if(curEl){curEl.textContent=cur;curEl.className='cs-hp-cur'+(cur<=Math.floor(max/2)?' hp-low':'');}
   if(maxEl)maxEl.textContent=max;
   if(_loadedCharId){const chars=_loadSavedChars();const idx=chars.findIndex(c=>c.id===_loadedCharId);if(idx>=0){chars[idx].currentHp=cur;chars[idx].hp=max;localStorage.setItem(CHARS_LS_KEY,JSON.stringify(chars));_cloudSyncChar(_loadedCharId);}}
 }
@@ -6274,6 +6360,7 @@ function switchCsTab(tab,el){
   const content=document.getElementById('cstab-'+tab);
   if(content)content.classList.add('active');
   if(tab==='spells')_renderCsSlots();
+  if(tab==='actions')_renderCombatActions(_turnCls);
   if(tab==='notes'){const ta=document.getElementById('csNotesArea');if(ta)ta.value=_charNotes;}
 }
 

@@ -1,7 +1,17 @@
 {
-  "version": "2.8.35",
-  "date": "2026-06-01",
+  "version": "2.8.37",
+  "date": "2026-06-05",
   "history": [
+    {
+      "version": "2.8.37",
+      "date": "2026-06-05",
+      "note": "Ficha: combat bar con Bono de Competencia/HP reestructurado (Sanar/Daño/Temp HP)/badges hexagonales de CA e Iniciativa, tab Acciones por defecto con contenido real"
+    },
+    {
+      "version": "2.8.36",
+      "date": "2026-06-05",
+      "note": "Toggle de visibilidad en input de contraseña — ícono de ojo en el lado derecho del campo Contraseña en el modal de login"
+    },
     {
       "version": "2.8.35",
       "date": "2026-06-01",
