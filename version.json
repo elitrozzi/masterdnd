@@ -1,7 +1,12 @@
 {
-  "version": "2.8.39",
+  "version": "2.8.40",
   "date": "2026-06-05",
   "history": [
+    {
+      "version": "2.8.40",
+      "date": "2026-06-05",
+      "note": "Fix ficha: borde hexagonal en badges CA/Iniciativa (::before border + ::after fill vía clip-path), fix race en tab Rasgos al cambiar tab en personaje cargado"
+    },
     {
       "version": "2.8.39",
       "date": "2026-06-05",
