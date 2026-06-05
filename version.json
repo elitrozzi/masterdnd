@@ -1,7 +1,12 @@
 {
-  "version": "2.8.42",
+  "version": "2.8.43",
   "date": "2026-06-05",
   "history": [
+    {
+      "version": "2.8.43",
+      "date": "2026-06-05",
+      "note": "Ficha rediseño layout DnD Beyond: stats+HP en una banda, Initiative+CA+Condiciones en segunda banda, stat abbr arriba/mod centro/score abajo con pill oval"
+    },
     {
       "version": "2.8.42",
       "date": "2026-06-05",
