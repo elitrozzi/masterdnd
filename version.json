@@ -1,7 +1,12 @@
 {
-  "version": "2.8.43",
+  "version": "2.8.45",
   "date": "2026-06-05",
   "history": [
+    {
+      "version": "2.8.45",
+      "date": "2026-06-05",
+      "note": "Ficha DnD Beyond: stats-row flex:1 (no se comprime), HP con btn-col + nums-col (Actual/Máx/Temp), AC badge ARMOR/CLASS, saves en grid 2col (STR+INT/DEX+WIS/CON+CHA), sección Defensas"
+    },
     {
       "version": "2.8.43",
       "date": "2026-06-05",
