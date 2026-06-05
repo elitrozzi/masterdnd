@@ -483,6 +483,12 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .cs-speed-pill{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:60px;padding:8px 10px;background:rgba(200,170,110,.04);border:1px solid rgba(120,90,40,.35);border-radius:8px;gap:2px;}
 .cs-speed-val{font:700 18px/1 'Cinzel',serif;color:var(--lol-gold-bright);}
 .cs-speed-lbl{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(200,170,110,.45);}
+/* Features & Traits tab */
+.cs-traits-section{margin-bottom:14px;}
+.cs-traits-section:last-child{margin-bottom:0;}
+.cs-traits-section-title{font:700 9px/1 'Cinzel',serif;letter-spacing:.2em;text-transform:uppercase;color:var(--lol-gold);margin-bottom:7px;padding-bottom:5px;border-bottom:1px solid rgba(200,170,110,.2);display:flex;align-items:center;gap:6px;}
+.cs-traits-section-title::before{content:'';display:block;width:3px;height:9px;background:var(--lol-gold);flex-shrink:0;}
+.cs-traits-list{display:flex;flex-direction:column;gap:4px;}
 /* Proficiencies panel */
 .cs-prof-list{display:flex;flex-direction:column;gap:7px;}
 .cs-prof-row{display:flex;flex-direction:column;gap:2px;}
@@ -2300,7 +2306,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.8.38</span>
+    <span class="ver-badge">v2.8.39</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">05 Jun 2026</span>
   </div>
@@ -2819,7 +2825,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.8.38</span>
+          <span class="ver-badge">v2.8.39</span>
           <span>·</span>
           <span class="ver-date">05 Jun 2026</span>
         </div>
@@ -3202,6 +3208,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
                       <div class="cs-dbd-col-panel cs-extra-panel" id="csExtraPanel">
                         <div class="cs-tabs">
                           <div class="cs-tab active" onclick="switchCsTab('actions',this)">Acciones</div>
+                          <div class="cs-tab" onclick="switchCsTab('traits',this)">Rasgos</div>
                           <div class="cs-tab" onclick="switchCsTab('inv',this)">Inventario</div>
                           <div class="cs-tab" onclick="switchCsTab('spells',this)">Hechizos</div>
                           <div class="cs-tab" onclick="switchCsTab('notes',this)">Notas</div>
@@ -3254,6 +3261,8 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
                         </div>
                         <!-- Acciones -->
                         <div class="cs-tab-content active" id="cstab-actions"></div>
+                        <!-- Rasgos -->
+                        <div class="cs-tab-content" id="cstab-traits"></div>
                         <!-- Notas -->
                         <div class="cs-tab-content" id="cstab-notes">
                           <textarea id="csNotesArea" class="cs-notes-area" placeholder="Notas del personaje: aliados, misiones, equipamiento especial..." oninput="saveCharNotes()"></textarea>
@@ -5648,8 +5657,29 @@ function buildSheet(){
   _renderPassives();
   _renderSkillPanel();
   _renderProficiencies(ck,rk);
+  _renderTraitsTab(ck,rk,selections?.background||'',_currentLevel);
   _activeConditions=new Set();
   _renderConditions();
+}
+function _renderTraitsTab(cls,race,bg,level){
+  const el=document.getElementById('cstab-traits');if(!el)return;
+  const lv=level||_currentLevel||1;
+  const rd=RACE_DATA[race]||{};
+  const bgd=BG_DATA[bg]||null;
+  const traitItem=(name,desc)=>`<div class="cs-trait-item" onclick="this.classList.toggle('open')"><div class="cs-trait-name">${name}</div>${desc?`<div class="cs-trait-desc">${desc}</div>`:''}</div>`;
+  // Race section
+  const raceTraits=(rd.traits||[]).map(t=>traitItem(t,RACE_TRAIT_DETAILS[t]||'')).join('');
+  const raceHtml=raceTraits?`<div class="cs-traits-section"><div class="cs-traits-section-title">Raza · ${currentLang==='es'?(rd.nameEs||race):(rd.nameEn||race)}</div><div class="cs-traits-list">${raceTraits}</div></div>`:'';
+  // Class features for current level
+  const cf=_CLASS_FEATURES[cls]||{};
+  const classItems=[];
+  for(let i=1;i<=lv;i++){(cf[i]||[]).forEach(f=>classItems.push(traitItem(f,'')));}
+  const cd=CLASS_DATA[cls]||{};
+  const classHtml=classItems.length?`<div class="cs-traits-section"><div class="cs-traits-section-title">Clase · ${cd.nameEs||cls} Nv.${lv}</div><div class="cs-traits-list">${classItems.join('')}</div></div>`:'';
+  // Background feature
+  let bgHtml='';
+  if(bgd){const feat=currentLang==='es'?bgd.featureEs:bgd.featureEn;const desc=currentLang==='es'?bgd.descEs:bgd.descEn;bgHtml=`<div class="cs-traits-section"><div class="cs-traits-section-title">Trasfondo · ${currentLang==='es'?bgd.nameEs:bgd.nameEn}</div><div class="cs-traits-list">${traitItem(feat,desc)}</div></div>`;}
+  el.innerHTML=`<div style="padding:4px 0;">${raceHtml}${classHtml}${bgHtml}</div>`;
 }
 function _renderProficiencies(cls,race){
   const el=document.getElementById('csProfList');if(!el)return;
@@ -5840,6 +5870,7 @@ function loadChar(id,fromPop){
   _renderInventory();
   _renderCombatActions(c.class||'fighter');
   _renderProficiencies(c.class||'fighter',c.race||'human');
+  _renderTraitsTab(c.class||'fighter',c.race||'human',c.background||'',_currentLevel);
   _renderBgSection(c.background||'');
   _renderSavingThrows();_renderSkillsList();_renderPassives();_renderSkillPanel();
   // Restore portrait
@@ -6282,6 +6313,7 @@ function confirmLevelUp(){
       _cloudSyncChar(_loadedCharId);
     }
   }
+  _renderTraitsTab(_turnCls,_selectedRace,selections?.background||'',_currentLevel);
   closeLevelUp();
 }
 function applyHpCard(id,mode){
@@ -6391,6 +6423,7 @@ function switchCsTab(tab,el){
   if(content)content.classList.add('active');
   if(tab==='spells')_renderCsSlots();
   if(tab==='actions')_renderCombatActions(_turnCls);
+  if(tab==='traits')_renderTraitsTab(_turnCls,_selectedRace,selections?.background||'',_currentLevel);
   if(tab==='notes'){const ta=document.getElementById('csNotesArea');if(ta)ta.value=_charNotes;}
 }
 

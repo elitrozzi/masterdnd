@@ -1,7 +1,12 @@
 {
-  "version": "2.8.38",
+  "version": "2.8.39",
   "date": "2026-06-05",
   "history": [
+    {
+      "version": "2.8.39",
+      "date": "2026-06-05",
+      "note": "Ficha: tab Rasgos centraliza rasgos de raza, clase (por nivel) y trasfondo — expandibles, actualizados al subir de nivel"
+    },
     {
       "version": "2.8.38",
       "date": "2026-06-05",
