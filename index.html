@@ -438,7 +438,7 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .cs-combat-misc-val{font:700 20px/1 'Cinzel',serif;color:var(--lol-gold);}
 .cs-combat-misc-lbl{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(200,170,110,.5);}
 /* Conditions in combat band */
-.cs-cond-band{display:flex;flex-direction:column;gap:5px;flex:1;min-width:0;}
+.cs-cond-band{display:flex;flex-direction:column;gap:4px;flex:1;min-width:0;max-width:530px;}
 .cs-cond-band-header{display:flex;align-items:center;gap:8px;margin-bottom:2px;}
 .cs-cond-band-lbl{font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(200,170,110,.5);flex-shrink:0;}
 /* HP DnD Beyond style */
@@ -767,14 +767,14 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 /* ── Status Conditions ── */
 .cs-cond-count{font-size:12px;font-weight:700;color:var(--lol-gray-dim);transition:color .2s;letter-spacing:.06em;}
 .cs-cond-count.has-conds{color:#ff8080;}
-.cs-cond-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:6px;}
-.cs-cond-pill{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 3px 7px;background:var(--lol-panel2);border:1px solid rgba(120,90,40,.4);cursor:pointer;transition:.18s;position:relative;user-select:none;}
+.cs-cond-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(60px,1fr));gap:4px;}
+.cs-cond-pill{display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px 2px 4px;background:var(--lol-panel2);border:1px solid rgba(120,90,40,.4);cursor:pointer;transition:.18s;position:relative;user-select:none;border-radius:4px;}
 .cs-cond-pill:hover{background:rgba(200,170,110,.07);border-color:var(--lol-border);}
-.cs-cond-pill.active{background:rgba(200,50,50,.18);border-color:rgba(220,80,80,.7);box-shadow:0 0 10px rgba(200,50,50,.25);}
-.cs-cond-icon{font-size:18px;line-height:1;}
+.cs-cond-pill.active{background:rgba(200,50,50,.18);border-color:rgba(220,80,80,.7);box-shadow:0 0 8px rgba(200,50,50,.2);}
+.cs-cond-icon{font-size:14px;line-height:1;}
 .cs-cond-pill.active .cs-cond-icon{animation:condPulse 1s ease-in-out infinite;}
 @keyframes condPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.22);}}
-.cs-cond-name{font-size:12px;color:var(--lol-gray-dim);text-align:center;line-height:1.2;font-weight:600;letter-spacing:.04em;text-transform:uppercase;}
+.cs-cond-name{font-size:9px;color:var(--lol-gray-dim);text-align:center;line-height:1.2;font-weight:600;letter-spacing:.03em;text-transform:uppercase;}
 .cs-cond-pill.active .cs-cond-name{color:#ff9090;}
 .cs-cond-tip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:160px;background:#010a13;border:1px solid rgba(120,90,40,.6);padding:8px 10px;font-size:13px;color:var(--lol-gray);line-height:1.55;z-index:300;pointer-events:none;opacity:0;transition:opacity .15s;white-space:normal;text-align:left;}
 .cs-cond-pill:hover .cs-cond-tip{opacity:1;}
