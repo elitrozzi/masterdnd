@@ -3964,15 +3964,25 @@ const SOUNDS=[
   {id:31,name:'Cueva Encantada',es:'Cueva Encantada',cat:'magic',icon:'🔮',ytId:'oAny8hqQvA4',dur:'∞',src:'YouTube'},
   {id:32,name:'Plano Místico',es:'Plano Místico',cat:'magic',icon:'✨',ytId:'nrQ6RtqGNro',dur:'∞',src:'YouTube'},
   {id:33,name:'Templo Oscuro',es:'Templo de la Oscuridad',cat:'magic',icon:'🌌',ytId:'c-Ghc1m88fQ',dur:'∞',src:'YouTube'},
-  /* ── SFX (Web Audio one-shot) ── */
-  {id:34,name:'Bola de Fuego',es:'Bola de Fuego',cat:'sfx',icon:'🔥',sfxId:'fireball',dur:'2.5'},
-  {id:35,name:'Choque de Espadas',es:'Choque de Espadas',cat:'sfx',icon:'⚔️',sfxId:'sword',dur:'1.5'},
-  {id:36,name:'Flecha',es:'Flecha',cat:'sfx',icon:'🏹',sfxId:'arrow',dur:'0.6'},
-  {id:37,name:'Rayo',es:'Rayo',cat:'sfx',icon:'⚡',sfxId:'thunder',dur:'3.5'},
-  {id:38,name:'Hechizo Mágico',es:'Hechizo Mágico',cat:'sfx',icon:'✨',sfxId:'magic',dur:'2.0'},
-  {id:39,name:'Grito de Guerra',es:'Grito de Guerra',cat:'sfx',icon:'😤',sfxId:'roar',dur:'2.0'},
-  {id:40,name:'Explosión',es:'Explosión',cat:'sfx',icon:'💥',sfxId:'explosion',dur:'3.5'},
-  {id:41,name:'Rugido del Dragón',es:'Rugido del Dragón',cat:'sfx',icon:'🐲',sfxId:'dragon',dur:'2.8'},
+  /* ── SFX (Audio real · archive.org CC) ── */
+  {id:34,name:'Bola de Fuego',es:'Bola de Fuego',cat:'sfx',icon:'🔥',sfxUrl:'Flame1.mp3',dur:'1.2'},
+  {id:35,name:'Choque de Espadas',es:'Choque de Espadas',cat:'sfx',icon:'⚔️',sfxUrl:'Sword1.mp3',dur:'0.8'},
+  {id:36,name:'Golpe de Combate',es:'Golpe de Combate',cat:'sfx',icon:'🗡️',sfxUrl:'Fight1.mp3',dur:'0.5'},
+  {id:37,name:'Disparo de Arco',es:'Disparo de Arco',cat:'sfx',icon:'🏹',sfxUrl:'Bow1.mp3',dur:'0.6'},
+  {id:38,name:'Rayo',es:'Rayo',cat:'sfx',icon:'⚡',sfxUrl:'Thunder1.mp3',dur:'2.0'},
+  {id:39,name:'Curación',es:'Curación',cat:'sfx',icon:'💊',sfxUrl:'Holy1.mp3',dur:'1.5'},
+  {id:40,name:'Explosión',es:'Explosión',cat:'sfx',icon:'💥',sfxUrl:'Explosion1.mp3',dur:'2.0'},
+  {id:41,name:'Magia Oscura',es:'Magia Oscura',cat:'sfx',icon:'🌑',sfxUrl:'Dark1.mp3',dur:'1.8'},
+  {id:42,name:'Hechizo de Hielo',es:'Hechizo de Hielo',cat:'sfx',icon:'❄️',sfxUrl:'Cold1.mp3',dur:'1.5'},
+  {id:43,name:'Terremoto',es:'Terremoto',cat:'sfx',icon:'🌍',sfxUrl:'Earthquake1.mp3',dur:'2.5'},
+  {id:44,name:'Impacto Físico',es:'Impacto Físico',cat:'sfx',icon:'👊',sfxUrl:'Blow1.mp3',dur:'0.4'},
+  {id:45,name:'Campana Taberna',es:'Campana Taberna',cat:'sfx',icon:'🔔',sfxUrl:'Bell.mp3',dur:'1.0'},
+  {id:46,name:'Muerte/Terror',es:'Muerte',cat:'sfx',icon:'💀',sfxUrl:'Darkness.mp3',dur:'2.0'},
+  {id:47,name:'Caos/Monstruo',es:'Caos',cat:'sfx',icon:'🐲',sfxUrl:'Chaos.mp3',dur:'1.5'},
+  {id:48,name:'Aniquilación',es:'Aniquilación',cat:'sfx',icon:'💥',sfxUrl:'Annihilation1.mp3',dur:'2.0'},
+  {id:49,name:'Daño Recibido',es:'Daño',cat:'sfx',icon:'🩸',sfxUrl:'Damage1.mp3',dur:'0.5'},
+  {id:50,name:'Caída',es:'Caída',cat:'sfx',icon:'⬇️',sfxUrl:'Fall1.mp3',dur:'0.8'},
+  {id:51,name:'Fallo/Evasión',es:'Fallo',cat:'sfx',icon:'💨',sfxUrl:'Failure1.mp3',dur:'0.6'},
 ];
 
 /* ══ WEB AUDIO ENGINE ══ */
@@ -4424,30 +4434,26 @@ const sfxEngine=new SFXEngine();
 
 /* ── Audio ducking: lower background music when SFX fires, restore after ── */
 function _duck(durationMs){
-  const duckRatio=0.6, restoreAfter=durationMs+250;
-  // HTML5 Audio track
-  if(currentAudio){
-    const orig=currentAudio.volume;
-    currentAudio.volume=orig*duckRatio;
-    setTimeout(()=>{if(currentAudio)currentAudio.volume=orig;},restoreAfter);
-  }
-  // Web Audio engine
-  if(engine.master&&engine.ctx&&engine.ctx.state==='running'){
-    const now=engine.ctx.currentTime, orig=engine.master.gain.value;
-    engine.master.gain.cancelScheduledValues(now);
-    engine.master.gain.setTargetAtTime(orig*duckRatio,now,0.04);
-    setTimeout(()=>{
-      if(engine.master&&engine.ctx&&engine.ctx.state==='running')
-        engine.master.gain.setTargetAtTime(orig,engine.ctx.currentTime,0.35);
-    },restoreAfter);
+  const duckRatio=0.5, restoreAfter=durationMs+400;
+  // YouTube player ducking
+  if(_ytPlayer&&_ytReady){
+    try{
+      const origVol=_ytPlayer.getVolume();
+      _ytPlayer.setVolume(origVol*duckRatio);
+      setTimeout(()=>{try{if(_ytPlayer&&_ytReady)_ytPlayer.setVolume(origVol);}catch(e){}},restoreAfter);
+    }catch(e){}
   }
 }
 
-/* ── playSFX: triggered by SFX card click ── */
+/* ── playSFX: triggered by SFX card click — uses real audio from archive.org ── */
+const _RM2K='https://archive.org/download/rm2k_sounds/';
 function playSFX(card,s){
-  const durMs=parseFloat(s.dur)*1000||2000;
+  if(!s||!s.sfxUrl)return;
+  const durMs=parseFloat(s.dur)*1000||1500;
   _duck(durMs);
-  sfxEngine.play(s.sfxId);
+  const a=new Audio(_RM2K+s.sfxUrl);
+  a.volume=_getVol();
+  a.play().catch(()=>{});
   if(card){card.classList.add('firing');setTimeout(()=>card.classList.remove('firing'),700);}
 }
 
@@ -9554,7 +9560,7 @@ function renderSounds(cat){
     if(s.cat==='sfx'){
       const nm=currentLang==='es'&&s.es?s.es:s.name;
       const sd=JSON.stringify(s).replace(/"/g,'&quot;');
-      return `<div class="sfx-card" onclick="playSFX(this,${sd})"><span class="sfx-badge">SFX</span><span class="sfx-icon">${s.icon}</span><div class="sfx-name">${nm}</div><div class="sfx-dur">${s.dur}s</div><button class="sfx-trigger">▶ Lanzar</button></div>`;
+      return `<div class="sfx-card" onclick="playSFX(this,${sd})"><span class="sfx-badge">SFX</span><span class="sfx-icon">${s.icon}</span><div class="sfx-name">${nm}</div><div class="sfx-dur">${s.dur}s · Real audio</div><button class="sfx-trigger">▶ Lanzar</button></div>`;
     }
     const nm=currentLang==='es'&&s.es?s.es:s.name;
     const catLbl=CAT_LABELS[s.cat]||s.cat;
