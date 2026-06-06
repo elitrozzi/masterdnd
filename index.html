@@ -984,6 +984,7 @@ body:has(.page.active#page-sounds) #cring{border-color:rgba(111,147,235,.35);}
 .sc-emoji{font-size:24px;}
 .sc-name{font-size:14px;font-weight:600;}
 .sc-type{font-size:13px;color:var(--text-m);}
+.sc-source{font-size:11px;color:var(--text-d);letter-spacing:.04em;margin:-10px 0 10px;}
 .sc-waveform{height:28px;background:rgba(255,255,255,.04);border-radius:6px;overflow:hidden;position:relative;margin-bottom:12px;}
 .sc-wave-fill{position:absolute;left:0;top:0;height:100%;width:45%;background:linear-gradient(90deg,var(--brand-600),var(--brand-400));opacity:.5;}
 .sound-card.playing .sc-wave-fill{animation:wavePulse 1.5s ease-in-out infinite;}
@@ -3547,11 +3548,31 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 <div id="page-sounds" class="page">
   <div class="inner-page">
     <div class="sound-layout">
-      <div class="sound-header"><div><h2 data-es="🎵 Librería de Sonidos" data-en="🎵 Sound Library">🎵 Librería de Sonidos</h2><p data-es="Ambientá cada momento de tu partida" data-en="Set the mood for every moment">Ambientá cada momento de tu partida</p></div></div>
-      <div class="now-playing" id="nowPlaying" style="display:none;"><div class="np-icon" id="npIcon">🎵</div><div class="np-info"><div class="np-name" id="npName">—</div><div class="np-meta" id="npMeta">—</div></div><div class="np-controls"><button class="np-btn">⏮</button><button class="np-btn np-play" id="npPlayBtn" onclick="togglePlay()">⏸</button><button class="np-btn">⏭</button></div><div class="np-volume">🔊 <input type="range" min="0" max="100" value="70" id="volSlider"></div></div>
-      <div class="cat-tabs"><div class="cat-tab active" onclick="filterCat('all',this)" data-es="Todos" data-en="All">Todos</div><div class="cat-tab" onclick="filterCat('combat',this)" data-es="⚔️ Combate" data-en="⚔️ Combat">⚔️ Combate</div><div class="cat-tab" onclick="filterCat('exploration',this)" data-es="🗺️ Exploración" data-en="🗺️ Exploration">🗺️ Exploración</div><div class="cat-tab" onclick="filterCat('tavern',this)" data-es="🍺 Taberna" data-en="🍺 Tavern">🍺 Taberna</div><div class="cat-tab" onclick="filterCat('dungeon',this)" data-es="🏚️ Dungeon" data-en="🏚️ Dungeon">🏚️ Dungeon</div><div class="cat-tab" onclick="filterCat('boss',this)" data-es="🐉 Boss" data-en="🐉 Boss">🐉 Boss</div><div class="cat-tab" onclick="filterCat('ambient',this)" data-es="🌧️ Ambiente" data-en="🌧️ Ambient">🌧️ Ambiente</div><div class="cat-tab sfx-tab" onclick="filterCat('sfx',this)" data-es="⚡ Efectos" data-en="⚡ Effects">⚡ Efectos</div></div>
+      <div class="sound-header">
+        <div><h2 data-es="🎵 Librería de Sonidos" data-en="🎵 Sound Library">🎵 Librería de Sonidos</h2><p>Alta calidad · Michael Ghelfi Studios · Bardify · Guild of Ambience</p></div>
+      </div>
+      <div class="now-playing" id="nowPlaying">
+        <div class="np-icon" id="npIcon">🎵</div>
+        <div class="np-info"><div class="np-name" id="npName" data-es="Elegí un track para comenzar" data-en="Pick a track to start">Elegí un track para comenzar</div><div class="np-meta" id="npMeta">YouTube · Alta calidad · Loop infinito</div></div>
+        <div class="np-controls"><button class="np-btn np-play" id="npPlayBtn" onclick="togglePlay()">▶</button></div>
+        <div class="np-volume">🔊 <input type="range" min="0" max="100" value="70" id="volSlider" oninput="_onVolChange()"></div>
+      </div>
+      <div class="cat-tabs">
+        <div class="cat-tab active" onclick="filterCat('all',this)">Todos</div>
+        <div class="cat-tab" onclick="filterCat('tavern',this)">🍺 Taberna</div>
+        <div class="cat-tab" onclick="filterCat('combat',this)">⚔️ Combate</div>
+        <div class="cat-tab" onclick="filterCat('dungeon',this)">🏚️ Mazmorra</div>
+        <div class="cat-tab" onclick="filterCat('boss',this)">🐉 Jefe Final</div>
+        <div class="cat-tab" onclick="filterCat('exploration',this)">🗺️ Exploración</div>
+        <div class="cat-tab" onclick="filterCat('nature',this)">🌲 Naturaleza</div>
+        <div class="cat-tab" onclick="filterCat('city',this)">🏙️ Ciudad</div>
+        <div class="cat-tab" onclick="filterCat('tension',this)">😰 Tensión</div>
+        <div class="cat-tab" onclick="filterCat('rest',this)">🌙 Descanso</div>
+        <div class="cat-tab" onclick="filterCat('magic',this)">🔮 Magia</div>
+        <div class="cat-tab sfx-tab" onclick="filterCat('sfx',this)">⚡ Efectos</div>
+      </div>
       <div class="sounds-grid" id="soundsGrid"></div>
-      <div class="playlist-section"><div class="playlist-title">🎧 <span data-es="Mi playlist de campaña" data-en="My campaign playlist">Mi playlist de campaña</span> <span class="tag tag-brand">5 tracks</span></div><div class="playlist-items"><div class="pl-item active" onclick="playSound({name:'The Dragon Awakens',cat:'boss',icon:'🐉',dur:'4:32'})"><div class="pl-num">▶</div><div class="pl-icon">🐉</div><div class="pl-info"><div class="pl-name">The Dragon Awakens</div><div class="pl-sub">Boss Fight</div></div><div class="pl-dur">4:32</div></div><div class="pl-item" onclick="playSound({name:'Dungeon Depths',cat:'dungeon',icon:'🏚️',dur:'6:10'})"><div class="pl-num">2</div><div class="pl-icon">🏚️</div><div class="pl-info"><div class="pl-name">Dungeon Depths</div><div class="pl-sub">Dungeon</div></div><div class="pl-dur">6:10</div></div><div class="pl-item" onclick="playSound({name:'Tavern Tales',cat:'tavern',icon:'🍺',dur:'3:45'})"><div class="pl-num">3</div><div class="pl-icon">🍺</div><div class="pl-info"><div class="pl-name">Tavern Tales</div><div class="pl-sub">Taberna</div></div><div class="pl-dur">3:45</div></div><div class="pl-item" onclick="playSound({name:'Forest Ambience',cat:'ambient',icon:'🌲',dur:'∞'})"><div class="pl-num">4</div><div class="pl-icon">🌲</div><div class="pl-info"><div class="pl-name">Forest Ambience</div><div class="pl-sub" data-es="Loop" data-en="Loop">Loop</div></div><div class="pl-dur">∞</div></div><div class="pl-item" onclick="playSound({name:'Battle Cry',cat:'combat',icon:'⚔️',dur:'3:18'})"><div class="pl-num">5</div><div class="pl-icon">⚔️</div><div class="pl-info"><div class="pl-name">Battle Cry</div><div class="pl-sub">Combate</div></div><div class="pl-dur">3:18</div></div></div></div>
+      <div id="yt-player-container" style="position:absolute;width:0;height:0;overflow:hidden;pointer-events:none;"><div id="yt-player"></div></div>
     </div>
   </div>
 </div>
@@ -3900,29 +3921,58 @@ let currentLang='es', currentStep=1, selections={}, rolledStats=null;
 let activeTile='floor', activeTool='draw', isDrawing=false, currentSoundId=null;
 
 const SOUNDS=[
-  {id:1,name:'Battle Cry',es:'Grito de Batalla',cat:'combat',icon:'⚔️',dur:'3:18'},
-  {id:2,name:'Epic Clash',es:'Choque Épico',cat:'combat',icon:'🗡️',dur:'4:05'},
-  {id:3,name:'Charge!',es:'¡Carga!',cat:'combat',icon:'💥',dur:'2:50'},
-  {id:4,name:'Into the Unknown',es:'Hacia lo Desconocido',cat:'exploration',icon:'🗺️',dur:'5:20'},
-  {id:5,name:"Explorer's Theme",es:'Tema del Explorador',cat:'exploration',icon:'🧭',dur:'4:15'},
-  {id:6,name:'Tavern Chatter',es:'Charlas de Taberna',cat:'tavern',icon:'🍺',dur:'∞'},
-  {id:7,name:'The Drinking Song',es:'Canción del Bardo',cat:'tavern',icon:'🎶',dur:'2:10'},
-  {id:8,name:'Dungeon Depths',es:'Las Profundidades',cat:'dungeon',icon:'🏚️',dur:'6:10'},
-  {id:9,name:'Ancient Crypt',es:'Cripta Antigua',cat:'dungeon',icon:'💀',dur:'5:00'},
-  {id:10,name:'The Dragon Awakens',es:'El Dragón Despierta',cat:'boss',icon:'🐉',dur:'4:32'},
-  {id:11,name:'Final Stand',es:'La Última Batalla',cat:'boss',icon:'🔥',dur:'5:45'},
-  {id:12,name:'Rain Ambience',es:'Lluvia Ambiental',cat:'ambient',icon:'🌧️',dur:'∞'},
-  {id:13,name:'Forest Ambience',es:'Bosque Ambiental',cat:'ambient',icon:'🌲',dur:'∞'},
-  {id:14,name:'Storm',es:'Tormenta',cat:'ambient',icon:'⛈️',dur:'∞'},
-  /* ── Efectos Especiales (SFX — one-shot, overlays background music) ── */
-  {id:15,name:'Fireball',es:'Bola de Fuego',cat:'sfx',icon:'🔥',sfxId:'fireball',dur:'2.5'},
-  {id:16,name:'Sword Clash',es:'Choque de Espadas',cat:'sfx',icon:'⚔️',sfxId:'sword',dur:'1.5'},
-  {id:17,name:'Arrow Shot',es:'Flecha',cat:'sfx',icon:'🏹',sfxId:'arrow',dur:'0.6'},
-  {id:18,name:'Thunder Strike',es:'Rayo',cat:'sfx',icon:'⚡',sfxId:'thunder',dur:'3.5'},
-  {id:19,name:'Magic Spell',es:'Hechizo Mágico',cat:'sfx',icon:'✨',sfxId:'magic',dur:'2.0'},
-  {id:20,name:'Battle Roar',es:'Grito de Guerra',cat:'sfx',icon:'😤',sfxId:'roar',dur:'2.0'},
-  {id:21,name:'Explosion',es:'Explosión',cat:'sfx',icon:'💥',sfxId:'explosion',dur:'3.5'},
-  {id:22,name:'Dragon Roar',es:'Rugido del Dragón',cat:'sfx',icon:'🐲',sfxId:'dragon',dur:'2.8'},
+  /* ── TABERNA ── */
+  {id:1,name:'Taberna Concurrida',es:'Taberna Concurrida',cat:'tavern',icon:'🍺',ytId:'KecVJnJcSI4',dur:'∞',src:'Michael Ghelfi'},
+  {id:2,name:'Noche de Fiesta',es:'Noche de Fiesta',cat:'tavern',icon:'🎶',ytId:'FM3Ep3yka44',dur:'∞',src:'Bardify'},
+  {id:3,name:'Taberna 24/7',es:'Música de Taberna',cat:'tavern',icon:'🍻',ytId:'vK5VwVyxkbI',dur:'∞',src:'YouTube'},
+  {id:4,name:'Taberna Tranquila',es:'Taberna Tranquila',cat:'tavern',icon:'🕯️',ytId:'atp0MuIQc_M',dur:'∞',src:'Bardify'},
+  /* ── COMBATE ── */
+  {id:5,name:'Batalla Épica',es:'Batalla Épica',cat:'combat',icon:'⚔️',ytId:'L9dhkINF5Vk',dur:'∞',src:'YouTube'},
+  {id:6,name:'Monstruos y Magia',es:'Monstruos y Magia',cat:'combat',icon:'🔥',ytId:'5Z1CjNzeQ04',dur:'∞',src:'YouTube'},
+  {id:7,name:'¡Emboscada!',es:'¡Emboscada!',cat:'combat',icon:'💥',ytId:'8Q7cioftmKs',dur:'∞',src:'Bardify'},
+  {id:8,name:'Batalla en la Ciudad',es:'Batalla Urbana',cat:'combat',icon:'🗡️',ytId:'LnlddcV5bAY',dur:'∞',src:'YouTube'},
+  /* ── MAZMORRA ── */
+  {id:9,name:'Mazmorra Oscura',es:'Mazmorra Oscura',cat:'dungeon',icon:'🏚️',ytId:'nhP7goJYSmc',dur:'∞',src:'YouTube'},
+  {id:10,name:'Las Profundidades',es:'Las Profundidades',cat:'dungeon',icon:'💀',ytId:'M7iPE6-OvzA',dur:'∞',src:'YouTube'},
+  {id:11,name:'La Gran Mazmorra',es:'Gran Mazmorra',cat:'dungeon',icon:'⚰️',ytId:'W2NAblVD70Q',dur:'∞',src:'YouTube'},
+  /* ── JEFE FINAL ── */
+  {id:12,name:'Batalla Final',es:'Batalla Final',cat:'boss',icon:'🐉',ytId:'CqH0o9nUqas',dur:'∞',src:'Bardify'},
+  {id:13,name:'Épica de Combate',es:'Épica de Combate',cat:'boss',icon:'💀',ytId:'_b6I2pvsv8Y',dur:'∞',src:'YouTube'},
+  /* ── EXPLORACIÓN ── */
+  {id:14,name:'Reinos Inexplorados',es:'Reinos Inexplorados',cat:'exploration',icon:'🗺️',ytId:'kAF0er66Flg',dur:'∞',src:'YouTube'},
+  {id:15,name:'Viaje al Crepúsculo',es:'Viaje al Crepúsculo',cat:'exploration',icon:'🧭',ytId:'WvQePQy6M5g',dur:'∞',src:'YouTube'},
+  {id:16,name:'Investigación',es:'Investigación y Misterio',cat:'exploration',icon:'🔍',ytId:'sGQFWM19DEw',dur:'∞',src:'YouTube'},
+  /* ── NATURALEZA ── */
+  {id:17,name:'Bosque Oscuro',es:'Bosque Oscuro',cat:'nature',icon:'🌲',ytId:'7ElGv7zMqeY',dur:'∞',src:'Michael Ghelfi'},
+  {id:18,name:'Bosque Misterioso',es:'Bosque Misterioso',cat:'nature',icon:'🌿',ytId:'4Y6n-1XQSfE',dur:'∞',src:'Bardify'},
+  {id:19,name:'Selva Peligrosa',es:'Selva Peligrosa',cat:'nature',icon:'🦎',ytId:'5Jzp5H4mQVE',dur:'∞',src:'Michael Ghelfi'},
+  {id:20,name:'Sendero del Bosque',es:'Sendero del Bosque',cat:'nature',icon:'🍃',ytId:'0Zw5Vk_rNTg',dur:'∞',src:'YouTube'},
+  /* ── CIUDAD ── */
+  {id:21,name:'Ciudad Medieval',es:'Ciudad Medieval',cat:'city',icon:'🏙️',ytId:'WJrqwa6tMQY',dur:'∞',src:'Michael Ghelfi'},
+  {id:22,name:'Tarde en el Pueblo',es:'Tarde en el Pueblo',cat:'city',icon:'🏡',ytId:'bSbYpFMNxLI',dur:'∞',src:'YouTube'},
+  {id:23,name:'Plaza del Mercado',es:'Plaza del Mercado',cat:'city',icon:'🛒',ytId:'NeOg8iCFfTA',dur:'∞',src:'Guild of Ambience'},
+  /* ── TENSIÓN/HORROR ── */
+  {id:24,name:'Terror Oscuro',es:'Terror en la Oscuridad',cat:'tension',icon:'😨',ytId:'JIzzxLTQ2zg',dur:'∞',src:'YouTube'},
+  {id:25,name:'Pesadilla',es:'Pesadilla',cat:'tension',icon:'💀',ytId:'Nue1k5-yaEs',dur:'∞',src:'Guild of Ambience'},
+  {id:26,name:'Cueva Escalofriante',es:'Cueva Oscura',cat:'tension',icon:'🕷️',ytId:'cMpnJ0nJZos',dur:'∞',src:'Bardify'},
+  {id:27,name:'Oscuro y Misterioso',es:'Oscuro Misterioso',cat:'tension',icon:'🌑',ytId:'yEYxnJB4jZs',dur:'∞',src:'YouTube'},
+  /* ── DESCANSO/CAMPAMENTO ── */
+  {id:28,name:'Campamento Nocturno',es:'Campamento Nocturno',cat:'rest',icon:'🌙',ytId:'7KFoj-SOfHs',dur:'∞',src:'YouTube'},
+  {id:29,name:'Atardecer en la Llanura',es:'Llanura al Atardecer',cat:'rest',icon:'🌅',ytId:'S8BOUkg7tN8',dur:'∞',src:'YouTube'},
+  {id:30,name:'Noche en el Pueblo',es:'Noche en el Pueblo',cat:'rest',icon:'⭐',ytId:'q9N4L0DOlv0',dur:'∞',src:'YouTube'},
+  /* ── MAGIA ── */
+  {id:31,name:'Cueva Encantada',es:'Cueva Encantada',cat:'magic',icon:'🔮',ytId:'oAny8hqQvA4',dur:'∞',src:'YouTube'},
+  {id:32,name:'Plano Místico',es:'Plano Místico',cat:'magic',icon:'✨',ytId:'nrQ6RtqGNro',dur:'∞',src:'YouTube'},
+  {id:33,name:'Templo Oscuro',es:'Templo de la Oscuridad',cat:'magic',icon:'🌌',ytId:'c-Ghc1m88fQ',dur:'∞',src:'YouTube'},
+  /* ── SFX (Web Audio one-shot) ── */
+  {id:34,name:'Bola de Fuego',es:'Bola de Fuego',cat:'sfx',icon:'🔥',sfxId:'fireball',dur:'2.5'},
+  {id:35,name:'Choque de Espadas',es:'Choque de Espadas',cat:'sfx',icon:'⚔️',sfxId:'sword',dur:'1.5'},
+  {id:36,name:'Flecha',es:'Flecha',cat:'sfx',icon:'🏹',sfxId:'arrow',dur:'0.6'},
+  {id:37,name:'Rayo',es:'Rayo',cat:'sfx',icon:'⚡',sfxId:'thunder',dur:'3.5'},
+  {id:38,name:'Hechizo Mágico',es:'Hechizo Mágico',cat:'sfx',icon:'✨',sfxId:'magic',dur:'2.0'},
+  {id:39,name:'Grito de Guerra',es:'Grito de Guerra',cat:'sfx',icon:'😤',sfxId:'roar',dur:'2.0'},
+  {id:40,name:'Explosión',es:'Explosión',cat:'sfx',icon:'💥',sfxId:'explosion',dur:'3.5'},
+  {id:41,name:'Rugido del Dragón',es:'Rugido del Dragón',cat:'sfx',icon:'🐲',sfxId:'dragon',dur:'2.8'},
 ];
 
 /* ══ WEB AUDIO ENGINE ══ */
@@ -4401,21 +4451,41 @@ function playSFX(card,s){
   if(card){card.classList.add('firing');setTimeout(()=>card.classList.remove('firing'),700);}
 }
 
-/* ══ TRACK URLs — Kevin MacLeod (CC BY 3.0 · incompetech.com) ══ */
-const BASE='https://incompetech.com/music/royalty-free/mp3-royaltyfree/';
-const TRACK_URLS={
-  'Battle Cry':         BASE+'Clash%20Defiant.mp3',
-  'Epic Clash':         BASE+'Anguish.mp3',
-  'Charge!':            BASE+'Heroic%20Age.mp3',
-  'The Dragon Awakens': BASE+'Epic%20Unease.mp3',
-  'Final Stand':        BASE+'Volatile%20Reaction.mp3',
-  'Into the Unknown':   BASE+'Arcadia.mp3',
-  "Explorer's Theme":   BASE+'Undaunted.mp3',
-  'The Drinking Song':  BASE+'Jaunty%20Gigue.mp3',
-  'Dungeon Depths':     BASE+'Shadowlands%201%20-%20The%20Horrors.mp3',
-  'Ancient Crypt':      BASE+'Myst%20on%20the%20Moor.mp3',
+/* ══ YOUTUBE PLAYER ══ */
+let _ytPlayer=null,_ytReady=false,_ytPendingId=null;
+let currentAudio=null; // kept for SFX ducking compat
+function _loadYouTubeAPI(){
+  if(window.YT&&window.YT.Player){_initYTPlayer();return;}
+  if(document.getElementById('yt-api-script'))return;
+  const t=document.createElement('script');t.id='yt-api-script';t.src='https://www.youtube.com/iframe_api';document.head.appendChild(t);
+}
+window.onYouTubeIframeAPIReady=function(){
+  _initYTPlayer();
 };
-let currentAudio=null;
+function _initYTPlayer(){
+  if(_ytPlayer)return;
+  const container=document.getElementById('yt-player');if(!container)return;
+  _ytPlayer=new YT.Player('yt-player',{
+    height:'1',width:'1',videoId:'',
+    playerVars:{autoplay:0,controls:0,loop:1,rel:0,modestbranding:1,enablejsapi:1},
+    events:{
+      onReady:function(e){_ytReady=true;_ytPlayer=e.target;if(_ytPendingId){_ytPlayId(_ytPendingId);_ytPendingId=null;}},
+      onStateChange:function(e){
+        if(e.data===YT.PlayerState.ENDED){try{_ytPlayer.playVideo();}catch(err){}}
+        if(e.data===YT.PlayerState.PLAYING){const b=document.getElementById('npPlayBtn');if(b)b.textContent='⏸';}
+        if(e.data===YT.PlayerState.PAUSED){const b=document.getElementById('npPlayBtn');if(b)b.textContent='▶';}
+      },
+      onError:function(){const el=document.getElementById('npMeta');if(el)el.textContent='Error al cargar · Revisá tu conexión';}
+    }
+  });
+}
+function _ytPlayId(ytId){
+  if(!_ytReady||!_ytPlayer){_ytPendingId=ytId;_loadYouTubeAPI();return;}
+  try{
+    _ytPlayer.loadVideoById({videoId:ytId,startSeconds:0});
+    _ytPlayer.setVolume(_getVol()*100);
+  }catch(e){setTimeout(()=>_ytPlayId(ytId),500);}
+}
 const RACE_EMOJIS={human:'👤',elf:'🧝',dwarf:'⛏️',halfling:'🌿',dragonborn:'🐲',tiefling:'😈',halforc:'💪',gnome:'🔮',aasimar:'✨',tabaxi:'🐱',firbolg:'🌲',kenku:'🦅'};
 const CLASS_EMOJIS={fighter:'⚔️',wizard:'🧙',rogue:'🗡️',cleric:'✝️',ranger:'🏹',paladin:'🛡️',barbarian:'💢',bard:'🎶',druid:'🌿',monk:'🥋',sorcerer:'🔥',warlock:'👁️'};
 /* Sprite sheet positions (3 cols × 4 rows) */
@@ -9476,66 +9546,61 @@ function closeGenModal(){
 }
 
 /* ══ SOUNDS ══ */
+const CAT_LABELS={tavern:'Taberna',combat:'Combate',dungeon:'Mazmorra',boss:'Jefe Final',exploration:'Exploración',nature:'Naturaleza',city:'Ciudad',tension:'Tensión',rest:'Descanso',magic:'Magia',sfx:'Efecto'};
 function renderSounds(cat){
-  const grid=document.getElementById('soundsGrid');
+  const grid=document.getElementById('soundsGrid');if(!grid)return;
   const f=cat==='all'?SOUNDS:SOUNDS.filter(s=>s.cat===cat);
   grid.innerHTML=f.map(s=>{
     if(s.cat==='sfx'){
       const nm=currentLang==='es'&&s.es?s.es:s.name;
-      const trigLabel=currentLang==='es'?'▶ Lanzar':'▶ Trigger';
       const sd=JSON.stringify(s).replace(/"/g,'&quot;');
-      return `<div class="sfx-card" onclick="playSFX(this,${sd})"><span class="sfx-badge">SFX</span><span class="sfx-icon">${s.icon}</span><div class="sfx-name">${nm}</div><div class="sfx-dur">${s.dur}s</div><button class="sfx-trigger">${trigLabel}</button></div>`;
+      return `<div class="sfx-card" onclick="playSFX(this,${sd})"><span class="sfx-badge">SFX</span><span class="sfx-icon">${s.icon}</span><div class="sfx-name">${nm}</div><div class="sfx-dur">${s.dur}s</div><button class="sfx-trigger">▶ Lanzar</button></div>`;
     }
+    const nm=currentLang==='es'&&s.es?s.es:s.name;
+    const catLbl=CAT_LABELS[s.cat]||s.cat;
+    const isPlaying=s.id===currentSoundId;
     const sd=JSON.stringify(s).replace(/"/g,'&quot;');
-    return `<div class="sound-card ${s.id===currentSoundId?'playing':''}" onclick="playSound(${sd})"><div class="sc-top"><div class="sc-emoji">${s.icon}</div><div><div class="sc-name">${currentLang==='es'&&s.es?s.es:s.name}</div><div class="sc-type">${s.cat}</div></div></div><div class="sc-waveform"><div class="sc-wave-fill"></div></div><div class="sc-bottom"><span class="sc-duration">${s.dur}</span><button class="sc-play-btn">${s.id===currentSoundId?'⏸':'▶'}</button></div></div>`;
+    return `<div class="sound-card${isPlaying?' playing':''}" onclick="playSound(${sd})">
+      <div class="sc-top"><div class="sc-emoji">${s.icon}</div><div><div class="sc-name">${nm}</div><div class="sc-type">${catLbl}</div></div></div>
+      <div class="sc-source">${s.src||'YouTube'}</div>
+      <div class="sc-waveform"><div class="sc-wave-fill"></div></div>
+      <div class="sc-bottom"><span class="sc-duration">∞ loop</span><button class="sc-play-btn">${isPlaying?'⏸':'▶'}</button></div>
+    </div>`;
   }).join('');
 }
 let activeCat='all';
 function filterCat(cat,el){activeCat=cat;document.querySelectorAll('.cat-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderSounds(cat);}
 function _stopAll(){
-  if(currentAudio){currentAudio.pause();currentAudio.currentTime=0;currentAudio=null;}
+  if(_ytPlayer&&_ytReady){try{_ytPlayer.stopVideo();}catch(e){}}
   engine.stop();
 }
 function _getVol(){return parseInt(document.getElementById('volSlider')?.value||70)/100;}
+function _onVolChange(){
+  const v=_getVol();
+  if(_ytPlayer&&_ytReady){try{_ytPlayer.setVolume(Math.round(v*100));}catch(e){}}
+  engine.setVolume(Math.round(v*100));
+}
 function playSound(s){
+  if(s.sfxId){playSFX(null,s);return;}
   _stopAll();
   currentSoundId=s.id||null;
-  const url=TRACK_URLS[s.name];
-  if(url){
-    currentAudio=new Audio(url);
-    currentAudio.loop=true;
-    currentAudio.volume=_getVol();
-    currentAudio.play().catch(()=>{
-      // URL failed → fall back to Web Audio synthesis
-      currentAudio=null;
-      engine.play(s);
-    });
-  } else {
-    // Ambient sounds (rain, storm, forest) → Web Audio synthesis
-    engine.play(s);
-  }
-  document.getElementById('nowPlaying').style.display='flex';
-  document.getElementById('npIcon').textContent=s.icon||'🎵';
-  document.getElementById('npName').textContent=currentLang==='es'&&s.es?s.es:s.name;
-  document.getElementById('npMeta').textContent=s.cat+' · '+s.dur;
-  document.getElementById('npPlayBtn').textContent='⏸';
+  _loadYouTubeAPI();
+  _ytPlayId(s.ytId);
+  const nm=currentLang==='es'&&s.es?s.es:s.name;
+  const npName=document.getElementById('npName');if(npName)npName.textContent=nm;
+  const npMeta=document.getElementById('npMeta');if(npMeta)npMeta.textContent=(s.src||'YouTube')+' · Alta calidad · Loop ∞';
+  const npIcon=document.getElementById('npIcon');if(npIcon)npIcon.textContent=s.icon||'🎵';
+  const npBtn=document.getElementById('npPlayBtn');if(npBtn)npBtn.textContent='⏸';
   renderSounds(activeCat||'all');
-  const vol=document.getElementById('volSlider');
-  if(vol)vol.oninput=()=>{
-    const v=parseInt(vol.value)/100;
-    if(currentAudio)currentAudio.volume=v;
-    else engine.setVolume(parseInt(vol.value));
-  };
 }
 function togglePlay(){
+  if(!_ytPlayer||!_ytReady)return;
   const b=document.getElementById('npPlayBtn');
-  if(currentAudio){
-    if(currentAudio.paused){currentAudio.play().catch(()=>{});b.textContent='⏸';}
-    else{currentAudio.pause();b.textContent='▶';}
-  } else if(engine.ctx){
-    if(engine.ctx.state==='running'){engine.ctx.suspend();b.textContent='▶';}
-    else{engine.ctx.resume();b.textContent='⏸';}
-  }
+  try{
+    const st=_ytPlayer.getPlayerState();
+    if(st===1){_ytPlayer.pauseVideo();if(b)b.textContent='▶';}
+    else{_ytPlayer.playVideo();if(b)b.textContent='⏸';}
+  }catch(e){}
 }
 
 /* ══ SCENE LANDING ══ */
