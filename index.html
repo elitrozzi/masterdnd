@@ -1991,7 +1991,11 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 .camp-code-label{color:var(--text-d);min-width:80px;}
 .camp-code-val{font:700 15px/1 'Cinzel',serif;letter-spacing:.2em;color:var(--lol-gold);}
 .camp-code-val.dm-code{color:#93c5fd;}
-.camp-copy-btn{font-size:13px;padding:3px 8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--text-d);cursor:pointer;}
+.camp-copy-btn{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;padding:0;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--text-d);cursor:pointer;border-radius:4px;transition:background .15s,color .15s;position:relative;}
+.camp-copy-btn:hover{background:rgba(255,255,255,.12);color:#fff;}
+.camp-copy-btn svg{width:14px;height:14px;pointer-events:none;}
+.camp-copy-tooltip{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#1a1a2e;border:1px solid rgba(212,175,55,.4);color:var(--lol-gold);font-size:11px;padding:3px 8px;white-space:nowrap;border-radius:3px;pointer-events:none;opacity:0;transition:opacity .2s;}
+.camp-copy-tooltip.show{opacity:1;}
 .camp-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:800;display:flex;align-items:center;justify-content:center;padding:20px;}
 .camp-modal{background:var(--lol-panel);border:1px solid rgba(212,175,55,.25);padding:32px;max-width:480px;width:100%;position:relative;max-height:90vh;overflow-y:auto;border-radius:8px;}
 /* ── Item Gift ──────────────────────────── */
@@ -2355,9 +2359,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.8.45</span>
+    <span class="ver-badge">v2.8.46</span>
     <span class="ver-sep">·</span>
-    <span class="ver-date">05 Jun 2026</span>
+    <span class="ver-date">16 Jun 2026</span>
   </div>
   <div class="lang-toggle">
     <button class="lang-btn active" onclick="setLang('es')">ES</button>
@@ -2874,9 +2878,9 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
         <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
         <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
           <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.8.45</span>
+          <span class="ver-badge">v2.8.46</span>
           <span>·</span>
-          <span class="ver-date">05 Jun 2026</span>
+          <span class="ver-date">16 Jun 2026</span>
         </div>
       </div>
       <!-- RIGHT: scene -->
@@ -8750,14 +8754,20 @@ function _buildPartyTab(){
   const myRole=_currentCampaignMembers.find(m=>m.user_id===_currentUser.id)?.role;
   const codesHtml=`<div class="camp-codes" style="margin-top:24px;">
     <div style="font-size:13px;color:var(--text-d);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">Códigos de invitación</div>
-    <div class="camp-code-row"><span class="camp-code-label">Jugadores:</span><span class="camp-code-val">${_currentCampaign.invite_code_player}</span><button class="camp-copy-btn" onclick="navigator.clipboard.writeText('${_currentCampaign.invite_code_player}')">Copiar</button></div>
-    <div class="camp-code-row"><span class="camp-code-label">DM:</span><span class="camp-code-val dm-code">${_currentCampaign.invite_code_dm}</span><button class="camp-copy-btn" onclick="navigator.clipboard.writeText('${_currentCampaign.invite_code_dm}')">Copiar</button></div>
+    <div class="camp-code-row"><span class="camp-code-label">Jugadores:</span><span class="camp-code-val">${_currentCampaign.invite_code_player}</span><button class="camp-copy-btn" onclick="copyCampaignCode('${_currentCampaign.invite_code_player}',this)" title="Copiar código"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="camp-copy-tooltip">Código copiado</span></button></div>
+    <div class="camp-code-row"><span class="camp-code-label">DM:</span><span class="camp-code-val dm-code">${_currentCampaign.invite_code_dm}</span><button class="camp-copy-btn" onclick="copyCampaignCode('${_currentCampaign.invite_code_dm}',this)" title="Copiar código"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="camp-copy-tooltip">Código copiado</span></button></div>
   </div>`;
   // Link char button for self if no char linked
   const me=_currentCampaignMembers.find(m=>m.user_id===_currentUser.id);
   const linkBtn=!me?.char_id?`<button class="camp-action-btn camp-create-btn" style="margin-top:16px;" onclick="openLinkCharModal()">🔗 Vincular mi personaje</button>`:'';
   const giftBtn=myRole==='dm'?`<button class="camp-action-btn camp-create-btn" style="margin-top:16px;" onclick="openItemGiftModal()">🎁 Entregar item</button>`:'';
   return`<div class="camp-party-grid">${cards}</div>${giftBtn}${linkBtn}${codesHtml}`;
+}
+function copyCampaignCode(code,btn){
+  navigator.clipboard.writeText(code);
+  const tip=btn.querySelector('.camp-copy-tooltip');
+  tip.classList.add('show');
+  setTimeout(()=>tip.classList.remove('show'),1800);
 }
 
 function _buildDmTab(){
@@ -8977,13 +8987,10 @@ async function joinCampaign(){
   const errEl=document.getElementById('campModalErr');
   if(!code){errEl.textContent='Ingresá el código de invitación.';return;}
   if(!displayName){errEl.textContent='Ingresá tu nombre.';return;}
-  // Find campaign by player or dm code
-  let {data:camp}=await _SB.from('campaigns').select('*').eq('invite_code_player',code).single();
-  let role='player';
-  if(!camp){
-    const r=await _SB.from('campaigns').select('*').eq('invite_code_dm',code).single();
-    camp=r.data;role='dm';
-  }
+  // Find campaign by player or dm code (via RPC to bypass RLS pre-membership)
+  const {data:rows}=await _SB.rpc('find_campaign_by_invite',{p_code:code});
+  const camp=rows?.[0]||null;
+  const role=camp?.invite_code_dm===code?'dm':'player';
   if(!camp){errEl.textContent='Código inválido. Verificá e intentá de nuevo.';return;}
   // Check if already member
   const {data:existing}=await _SB.from('campaign_members').select('id').eq('campaign_id',camp.id).eq('user_id',_currentUser.id).single();

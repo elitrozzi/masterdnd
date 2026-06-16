@@ -1,7 +1,12 @@
 {
-  "version": "2.8.45",
-  "date": "2026-06-05",
+  "version": "2.8.46",
+  "date": "2026-06-16",
   "history": [
+    {
+      "version": "2.8.46",
+      "date": "2026-06-16",
+      "note": "Fix crítico Modo Campaña: RLS campaign_members tenía recursión infinita — función SECURITY DEFINER get_my_campaign_ids() rompe el ciclo; joinCampaign usa RPC find_campaign_by_invite() para lookup por código sin requerir membresía previa"
+    },
     {
       "version": "2.8.45",
       "date": "2026-06-05",
