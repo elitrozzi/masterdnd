@@ -1911,9 +1911,8 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 .cmap-dm-only-toggle{display:flex;align-items:center;gap:8px;padding:8px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);cursor:pointer;margin:8px 0 12px;user-select:none;}
 .cmap-dm-only-toggle input{accent-color:var(--lol-gold);cursor:pointer;}
 .cmap-dm-only-toggle span{font-size:12px;color:var(--text-m);}
-.cmap-add-modal{background:#10081f;border:1px solid rgba(212,175,55,.35);padding:22px;max-width:360px;width:92%;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:910;max-height:90vh;overflow-y:auto;}
-.cmap-add-modal h3{font:700 16px/1 'Cinzel',serif;color:var(--lol-gold);margin:0 0 14px;}
-.cmap-add-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:909;}
+.cmap-add-modal{display:none;}
+.cmap-add-overlay{display:none;}
 /* ══ CAMPAIGN ══ */
 .camp-layout{display:flex;flex-direction:column;flex:1;min-height:0;padding:24px 32px;max-width:1100px;margin:0 auto;width:100%;}
 .camp-login-gate{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:16px;text-align:center;}
@@ -1996,8 +1995,19 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 .camp-copy-btn svg{width:14px;height:14px;pointer-events:none;}
 .camp-copy-tooltip{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#1a1a2e;border:1px solid rgba(212,175,55,.4);color:var(--lol-gold);font-size:11px;padding:3px 8px;white-space:nowrap;border-radius:3px;pointer-events:none;opacity:0;transition:opacity .2s;}
 .camp-copy-tooltip.show{opacity:1;}
-.camp-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:800;display:flex;align-items:center;justify-content:center;padding:20px;}
-.camp-modal{background:var(--lol-panel);border:1px solid rgba(212,175,55,.25);padding:32px;max-width:480px;width:100%;position:relative;max-height:90vh;overflow-y:auto;border-radius:8px;}
+.camp-modal-overlay{display:none;}
+.drawer-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:799;opacity:0;transition:opacity .25s ease;pointer-events:none;}
+.drawer-backdrop.open{opacity:1;pointer-events:auto;}
+.drawer{position:fixed;top:0;right:0;height:100%;width:440px;max-width:100vw;background:#0e0718;border-left:1px solid rgba(212,175,55,.25);z-index:800;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);}
+.drawer.open{transform:translateX(0);}
+.drawer-header{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 16px;border-bottom:1px solid rgba(255,255,255,.07);flex-shrink:0;}
+.drawer-title{font:700 18px/1 'Cinzel',serif;color:var(--lol-gold);}
+.drawer-close{background:none;border:none;color:var(--text-d);font-size:18px;cursor:pointer;padding:4px;line-height:1;transition:color .15s;}
+.drawer-close:hover{color:#fff;}
+.drawer-body{flex:1;overflow-y:auto;padding:20px 24px;}
+.drawer-footer{padding:16px 24px;border-top:1px solid rgba(255,255,255,.07);flex-shrink:0;}
+@media(max-width:600px){.drawer{width:100vw;}}
+.camp-modal{display:none;}
 /* ── Item Gift ──────────────────────────── */
 .item-gift-overlay{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;background:rgba(5,5,15,.88);backdrop-filter:blur(8px);opacity:0;transition:opacity .4s;}
 .item-gift-overlay.open{opacity:1;}
@@ -3781,7 +3791,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
           <div class="camp-detail-name" id="campDetailName"></div>
           <div class="camp-detail-meta" id="campDetailMeta"></div>
         </div>
-        <button class="camp-session-inc-btn" id="campSessionBtn" onclick="incrementSessionCount()" style="display:none;" title="Registrar sesión jugada">+1 Sesión</button>
+        <button class="camp-session-inc-btn" id="campSessionBtn" onclick="openNewSessionModal()" style="display:none;">Registrar sesión</button>
       </div>
       <div class="camp-tabs">
         <button class="camp-tab active" data-tab="party" onclick="switchCampTab('party')">👥 Party</button>
@@ -3795,12 +3805,15 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
       <div id="campTabContent" class="camp-tab-content"></div>
     </div>
   </div>
-  <!-- Create/Join modal -->
-  <div id="campModal" class="camp-modal-overlay" style="display:none;" onclick="if(event.target===this)closeCampaignModal()">
-    <div class="camp-modal">
-      <button class="camp-modal-close" onclick="closeCampaignModal()">✕</button>
-      <div id="campModalContent"></div>
+  <!-- Drawer (reemplaza todos los modales de campaña) -->
+  <div class="drawer-backdrop" id="campDrawerBackdrop" onclick="closeCampaignModal()"></div>
+  <div class="drawer" id="campDrawer">
+    <div class="drawer-header">
+      <span class="drawer-title" id="campDrawerTitle"></span>
+      <button class="drawer-close" onclick="closeCampaignModal()">✕</button>
     </div>
+    <div class="drawer-body" id="campModalContent"></div>
+    <div class="drawer-footer" id="campDrawerFooter"></div>
   </div>
 </div>
 <!-- Item Gift Received Modal (global, shown on any page) -->
@@ -8608,7 +8621,11 @@ async function openItemGiftModal(){
     </div>`;
   _giftSelectedItem=null;
   _giftRecipients=new Set(['all']);
-  document.getElementById('campModal').style.display='flex';
+  document.getElementById('campDrawerBackdrop').classList.add('open');
+  document.getElementById('campDrawer').classList.add('open');
+  document.body.style.overflow='hidden';
+  document.getElementById('campDrawerTitle').textContent='🎁 Entregar Item';
+  document.getElementById('campDrawerFooter').innerHTML='';
   _loadInvAcData(); // pre-warm cache
 }
 
@@ -8900,12 +8917,15 @@ async function incrementSessionCount(){
 
 /* Create / Join modals */
 function openCampaignModal(mode){
-  document.getElementById('campModal').style.display='flex';
+  const backdrop=document.getElementById('campDrawerBackdrop');
+  const drawer=document.getElementById('campDrawer');
+  backdrop.classList.add('open');
+  drawer.classList.add('open');
+  document.body.style.overflow='hidden';
   const content=document.getElementById('campModalContent');
   if(mode==='create'){
     _campCreateRole='dm';
     content.innerHTML=`
-      <div class="camp-modal-title">Nueva Campaña</div>
       <div class="camp-modal-label">¿Cuál es tu rol?</div>
       <div class="camp-role-btns">
         <div class="camp-role-btn selected" id="campRoleDm" onclick="selectCampRole('dm')">
@@ -8925,9 +8945,10 @@ function openCampaignModal(mode){
       <input class="camp-modal-input" id="campDisplayName" placeholder="ej. El DM, Gandalf..." maxlength="40">
       <button class="camp-modal-submit" onclick="createCampaign()">Crear campaña</button>
       <div class="camp-modal-err" id="campModalErr"></div>`;
+    document.getElementById('campDrawerTitle').textContent='Nueva Campaña';
+    document.getElementById('campDrawerFooter').innerHTML='';
   } else {
     content.innerHTML=`
-      <div class="camp-modal-title">Unirse a una Campaña</div>
       <label class="camp-modal-label">Código de invitación</label>
       <input class="camp-modal-input" id="campJoinCode" placeholder="Ej. ABC123" maxlength="8" style="text-transform:uppercase;letter-spacing:.2em;font-size:18px;font-family:'Cinzel',serif;">
       <label class="camp-modal-label">Tu nombre en la campaña</label>
@@ -8939,6 +8960,8 @@ function openCampaignModal(mode){
       </select>
       <button class="camp-modal-submit" onclick="joinCampaign()">Unirse</button>
       <div class="camp-modal-err" id="campModalErr"></div>`;
+    document.getElementById('campDrawerTitle').textContent='Unirse a una Campaña';
+    document.getElementById('campDrawerFooter').innerHTML='';
   }
 }
 
@@ -8949,7 +8972,9 @@ function selectCampRole(role){
 }
 
 function closeCampaignModal(){
-  document.getElementById('campModal').style.display='none';
+  document.getElementById('campDrawerBackdrop').classList.remove('open');
+  document.getElementById('campDrawer').classList.remove('open');
+  document.body.style.overflow='';
 }
 
 function _genCode(len=6){return Math.random().toString(36).substr(2,len).toUpperCase();}
@@ -9013,9 +9038,12 @@ async function openLinkCharModal(){
   const sel=document.createElement('select');
   sel.style.cssText='background:var(--lol-panel);border:1px solid rgba(212,175,55,.3);color:#fff;padding:10px;font-size:14px;width:100%;margin:10px 0;';
   sel.innerHTML=chars.map(c=>`<option value="${c.id}">${c.name} (${c.class} Nv.${c.level||1})</option>`).join('');
-  document.getElementById('campModal').style.display='flex';
+  document.getElementById('campDrawerBackdrop').classList.add('open');
+  document.getElementById('campDrawer').classList.add('open');
+  document.body.style.overflow='hidden';
+  document.getElementById('campDrawerTitle').textContent='Vincular personaje';
+  document.getElementById('campDrawerFooter').innerHTML='';
   document.getElementById('campModalContent').innerHTML=`
-    <div class="camp-modal-title">Vincular personaje</div>
     <div style="font-size:13px;color:var(--text-d);margin-bottom:12px;">Elegí el personaje que usás en esta campaña:</div>
     <div id="campLinkSelWrap"></div>
     <button class="camp-modal-submit" onclick="linkCharToCampaign()">Vincular</button>`;
@@ -9097,17 +9125,40 @@ function _buildBitacoraTab(){
 }
 function openNewSessionModal(){
   const n=(_currentCampaign.session_count||0);
-  document.getElementById('campModal').style.display='flex';
-  document.getElementById('campModalContent').innerHTML=`
-    <div class="camp-modal-title">📖 Nueva sesión — #${n+1}</div>
-    <label class="camp-modal-label">Título de la sesión</label>
-    <input class="camp-modal-input" id="sessTitle" placeholder="ej. La noche en el castillo...">
-    <label class="camp-modal-label">Fecha jugada</label>
-    <input class="camp-modal-input" id="sessDate" type="date" value="${new Date().toISOString().split('T')[0]}">
-    <label class="camp-modal-label">Notas / resumen (opcional)</label>
-    <textarea class="camp-modal-input" id="sessNotes" rows="5" placeholder="Qué pasó en esta sesión..." style="resize:vertical;font-family:inherit;"></textarea>
+  const lastSess=_campaignSessions[0]||null;
+  const prevBlock=lastSess?`
+    <div style="background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.18);border-radius:8px;padding:14px 16px;margin-bottom:20px;">
+      <div style="font-size:11px;color:var(--text-d);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;">Última sesión — #${lastSess.session_number} · ${lastSess.played_at?new Date(lastSess.played_at+'T12:00:00').toLocaleDateString('es-AR',{day:'numeric',month:'long'}):'sin fecha'}</div>
+      <div style="font-size:14px;color:var(--lol-gold);font-weight:700;margin-bottom:${lastSess.notes?'8':'0'}px;">${_esc(lastSess.title)}</div>
+      ${lastSess.notes?`<div style="font-size:13px;color:var(--text-m);line-height:1.5;white-space:pre-wrap;">${_esc(lastSess.notes)}</div>`:''}
+    </div>`:'';
+  const memberCount=_currentCampaignMembers.length;
+  const playerCount=_currentCampaignMembers.filter(m=>m.role!=='dm').length;
+  document.getElementById('campDrawerBackdrop').classList.add('open');
+  document.getElementById('campDrawer').classList.add('open');
+  document.body.style.overflow='hidden';
+  document.getElementById('campDrawerTitle').textContent=`📖 Sesión #${n+1}`;
+  document.getElementById('campDrawerFooter').innerHTML=`
     <button class="camp-modal-submit" onclick="saveSessionEntry()">Guardar sesión</button>
-    <div class="camp-modal-err" id="campModalErr"></div>`;
+    <div class="camp-modal-err" id="campModalErr" style="margin-top:8px;"></div>`;
+  document.getElementById('campModalContent').innerHTML=`
+    ${prevBlock}
+    <div style="display:flex;gap:16px;margin-bottom:16px;">
+      <div style="flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:10px 14px;text-align:center;">
+        <div style="font-size:11px;color:var(--text-d);text-transform:uppercase;letter-spacing:.08em;">Sesión</div>
+        <div style="font-size:22px;font-weight:700;color:#fff;">#${n+1}</div>
+      </div>
+      <div style="flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:10px 14px;text-align:center;">
+        <div style="font-size:11px;color:var(--text-d);text-transform:uppercase;letter-spacing:.08em;">Jugadores</div>
+        <div style="font-size:22px;font-weight:700;color:#fff;">${playerCount}/${memberCount}</div>
+      </div>
+    </div>
+    <label class="camp-modal-label">Fecha jugada</label>
+    <input class="camp-modal-input" id="sessDate" type="date" value="${new Date().toISOString().split('T')[0]}" style="margin-bottom:14px;">
+    <label class="camp-modal-label">Título de la sesión</label>
+    <input class="camp-modal-input" id="sessTitle" placeholder="ej. La noche en el castillo..." style="margin-bottom:14px;">
+    <label class="camp-modal-label">Resumen de esta sesión (opcional)</label>
+    <textarea class="camp-modal-input" id="sessNotes" rows="5" placeholder="¿Qué pasó? Esto aparecerá como contexto antes de la próxima sesión..." style="resize:vertical;font-family:inherit;margin-bottom:0;"></textarea>`;
 }
 async function saveSessionEntry(){
   const title=(document.getElementById('sessTitle')?.value||'').trim();
@@ -9486,28 +9537,28 @@ function _cmapOpenAddModal(xPct,yPct){
   const typeOpts=CAMP_PIN_TYPES.map(t=>`<div class="cmap-pin-type-opt${t.id===_cmapSelectedPinType?' selected':''}" onclick="document.querySelectorAll('.cmap-pin-type-opt').forEach(el=>el.classList.remove('selected'));this.classList.add('selected');_cmapSelectedPinType='${t.id}'">
     <span class="cmap-pin-type-icon">${t.icon}</span><span class="cmap-pin-type-lbl">${t.label}</span>
   </div>`).join('');
-  document.body.insertAdjacentHTML('beforeend',`
-    <div class="cmap-add-overlay" id="cmapAddOverlay" onclick="closeCmapModal()"></div>
-    <div class="cmap-add-modal" id="cmapAddModal">
-      <h3>📍 Nuevo marcador</h3>
-      <label class="camp-modal-label">Tipo de lugar</label>
-      <div class="cmap-pin-type-grid">${typeOpts}</div>
-      <label class="camp-modal-label">Nombre del lugar</label>
-      <input class="camp-modal-input" id="cmapLabel" placeholder="ej. Fortaleza de Neverwinter" style="margin-bottom:10px;">
-      <label class="camp-modal-label">Notas del DM (se muestran al hacer hover)</label>
-      <textarea class="camp-modal-input" id="cmapNotes" rows="3" placeholder="ej. Aquí vive el dragón rojo Infernax..." style="resize:vertical;font-family:inherit;margin-bottom:0;"></textarea>
-      <label class="cmap-dm-only-toggle"><input type="checkbox" id="cmapDmOnly"><span>🔒 Solo visible para el DM</span></label>
-      <div style="display:flex;gap:8px;">
-        <button class="camp-modal-submit" onclick="saveCampPin()" style="flex:1;">Colocar marcador</button>
-        <button onclick="closeCmapModal()" style="padding:10px 14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--text-d);cursor:pointer;font-family:inherit;">Cancelar</button>
-      </div>
-    </div>`);
+  document.getElementById('campDrawerTitle').textContent='📍 Nuevo marcador';
+  document.getElementById('campModalContent').innerHTML=`
+    <label class="camp-modal-label">Tipo de lugar</label>
+    <div class="cmap-pin-type-grid">${typeOpts}</div>
+    <label class="camp-modal-label">Nombre del lugar</label>
+    <input class="camp-modal-input" id="cmapLabel" placeholder="ej. Fortaleza de Neverwinter" style="margin-bottom:10px;">
+    <label class="camp-modal-label">Notas del DM (se muestran al hacer hover)</label>
+    <textarea class="camp-modal-input" id="cmapNotes" rows="3" placeholder="ej. Aquí vive el dragón rojo Infernax..." style="resize:vertical;font-family:inherit;margin-bottom:0;"></textarea>
+    <label class="cmap-dm-only-toggle"><input type="checkbox" id="cmapDmOnly"><span>🔒 Solo visible para el DM</span></label>`;
+  document.getElementById('campDrawerFooter').innerHTML=`
+    <div style="display:flex;gap:8px;">
+      <button class="camp-modal-submit" onclick="saveCampPin()" style="flex:1;">Colocar marcador</button>
+      <button onclick="closeCmapModal()" style="padding:10px 14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--text-d);cursor:pointer;font-family:inherit;border-radius:6px;">Cancelar</button>
+    </div>`;
+  document.getElementById('campDrawerBackdrop').classList.add('open');
+  document.getElementById('campDrawer').classList.add('open');
+  document.body.style.overflow='hidden';
   document.getElementById('cmapLabel')?.focus();
 }
 
 function closeCmapModal(){
-  document.getElementById('cmapAddModal')?.remove();
-  document.getElementById('cmapAddOverlay')?.remove();
+  closeCampaignModal();
   _cmapPendingXY=null;
 }
 
