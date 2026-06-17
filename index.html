@@ -2269,6 +2269,270 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
 .cs-dbd-btn:active,.ct-next-btn:active,.ct-roll-btn:active,.ct-dmg-btn:active,.btn-dmg:active,.btn-heal:active,.char-picker-new:active,.combat-active-btn:active,.cmb-attack-btn:active,.cmb-dice-btn:active,.cmb-session-btn:active,.dr-stat-btn:active,.lu-hp-option:active,.lu-asi-btn:active,.lu-btn-cancel:active,.lu-btn-confirm:active,.cnotes-cat-btn:active,.cmap-zoom-btn:active,.camp-gate-btn:active,.camp-action-btn:active,.camp-back-btn:active,.camp-tab:active,.item-gift-btn:active,.gift-chip:active,.gift-send-btn:active,.camp-role-btn:active,.camp-modal-submit:active,.cmb-cond-badge:active,.cmb-cond-picker-badge:active,.cs-chip:active,.ct-token:active,.char-picker-card:active,.ct-card:active,.camp-card:active,.cmap-sidebar-item:active,.cmap-pin-type-opt:active,.cs-dbd-stat-box:active,.mob-block-btn:active,.fb-send:active{transform:scale(0.97);}
 @media(hover:none){.lbtn-ghost:hover,.lbtn-gold:hover,.hook-roll-btn:hover,.ls-feat-card:hover,.ls-guide-card:hover,.ls-camp-cta:hover,.ls-cta-btn-start:hover,.option-card:hover,.char-picker-card:hover,.btn-cta-primary:hover,.btn-cta-secondary:hover,.char-confirm-btn:hover,.cs-mode-card:hover,.gen-card:hover,.comm-card:hover,.sound-card:hover,.sfx-card:hover,.comp-card:hover,.dado-btn:hover,.dados-roll-btn:hover,.fb-btn:hover{transform:none;filter:none;box-shadow:none;}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;}}
+
+/* ══ HERO REDESIGN ══ */
+#page-home { background: #05081a; }
+.sc-wrap { display: none !important; } /* ocultar escena animada */
+.land-section-hero-spacer { display: none; } /* sin spacer, hero fluye */
+.land-ui { position: relative; z-index: 10; pointer-events: auto; }
+.land-hero-new {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 120px 8vw 80px;
+  position: relative;
+  overflow: hidden;
+}
+.land-hero-new::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 60% 40%, rgba(124,58,237,.15) 0%, transparent 65%),
+              radial-gradient(ellipse 50% 40% at 20% 80%, rgba(230,57,70,.08) 0%, transparent 55%);
+  pointer-events: none;
+}
+.hero-content { flex: 1; max-width: 600px; z-index: 2; }
+.hero-dice-visual {
+  position: absolute;
+  right: 6vw;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: clamp(120px, 18vw, 260px);
+  opacity: 0.18;
+  filter: blur(1px) drop-shadow(0 0 60px rgba(124,58,237,.6));
+  animation: heroDiceFloat 6s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+  user-select: none;
+}
+@keyframes heroDiceFloat {
+  0%, 100% { transform: translateY(-50%) rotate(-8deg); }
+  50% { transform: translateY(calc(-50% - 20px)) rotate(8deg); }
+}
+.hero-eyebrow-new {
+  font-size: 11px;
+  letter-spacing: .32em;
+  color: rgba(248,198,98,.7);
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+.hero-title-new {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(52px, 8vw, 108px);
+  font-weight: 700;
+  line-height: .88;
+  margin-bottom: 28px;
+  background: linear-gradient(135deg, #f8c662 0%, #fad888 40%, #c89630 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-desc-new {
+  font-size: clamp(14px, 1.4vw, 16px);
+  color: var(--text-m);
+  line-height: 1.75;
+  max-width: 480px;
+  margin-bottom: 36px;
+}
+.hero-stats-new {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 40px;
+}
+.hero-stat-new {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0 22px;
+}
+.hero-stat-new:first-child { padding-left: 0; }
+.hero-stat-n { font-family: 'Cinzel', serif; font-size: clamp(22px, 2.5vw, 30px); font-weight: 700; color: var(--gold); line-height: 1; }
+.hero-stat-l { font-size: 11px; color: var(--text-d); letter-spacing: .1em; text-transform: uppercase; margin-top: 3px; }
+.hero-stat-sep { width: 1px; height: 28px; background: rgba(248,198,98,.2); align-self: center; }
+.hero-btns-new { display: flex; gap: 14px; flex-wrap: wrap; }
+.lbtn-primary-new {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 15px 32px; border-radius: 8px;
+  background: #e63946; color: #fff;
+  font-size: 15px; font-weight: 700;
+  border: none; cursor: pointer;
+  transition: filter .2s, transform .2s, box-shadow .2s;
+  letter-spacing: .3px;
+}
+.lbtn-primary-new:hover { filter: brightness(1.12); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(230,57,70,.45); }
+.hero-scroll-hint {
+  margin-top: 60px;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 6px;
+}
+.hero-scroll-text { font-size: 11px; letter-spacing: .25em; color: rgba(255,255,255,.3); text-transform: uppercase; }
+.hero-scroll-arrow { font-size: 18px; color: rgba(248,198,98,.4); animation: heroArrowBounce 1.8s ease-in-out infinite; }
+@keyframes heroArrowBounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(6px);} }
+
+/* ══ FEAT CARD LABEL TAG ══ */
+.ls-feat-label {
+  font-size: 9px; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--text-d); font-weight: 700; margin-bottom: 16px;
+  display: block;
+}
+
+/* ══ CAMPAIGN REDESIGN ══ */
+.ls-campaign-new { background: linear-gradient(180deg, #03060f 0%, #060c1f 100%); }
+.ls-camp-new-inner { display: flex; gap: 80px; align-items: center; }
+.ls-camp-new-left { flex: 0 0 45%; }
+.ls-camp-new-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 5px 14px; border-radius: 20px;
+  background: rgba(248,198,98,.1); border: 1px solid rgba(248,198,98,.25);
+  color: var(--gold); font-size: 11px; font-weight: 700;
+  letter-spacing: .18em; text-transform: uppercase; margin-bottom: 20px;
+}
+.ls-camp-new-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(28px, 3.8vw, 50px);
+  font-weight: 700; color: var(--text);
+  line-height: .95; margin-bottom: 20px;
+}
+.ls-camp-new-title em { font-style: normal; color: var(--gold); display: block; }
+.ls-camp-features { display: flex; flex-direction: column; gap: 10px; margin: 24px 0 32px; }
+.ls-camp-feature { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--text-m); }
+.ls-camp-feature-check { width: 18px; height: 18px; border-radius: 50%; background: rgba(74,222,128,.15); border: 1px solid rgba(74,222,128,.35); color: #4ade80; font-size: 11px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.ls-camp-new-right { flex: 1; }
+.camp-mockup {
+  background: rgba(13,18,48,.9); border: 1px solid rgba(255,255,255,.1);
+  border-radius: 12px; overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0,0,0,.5), 0 0 0 1px rgba(124,58,237,.15);
+}
+.camp-mockup-header {
+  padding: 14px 18px; background: rgba(0,0,0,.3);
+  border-bottom: 1px solid rgba(255,255,255,.07);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.camp-mockup-title { font-family: 'Cinzel',serif; font-size: 12px; color: var(--gold); letter-spacing: .08em; }
+.camp-mockup-badge { font-size: 11px; padding: 3px 10px; border-radius: 10px; background: rgba(74,222,128,.15); color: #4ade80; border: 1px solid rgba(74,222,128,.3); }
+.camp-mockup-campaign { padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,.06); }
+.camp-mockup-campaign-name { font-family: 'Cinzel',serif; font-size: 13px; color: var(--text); margin-bottom: 3px; }
+.camp-mockup-campaign-sub { font-size: 11px; color: var(--text-d); }
+.camp-mockup-players { padding: 10px 18px; display: flex; flex-direction: column; gap: 8px; }
+.camp-mockup-player { display: flex; align-items: center; gap: 10px; }
+.cmp-name { font-size: 12px; color: var(--text-m); width: 130px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cmp-hp-bar { flex: 1; height: 5px; background: rgba(255,255,255,.08); border-radius: 3px; overflow: hidden; }
+.cmp-hp-fill { height: 100%; border-radius: 3px; transition: width .3s; }
+.cmp-hp-text { font-size: 11px; color: var(--text-d); width: 60px; text-align: right; white-space: nowrap; }
+.camp-mockup-footer { padding: 10px 18px; background: rgba(0,0,0,.2); border-top: 1px solid rgba(255,255,255,.05); font-size: 11px; color: var(--text-d); display: flex; align-items: center; justify-content: space-between; }
+.camp-mockup-combat { color: #f87171; }
+
+/* ══ HOOKS REDESIGN ══ */
+.ls-hooks-new { background: linear-gradient(180deg,#040810 0%,#060c1e 100%); }
+.ls-hooks-header { text-align: center; margin-bottom: 48px; }
+.ls-hook-cats {
+  display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+.ls-hook-cat-pill {
+  padding: 7px 18px; border-radius: 20px;
+  background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1);
+  font-size: 12px; color: var(--text-m); cursor: pointer;
+  transition: background .15s, border-color .15s, color .15s;
+  white-space: nowrap;
+}
+.ls-hook-cat-pill:hover, .ls-hook-cat-pill.active {
+  background: rgba(248,198,98,.1); border-color: rgba(248,198,98,.4); color: var(--gold);
+}
+.ls-hooks-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.ls-hook-card {
+  background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.09);
+  border-radius: 8px; padding: 24px 22px;
+  transition: border-color .2s, transform .2s;
+}
+.ls-hook-card:hover { border-color: rgba(248,198,98,.3); transform: translateY(-4px); }
+.ls-hook-card-cat { font-size: 10px; letter-spacing: .22em; color: var(--text-d); text-transform: uppercase; font-weight: 700; margin-bottom: 12px; }
+.ls-hook-card-title { font-family: 'Cinzel', serif; font-size: 15px; color: var(--gold); margin-bottom: 10px; }
+.ls-hook-card-desc { font-size: 13px; color: var(--text-m); line-height: 1.65; }
+@media(max-width:700px){ .ls-hooks-grid{grid-template-columns:1fr;} }
+@media(max-width:900px){ .ls-hooks-grid{grid-template-columns:1fr 1fr;} }
+
+/* ══ GUIDES REDESIGN ══ */
+.ls-guides-new { background: linear-gradient(180deg,#04080f 0%,#060c1e 100%); }
+.ls-guides-new-inner { display: flex; gap: 80px; align-items: flex-start; }
+.ls-guides-new-left { flex: 0 0 38%; }
+.ls-guides-new-right { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+.ls-guide-row {
+  display: flex; align-items: center; gap: 20px;
+  padding: 18px 20px;
+  background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
+  border-radius: 8px; text-decoration: none; color: inherit;
+  transition: border-color .2s, background .2s;
+}
+.ls-guide-row:hover { border-color: rgba(248,198,98,.25); background: rgba(248,198,98,.04); }
+.ls-guide-row-tag { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; font-weight: 700; white-space: nowrap; flex-shrink: 0; width: 100px; }
+.tag-beginner { color: #4ade80; }
+.tag-intermediate { color: #60a5fa; }
+.tag-advanced { color: #f59e0b; }
+.ls-guide-row-title { font-family: 'Cinzel', serif; font-size: 13px; color: var(--text); flex: 1; line-height: 1.35; }
+.ls-guide-row-time { font-size: 11px; color: var(--text-d); white-space: nowrap; flex-shrink: 0; }
+.ls-guide-row-arrow { font-size: 14px; color: var(--gold); opacity: 0; transition: opacity .2s; flex-shrink: 0; }
+.ls-guide-row:hover .ls-guide-row-arrow { opacity: 1; }
+@media(max-width:900px){ .ls-guides-new-inner{flex-direction:column;gap:40px;} .ls-guides-new-left{flex:none;} }
+
+/* ══ CTA REDESIGN ══ */
+.ls-cta-new {
+  background: linear-gradient(180deg,#04080f 0%,#03060d 100%);
+  text-align: center; padding: 130px 8vw !important;
+  position: relative; overflow: hidden;
+}
+.ls-cta-new::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(230,57,70,.08) 0%, transparent 65%);
+  pointer-events: none;
+}
+.ls-cta-new-inner { position: relative; z-index: 2; max-width: 600px; margin: 0 auto; }
+.ls-cta-new-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 700; color: var(--text);
+  line-height: .9; margin-bottom: 24px;
+  text-transform: uppercase;
+}
+.ls-cta-new-title span { display: block; color: var(--gold); }
+.ls-cta-new-sub { font-size: 16px; color: var(--text-m); line-height: 1.7; margin-bottom: 40px; }
+.ls-cta-new-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 18px 52px; border-radius: 8px;
+  background: #e63946; color: #fff;
+  font-size: 16px; font-weight: 700; border: none; cursor: pointer;
+  transition: filter .2s, transform .2s, box-shadow .2s;
+  letter-spacing: .3px;
+}
+.ls-cta-new-btn:hover { filter: brightness(1.12); transform: translateY(-3px); box-shadow: 0 10px 36px rgba(230,57,70,.45); }
+
+/* ══ FOOTER NEW ══ */
+.footer-new {
+  border-top: 1px solid rgba(124,58,237,.15);
+  padding: 64px 8vw 32px;
+  background: #03060d;
+}
+.footer-grid {
+  display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 48px; margin-bottom: 48px;
+}
+.footer-brand-desc { font-size: 13px; color: var(--text-d); line-height: 1.7; margin-top: 12px; max-width: 220px; }
+.footer-col-title { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: .18em; color: var(--gold); text-transform: uppercase; margin-bottom: 16px; }
+.footer-links { display: flex; flex-direction: column; gap: 9px; }
+.footer-link { font-size: 13px; color: var(--text-d); cursor: pointer; transition: color .15s; text-decoration: none; }
+.footer-link:hover { color: var(--text); }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,.06); padding-top: 24px; text-align: center; font-size: 12px; color: rgba(180,160,220,.35); }
+@media(max-width:900px){ .footer-grid{grid-template-columns:1fr 1fr;} }
+@media(max-width:600px){ .footer-grid{grid-template-columns:1fr;} }
+@media(max-width:700px){
+  .hero-dice-visual{display:none;}
+  .land-hero-new{padding:100px 5vw 60px;}
+  .ls-camp-new-inner{flex-direction:column;gap:40px;}
+  .ls-camp-new-left{flex:none;}
+  .ls-guides-new-inner{flex-direction:column;}
+}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" integrity="sha384-CI3ELBVUz9XQO+97x6nwMDPosPR5XvsxW2ua7N1Xeygeh1IxtgqtCkGfQY9WWdHu" crossorigin="anonymous"></script>
 </head>
@@ -2369,7 +2633,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   <div class="anav-spacer"></div>
   <div class="ver-footer" style="display:none;align-items:center;gap:5px;font-size:12px;color:var(--text-d);margin-right:8px;font-family:monospace;">
     <span class="ver-dot" style="width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.5;"></span>
-    <span class="ver-badge">v2.8.46</span>
+    <span class="ver-badge">v2.8.47</span>
     <span class="ver-sep">·</span>
     <span class="ver-date">16 Jun 2026</span>
   </div>
@@ -2673,7 +2937,7 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
           <button class="lang-btn active" onclick="setLang('es')">ES</button>
           <button class="lang-btn" onclick="setLang('en')">EN</button>
         </div>
-        <button class="lbtn-ghost" id="lbtnEntrar" onclick="openModal('login')" data-es="Entrar" data-en="Log in">Entrar</button>
+        <button class="lbtn-ghost" id="lbtnEntrar" onclick="openModal('login')" data-es="Registrar sesión" data-en="Log in">Registrar sesión</button>
         <button class="lbtn-gold" id="lbtnComenzar" onclick="openModal('register')" data-es="Comenzar" data-en="Get started">Comenzar</button>
         <div class="nav-user" id="landNavUser" style="display:none;">
           <button class="nav-user-btn" onclick="toggleUserMenu()"><span id="landNavGreeting"></span><span class="nav-user-chevron">▾</span></button>
@@ -2687,35 +2951,31 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   </nav>
 
   <div class="land-ui">
-    <div class="land-hero">
-      <div class="land-eyebrow" data-es="TU PLATAFORMA DE D&D" data-en="YOUR D&D PLATFORM">TU PLATAFORMA DE D&D</div>
-      <div class="land-title">
-        <span class="lt-master">MASTER</span>
-        <span class="lt-dnd">DND</span>
+    <section class="land-hero-new">
+      <div class="hero-dice-visual">🎲</div>
+      <div class="hero-content">
+        <div class="hero-eyebrow-new">La plataforma definitiva de D&amp;D en español</div>
+        <div class="hero-title-new">FORJA TU<br>LEYENDA</div>
+        <p class="hero-desc-new">Crea personajes épicos, gestiona campañas completas y sumérgete en aventuras inigualables. Todo lo que necesitas para tu partida de D&amp;D 5e en un solo lugar.</p>
+        <div class="hero-stats-new">
+          <div class="hero-stat-new"><span class="hero-stat-n">9</span><span class="hero-stat-l">Razas</span></div>
+          <div class="hero-stat-sep"></div>
+          <div class="hero-stat-new"><span class="hero-stat-n">12</span><span class="hero-stat-l">Clases</span></div>
+          <div class="hero-stat-sep"></div>
+          <div class="hero-stat-new"><span class="hero-stat-n">600+</span><span class="hero-stat-l">Monstruos</span></div>
+          <div class="hero-stat-sep"></div>
+          <div class="hero-stat-new"><span class="hero-stat-n">∞</span><span class="hero-stat-l">Aventuras</span></div>
+        </div>
+        <div class="hero-btns-new">
+          <button class="lbtn-primary-new" onclick="goToCreateChar()">🗡️ Crear Personaje</button>
+          <button class="lbtn-ghost lbtn-lg" onclick="goTo('maps')">Diseñar Mapa</button>
+        </div>
+        <div class="hero-scroll-hint">
+          <span class="hero-scroll-text">explorar</span>
+          <span class="hero-scroll-arrow">↓</span>
+        </div>
       </div>
-      <p class="land-sub" data-es="Forja héroes legendarios. Teje mundos de fantasía.<br>Narra historias que nadie olvide." data-en="Forge legendary heroes. Weave worlds of fantasy.<br>Tell stories no one will forget.">Forja héroes legendarios. Teje mundos de fantasía.<br>Narra historias que nadie olvide.</p>
-      <div class="land-btns">
-        <button class="lbtn-gold lbtn-lg" onclick="goToCreateChar()" data-es="Crear personaje" data-en="Create character">Crear personaje</button>
-        <button class="lbtn-ghost lbtn-lg" onclick="goTo('maps')" data-es="Diseñar mapa" data-en="Design a map">Diseñar mapa</button>
-      </div>
-      <div class="land-stats">
-        <div class="land-stat"><span class="lstat-n">9</span><span class="lstat-l">Razas</span></div>
-        <div class="land-stat-sep"></div>
-        <div class="land-stat"><span class="lstat-n">12</span><span class="lstat-l">Clases</span></div>
-        <div class="land-stat-sep"></div>
-        <div class="land-stat"><span class="lstat-n">600+</span><span class="lstat-l">Monstruos</span></div>
-        <div class="land-stat-sep"></div>
-        <div class="land-stat"><span class="lstat-n">∞</span><span class="lstat-l">Aventuras</span></div>
-      </div>
-    </div>
-
-    <div class="land-hints">
-      <div class="dice-label" data-es="La aventura te espera" data-en="Adventure awaits">La aventura te espera</div>
-      <div class="scroll-down">
-        <span>SCROLL</span>
-        <div class="sd-line"></div>
-      </div>
-    </div>
+    </section>
   </div>
 
   <!-- ══ SPACER: pushes static sections below hero viewport ══ -->
@@ -2726,41 +2986,47 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
     <div class="ls-feat-header">
       <div class="ls-eyebrow fiu">01 — HERRAMIENTAS</div>
       <div class="ls-title fiu fiu-d1">Todo en <span class="ls-title-em">un sólo</span> lugar</div>
-      <p class="ls-sub fiu fiu-d2" style="margin:0 auto;">Sin hojas de cálculo. Sin múltiples apps. Fichas, combate, mapas y más — listo para tu próxima sesión.</p>
+      <p class="ls-sub fiu fiu-d2" style="margin:0 auto;">Seis herramientas forjadas para el maestro de mazmorras y los jugadores más exigentes. Sin apps adicionales. Sin pestañas infinitas.</p>
     </div>
     <div class="ls-feat-grid">
       <div class="ls-feat-card fiu fiu-d1" data-accent="violet" onclick="goToCharsSmart()">
         <div class="ls-feat-top" style="background:linear-gradient(90deg,#7c3aed,#a855f7);"></div>
+        <span class="ls-feat-label">ESENCIAL</span>
         <div class="ls-feat-icon">⚔️</div>
         <div class="ls-feat-title">Ficha de Personaje</div>
         <div class="ls-feat-desc">Aventureros completos con stats, habilidades, retrato, inventario, hechizos y subida de nivel. Dados integrados directamente en la ficha.</div>
       </div>
       <div class="ls-feat-card fiu fiu-d2" data-accent="crimson" onclick="goTo('combat')">
         <div class="ls-feat-top" style="background:linear-gradient(90deg,#e63946,#f97316);"></div>
+        <span class="ls-feat-label">COMBATE</span>
         <div class="ls-feat-icon">⚡</div>
         <div class="ls-feat-title">Combate en Tiempo Real</div>
         <div class="ls-feat-desc">Tracker de iniciativa con HP dinámico, log de eventos, tiradas de daño y estado de cada combatiente a un vistazo.</div>
       </div>
       <div class="ls-feat-card fiu fiu-d3" data-accent="gold" onclick="goTo('compendium')">
         <div class="ls-feat-top" style="background:linear-gradient(90deg,#d4af37,#f8c662);"></div>
+        <span class="ls-feat-label">REFERENCIA</span>
         <div class="ls-feat-icon">🐉</div>
         <div class="ls-feat-title">Grimorio Completo</div>
         <div class="ls-feat-desc">600+ monstruos con sprites ilustrados, hechizos por clase y escuela, equipamiento del SRD D&D 5e con filtros avanzados.</div>
       </div>
       <div class="ls-feat-card fiu fiu-d1" data-accent="emerald" onclick="goTo('maps')">
         <div class="ls-feat-top" style="background:linear-gradient(90deg,#059669,#34d399);"></div>
+        <span class="ls-feat-label">CARTOGRAFÍA</span>
         <div class="ls-feat-icon">🗺️</div>
         <div class="ls-feat-title">Editor de Mapas</div>
         <div class="ls-feat-desc">Diseñá dungeons, ciudades y tabernas con 20+ tipos de terreno, tokens de personajes, niebla de guerra y exportar imagen.</div>
       </div>
       <div class="ls-feat-card fiu fiu-d2" data-accent="sky" onclick="goTo('sounds')">
         <div class="ls-feat-top" style="background:linear-gradient(90deg,#0891b2,#38bdf8);"></div>
+        <span class="ls-feat-label">ATMÓSFERA</span>
         <div class="ls-feat-icon">🎵</div>
         <div class="ls-feat-title">Ambientación Sonora</div>
         <div class="ls-feat-desc">Música épica, efectos de combate y ambientes inmersivos: bosque, taberna, mazmorra, tormenta. Todo sincronizado para tu sesión.</div>
       </div>
       <div class="ls-feat-card fiu fiu-d3" data-accent="orange" style="cursor:default;">
         <div class="ls-feat-top" style="background:linear-gradient(90deg,#c2410c,#fb923c);"></div>
+        <span class="ls-feat-label">MECÁNICAS</span>
         <div class="ls-feat-icon">🎲</div>
         <div class="ls-feat-title">Dados 3D Físicos</div>
         <div class="ls-feat-desc">Animación física real con todos los poliedros: d4, d6, d8, d10, d12, d20. Cada tirada desde la ficha actualiza automáticamente.</div>
@@ -2769,218 +3035,173 @@ body:has(.page.active#page-compendium) #cring{border-color:rgba(248,198,98,.35);
   </section>
 
   <!-- ══ SECTION 2: CAMPAÑA ══ -->
-  <section class="land-section ls-campaign">
-    <div class="ls-camp-inner">
-      <div class="ls-camp-left">
-        <div class="ls-camp-badge fiu">✨ NUEVO — MODO CAMPAÑA</div>
-        <div class="ls-camp-title fiu fiu-d1">Jugá con<br>tu grupo.<br><span class="ls-camp-em">Real.</span></div>
-        <p class="ls-camp-desc fiu fiu-d2">Creá o unite a una campaña con un código único. El DM tiene control total — los jugadores ven su ficha, el mapa y las notas compartidas en tiempo real.</p>
-        <button class="ls-camp-cta fiu fiu-d3" onclick="goToCampaign()">⚔️ Explorar Modo Campaña</button>
+  <section class="land-section ls-campaign ls-campaign-new">
+    <div class="ls-camp-new-inner">
+      <div class="ls-camp-new-left">
+        <div class="ls-eyebrow fiu">02 — MODO CAMPAÑA <span class="ls-camp-new-badge">Nuevo</span></div>
+        <div class="ls-camp-new-title fiu fiu-d1">Multijugador en<br><em>tiempo real</em></div>
+        <p class="ls-camp-desc fiu fiu-d2">El Director de Juego controla mapas, notas compartidas e inventario de campaña mientras los jugadores acceden a sus hojas en tiempo real. La partida perfecta, conectada.</p>
+        <div class="ls-camp-features fiu fiu-d3">
+          <div class="ls-camp-feature"><span class="ls-camp-feature-check">✓</span>Hasta 8 jugadores simultáneos</div>
+          <div class="ls-camp-feature"><span class="ls-camp-feature-check">✓</span>Mapas sincronizados en vivo</div>
+          <div class="ls-camp-feature"><span class="ls-camp-feature-check">✓</span>Niebla de guerra controlada por el DJ</div>
+          <div class="ls-camp-feature"><span class="ls-camp-feature-check">✓</span>Notas e inventario compartidos</div>
+        </div>
+        <button class="ls-camp-cta fiu fiu-d4" onclick="goToCampaign()">⚔️ Explorar Modo Campaña</button>
       </div>
-      <div class="ls-camp-right">
-        <div class="ls-camp-feat fiu fiu-d1">
-          <div class="ls-camp-feat-icon">👥</div>
-          <div class="ls-camp-feat-title">Party completa</div>
-          <div class="ls-camp-feat-desc">Perfiles de todos los miembros. El DM ve las fichas completas; los jugadores ven la party en tiempo real.</div>
-        </div>
-        <div class="ls-camp-feat fiu fiu-d2">
-          <div class="ls-camp-feat-icon">🗺️</div>
-          <div class="ls-camp-feat-title">Mapa interactivo</div>
-          <div class="ls-camp-feat-desc">Pan/zoom, fondo personalizable, 9 tipos de marcador y pins secretos solo visibles para el DM.</div>
-        </div>
-        <div class="ls-camp-feat fiu fiu-d3">
-          <div class="ls-camp-feat-icon">📝</div>
-          <div class="ls-camp-feat-title">Notas compartidas</div>
-          <div class="ls-camp-feat-desc">Categorías, markdown y pins fijados. El DM decide qué notas comparte con los jugadores.</div>
-        </div>
-        <div class="ls-camp-feat fiu fiu-d4">
-          <div class="ls-camp-feat-icon">📖</div>
-          <div class="ls-camp-feat-title">Bitácora de sesiones</div>
-          <div class="ls-camp-feat-desc">Timeline de sesiones, condiciones D&D, death saves e historial completo de la campaña.</div>
-        </div>
-        <div class="ls-camp-feat fiu fiu-d5">
-          <div class="ls-camp-feat-icon">🎒</div>
-          <div class="ls-camp-feat-title">Inventario compartido</div>
-          <div class="ls-camp-feat-desc">El DM administra los ítems del grupo. Todos ven el inventario y el tesoro de la campaña.</div>
-        </div>
-        <div class="ls-camp-feat fiu fiu-d1">
-          <div class="ls-camp-feat-icon">⚔️</div>
-          <div class="ls-camp-feat-title">Combate integrado</div>
-          <div class="ls-camp-feat-desc">Los jugadores controlan su turno en combate — HP, acciones y estado sincronizados con el DM.</div>
+      <div class="ls-camp-new-right fiu fiu-d2">
+        <div class="camp-mockup">
+          <div class="camp-mockup-header">
+            <span class="camp-mockup-title">Campaña Activa</span>
+            <span class="camp-mockup-badge">4 en línea</span>
+          </div>
+          <div class="camp-mockup-campaign">
+            <div class="camp-mockup-campaign-name">La Maldición de Strahd</div>
+            <div class="camp-mockup-campaign-sub">4 aventureros · Nivel 8</div>
+          </div>
+          <div class="camp-mockup-players">
+            <div class="camp-mockup-player">
+              <span class="cmp-name">Vaelithor Shadowmend</span>
+              <div class="cmp-hp-bar"><div class="cmp-hp-fill" style="width:90%;background:#a78bfa;"></div></div>
+              <span class="cmp-hp-text">52/58 Brujo</span>
+            </div>
+            <div class="camp-mockup-player">
+              <span class="cmp-name">Seraphina Goldthorn</span>
+              <div class="cmp-hp-bar"><div class="cmp-hp-fill" style="width:100%;background:#6ee7b7;"></div></div>
+              <span class="cmp-hp-text">67/67 Clérigo</span>
+            </div>
+            <div class="camp-mockup-player">
+              <span class="cmp-name">Drak Ironjaw</span>
+              <div class="cmp-hp-bar"><div class="cmp-hp-fill" style="width:36%;background:#f87171;"></div></div>
+              <span class="cmp-hp-text">30/84 Guerrero</span>
+            </div>
+            <div class="camp-mockup-player">
+              <span class="cmp-name">Lyra Whisperwind</span>
+              <div class="cmp-hp-bar"><div class="cmp-hp-fill" style="width:92%;background:#60a5fa;"></div></div>
+              <span class="cmp-hp-text">55/60 Bardo</span>
+            </div>
+          </div>
+          <div class="camp-mockup-footer">
+            <span>Combate activo — Ronda 3</span>
+            <span class="camp-mockup-combat">Turno: Vaelithor ›</span>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ══ SECTION 3: HOOK GENERATOR ══ -->
-  <section class="land-section ls-hook">
-    <div class="ls-hook-inner">
-      <div class="ls-hook-left">
-        <div class="ls-eyebrow fiu">02 — INSPIRACIÓN</div>
-        <div class="ls-camp-title fiu fiu-d1" style="font-size:clamp(26px,3.5vw,44px);">Genera tu<br><span class="ls-camp-em">próxima aventura</span></div>
-        <p class="ls-camp-desc fiu fiu-d2">42 hooks únicos en 6 categorías — desde mazmorras oscuras hasta intrigas políticas. Cada sesión empieza con una historia.</p>
-        <div class="hook-intro-cats fiu fiu-d3">
-          <span class="hook-intro-cat" onclick="rollHookByCat('Mazmorra')">🗡️ Mazmorra</span>
-          <span class="hook-intro-cat" onclick="rollHookByCat('Naturaleza')">🌲 Naturaleza</span>
-          <span class="hook-intro-cat" onclick="rollHookByCat('Ciudad')">🏙️ Ciudad</span>
-          <span class="hook-intro-cat" onclick="rollHookByCat('Dragón')">🐉 Dragón</span>
-          <span class="hook-intro-cat" onclick="rollHookByCat('Horror')">💀 Horror</span>
-          <span class="hook-intro-cat" onclick="rollHookByCat('Misterio')">🔍 Misterio</span>
-          <span class="hook-intro-cat" onclick="rollHookByCat('Político')">🏛️ Político</span>
-        </div>
+  <!-- ══ SECTION 3: HOOKS ══ -->
+  <section class="land-section ls-hook ls-hooks-new">
+    <div class="ls-hooks-header">
+      <div class="ls-eyebrow fiu" style="justify-content:center;">03 — GANCHOS DE AVENTURA</div>
+      <div class="ls-title fiu fiu-d1" style="text-align:center;">42 Historias <span class="ls-title-em">esperando</span></div>
+      <p class="ls-sub fiu fiu-d2" style="text-align:center;margin:0 auto;">Ganchos de aventura curados en 6 categorías. Cuando la inspiración falla, la mazmorra siempre tiene una respuesta.</p>
+    </div>
+    <div class="ls-hook-cats fiu fiu-d3">
+      <span class="ls-hook-cat-pill active" onclick="filterHookCards('Mazmorras',this)">🗡️ Mazmorras</span>
+      <span class="ls-hook-cat-pill" onclick="filterHookCards('Naturaleza',this)">🌲 Naturaleza</span>
+      <span class="ls-hook-cat-pill" onclick="filterHookCards('Ciudad',this)">🏙️ Ciudad</span>
+      <span class="ls-hook-cat-pill" onclick="filterHookCards('Dragones',this)">🐉 Dragones</span>
+      <span class="ls-hook-cat-pill" onclick="filterHookCards('Horror',this)">💀 Horror</span>
+      <span class="ls-hook-cat-pill" onclick="filterHookCards('Política',this)">🏛️ Política</span>
+    </div>
+    <div class="ls-hooks-grid fiu fiu-d4">
+      <div class="ls-hook-card">
+        <div class="ls-hook-card-cat">Mazmorras</div>
+        <div class="ls-hook-card-title">El Sello Roto</div>
+        <p class="ls-hook-card-desc">Un antiguo sello que contenía un horror primigenio ha sido profanado. Los exploradores que entran no regresan.</p>
       </div>
-      <div class="ls-hook-right fiu fiu-d2">
-        <div class="hook-card">
-          <div class="hook-label">HOOK DE AVENTURA</div>
-          <div class="hook-cat" id="hookCat"><span class="hook-icon" id="hookIcon">🗡️</span><span id="hookCatName">Mazmorra</span></div>
-          <div class="hook-text" id="hookText"></div>
-          <div class="hook-actions">
-            <button class="hook-roll-btn" onclick="rollHook()"><span class="hook-roll-icon">⚄</span><span>Nueva inspiración</span></button>
-          </div>
-        </div>
+      <div class="ls-hook-card">
+        <div class="ls-hook-card-cat">Dragones</div>
+        <div class="ls-hook-card-title">La Deuda de Sangre</div>
+        <p class="ls-hook-card-desc">Un joven dragón plateado os busca para cobrar una deuda que vuestros antepasados contrajeron hace cien años.</p>
+      </div>
+      <div class="ls-hook-card">
+        <div class="ls-hook-card-cat">Ciudad</div>
+        <div class="ls-hook-card-title">El Gremio Silencioso</div>
+        <p class="ls-hook-card-desc">El gremio de ladrones ha desaparecido de la noche a la mañana. Nadie en los bajos fondos sabe qué ocurrió.</p>
       </div>
     </div>
   </section>
 
   <!-- ══ SECTION 4: GUÍAS ══ -->
-  <section class="land-section ls-guides">
-    <div class="ls-guides-header">
-      <div class="ls-eyebrow fiu">03 — GUÍAS D&amp;D 5e</div>
-      <div class="ls-title fiu fiu-d1">Aprendé a jugar<br><span class="ls-title-em">como un experto</span></div>
-      <p class="ls-sub fiu fiu-d2" style="margin:0 auto;">Guías en español para principiantes y veteranos — clases, razas, combate, roleplay y más.</p>
-    </div>
-    <div class="ls-guides-grid">
-      <a class="ls-guide-card fiu fiu-d1" href="/guias/como-jugar-dnd-principiantes">
-        <div class="ls-guide-top"><img src="/Im%C3%A1genes/Gu%C3%ADa/1.png" alt="Cómo jugar D&D por primera vez" loading="lazy"/></div>
-        <div class="ls-guide-tag">⭐ Principiante</div>
-        <div class="ls-guide-title">Cómo jugar D&D por primera vez</div>
-        <div class="ls-guide-arrow">→</div>
-      </a>
-      <a class="ls-guide-card fiu fiu-d2" href="/guias/clases-dnd-5e">
-        <div class="ls-guide-top"><img src="/Im%C3%A1genes/Gu%C3%ADa/2.png" alt="Las 12 clases de D&D 5e" loading="lazy"/></div>
-        <div class="ls-guide-tag">⚔️ Clases</div>
-        <div class="ls-guide-title">Las 12 clases de D&D 5e explicadas</div>
-        <div class="ls-guide-arrow">→</div>
-      </a>
-      <a class="ls-guide-card fiu fiu-d3" href="/guias/razas-dnd-5e">
-        <div class="ls-guide-top"><img src="/Im%C3%A1genes/Gu%C3%ADa/3.png" alt="Todas las razas de D&D 5e" loading="lazy"/></div>
-        <div class="ls-guide-tag">🧝 Razas</div>
-        <div class="ls-guide-title">Todas las razas de D&D 5e: guía completa</div>
-        <div class="ls-guide-arrow">→</div>
-      </a>
-    </div>
-    <div style="text-align:center;margin-top:40px;">
-      <a class="ls-guides-all fiu" href="/guias/">Ver todas las guías →</a>
+  <section class="land-section ls-guides ls-guides-new">
+    <div class="ls-guides-new-inner">
+      <div class="ls-guides-new-left">
+        <div class="ls-eyebrow fiu">04 — GUÍAS</div>
+        <div class="ls-title fiu fiu-d1">Aprende a<br><span class="ls-title-em">dominar el juego</span></div>
+        <p class="ls-sub fiu fiu-d2">Guías de D&amp;D 5e en español, desde los primeros pasos hasta las tácticas más avanzadas para directores de juego veteranos.</p>
+        <div style="margin-top:32px;">
+          <a class="ls-guides-all fiu fiu-d3" href="/guias/">Ver todas las guías →</a>
+        </div>
+      </div>
+      <div class="ls-guides-new-right">
+        <a class="ls-guide-row fiu fiu-d1" href="/guias/como-jugar-dnd-principiantes">
+          <span class="ls-guide-row-tag tag-beginner">Principiante · 8 min</span>
+          <span class="ls-guide-row-title">Cómo crear tu primer personaje</span>
+          <span class="ls-guide-row-time">lectura</span>
+          <span class="ls-guide-row-arrow">→</span>
+        </a>
+        <a class="ls-guide-row fiu fiu-d2" href="/guias/clases-dnd-5e">
+          <span class="ls-guide-row-tag tag-intermediate">Intermedio · 12 min</span>
+          <span class="ls-guide-row-title">Gestión del combate para el DJ</span>
+          <span class="ls-guide-row-time">lectura</span>
+          <span class="ls-guide-row-arrow">→</span>
+        </a>
+        <a class="ls-guide-row fiu fiu-d3" href="/guias/razas-dnd-5e">
+          <span class="ls-guide-row-tag tag-advanced">Avanzado · 18 min</span>
+          <span class="ls-guide-row-title">Diseño de mazmorras memorables</span>
+          <span class="ls-guide-row-time">lectura</span>
+          <span class="ls-guide-row-arrow">→</span>
+        </a>
+      </div>
     </div>
   </section>
 
-  <!-- ══ SECTION 5: CTA — DAWN ══ -->
-  <section class="land-section ls-cta">
-    <div class="ls-cta-dawn-bg"></div>
-    <div class="ls-cta-sun"></div>
-    <div class="ls-cta-fog"></div>
-    <div class="ls-cta-ground"></div>
-    <div class="ls-cta-inner">
-      <!-- LEFT: text + CTA -->
-      <div class="ls-cta-left">
-        <div class="ls-cta-title fiu">¿Listo para<br><span class="ls-cta-em">tu próxima aventura?</span></div>
-        <p class="ls-cta-sub fiu fiu-d1">Crea tu personaje, unite a una campaña o explorá el grimorio. Todo en un solo lugar.</p>
-        <button class="ls-cta-btn-start fiu fiu-d2" onclick="ctaStart()">⚔️ Comienza ahora</button>
-        <div style="display:none;margin-top:48px;align-items:center;gap:6px;font-size:12px;color:rgba(255,200,150,.75);font-family:monospace;">
-          <span style="width:5px;height:5px;border-radius:50%;background:#f8c662;opacity:.4;display:inline-block;"></span>
-          <span class="ver-badge">v2.8.46</span>
-          <span>·</span>
-          <span class="ver-date">16 Jun 2026</span>
+  <!-- ══ SECTION 5: CTA ══ -->
+  <section class="land-section ls-cta ls-cta-new">
+    <div class="ls-cta-new-inner">
+      <div class="ls-eyebrow fiu" style="justify-content:center;margin-bottom:28px;">Tu aventura comienza</div>
+      <div class="ls-cta-new-title fiu fiu-d1">TU AVENTURA<br><span>COMIENZA AHORA</span></div>
+      <p class="ls-cta-new-sub fiu fiu-d2">Únete a miles de grupos que ya juegan con MasterDnD. Gratis, en español, sin descargas.</p>
+      <button class="ls-cta-new-btn fiu fiu-d3" onclick="ctaStart()">🗡️ Comienza gratis</button>
+    </div>
+  </section>
+  <footer class="footer-new">
+    <div class="footer-grid">
+      <div>
+        <div class="land-logo"><span class="llogo-m">MASTER</span><span class="llogo-d">DND</span></div>
+        <p class="footer-brand-desc">La plataforma definitiva de D&D 5e en español. Forja tu leyenda.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Herramientas</div>
+        <div class="footer-links">
+          <span class="footer-link" onclick="goToCreateChar()">Hoja de Personaje</span>
+          <span class="footer-link" onclick="goTo('combat')">Combate</span>
+          <span class="footer-link" onclick="goTo('compendium')">Grimorio</span>
+          <span class="footer-link" onclick="goTo('maps')">Mapas</span>
         </div>
       </div>
-      <!-- RIGHT: scene -->
-      <div class="ls-cta-right">
-        <svg class="ls-cta-adventurers" viewBox="0 0 700 260" preserveAspectRatio="xMidYMax meet">
-          <g fill="#08061a">
-            <g id="ctaRogue">
-              <circle cx="85" cy="168" r="8"/>
-              <path d="M73,166 Q79,155 85,153 Q91,155 97,166 L100,176 Q93,171 85,171 Q77,171 70,176 Z"/>
-              <path d="M74,174 Q71,185 72,202 L80,202 Q81,190 85,188 Q89,190 90,202 L98,202 Q99,185 96,174 Q90,180 85,180 Q80,180 74,174 Z"/>
-              <rect x="72" y="202" width="7" height="30" rx="2"/>
-              <rect x="82" y="202" width="7" height="30" rx="2"/>
-              <path d="M74,174 L64,210 L71,215 L79,188 Z"/>
-              <path d="M96,174 L106,210 L99,215 L91,188 Z"/>
-              <rect x="62" y="198" width="4" height="16" rx="1.5"/>
-              <rect x="59" y="194" width="10" height="4" rx="1"/>
-              <rect x="104" y="180" width="4" height="15" rx="1.5" transform="rotate(-28 106 188)"/>
-              <rect x="101" y="192" width="10" height="4" rx="1" transform="rotate(-28 106 194)"/>
-            </g>
-            <rect x="198" y="130" width="24" height="18" rx="5 5 0 0"/>
-            <rect x="196" y="146" width="28" height="5" rx="2"/>
-            <rect x="201" y="151" width="18" height="14" rx="2"/>
-            <ellipse cx="192" cy="170" rx="11" ry="5" transform="rotate(-8 192 170)"/>
-            <ellipse cx="228" cy="170" rx="11" ry="5" transform="rotate(8 228 170)"/>
-            <rect x="195" y="165" width="30" height="30" rx="2"/>
-            <rect x="193" y="193" width="34" height="7" rx="1"/>
-            <rect x="194" y="200" width="13" height="32" rx="3"/>
-            <rect x="213" y="200" width="13" height="32" rx="3"/>
-            <rect x="175" y="157" width="16" height="46" rx="5 0 8 5"/>
-            <rect x="228" y="162" width="10" height="20" rx="3"/>
-            <rect x="232" y="110" width="6" height="54" rx="2" transform="rotate(8 235 140)"/>
-            <rect x="226" y="159" width="22" height="5" rx="2"/>
-            <polygon points="320,98 308,150 332,150"/>
-            <rect x="303" y="146" width="34" height="7" rx="3.5"/>
-            <circle cx="320" cy="160" r="10"/>
-            <path d="M313,168 Q316,176 320,177 Q324,176 327,168 L324,165 Q320,169 316,165 Z"/>
-            <path d="M307,170 L300,248 L340,248 L333,170 Q327,177 320,177 Q313,177 307,170 Z"/>
-            <path d="M308,174 L290,204 L297,210 L313,183 Z"/>
-            <path d="M332,174 L350,204 L343,210 L327,183 Z"/>
-            <rect x="287" y="86" width="5" height="117" rx="2.5"/>
-            <circle cx="289" cy="83" r="12"/>
-            <circle cx="289" cy="83" r="6" fill="#1a1040" opacity="0.45"/>
-            <rect x="311" y="183" width="18" height="4" rx="2"/>
-            <circle cx="430" cy="162" r="9"/>
-            <rect x="423" y="171" width="14" height="28" rx="3"/>
-            <rect x="423" y="199" width="6" height="33" rx="2"/>
-            <rect x="431" y="199" width="6" height="33" rx="2"/>
-            <rect x="402" y="166" width="19" height="7" rx="3.5"/>
-            <path d="M402,146 Q384,168 402,192" fill="none" stroke="#08061a" stroke-width="5.5" stroke-linecap="round"/>
-            <line x1="402" y1="146" x2="415" y2="168" stroke="#08061a" stroke-width="2"/>
-            <line x1="402" y1="192" x2="415" y2="168" stroke="#08061a" stroke-width="2"/>
-            <rect x="413" y="166" width="30" height="3.5" rx="1.5"/>
-            <polygon points="443,165 450,168 443,171"/>
-            <rect x="437" y="164" width="15" height="7" rx="3.5"/>
-            <rect x="436" y="154" width="10" height="22" rx="3"/>
-            <rect x="438" y="152" width="2" height="6" rx="1"/><rect x="441" y="151" width="2" height="7" rx="1"/><rect x="444" y="153" width="2" height="5" rx="1"/>
-            <circle cx="530" cy="151" r="14"/>
-            <rect x="519" y="156" width="22" height="6" rx="2"/>
-            <rect x="522" y="162" width="16" height="8" rx="2"/>
-            <rect x="515" y="170" width="30" height="30" rx="3"/>
-            <ellipse cx="509" cy="175" rx="12" ry="7" transform="rotate(-8 509 175)"/>
-            <ellipse cx="551" cy="175" rx="12" ry="7" transform="rotate(8 551 175)"/>
-            <rect x="516" y="200" width="12" height="32" rx="3"/>
-            <rect x="533" y="200" width="12" height="32" rx="3"/>
-            <rect x="499" y="172" width="14" height="10" rx="3"/>
-            <circle cx="493" cy="178" r="11"/>
-            <rect x="489" y="175" width="8" height="6" fill="#180e38" opacity="0.35" rx="1"/>
-            <rect x="490" y="171" width="6" height="14" fill="#180e38" opacity="0.35" rx="1"/>
-            <rect x="547" y="166" width="13" height="22" rx="3"/>
-            <rect x="553" y="136" width="5" height="34" rx="2"/>
-            <rect x="543" y="125" width="24" height="14" rx="4"/>
-            <polygon points="567,126 577,132 567,139"/>
-          </g>
-        </svg>
-        <!-- Campfire (dying — low flames) -->
-        <div class="ls-cta-campfire">
-          <div class="sc-fire-glow" style="opacity:.18;"></div>
-          <div class="sc-flames" style="opacity:.15;">
-            <div class="sc-flame sc-f4"></div>
-            <div class="sc-flame sc-f1"></div>
-            <div class="sc-flame sc-f2"></div>
-          </div>
-          <div class="sc-logs"></div>
-          <div id="ctaSmokeWrap" class="sc-smoke-wrap"></div>
+      <div>
+        <div class="footer-col-title">Recursos</div>
+        <div class="footer-links">
+          <span class="footer-link" onclick="rollHook()">Ganchos de Aventura</span>
+          <a class="footer-link" href="/guias/">Guías</a>
+          <span class="footer-link" onclick="goTo('compendium')">Monstruos</span>
+          <span class="footer-link" onclick="goTo('compendium')">Hechizos</span>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Comunidad</div>
+        <div class="footer-links">
+          <a class="footer-link" href="https://discord.gg/masterdnd" target="_blank" rel="noopener">Discord</a>
+          <a class="footer-link" href="https://twitter.com/masterdnd" target="_blank" rel="noopener">Twitter</a>
+          <a class="footer-link" href="/guias/">Blog</a>
+          <span class="footer-link">Contacto</span>
         </div>
       </div>
     </div>
-  </section>
-  <footer style="text-align:center;padding:32px 24px;border-top:1px solid rgba(124,58,237,.15);font-family:'Roboto',sans-serif;font-size:13px;color:rgba(180,160,220,.55);">
-    Creado con amor ♥ MasterDnD 2026
+    <div class="footer-bottom">© 2025 MasterDnD — Hecho con ♥ para la comunidad rolera hispanohablante</div>
   </footer>
 </div>
 
@@ -11299,6 +11520,10 @@ function _ddbSaveAndLoad(c){
     setTimeout(()=>fbClose(),2200);
   };
 })();
+function filterHookCards(cat, el) {
+  document.querySelectorAll('.ls-hook-cat-pill').forEach(p => p.classList.remove('active'));
+  if (el) el.classList.add('active');
+}
 </script>
 </body>
 </html>

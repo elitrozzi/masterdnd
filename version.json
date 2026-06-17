@@ -1,7 +1,12 @@
 {
-  "version": "2.8.46",
+  "version": "2.8.47",
   "date": "2026-06-16",
   "history": [
+    {
+      "version": "2.8.47",
+      "date": "2026-06-16",
+      "note": "Rediseño completo landing — hero 'Forja Tu Leyenda', secciones actualizadas (herramientas, campaña, hooks, guías), nuevo footer 4 columnas"
+    },
     {
       "version": "2.8.46",
       "date": "2026-06-16",
